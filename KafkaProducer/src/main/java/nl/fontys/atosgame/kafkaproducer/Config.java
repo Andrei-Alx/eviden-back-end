@@ -10,6 +10,11 @@ import java.util.function.Function;
 @Controller
 public class Config {
 
+    /**
+     * function to produce an integer * 2
+     * input topic: -
+     * output topic: test3
+     */
     @Bean
     public Function<Integer, Integer> testFunc() {
         return (input) -> {

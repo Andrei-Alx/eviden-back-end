@@ -1,16 +1,21 @@
 package nl.fontys.atosgame.kafkaconsumer;
 
-import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
+import java.util.function.Consumer;
+
+@Configuration
 public class KafkaConsumer {
 
-    @KafkaListener(topics = "NewTopic", groupId = "group_id")
-
-    // Method
-    public void
-    consume(String message)
+    /**
+     * function to consume a string message and output it to the console
+     * input topic: test3
+     * output topic: -
+     */
+    @Bean
+    public Consumer<String> consume()
     {
-        // Print statement
-        System.out.println("message = " + message);
+        return (message) -> System.out.println("message = " + message);
     }
 }
