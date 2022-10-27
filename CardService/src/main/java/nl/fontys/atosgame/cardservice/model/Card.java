@@ -2,6 +2,7 @@ package nl.fontys.atosgame.cardservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
@@ -12,6 +13,7 @@ import java.util.*;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class Card {
     @Id
     @GeneratedValue(generator = "UUID")
