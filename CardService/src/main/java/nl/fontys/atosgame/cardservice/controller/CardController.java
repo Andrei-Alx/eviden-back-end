@@ -14,6 +14,11 @@ import javax.persistence.EntityNotFoundException;
 import java.util.UUID;
 
 
+/**
+ * Controller for the CardService
+ * Performs CRUD operations on cards
+ * @author Eli
+ */
 @RestController
 @RequestMapping("/api/cards")
 public class CardController {
