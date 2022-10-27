@@ -4,6 +4,7 @@ import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
 import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,9 @@ public class CardServiceImpl implements CardService {
     @Autowired
     private CardRepository cardRepository;
 
+    @Autowired
+    private StreamBridge streamBridge;
+
     /**
      * Create a new card
      * @param createCardDto the card to create
@@ -22,7 +26,9 @@ public class CardServiceImpl implements CardService {
      */
     @Override
     public Card createCard(CreateCardDto createCardDto) {
-        return cardRepository.save(new Card(null, createCardDto.getTags(), createCardDto.getTranslations()));
+        Card card = cardRepository.save(new Card(null, createCardDto.getTags(), createCardDto.getTranslations()));
+        streamBridge.send("cardCreated-in-0", card);
+        return card;
     }
 
     /**
@@ -32,7 +38,9 @@ public class CardServiceImpl implements CardService {
      */
     @Override
     public Card updateCard(Card card) {
-        return cardRepository.save(card);
+        Card updatedCard = cardRepository.save(card);
+        streamBridge.send("cardUpdated-in-0", updatedCard);
+        return updatedCard;
     }
 
     /**
@@ -42,5 +50,6 @@ public class CardServiceImpl implements CardService {
     @Override
     public void deleteCard(UUID id) {
         cardRepository.deleteById(id);
+        streamBridge.send("cardDeleted-in-0", id);
     }
 }
