@@ -6,7 +6,10 @@ import nl.fontys.atosgame.cardservice.repository.CardRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.stream.function.StreamBridge;
+import org.w3c.dom.stylesheets.LinkStyle;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,5 +59,16 @@ class CardServiceImplTest {
         cardService.deleteCard(id);
 
         verify(cardRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void getCardsByIds() {
+        List<Card> cards = mock(List.class);
+        Collection<UUID> ids = mock(Collection.class);
+        when(cardRepository.findAllById(ids)).thenReturn(cards);
+
+        Collection<Card> result = cardService.getCardsByIds(ids);
+
+        assertEquals(cards, result);
     }
 }

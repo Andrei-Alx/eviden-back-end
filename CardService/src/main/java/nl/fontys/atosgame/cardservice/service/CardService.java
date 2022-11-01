@@ -4,6 +4,7 @@ import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
 import nl.fontys.atosgame.cardservice.model.Card;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Collection;
 import java.util.UUID;
 
 public interface CardService {
@@ -12,4 +13,6 @@ public interface CardService {
     Card updateCard(Card card) throws EntityNotFoundException;
 
     void deleteCard(UUID id) throws EntityNotFoundException;
+
+    Collection<Card> getCardsByIds(Collection<UUID> ids);
 }
