@@ -19,11 +19,13 @@ import java.util.UUID;
 @Service
 public class CardServiceImpl implements CardService {
 
-    @Autowired
     private CardRepository cardRepository;
-
-    @Autowired
     private StreamBridge streamBridge;
+
+    public CardServiceImpl(@Autowired CardRepository cardRepository, @Autowired StreamBridge streamBridge) {
+        this.cardRepository = cardRepository;
+        this.streamBridge = streamBridge;
+    }
 
     /**
      * Create a new card
