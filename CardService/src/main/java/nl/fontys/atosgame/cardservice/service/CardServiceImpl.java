@@ -10,6 +10,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+/**
+ * Service that handles all card requests
+ * calls the repository to store the card in the database
+ * and sends a message to the event bus
+ * @author Eli
+ */
 @Service
 public class CardServiceImpl implements CardService {
 
