@@ -24,8 +24,12 @@ import java.util.UUID;
 @RequestMapping("/api/cards")
 public class CardController {
 
-    @Autowired
+
     private CardService cardService;
+
+    public CardController(@Autowired CardService cardService) {
+        this.cardService = cardService;
+    }
 
     @PostMapping("/create")
     @ApiResponses(value = {
