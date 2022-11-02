@@ -28,7 +28,7 @@ public class EventFactory {
     public static CardDeletedEvent createCardDeletedEvent(String service, UUID id) {
         CardDeletedEvent event = new CardDeletedEvent();
         event = (CardDeletedEvent) initializeBaseEvent(event, "CardDeleted", service);
-        event.setId(id);
+        event.setCardId(id);
         return event;
     }
 
@@ -49,7 +49,7 @@ public class EventFactory {
     public static CardSetDeletedEvent createCardSetDeletedEvent(String service, UUID id) {
         CardSetDeletedEvent event = new CardSetDeletedEvent();
         event = (CardSetDeletedEvent) initializeBaseEvent(event, "CardSetDeleted", service);
-        event.setId(id);
+        event.setCardSetId(id);
         return event;
     }
 

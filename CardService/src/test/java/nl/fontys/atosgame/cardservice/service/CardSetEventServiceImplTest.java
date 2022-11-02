@@ -44,7 +44,7 @@ class CardSetEventServiceImplTest {
         assertEquals("CardSetDeleted", message.getPayload().getType());
         assertEquals("CardService", message.getPayload().getService());
         assertInstanceOf(CardSetDeletedEvent.class, message.getPayload());
-        assertEquals(id, message.getPayload().getId());
+        assertEquals(id, message.getPayload().getCardSetId());
     }
 
     @Test

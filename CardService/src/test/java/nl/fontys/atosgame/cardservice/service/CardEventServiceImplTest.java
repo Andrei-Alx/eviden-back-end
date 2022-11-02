@@ -57,7 +57,7 @@ class CardEventServiceImplTest {
         assertEquals("CardDeleted", message.getPayload().getType());
         assertEquals("CardService", message.getPayload().getService());
         assertInstanceOf(CardDeletedEvent.class, message.getPayload());
-        assertEquals(id, message.getPayload().getId());
+        assertEquals(id, message.getPayload().getCardId());
         assertEquals(id, message.getHeaders().get("kafka_messageKey"));
     }
 }

@@ -52,7 +52,7 @@ class EventFactoryTest {
         assertNotNull(cardDeletedEvent.getTimestamp());
         assertEquals("CardDeleted", cardDeletedEvent.getType());
         assertEquals("Test", cardDeletedEvent.getService());
-        assertEquals(id, cardDeletedEvent.getId());
+        assertEquals(id, cardDeletedEvent.getCardId());
     }
 
     @Test
@@ -94,7 +94,7 @@ class EventFactoryTest {
         assertNotNull(cardSetDeletedEvent.getTimestamp());
         assertEquals("CardSetDeleted", cardSetDeletedEvent.getType());
         assertEquals("Test", cardSetDeletedEvent.getService());
-        assertEquals(id, cardSetDeletedEvent.getId());
+        assertEquals(id, cardSetDeletedEvent.getCardSetId());
     }
 
 }
