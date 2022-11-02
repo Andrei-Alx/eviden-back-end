@@ -1,8 +1,8 @@
 package nl.fontys.atosgame.cardservice.service;
 
 import nl.fontys.atosgame.cardservice.event.BaseEvent;
-import nl.fontys.atosgame.cardservice.event.CardDeletedData;
-import nl.fontys.atosgame.cardservice.event.CardEventData;
+import nl.fontys.atosgame.cardservice.event.CardDeletedEvent;
+import nl.fontys.atosgame.cardservice.event.CardEvent;
 import nl.fontys.atosgame.cardservice.model.Card;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,12 +26,12 @@ class CardEventServiceImplTest {
     void cardCreated() {
         Card card = mock(Card.class);
 
-        Message<BaseEvent> message = cardService.cardCreated(card);
+        Message<CardEvent> message = cardService.cardCreated(card);
 
         assertEquals("CardCreated", message.getPayload().getType());
         assertEquals("CardService", message.getPayload().getService());
-        assertInstanceOf(CardEventData.class, message.getPayload().getData());
-        assertEquals(card, ((CardEventData) message.getPayload().getData()).getCard());
+        assertInstanceOf(CardEvent.class, message.getPayload());
+        assertEquals(card, message.getPayload().getCard());
         assertEquals(card.getId(), message.getHeaders().get("kafka_messageKey"));
     }
 
@@ -39,12 +39,12 @@ class CardEventServiceImplTest {
     void cardUpdated() {
         Card card = mock(Card.class);
 
-        Message<BaseEvent> message = cardService.cardUpdated(card);
+        Message<CardEvent> message = cardService.cardUpdated(card);
 
         assertEquals("CardUpdated", message.getPayload().getType());
         assertEquals("CardService", message.getPayload().getService());
-        assertInstanceOf(CardEventData.class, message.getPayload().getData());
-        assertEquals(card, ((CardEventData) message.getPayload().getData()).getCard());
+        assertInstanceOf(CardEvent.class, message.getPayload());
+        assertEquals(card, message.getPayload().getCard());
         assertEquals(card.getId(), message.getHeaders().get("kafka_messageKey"));
     }
 
@@ -52,12 +52,12 @@ class CardEventServiceImplTest {
     void cardDeleted() {
         UUID id = UUID.randomUUID();
 
-        Message<BaseEvent> message = cardService.cardDeleted(id);
+        Message<CardDeletedEvent> message = cardService.cardDeleted(id);
 
         assertEquals("CardDeleted", message.getPayload().getType());
         assertEquals("CardService", message.getPayload().getService());
-        assertInstanceOf(CardDeletedData.class, message.getPayload().getData());
-        assertEquals(id, ((CardDeletedData) message.getPayload().getData()).getId());
+        assertInstanceOf(CardDeletedEvent.class, message.getPayload());
+        assertEquals(id, message.getPayload().getId());
         assertEquals(id, message.getHeaders().get("kafka_messageKey"));
     }
 }

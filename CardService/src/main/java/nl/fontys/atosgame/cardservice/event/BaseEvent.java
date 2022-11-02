@@ -11,10 +11,9 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BaseEvent {
+public abstract class BaseEvent {
     private UUID id;
-    private LocalDateTime timestamp;
+    private LocalDateTime timestamp ;
     private String type;
     private String service;
-    private EventData data;
 }

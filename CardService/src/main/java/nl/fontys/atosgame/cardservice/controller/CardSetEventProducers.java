@@ -1,6 +1,8 @@
 package nl.fontys.atosgame.cardservice.controller;
 
 import nl.fontys.atosgame.cardservice.event.BaseEvent;
+import nl.fontys.atosgame.cardservice.event.CardSetDeletedEvent;
+import nl.fontys.atosgame.cardservice.event.CardSetEvent;
 import nl.fontys.atosgame.cardservice.model.CardSet;
 import nl.fontys.atosgame.cardservice.service.CardSetEventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,7 @@ public class CardSetEventProducers {
      * output topic: card-set-created-topic
      */
     @Bean
-    public Function<CardSet, Message<BaseEvent>> cardSetCreated() {
+    public Function<CardSet, Message<CardSetEvent>> cardSetCreated() {
         return (input) -> {
             return cardSetEventService.cardSetCreated(input);
         };
@@ -45,7 +47,7 @@ public class CardSetEventProducers {
      * output topic: card-set-updated-topic
      */
     @Bean
-    public Function<CardSet, Message<BaseEvent>> cardSetUpdated() {
+    public Function<CardSet, Message<CardSetEvent>> cardSetUpdated() {
         return (input) -> {
             return cardSetEventService.cardSetUpdated(input);
         };
@@ -57,7 +59,7 @@ public class CardSetEventProducers {
      * output topic: card-set-deleted-topic
      */
     @Bean
-    public Function<UUID, Message<BaseEvent>> cardSetDeleted() {
+    public Function<UUID, Message<CardSetDeletedEvent>> cardSetDeleted() {
         return (input) -> {
             return cardSetEventService.cardSetDeleted(input);
         };

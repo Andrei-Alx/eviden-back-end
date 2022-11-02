@@ -6,9 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CardDeletedData extends EventData {
-    private UUID id;
+@Data
+public class CardSetDeletedEvent extends BaseEvent{
+    private UUID cardSetId;
 }
