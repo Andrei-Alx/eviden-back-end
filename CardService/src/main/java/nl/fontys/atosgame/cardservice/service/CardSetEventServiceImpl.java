@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+/**
+ * Service to create events for card set events
+ * @author Eli
+ */
 @Service
 public class CardSetEventServiceImpl implements CardSetEventService {
     /**

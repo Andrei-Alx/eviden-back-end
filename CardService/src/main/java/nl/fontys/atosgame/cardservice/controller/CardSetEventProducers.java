@@ -16,6 +16,7 @@ import java.util.function.Function;
  * - CardSetCreated
  * - CardSetUpdated
  * - CardSetDeleted
+ * @author Eli
  */
 @Controller
 public class CardSetEventProducers {

@@ -1,5 +1,9 @@
 package nl.fontys.atosgame.cardservice.event;
 
+/**
+ * Factory class for creating BaseEvent objects
+ * @author Eli
+ */
 public class BaseEventFactory {
     public static BaseEvent create(String type, String service, EventData data) {
         BaseEvent event = new BaseEvent();
