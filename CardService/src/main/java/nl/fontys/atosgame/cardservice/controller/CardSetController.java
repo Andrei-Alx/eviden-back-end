@@ -37,6 +37,7 @@ public class CardSetController {
             @ApiResponse(responseCode = "400", description = "Invalid input", content = @io.swagger.v3.oas.annotations.media.Content),
     })
     public ResponseEntity<CardSet> createCardSet(@RequestBody CreateCardSetDto createCardSetDto) {
+        // TODO: Cards should be validated, give response when card ids do not exist
         try {
             return ResponseEntity.ok(cardSetService.createCardSet(createCardSetDto));
         } catch (Exception e) {
