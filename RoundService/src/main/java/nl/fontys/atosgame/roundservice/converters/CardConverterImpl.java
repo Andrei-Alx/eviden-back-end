@@ -1,11 +1,13 @@
 package nl.fontys.atosgame.roundservice.converters;
 
 import nl.fontys.atosgame.roundservice.model.Card;
+import org.springframework.stereotype.Service;
 
 /**
  * Converts a cardService.card to a roundService.card
  * @author Eli
  */
+@Service
 public class CardConverterImpl implements CardConverter {
     /**
      * Convert a cardService.card to a roundService.card
