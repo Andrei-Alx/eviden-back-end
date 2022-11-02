@@ -8,16 +8,25 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.UUID;
 
+/**
+ * Service that handles all card requests
+ * calls the repository to store the card in the database
+ * and sends a message to the event bus
+ * @author Eli
+ */
 @Service
 public class CardServiceImpl implements CardService {
 
-    @Autowired
     private CardRepository cardRepository;
-
-    @Autowired
     private StreamBridge streamBridge;
+
+    public CardServiceImpl(@Autowired CardRepository cardRepository, @Autowired StreamBridge streamBridge) {
+        this.cardRepository = cardRepository;
+        this.streamBridge = streamBridge;
+    }
 
     /**
      * Create a new card
@@ -51,5 +60,15 @@ public class CardServiceImpl implements CardService {
     public void deleteCard(UUID id) {
         cardRepository.deleteById(id);
         streamBridge.send("cardDeleted-in-0", id);
+    }
+
+    /**
+     * Get collection of cards by their ids
+     * @param ids the ids of the cards to get
+     * @return the collection of cards
+     */
+    @Override
+    public Collection<Card> getCardsByIds(Collection<UUID> ids) {
+        return cardRepository.findAllById(ids);
     }
 }

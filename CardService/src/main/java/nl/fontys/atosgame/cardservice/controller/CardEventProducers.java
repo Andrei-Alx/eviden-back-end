@@ -5,6 +5,8 @@ import nl.fontys.atosgame.cardservice.event.BaseEventFactory;
 import nl.fontys.atosgame.cardservice.event.CardDeletedData;
 import nl.fontys.atosgame.cardservice.event.CardEventData;
 import nl.fontys.atosgame.cardservice.model.Card;
+import nl.fontys.atosgame.cardservice.service.CardEventService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -19,9 +21,16 @@ import java.util.function.Function;
  * - CardCreated
  * - CardUpdated
  * - CardDeleted
+ * @author Eli
  */
 @Controller
 public class CardEventProducers {
+
+    private CardEventService cardEventService;
+
+    public CardEventProducers(@Autowired CardEventService cardEventService) {
+        this.cardEventService = cardEventService;
+    }
 
     /**
      * function to produce a CardCreated event
@@ -31,13 +40,7 @@ public class CardEventProducers {
     @Bean
     public Function<Card, Message<BaseEvent>> cardCreated() {
         return (input) -> {
-            CardEventData data = new CardEventData(input);
-            Object key = input.getId();
-            BaseEvent event = BaseEventFactory.create("CardCreated", "CardService", data);
-            Message<BaseEvent> message = MessageBuilder.withPayload(event)
-                    .setHeader(KafkaHeaders.MESSAGE_KEY, key)
-                    .build();
-            return message;
+            return cardEventService.cardCreated(input);
         };
     }
 
@@ -49,13 +52,7 @@ public class CardEventProducers {
     @Bean
     public Function<Card, Message<BaseEvent>> cardUpdated() {
         return (input) -> {
-            CardEventData data = new CardEventData(input);
-            Object key = input.getId();
-            BaseEvent event = BaseEventFactory.create("CardUpdated", "CardService", data);
-            Message<BaseEvent> message = MessageBuilder.withPayload(event)
-                    .setHeader(KafkaHeaders.MESSAGE_KEY, key)
-                    .build();
-            return message;
+            return cardEventService.cardUpdated(input);
         };
     }
 
@@ -67,12 +64,7 @@ public class CardEventProducers {
     @Bean
     public Function<UUID, Message<BaseEvent>> cardDeleted() {
         return (input) -> {
-            CardDeletedData data = new CardDeletedData(input);
-            BaseEvent event = BaseEventFactory.create("CardDeleted", "CardService", data);
-            Message<BaseEvent> message = MessageBuilder.withPayload(event)
-                    .setHeader(KafkaHeaders.MESSAGE_KEY, input)
-                    .build();
-            return message;
+            return cardEventService.cardDeleted(input);
         };
     }
 }
