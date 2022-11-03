@@ -32,4 +32,11 @@ public interface RoundService {
      * @return The updated round
      */
     Round initializeRound(UUID roundId, List<UUID> playerIds);
+
+    /**
+     * distribute cards to all players
+     * @param roundId The id of the round
+     * @return The updated round
+     */
+    Round distributeCards(UUID roundId);
 }

@@ -9,6 +9,7 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -62,6 +63,7 @@ public class RoundServiceImpl implements RoundService {
      */
     @Override
     public Round startRound(UUID roundId) {
+        // TODO
         throw new UnsupportedOperationException();
     }
 
@@ -74,7 +76,7 @@ public class RoundServiceImpl implements RoundService {
      */
     @Override
     public Round initializeRound(UUID roundId, List<UUID> playerIds) {
-        Round round = roundRepository.findById(roundId).orElseThrow(EntityExistsException::new);
+        Round round = roundRepository.findById(roundId).orElseThrow(EntityNotFoundException::new);
         List<PlayerRound> playerRounds = new ArrayList<>();
         for (UUID playerId : playerIds) {
             PlayerRound playerRound = playerRoundService.createPlayerRound(roundId, playerId);
@@ -82,6 +84,18 @@ public class RoundServiceImpl implements RoundService {
         }
         round.setPlayerRounds(playerRounds);
         return roundRepository.save(round);
+    }
+
+    /**
+     * distribute cards to all players
+     *
+     * @param roundId The id of the round
+     * @return The updated round
+     */
+    @Override
+    public Round distributeCards(UUID roundId) {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     /**
