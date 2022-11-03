@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.roundservice.service;
 
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
+import nl.fontys.atosgame.roundservice.event.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.model.CardSet;
 import nl.fontys.atosgame.roundservice.model.LobbySettings;
 import nl.fontys.atosgame.roundservice.model.Round;
@@ -47,6 +48,11 @@ public class RoundServiceImpl implements RoundService {
         }
     }
 
+    /**
+     * Create a round for a game
+     * @param gameId The id of the game
+     * @param roundSettings The settings for the round
+     */
     public void createRound(UUID gameId, RoundSettingsDto roundSettings) {
         Round round = new Round(null, new ArrayList<>(), "NotStarted", null);
         // Create round settings
@@ -63,7 +69,6 @@ public class RoundServiceImpl implements RoundService {
         round = roundRepository.save(round);
 
         // Produce round created event
-        streamBridge.send("produceRoundCreated-in-0", gameId);
-        streamBridge.send("produceRoundCreated-in-1", round);
+        streamBridge.send("produceRoundCreated-in-0", new RoundCreatedEventKeyValue(gameId, round));
     }
 }

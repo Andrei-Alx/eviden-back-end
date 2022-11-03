@@ -1,7 +1,7 @@
 package nl.fontys.atosgame.roundservice.service;
 
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
-import nl.fontys.atosgame.roundservice.model.CardSet;
+import nl.fontys.atosgame.roundservice.event.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.model.RoundSettings;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
@@ -12,7 +12,6 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class RoundServiceImplTest {
@@ -42,7 +41,6 @@ class RoundServiceImplTest {
         roundService.createRound(gameId, roundSettings);
 
         verify(roundRepository).save(round);
-        verify(streamBridge).send("produceRoundCreated-in-0", gameId);
-        verify(streamBridge).send("produceRoundCreated-in-1", round);
+        verify(streamBridge).send("produceRoundCreated-in-0", new RoundCreatedEventKeyValue(gameId, round));
     }
 }

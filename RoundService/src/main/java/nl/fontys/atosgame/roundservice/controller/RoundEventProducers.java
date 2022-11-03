@@ -2,6 +2,7 @@ package nl.fontys.atosgame.roundservice.controller;
 
 import nl.fontys.atosgame.roundservice.event.EventFactory;
 import nl.fontys.atosgame.roundservice.event.RoundCreatedEvent;
+import nl.fontys.atosgame.roundservice.event.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.model.Round;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -26,17 +27,13 @@ public class RoundEventProducers {
      * function to produce a RoundCreated event
      * input topic: -
      * output topic: round-created-topic
-     *
-     * Function input: Tuple2<UUID, Round>
-     *     - UUID: The id of the game
-     *     - Round: The round that was created
      */
     @Bean
-    public Function<Tuple2<UUID, Round>, Message<RoundCreatedEvent>> produceRoundCreated() {
-        return (tuple) -> {
-            RoundCreatedEvent event = EventFactory.createRoundCreatedEvent("RoundService", tuple.getT2());
+    public Function<RoundCreatedEventKeyValue, Message<RoundCreatedEvent>> produceRoundCreated() {
+        return (keyValue) -> {
+            RoundCreatedEvent event = EventFactory.createRoundCreatedEvent("RoundService", keyValue.getRound());
             return MessageBuilder.withPayload(event)
-                    .setHeader(KafkaHeaders.MESSAGE_KEY, tuple.getT1())
+                    .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
                     .build();
         };
     }
