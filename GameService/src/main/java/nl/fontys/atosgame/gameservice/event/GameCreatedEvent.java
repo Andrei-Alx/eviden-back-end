@@ -1,8 +1,7 @@
 package nl.fontys.atosgame.gameservice.event;
 
-import nl.fontys.atosgame.cardservice.event.BaseEvent;
-import nl.fontys.atosgame.lobbyservice.model.LobbySettings;
-import nl.fontys.atosgame.roundservice.model.RoundSettings;
+import nl.fontys.atosgame.gameservice.model.LobbySettings;
+import nl.fontys.atosgame.gameservice.model.RoundSettings;
 
 import java.util.List;
 import java.util.UUID;

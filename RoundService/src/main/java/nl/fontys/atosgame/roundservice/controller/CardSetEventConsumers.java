@@ -1,9 +1,7 @@
 package nl.fontys.atosgame.roundservice.controller;
 
-import nl.fontys.atosgame.cardservice.event.CardSetDeletedEvent;
-import nl.fontys.atosgame.cardservice.event.CardSetEvent;
-import nl.fontys.atosgame.roundservice.converters.CardSetConverter;
-import nl.fontys.atosgame.roundservice.model.CardSet;
+import nl.fontys.atosgame.roundservice.event.CardSetDeletedEvent;
+import nl.fontys.atosgame.roundservice.event.CardSetEvent;
 import nl.fontys.atosgame.roundservice.service.CardSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,12 +14,17 @@ import java.util.function.Function;
 public class CardSetEventConsumers {
 
     private CardSetService cardSetService;
-    private CardSetConverter cardSetConverter;
 
-    public CardSetEventConsumers(@Autowired CardSetService cardSetService, @Autowired CardSetConverter cardSetConverter) {
+    public CardSetEventConsumers(@Autowired CardSetService cardSetService) {
         this.cardSetService = cardSetService;
-        this.cardSetConverter = cardSetConverter;
     }
+
+//    private CardSetConverter cardSetConverter;
+
+//    public CardSetEventConsumers(@Autowired CardSetService cardSetService, @Autowired CardSetConverter cardSetConverter) {
+//        this.cardSetService = cardSetService;
+//        this.cardSetConverter = cardSetConverter;
+//    }
 
     /**
      * function to consume a CardSetCreated event
@@ -32,7 +35,7 @@ public class CardSetEventConsumers {
     public Function<Message<CardSetEvent>, Void> handleCardSetCreated() {
         return message -> {
             CardSetEvent event = message.getPayload();
-            cardSetService.createCardSet(cardSetConverter.convert(event.getCardSet()));
+            cardSetService.createCardSet(event.getCardSet());
             return null;
         };
     }
@@ -47,7 +50,7 @@ public class CardSetEventConsumers {
         return message -> {
             CardSetEvent event = message.getPayload();
             // Convert to round service cardset
-            cardSetService.updateCardSet(cardSetConverter.convert(event.getCardSet()));
+            cardSetService.updateCardSet(event.getCardSet());
             return null;
         };
     }

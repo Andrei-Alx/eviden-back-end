@@ -1,9 +1,8 @@
 package nl.fontys.atosgame.roundservice.controller;
 
-import nl.fontys.atosgame.cardservice.event.BaseEvent;
-import nl.fontys.atosgame.cardservice.event.CardDeletedEvent;
-import nl.fontys.atosgame.cardservice.event.CardEvent;
-import nl.fontys.atosgame.cardservice.model.Card;
+import nl.fontys.atosgame.roundservice.event.CardDeletedEvent;
+import nl.fontys.atosgame.roundservice.event.CardEvent;
+import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.service.CardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
