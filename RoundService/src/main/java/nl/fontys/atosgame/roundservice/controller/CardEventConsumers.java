@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
 import java.util.function.Function;
 
 /**
- * Collection of all event producers for card events:
+ * Collection of all event consumers for card events:
  * - CardCreated
  * - CardUpdated
  * - CardDeleted

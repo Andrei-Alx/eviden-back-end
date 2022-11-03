@@ -21,12 +21,16 @@ public class Round {
     @JsonProperty
     private UUID id;
 
+    @JsonProperty
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "card_set_id")
     private CardSet cardSet;
     @OneToMany
+    @JsonProperty
     private List<PlayerRound> playerRounds;
+    @JsonProperty
     private String status;
+    @JsonProperty
     @OneToOne
     private RoundSettings roundSettings;
 }
