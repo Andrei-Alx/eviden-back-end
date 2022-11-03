@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.roundservice.service;
 
 import nl.fontys.atosgame.roundservice.model.Game;
+import nl.fontys.atosgame.roundservice.model.Lobby;
 import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.repository.GameRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,5 +40,29 @@ class GameServiceImplTest {
         assertNull(game.getLobby());
         assertEquals(0, game.getAmountOfPlayers());
         assertEquals(rounds, game.getRounds());
+    }
+
+    @Test
+    void addLobbyToGameNormalFlow() {
+        UUID gameId = UUID.randomUUID();
+        Game game = new Game();
+        game.setId(gameId);
+        Lobby lobby = new Lobby();
+        when(gameRepository.findById(gameId)).thenReturn(java.util.Optional.of(game));
+        when(gameRepository.save(any(Game.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        Game updatedGame = gameService.addLobbyToGame(gameId, lobby);
+
+        assertEquals(gameId, updatedGame.getId());
+        assertEquals(lobby, updatedGame.getLobby());
+    }
+
+    @Test
+    void addLobbyToGameGameNotFound() {
+        UUID gameId = UUID.randomUUID();
+        Lobby lobby = new Lobby();
+        when(gameRepository.findById(gameId)).thenReturn(java.util.Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> gameService.addLobbyToGame(gameId, lobby));
     }
 }
