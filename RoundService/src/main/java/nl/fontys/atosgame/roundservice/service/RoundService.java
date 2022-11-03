@@ -2,6 +2,7 @@ package nl.fontys.atosgame.roundservice.service;
 
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.model.LobbySettings;
+import nl.fontys.atosgame.roundservice.model.Round;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,5 +16,5 @@ public interface RoundService {
      * @param gameId The id of the game
      * @param roundSettings The settings for the rounds
      */
-    void createRounds(UUID gameId, List<RoundSettingsDto> roundSettings);
+    List<Round> createRounds(UUID gameId, List<RoundSettingsDto> roundSettings);
 }

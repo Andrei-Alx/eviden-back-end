@@ -3,12 +3,10 @@ package nl.fontys.atosgame.roundservice.service;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.event.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.model.*;
-import nl.fontys.atosgame.roundservice.repository.CardSetRepository;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
-import reactor.util.function.Tuple2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,12 +36,17 @@ public class RoundServiceImpl implements RoundService {
      * Create rounds for a game
      * @param gameId The id of the game
      * @param roundSettings The settings for the rounds
+     * @return
      */
     @Override
-    public void createRounds(UUID gameId, List<RoundSettingsDto> roundSettings) {
-        for (RoundSettingsDto roundSetting : roundSettings) {
-            createRound(gameId, roundSetting);
+    public List<Round> createRounds(UUID gameId, List<RoundSettingsDto> roundSettings) {
+        List<Round> rounds = new ArrayList<>();
+
+        for(RoundSettingsDto roundSetting : roundSettings) {
+            rounds.add(createRound(gameId, roundSetting));
         }
+
+        return rounds;
     }
 
     /**
@@ -51,7 +54,7 @@ public class RoundServiceImpl implements RoundService {
      * @param gameId The id of the game
      * @param roundSettings The settings for the round
      */
-    public void createRound(UUID gameId, RoundSettingsDto roundSettings) {
+    public Round createRound(UUID gameId, RoundSettingsDto roundSettings) {
         Round round = new Round(null, new ArrayList<>(), "NotStarted", null);
         // Create round settings
         RoundSettings settings = new RoundSettings(roundSettings.isShowPersonalOrGroupResults(), roundSettings.getNrOfLikedCards(), roundSettings.getNrOfPickedCards(), roundSettings.getShuffleMethod(), roundSettings.isShowSameCardOrder(), null);
@@ -72,5 +75,6 @@ public class RoundServiceImpl implements RoundService {
 
         // Produce round created event
         streamBridge.send("produceRoundCreated-in-0", new RoundCreatedEventKeyValue(gameId, round));
+        return round;
     }
 }

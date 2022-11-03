@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.roundservice.controller;
 
 import nl.fontys.atosgame.roundservice.event.GameCreatedEvent;
+import nl.fontys.atosgame.roundservice.service.GameService;
 import nl.fontys.atosgame.roundservice.service.RoundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,10 +19,10 @@ import java.util.function.Function;
 @Controller
 public class GameEventConsumers {
 
-    private RoundService roundService;
+    private GameService gameService;
 
-    public GameEventConsumers(@Autowired RoundService roundService) {
-        this.roundService = roundService;
+    public GameEventConsumers(@Autowired GameService gameService) {
+        this.gameService = gameService;
     }
 
     /**
@@ -33,7 +34,7 @@ public class GameEventConsumers {
     public Function<Message<GameCreatedEvent>, Void> handleGameCreated() {
         return message -> {
             GameCreatedEvent event = message.getPayload();
-            roundService.createRounds(event.getGameId(), event.getRoundSettings());
+            gameService.initializeGame(event.getGameId(), event.getRoundSettings());
             return null;
         };
     }
