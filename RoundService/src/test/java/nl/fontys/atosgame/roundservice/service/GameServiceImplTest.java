@@ -65,4 +65,10 @@ class GameServiceImplTest {
 
         assertThrows(IllegalArgumentException.class, () -> gameService.addLobbyToGame(gameId, lobby));
     }
+
+    @Test
+    void startGame() {
+        // Not yet implemented
+        assertFalse(true);
+    }
 }

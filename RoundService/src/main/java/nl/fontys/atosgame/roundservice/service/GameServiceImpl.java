@@ -66,4 +66,16 @@ public class GameServiceImpl implements GameService {
             throw new IllegalArgumentException("Game not found");
         }
     }
+
+    /**
+     * Start the game
+     * Start the first round
+     *
+     * @param gameId The id of the game
+     * @return The updated game
+     */
+    @Override
+    public Game startGame(String gameId) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 }

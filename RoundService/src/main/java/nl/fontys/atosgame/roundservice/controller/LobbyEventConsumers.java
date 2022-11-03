@@ -1,6 +1,6 @@
 package nl.fontys.atosgame.roundservice.controller;
 
-import nl.fontys.atosgame.roundservice.event.LobbyCreated;
+import nl.fontys.atosgame.roundservice.event.LobbyCreatedEvent;
 import nl.fontys.atosgame.roundservice.event.PlayerJoinedEvent;
 import nl.fontys.atosgame.roundservice.service.GameService;
 import nl.fontys.atosgame.roundservice.service.LobbyService;
@@ -36,9 +36,9 @@ public class LobbyEventConsumers {
      * output topic: -
      */
     @Bean
-    public Function<Message<LobbyCreated>, Void> handleLobbyCreated() {
+    public Function<Message<LobbyCreatedEvent>, Void> handleLobbyCreated() {
         return message -> {
-            LobbyCreated event = message.getPayload();
+            LobbyCreatedEvent event = message.getPayload();
             lobbyService.createLobby(event.getLobby());
             gameService.addLobbyToGame(event.getGameId(), event.getLobby());
             return null;

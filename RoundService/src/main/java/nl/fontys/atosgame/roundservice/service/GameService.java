@@ -23,4 +23,12 @@ public interface GameService {
      * @return The updated game
      */
     Game addLobbyToGame(UUID gameId, Lobby lobby);
+
+    /**
+     * Start the game
+     * Start the first round
+     * @param gameId The id of the game
+     * @return The updated game
+     */
+    Game startGame(String gameId);
 }

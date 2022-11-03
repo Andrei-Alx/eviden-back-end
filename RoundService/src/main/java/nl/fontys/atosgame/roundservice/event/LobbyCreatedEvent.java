@@ -10,7 +10,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LobbyCreated extends BaseEvent {
+public class LobbyCreatedEvent extends BaseEvent {
     private Lobby lobby;
     private UUID gameId;
 }

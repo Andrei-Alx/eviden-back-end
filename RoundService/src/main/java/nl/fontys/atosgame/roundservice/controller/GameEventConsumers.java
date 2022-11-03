@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.roundservice.controller;
 
 import nl.fontys.atosgame.roundservice.event.GameCreatedEvent;
+import nl.fontys.atosgame.roundservice.event.GameStartedEvent;
 import nl.fontys.atosgame.roundservice.service.GameService;
 import nl.fontys.atosgame.roundservice.service.RoundService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import java.util.function.Function;
 /**
  *  Collection of all event consumers for game events:
  *  - GameCreated
- *
+ *  - GameStarted
  *  @author Eli
  */
 @Controller
@@ -35,6 +36,20 @@ public class GameEventConsumers {
         return message -> {
             GameCreatedEvent event = message.getPayload();
             gameService.initializeGame(event.getGameId(), event.getRoundSettings());
+            return null;
+        };
+    }
+
+    /**
+     * function to consume a GameStarted event
+     * input topic: game-started-topic
+     * output topic: -
+     */
+    @Bean
+    public Function<Message<GameStartedEvent>, Void> handleGameStarted() {
+        return message -> {
+            GameStartedEvent event = message.getPayload();
+            gameService.startGame(event.getGameId());
             return null;
         };
     }
