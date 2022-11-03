@@ -45,4 +45,15 @@ public class CardSetServiceImpl implements CardSetService {
     public void deleteCardSet(UUID uuid) {
         cardSetRepository.deleteById(uuid);
     }
+
+    /**
+     * Get a card set by id
+     *
+     * @param uuid The id of the card set to get
+     * @return The card set
+     */
+    @Override
+    public CardSet getCardSet(UUID uuid) {
+        return cardSetRepository.findById(uuid).orElse(null);
+    }
 }

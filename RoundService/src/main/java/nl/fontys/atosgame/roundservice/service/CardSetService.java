@@ -20,4 +20,11 @@ public interface CardSetService {
      * @param uuid The id of the card set to delete
      */
     void deleteCardSet(java.util.UUID uuid);
+
+    /**
+     * Get a card set by id
+     * @param uuid The id of the card set to get
+     * @return The card set
+     */
+    CardSet getCardSet(java.util.UUID uuid);
 }
