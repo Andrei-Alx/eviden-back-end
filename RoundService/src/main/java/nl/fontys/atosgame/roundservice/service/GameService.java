@@ -4,6 +4,7 @@ import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.model.Game;
 import nl.fontys.atosgame.roundservice.model.Lobby;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,5 +31,14 @@ public interface GameService {
      * @param gameId The id of the game
      * @return The updated game
      */
-    Game startGame(String gameId);
+    Game startGame(UUID gameId) throws EntityNotFoundException;
+
+    /**
+     * Start a round in a game
+     * @param gameId The id of the game
+     * @param roundNumber The number of the round
+     * @return The updated game
+     * @throws EntityNotFoundException When the game or round is not found
+     */
+    Game startRound(UUID gameId, int roundNumber) throws EntityNotFoundException;
 }

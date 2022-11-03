@@ -50,6 +50,29 @@ public class RoundServiceImpl implements RoundService {
     }
 
     /**
+     * Start a round
+     *
+     * @param roundId The id of the round
+     * @return The updated round
+     */
+    @Override
+    public Round startRound(UUID roundId) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Initialize a round
+     *
+     * @param roundId   The id of the round
+     * @param playerIds The ids of the players
+     * @return The updated round
+     */
+    @Override
+    public Round initializeRound(UUID roundId, List<UUID> playerIds) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * Create a round for a game
      * @param gameId The id of the game
      * @param roundSettings The settings for the round

@@ -8,6 +8,7 @@ import nl.fontys.atosgame.roundservice.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,7 +39,6 @@ public class GameServiceImpl implements GameService {
     public Game initializeGame(UUID gameId, List<RoundSettingsDto> roundSettings) {
         Game game = new Game();
         game.setId(gameId);
-        game.setAmountOfPlayers(0);
 
         game = gameRepository.save(game);
 
@@ -75,7 +75,39 @@ public class GameServiceImpl implements GameService {
      * @return The updated game
      */
     @Override
-    public Game startGame(String gameId) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public Game startGame(UUID gameId) throws EntityNotFoundException {
+        return this.startRound(gameId, 0);
+    }
+
+    /**
+     * Start a round in a game
+     *
+     * @param gameId      The id of the game
+     * @param roundNumber The number of the round
+     * @return The updated game
+     * @throws EntityNotFoundException When the game or round is not found
+     */
+    @Override
+    public Game startRound(UUID gameId, int roundNumber) throws EntityNotFoundException {
+        Optional<Game> gameOptional = gameRepository.findById(gameId);
+        if (gameOptional.isPresent()) {
+            Game game = gameOptional.get();
+
+            if (game.getRounds().size() <= roundNumber) {
+                throw new EntityNotFoundException("Round not found");
+            }
+
+            // Initialize the round
+            Round round = game.getRounds().get(roundNumber);
+            roundService.initializeRound(round.getId(), game.getLobby().getPlayerIds());
+
+            // Start the round
+            round = roundService.startRound(round.getId());
+            game.getRounds().set(roundNumber, round);
+
+            return gameRepository.save(game);
+        } else {
+            throw new EntityNotFoundException("Game not found");
+        }
     }
 }

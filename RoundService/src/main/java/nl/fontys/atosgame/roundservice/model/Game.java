@@ -26,9 +26,6 @@ public class Game {
     @OneToMany
     private List<Round> rounds;
 
-    @JsonProperty
-    private int amountOfPlayers;
-
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "lobby_id")
     @JsonProperty

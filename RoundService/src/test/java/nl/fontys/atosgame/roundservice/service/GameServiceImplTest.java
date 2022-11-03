@@ -7,6 +7,7 @@ import nl.fontys.atosgame.roundservice.repository.GameRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,7 +39,6 @@ class GameServiceImplTest {
         assertNotNull(game.getId());
         assertEquals(gameId, game.getId());
         assertNull(game.getLobby());
-        assertEquals(0, game.getAmountOfPlayers());
         assertEquals(rounds, game.getRounds());
     }
 
@@ -67,8 +67,31 @@ class GameServiceImplTest {
     }
 
     @Test
-    void startGame() {
-        // Not yet implemented
-        assertFalse(true);
+    void startRound() {
+        UUID gameId = UUID.randomUUID();
+        Game game = new Game();
+        game.setId(gameId);
+        List<Round> rounds = new ArrayList<>(){{
+            add(new Round(UUID.randomUUID(), new ArrayList<>(), "NotStarted", null));
+            add(new Round(UUID.randomUUID(), new ArrayList<>(), "NotStarted", null));
+        }};
+        game.setRounds(rounds);
+        Lobby lobby = new Lobby();
+        List<UUID> players = new ArrayList<>(){{
+            add(UUID.randomUUID());
+            add(UUID.randomUUID());
+        }};
+        lobby.setPlayerIds(players);
+        game.setLobby(lobby);
+        when(gameRepository.findById(gameId)).thenReturn(java.util.Optional.of(game));
+        when(gameRepository.save(any(Game.class))).thenAnswer(i -> i.getArguments()[0]);
+        when(roundService.startRound(rounds.get(0).getId())).thenReturn(rounds.get(0));
+
+        Game updatedGame = gameService.startRound(gameId, 0);
+
+        assertEquals(gameId, updatedGame.getId());
+        verify(roundService).initializeRound(rounds.get(0).getId(), game.getLobby().getPlayerIds());
+        verify(roundService).startRound(rounds.get(0).getId());
+        verify(roundService, never()).startRound(rounds.get(1).getId());
     }
 }
