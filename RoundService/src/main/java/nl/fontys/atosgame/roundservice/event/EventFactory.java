@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.roundservice.event;
 
 
+import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
 import nl.fontys.atosgame.roundservice.model.Round;
 
 import java.util.UUID;

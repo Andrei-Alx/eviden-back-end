@@ -1,7 +1,7 @@
 package nl.fontys.atosgame.roundservice.service;
 
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
-import nl.fontys.atosgame.roundservice.event.RoundCreatedEventKeyValue;
+import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.model.RoundSettings;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
