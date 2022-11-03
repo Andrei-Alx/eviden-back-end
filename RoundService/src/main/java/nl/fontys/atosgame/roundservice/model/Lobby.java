@@ -25,4 +25,20 @@ public class Lobby {
     @ElementCollection
     @JsonProperty
     private List<UUID> playerIds = new java.util.ArrayList<>();
+
+    /**
+     * Add a player to the lobby
+     * @param playerId The id of the player
+     */
+    public void addPlayer(UUID playerId) {
+        playerIds.add(playerId);
+    }
+
+    /**
+     * Remove a player from the lobby
+     * @param playerId The id of the player
+     */
+    public void removePlayer(UUID playerId) {
+        playerIds.remove(playerId);
+    }
 }
