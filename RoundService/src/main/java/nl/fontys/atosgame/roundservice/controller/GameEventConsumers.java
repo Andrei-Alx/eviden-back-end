@@ -33,7 +33,7 @@ public class GameEventConsumers {
     public Function<Message<GameCreatedEvent>, Void> handleGameCreated() {
         return message -> {
             GameCreatedEvent event = message.getPayload();
-            roundService.createRounds(event.getGameId(), event.getRoundSettings(), event.getLobbySettings());
+            roundService.createRounds(event.getGameId(), event.getRoundSettings());
             return null;
         };
     }

@@ -17,5 +17,4 @@ import java.util.UUID;
 public class GameCreatedEvent extends BaseEvent {
     private UUID gameId;
     private List<RoundSettingsDto> roundSettings;
-    private LobbySettings lobbySettings;
 }
