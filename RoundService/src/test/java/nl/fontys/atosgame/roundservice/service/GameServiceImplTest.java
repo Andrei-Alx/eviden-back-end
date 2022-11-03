@@ -36,7 +36,7 @@ class GameServiceImplTest {
 
         assertNotNull(game.getId());
         assertEquals(gameId, game.getId());
-        assertNull(game.getLobbyId());
+        assertNull(game.getLobby());
         assertEquals(0, game.getAmountOfPlayers());
         assertEquals(rounds, game.getRounds());
     }
