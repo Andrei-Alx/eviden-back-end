@@ -3,9 +3,8 @@ package nl.fontys.atosgame.roundservice.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -30,4 +29,11 @@ public class RoundSettings {
 
     @JsonProperty
     private boolean showSameCardOrder;
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "round_settings_card_set",
+            joinColumns = @JoinColumn(name = "round_settings_null"),
+            inverseJoinColumns = @JoinColumn(name = "card_set_id"))
+    @JsonProperty
+    private Set<CardSet> cardSet = new java.util.LinkedHashSet<>();
 }
