@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,11 +25,14 @@ public class RoundServiceImpl implements RoundService {
 
     private final CardSetService cardSetService;
 
+    private final PlayerRoundService playerRoundService;
+
     private StreamBridge streamBridge;
 
-    public RoundServiceImpl(@Autowired RoundRepository roundRepository, @Autowired CardSetService cardSetService, @Autowired StreamBridge streamBridge) {
+    public RoundServiceImpl(@Autowired RoundRepository roundRepository, @Autowired CardSetService cardSetService, @Autowired StreamBridge streamBridge, @Autowired PlayerRoundService playerRoundService) {
         this.roundRepository = roundRepository;
         this.cardSetService = cardSetService;
+        this.playerRoundService = playerRoundService;
         this.streamBridge = streamBridge;
     }
 
@@ -51,7 +55,8 @@ public class RoundServiceImpl implements RoundService {
 
     /**
      * Start a round
-     *
+     * Changes the status of the round to InProgress
+     * Distributes the cards to the players
      * @param roundId The id of the round
      * @return The updated round
      */
@@ -62,14 +67,21 @@ public class RoundServiceImpl implements RoundService {
 
     /**
      * Initialize a round
-     *
+     * Create all the player rounds
      * @param roundId   The id of the round
      * @param playerIds The ids of the players
      * @return The updated round
      */
     @Override
     public Round initializeRound(UUID roundId, List<UUID> playerIds) {
-        throw new UnsupportedOperationException();
+        Round round = roundRepository.findById(roundId).orElseThrow(EntityExistsException::new);
+        List<PlayerRound> playerRounds = new ArrayList<>();
+        for (UUID playerId : playerIds) {
+            PlayerRound playerRound = playerRoundService.createPlayerRound(roundId, playerId);
+            playerRounds.add(playerRound);
+        }
+        round.setPlayerRounds(playerRounds);
+        return roundRepository.save(round);
     }
 
     /**
