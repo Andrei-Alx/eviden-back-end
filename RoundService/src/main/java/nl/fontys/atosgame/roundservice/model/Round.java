@@ -20,11 +20,6 @@ public class Round {
     @Type(type="org.hibernate.type.UUIDCharType")
     @JsonProperty
     private UUID id;
-
-    @JsonProperty
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "card_set_id")
-    private CardSet cardSet;
     @OneToMany
     @JsonProperty
     private List<PlayerRound> playerRounds;
