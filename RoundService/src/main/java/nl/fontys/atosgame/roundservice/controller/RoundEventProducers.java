@@ -3,16 +3,12 @@ package nl.fontys.atosgame.roundservice.controller;
 import nl.fontys.atosgame.roundservice.event.EventFactory;
 import nl.fontys.atosgame.roundservice.event.RoundCreatedEvent;
 import nl.fontys.atosgame.roundservice.event.RoundCreatedEventKeyValue;
-import nl.fontys.atosgame.roundservice.model.Round;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
-import reactor.util.function.Tuple2;
 
-import java.util.UUID;
 import java.util.function.Function;
 
 /**
