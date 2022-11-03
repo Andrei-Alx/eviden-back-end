@@ -2,10 +2,7 @@ package nl.fontys.atosgame.roundservice.service;
 
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.event.RoundCreatedEventKeyValue;
-import nl.fontys.atosgame.roundservice.model.CardSet;
-import nl.fontys.atosgame.roundservice.model.LobbySettings;
-import nl.fontys.atosgame.roundservice.model.Round;
-import nl.fontys.atosgame.roundservice.model.RoundSettings;
+import nl.fontys.atosgame.roundservice.model.*;
 import nl.fontys.atosgame.roundservice.repository.CardSetRepository;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +12,7 @@ import reactor.util.function.Tuple2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -56,17 +54,21 @@ public class RoundServiceImpl implements RoundService {
     public void createRound(UUID gameId, RoundSettingsDto roundSettings) {
         Round round = new Round(null, new ArrayList<>(), "NotStarted", null);
         // Create round settings
-        RoundSettings settings = new RoundSettings(roundSettings.getId(), roundSettings.isShowPersonalOrGroupResults(), roundSettings.getNrOfLikedCards(), roundSettings.getNrOfPickedCards(), roundSettings.getShuffleMethod(), roundSettings.isShowSameCardOrder(), null);
+        RoundSettings settings = new RoundSettings(roundSettings.isShowPersonalOrGroupResults(), roundSettings.getNrOfLikedCards(), roundSettings.getNrOfPickedCards(), roundSettings.getShuffleMethod(), roundSettings.isShowSameCardOrder(), null);
         // Get card set
-        CardSet cardSet = cardSetService.getCardSet(roundSettings.getCardSetId());
-        // Add card set to round settings
-        settings.setCardSet(cardSet);
-
+        Optional<CardSet> cardSet = cardSetService.getCardSet(roundSettings.getCardSetId());
+        if (cardSet.isEmpty()) {
+            throw new IllegalArgumentException("Card set not found");
+        }
         // Add round settings to round
         round.setRoundSettings(settings);
-
         // Save round
         round = roundRepository.save(round);
+        // Add card set to round settings
+        settings.setCardSet(cardSet.get());
+
+        round = roundRepository.save(round);
+
 
         // Produce round created event
         streamBridge.send("produceRoundCreated-in-0", new RoundCreatedEventKeyValue(gameId, round));

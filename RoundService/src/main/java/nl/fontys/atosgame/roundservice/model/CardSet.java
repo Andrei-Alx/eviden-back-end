@@ -20,7 +20,7 @@ public class CardSet {
     @JsonProperty
     private UUID id;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(name = "card_set_cards",
             joinColumns = @JoinColumn(name = "card_set_null"),
             inverseJoinColumns = @JoinColumn(name = "cards_id"))

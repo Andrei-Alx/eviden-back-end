@@ -26,6 +26,6 @@ public class Round {
     @JsonProperty
     private String status;
     @JsonProperty
-    @OneToOne
+    @Embedded
     private RoundSettings roundSettings;
 }

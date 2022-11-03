@@ -11,16 +11,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-@Entity
+@Embeddable
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoundSettings {
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @Type(type="org.hibernate.type.UUIDCharType")
-    @JsonProperty
-    private UUID id;
 
     @JsonProperty
     private boolean showPersonalOrGroupResults;

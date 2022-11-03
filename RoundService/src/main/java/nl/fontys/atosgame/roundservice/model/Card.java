@@ -22,7 +22,7 @@ public class Card {
     @JsonProperty
     private UUID id;
 
-    @ElementCollection
+    @ElementCollection(fetch = javax.persistence.FetchType.EAGER)
     @JsonProperty
     private Collection<Tag> tags;
 }

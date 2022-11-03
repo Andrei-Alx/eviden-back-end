@@ -32,7 +32,7 @@ class RoundServiceImplTest {
     @Test
     void createRound() {
         RoundSettingsDto roundSettings = new RoundSettingsDto(UUID.randomUUID(), true, 1, 1, "shuffle", true, UUID.randomUUID());
-        RoundSettings settings = new RoundSettings(roundSettings.getId(), roundSettings.isShowPersonalOrGroupResults(), roundSettings.getNrOfLikedCards(), roundSettings.getNrOfPickedCards(), roundSettings.getShuffleMethod(), roundSettings.isShowSameCardOrder(), null);
+        RoundSettings settings = new RoundSettings(roundSettings.isShowPersonalOrGroupResults(), roundSettings.getNrOfLikedCards(), roundSettings.getNrOfPickedCards(), roundSettings.getShuffleMethod(), roundSettings.isShowSameCardOrder(), null);
         when(cardSetService.getCardSet(roundSettings.getCardSetId())).thenReturn(null);
         Round round = new Round(null, new ArrayList<>(), "NotStarted", settings);
         when(roundRepository.save(round)).thenReturn(round);
