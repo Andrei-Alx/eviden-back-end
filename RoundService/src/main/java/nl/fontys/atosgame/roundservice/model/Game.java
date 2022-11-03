@@ -31,4 +31,7 @@ public class Game {
 
     @JsonProperty
     private int amountOfPlayers;
+
+    @JsonProperty
+    private UUID lobbyId;
 }
