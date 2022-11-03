@@ -22,7 +22,7 @@ public class Lobby {
     @Type(type="org.hibernate.type.UUIDCharType")
     @JsonProperty
     private UUID id;
-    @ElementCollection
+    @ElementCollection(fetch = javax.persistence.FetchType.EAGER)
     @JsonProperty
     private List<UUID> playerIds = new java.util.ArrayList<>();
 
