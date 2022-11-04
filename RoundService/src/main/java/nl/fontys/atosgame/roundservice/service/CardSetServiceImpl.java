@@ -5,6 +5,7 @@ import nl.fontys.atosgame.roundservice.repository.CardSetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -44,5 +45,16 @@ public class CardSetServiceImpl implements CardSetService {
     @Override
     public void deleteCardSet(UUID uuid) {
         cardSetRepository.deleteById(uuid);
+    }
+
+    /**
+     * Get a card set by id
+     *
+     * @param uuid The id of the card set to get
+     * @return The card set
+     */
+    @Override
+    public Optional<CardSet> getCardSet(UUID uuid) {
+        return cardSetRepository.findById(uuid);
     }
 }

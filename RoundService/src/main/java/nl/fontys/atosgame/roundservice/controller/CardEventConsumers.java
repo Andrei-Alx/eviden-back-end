@@ -1,8 +1,7 @@
 package nl.fontys.atosgame.roundservice.controller;
 
-import nl.fontys.atosgame.cardservice.event.BaseEvent;
-import nl.fontys.atosgame.cardservice.event.CardDeletedEvent;
-import nl.fontys.atosgame.cardservice.event.CardEvent;
+import nl.fontys.atosgame.roundservice.event.CardDeletedEvent;
+import nl.fontys.atosgame.roundservice.event.CardEvent;
 import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import java.util.function.Function;
 
 /**
- * Collection of all event producers for card events:
+ * Collection of all event consumers for card events:
  * - CardCreated
  * - CardUpdated
  * - CardDeleted
@@ -38,8 +37,7 @@ public class CardEventConsumers {
         return message -> {
             CardEvent event = message.getPayload();
             // Convert to round service card
-            Card card = new Card(event.getCard().getId(), event.getCard().getTags());
-            cardService.createCard(card);
+            cardService.createCard(event.getCard());
             return null;
         };
     }
@@ -54,8 +52,7 @@ public class CardEventConsumers {
         return message -> {
             CardEvent event = message.getPayload();
             // Convert to round service card
-            Card card = new Card(event.getCard().getId(), event.getCard().getTags());
-            cardService.updateCard(card);
+            cardService.updateCard(event.getCard());
             return null;
         };
     }

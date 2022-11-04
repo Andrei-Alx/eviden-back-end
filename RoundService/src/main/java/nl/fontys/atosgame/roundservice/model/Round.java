@@ -6,23 +6,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.util.Collection;
+import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Card {
+public class Round {
     @Id
-    @Type(type = "org.hibernate.type.UUIDCharType")
+    @GeneratedValue(generator = "UUID")
+    @Type(type="org.hibernate.type.UUIDCharType")
     @JsonProperty
     private UUID id;
-
-    @ElementCollection(fetch = javax.persistence.FetchType.EAGER)
+    @OneToMany
     @JsonProperty
-    private Collection<Tag> tags;
+    private List<PlayerRound> playerRounds;
+    @JsonProperty
+    private String status;
+    @JsonProperty
+    @Embedded
+    private RoundSettings roundSettings;
 }
