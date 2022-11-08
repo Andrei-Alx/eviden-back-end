@@ -11,7 +11,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoundStarted extends BaseEvent {
-    private int roundNumber;
     private UUID gameId;
     private UUID roundId;
 }
