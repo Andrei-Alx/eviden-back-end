@@ -1,7 +1,6 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
-import nl.fontys.atosgame.gameappbff.event.consumed.RoundEndedEvent;
-import nl.fontys.atosgame.gameappbff.event.consumed.RoundStartedEvent;
+import nl.fontys.atosgame.gameappbff.event.consumed.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
@@ -12,6 +11,12 @@ import java.util.function.Function;
  * Collection of consumers for round related events:
  * - RoundStartedEvent
  * - RoundEndedEvent
+ * - PlayerPhaseStartedEvent
+ * - PlayerPhaseEndedEvent
+ * - PlayerCardsDistributedEvent
+ * - PlayerLikedCardEvent
+ * - PlayerDislikedCardEvent
+ * - PlayerSelectedCardsEvent
  */
 @Controller
 public class RoundConsumers {
@@ -38,6 +43,90 @@ public class RoundConsumers {
      */
     @Bean
     public Function<Message<RoundEndedEvent>, Void> handleRoundEnded() {
+        return message -> {
+            //TODO: implement
+            throw new UnsupportedOperationException("Not implemented yet");
+        };
+    }
+
+    /**
+     * Id: C-32
+     * Consumer for PlayerPhaseStartedEvent
+     * input topic: player-phase-started-topic
+     * output topic: -
+     */
+    @Bean
+    public Function<Message<PlayerPhaseStartedEvent>, Void> handlePlayerPhaseStarted() {
+        return message -> {
+            //TODO: implement
+            throw new UnsupportedOperationException("Not implemented yet");
+        };
+    }
+
+    /**
+     * Id: C-33
+     * Consumer for PlayerPhaseEndedEvent
+     * input topic: player-phase-ended-topic
+     * output topic: -
+     */
+    @Bean
+    public Function<Message<PlayerPhaseEndedEvent>, Void> handlePlayerPhaseEnded() {
+        return message -> {
+            //TODO: implement
+            throw new UnsupportedOperationException("Not implemented yet");
+        };
+    }
+
+    /**
+     * Id: C-34
+     * Consumer for PlayerCardsDistributedEvent
+     * input topic: player-cards-distributed-topic
+     * output topic: -
+     */
+    @Bean
+    public Function<Message<PlayerCardsDistributedEvent>, Void> handlePlayerCardsDistributed() {
+        return message -> {
+            //TODO: implement
+            throw new UnsupportedOperationException("Not implemented yet");
+        };
+    }
+
+    /**
+     * Id: C-35
+     * Consumer for PlayerLikedCardEvent
+     * input topic: player-liked-card-topic
+     * output topic: -
+     */
+    @Bean
+    public Function<Message<PlayerLikedCardEvent>, Void> handlePlayerLikedCard() {
+        return message -> {
+            //TODO: implement
+            throw new UnsupportedOperationException("Not implemented yet");
+        };
+    }
+
+    /**
+     * Id: C-36
+     * Consumer for PlayerDislikedCardEvent
+     * input topic: player-disliked-card-topic
+     * output topic: -
+     */
+    @Bean
+    public Function<Message<PlayerDislikedCardEvent>, Void> handlePlayerDislikedCard() {
+        return message -> {
+            //TODO: implement
+            throw new UnsupportedOperationException("Not implemented yet");
+        };
+    }
+
+    /**
+     * Id: C-37
+     * Consumer for PlayerSelectedCardsEvent
+     * input topic: player-selected-cards-topic
+     * output topic: -
+     */
+    @Bean
+    public Function<Message<PlayerSelectedCardsEvent>, Void> handlePlayerSelectedCards() {
         return message -> {
             //TODO: implement
             throw new UnsupportedOperationException("Not implemented yet");

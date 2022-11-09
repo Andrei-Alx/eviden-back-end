@@ -5,12 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.gameappbff.event.BaseEvent;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoundEndedEvent extends BaseEvent {
-    private UUID roundId;
+public class PlayerCardsDistributedEvent extends BaseEvent {
+    private UUID playerId;
     private UUID gameId;
+    private UUID roundId;
+    private List<UUID> cardIds;
 }

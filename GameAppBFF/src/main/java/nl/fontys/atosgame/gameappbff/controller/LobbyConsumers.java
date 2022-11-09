@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
+import nl.fontys.atosgame.gameappbff.event.consumed.LobbyDeletedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerJoinedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerQuitEvent;
 import org.springframework.context.annotation.Bean;
@@ -9,13 +10,14 @@ import org.springframework.stereotype.Controller;
 import java.util.function.Function;
 
 /**
- * Collection of consumers for player related events:
+ * Collection of consumers for lobby related events:
  * - PlayerJoinedEvent
  * - PlayerQuitEvent
+ * - LobbyDeletedEvent
  * @author Eli
  */
 @Controller
-public class PlayerConsumers {
+public class LobbyConsumers {
 
     /**
      * Id: C-26
@@ -41,6 +43,20 @@ public class PlayerConsumers {
     public Function<Message<PlayerQuitEvent>, Void> handlePlayerQuit() {
         return message -> {
             // TODO: implement
+            throw new UnsupportedOperationException("Not implemented yet");
+        };
+    }
+
+    /**
+     * Id: C-41
+     * Consumer for LobbyDeletedEvent
+     * input topic: lobby-deleted-topic
+     * output topic: -
+     */
+    @Bean
+    public Function<Message<LobbyDeletedEvent>, Void> handleLobbyDeleted() {
+        return message -> {
+            //TODO: implement
             throw new UnsupportedOperationException("Not implemented yet");
         };
     }

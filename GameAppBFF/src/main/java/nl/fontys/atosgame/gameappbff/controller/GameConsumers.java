@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
 import nl.fontys.atosgame.gameappbff.event.consumed.GameCreatedEvent;
+import nl.fontys.atosgame.gameappbff.event.consumed.GameEndedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.GameStartedEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
@@ -12,6 +13,7 @@ import java.util.function.Function;
  * Collection of consumers for game related events:
  * - GameCreatedEvent
  * - GameStartedEvent
+ * - GameEndedEvent
  * @author Eli
  */
 @Controller
@@ -41,6 +43,20 @@ public class GameConsumers {
     public Function<Message<GameStartedEvent>, Void> handleGameStarted() {
         return message -> {
             // TODO: implement
+            throw new UnsupportedOperationException("Not implemented yet");
+        };
+    }
+
+    /**
+     * Id: C-40
+     * Consumer for GameEndedEvent
+     * input topic: game-ended-topic
+     * output topic: -
+     */
+    @Bean
+    public Function<Message<GameEndedEvent>, Void> handleGameEnded() {
+        return message -> {
+            //TODO: implement
             throw new UnsupportedOperationException("Not implemented yet");
         };
     }

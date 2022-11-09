@@ -10,7 +10,6 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoundEndedEvent extends BaseEvent {
-    private UUID roundId;
-    private UUID gameId;
+public class LobbyDeletedEvent extends BaseEvent {
+    private UUID lobbyId;
 }
