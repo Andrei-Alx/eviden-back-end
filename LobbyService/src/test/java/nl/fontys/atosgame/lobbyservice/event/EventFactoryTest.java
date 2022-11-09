@@ -2,6 +2,7 @@ package nl.fontys.atosgame.lobbyservice.event;
 
 import nl.fontys.atosgame.lobbyservice.event.produced.LobbyCreatedEvent;
 import nl.fontys.atosgame.lobbyservice.event.produced.LobbyDeletedEvent;
+import nl.fontys.atosgame.lobbyservice.event.produced.PlayerJoinedEvent;
 import nl.fontys.atosgame.lobbyservice.model.Lobby;
 import org.junit.jupiter.api.Test;
 
@@ -39,5 +40,42 @@ class EventFactoryTest {
         assertEquals("LobbyDeleted", lobbyDeletedEvent.getType());
         assertEquals("Test", lobbyDeletedEvent.getService());
         assertEquals(id, lobbyDeletedEvent.getLobbyId());
+        assertEquals(gameid, lobbyDeletedEvent.getGameId());
+    }
+
+    @Test
+    void createPlayerJoinedEvent() {
+        UUID lobbyid = UUID.randomUUID();
+        UUID playerid = UUID.randomUUID();
+        UUID gameid = UUID.randomUUID();
+
+        PlayerJoinedEvent playerJoinedEvent = EventFactory.createPlayerJoinedEvent(lobbyid, playerid, gameid);
+
+        assertNotNull(playerJoinedEvent);
+        assertNotNull(playerJoinedEvent.getId());
+        assertNotNull(playerJoinedEvent.getTimestamp());
+        assertEquals("PlayerJoined", playerJoinedEvent.getType());
+        assertEquals("LobbyService", playerJoinedEvent.getService());
+        assertEquals(lobbyid, playerJoinedEvent.getLobbyId());
+        assertEquals(playerid, playerJoinedEvent.getPlayerId());
+        assertEquals(gameid, playerJoinedEvent.getGameId());
+    }
+
+    @Test
+    void createPlayerQuitEvent() {
+        UUID lobbyid = UUID.randomUUID();
+        UUID playerid = UUID.randomUUID();
+        UUID gameid = UUID.randomUUID();
+
+        PlayerJoinedEvent playerJoinedEvent = EventFactory.createPlayerJoinedEvent(lobbyid, playerid, gameid);
+
+        assertNotNull(playerJoinedEvent);
+        assertNotNull(playerJoinedEvent.getId());
+        assertNotNull(playerJoinedEvent.getTimestamp());
+        assertEquals("PlayerJoined", playerJoinedEvent.getType());
+        assertEquals("LobbyService", playerJoinedEvent.getService());
+        assertEquals(lobbyid, playerJoinedEvent.getLobbyId());
+        assertEquals(playerid, playerJoinedEvent.getPlayerId());
+        assertEquals(gameid, playerJoinedEvent.getGameId());
     }
 }
