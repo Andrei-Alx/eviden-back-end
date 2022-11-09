@@ -1,6 +1,5 @@
 package nl.fontys.atosgame.gameappbff.event;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
