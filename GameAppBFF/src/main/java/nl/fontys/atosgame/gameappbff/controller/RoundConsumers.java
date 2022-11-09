@@ -16,6 +16,7 @@ import java.util.function.Function;
  * - PlayerCardsDistributedEvent
  * - PlayerLikedCardEvent
  * - PlayerDislikedCardEvent
+ * - PlayerSelectedCardsEvent
  */
 @Controller
 public class RoundConsumers {
@@ -112,6 +113,20 @@ public class RoundConsumers {
      */
     @Bean
     public Function<Message<PlayerDislikedCardEvent>, Void> handlePlayerDislikedCard() {
+        return message -> {
+            //TODO: implement
+            throw new UnsupportedOperationException("Not implemented yet");
+        };
+    }
+
+    /**
+     * Id: C-37
+     * Consumer for PlayerSelectedCardsEvent
+     * input topic: player-selected-cards-topic
+     * output topic: -
+     */
+    @Bean
+    public Function<Message<PlayerSelectedCardsEvent>, Void> handlePlayerSelectedCards() {
         return message -> {
             //TODO: implement
             throw new UnsupportedOperationException("Not implemented yet");
