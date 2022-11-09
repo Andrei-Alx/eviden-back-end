@@ -2,6 +2,7 @@ package nl.fontys.atosgame.gameservice.event;
 
 import nl.fontys.atosgame.gameservice.event.consumed.RoundStartedEvent;
 import nl.fontys.atosgame.gameservice.event.produced.GameCreatedEvent;
+import nl.fontys.atosgame.gameservice.event.produced.GameEndedEvent;
 import nl.fontys.atosgame.gameservice.event.produced.GameStartedEvent;
 import nl.fontys.atosgame.gameservice.model.LobbySettings;
 import nl.fontys.atosgame.gameservice.model.RoundSettings;
@@ -38,6 +39,19 @@ class EventFactoryTest {
         GameStartedEvent event = EventFactory.createGameStartedEvent(gameId);
 
         assertEquals("GameStarted", event.getType());
+        assertEquals("GameService", event.getService());
+        assertNotNull(event.getTimestamp());
+        assertNotNull(event.getId());
+        assertEquals(gameId, event.getGameId());
+    }
+
+    @Test
+    void createGameEndedEvent() {
+        UUID gameId = UUID.randomUUID();
+
+        GameEndedEvent event = EventFactory.createGameEndedEvent(gameId);
+
+        assertEquals("GameEnded", event.getType());
         assertEquals("GameService", event.getService());
         assertNotNull(event.getTimestamp());
         assertNotNull(event.getId());

@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.gameservice.event;
 
 import nl.fontys.atosgame.gameservice.event.produced.GameCreatedEvent;
+import nl.fontys.atosgame.gameservice.event.produced.GameEndedEvent;
 import nl.fontys.atosgame.gameservice.event.produced.GameStartedEvent;
 import nl.fontys.atosgame.gameservice.model.LobbySettings;
 import nl.fontys.atosgame.gameservice.model.RoundSettings;
@@ -26,6 +27,13 @@ public class EventFactory {
     public static GameStartedEvent createGameStartedEvent(UUID gameId) {
         GameStartedEvent event = new GameStartedEvent();
         event = (GameStartedEvent) initializeBaseEvent(event, "GameStarted", "GameService");
+        event.setGameId(gameId);
+        return event;
+    }
+
+    public static GameEndedEvent createGameEndedEvent(UUID gameId) {
+        GameEndedEvent event = new GameEndedEvent();
+        event = (GameEndedEvent) initializeBaseEvent(event, "GameEnded", "GameService");
         event.setGameId(gameId);
         return event;
     }
