@@ -30,6 +30,7 @@ public class CardEventProducers {
     }
 
     /**
+     * Id: P-1
      * function to produce a CardCreated event
      * input topic: -
      * output topic: card-created-topic
@@ -42,6 +43,7 @@ public class CardEventProducers {
     }
 
     /**
+     * Id: P-2
      * function to produce a CardUpdated event
      * input topic: -
      * output topic: card-updated-topic
@@ -54,6 +56,7 @@ public class CardEventProducers {
     }
 
     /**
+     * Id: P-3
      * function to produce a CardDeleted event
      * input topic: -
      * output topic: card-deleted-topic
