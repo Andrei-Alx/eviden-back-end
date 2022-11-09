@@ -31,6 +31,7 @@ public class LobbyEventConsumers {
     }
 
     /**
+     * Id: C-16
      * function to consume a LobbyCreated event
      * input topic: lobby-created-topic
      * output topic: -
@@ -46,6 +47,7 @@ public class LobbyEventConsumers {
     }
 
     /**
+     * Id: C-17
      * function to consume a PlayerJoined event
      * input topic: player-joined-topic
      * output topic: -
@@ -60,6 +62,7 @@ public class LobbyEventConsumers {
     }
 
     /**
+     * Id: C-18
      * function to consume a PlayerQuit event
      * input topic: player-quit-topic
      * output topic: -

@@ -9,6 +9,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CardSet {
+public class Round {
     private UUID id;
+    private String status;
 }

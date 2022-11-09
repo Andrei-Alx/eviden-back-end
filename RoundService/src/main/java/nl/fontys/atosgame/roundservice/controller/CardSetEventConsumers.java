@@ -27,6 +27,7 @@ public class CardSetEventConsumers {
 //    }
 
     /**
+     * Id: C-23
      * function to consume a CardSetCreated event
      * input topic: card-set-created-topic
      * output topic: -
@@ -41,6 +42,7 @@ public class CardSetEventConsumers {
     }
 
     /**
+     * Id: C-24
      * function to consume a CardSetUpdated event
      * input topic: card-set-updated-topic
      * output topic: -
@@ -56,6 +58,7 @@ public class CardSetEventConsumers {
     }
 
     /**
+     * Id: C-25
      * function to consume a CardSetDeleted event
      * input topic: card-set-deleted-topic
      * output topic: -
