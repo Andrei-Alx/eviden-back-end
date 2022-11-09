@@ -38,7 +38,7 @@ class EventFactoryTest {
         assertNotNull(lobbyDeletedEvent.getId());
         assertNotNull(lobbyDeletedEvent.getTimestamp());
         assertEquals("LobbyDeleted", lobbyDeletedEvent.getType());
-        assertEquals("Test", lobbyDeletedEvent.getService());
+        assertEquals("LobbyService", lobbyDeletedEvent.getService());
         assertEquals(id, lobbyDeletedEvent.getLobbyId());
         assertEquals(gameid, lobbyDeletedEvent.getGameId());
     }
