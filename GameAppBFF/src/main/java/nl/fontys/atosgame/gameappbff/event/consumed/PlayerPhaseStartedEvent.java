@@ -10,7 +10,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlayerPhaseStarted extends BaseEvent {
+public class PlayerPhaseStartedEvent extends BaseEvent {
     private int phaseNumber;
     private UUID playerId;
     private UUID gameId;
