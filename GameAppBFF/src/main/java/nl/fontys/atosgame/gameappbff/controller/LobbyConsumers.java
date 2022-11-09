@@ -9,13 +9,13 @@ import org.springframework.stereotype.Controller;
 import java.util.function.Function;
 
 /**
- * Collection of consumers for player related events:
+ * Collection of consumers for lobby related events:
  * - PlayerJoinedEvent
  * - PlayerQuitEvent
  * @author Eli
  */
 @Controller
-public class PlayerConsumers {
+public class LobbyConsumers {
 
     /**
      * Id: C-26
