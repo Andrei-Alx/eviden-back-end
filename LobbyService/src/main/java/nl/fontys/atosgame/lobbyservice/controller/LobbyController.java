@@ -25,9 +25,7 @@ public class LobbyController {
 
     /**
      * Id: R-7
-     * Creates a new lobby
-     * @param joinRequestDto
-     * @return
+     * Join a lobby
      */
     @PostMapping("/join")
     @ApiResponses(value = {
@@ -39,5 +37,19 @@ public class LobbyController {
     public ResponseEntity<Lobby> joinLobby(@RequestBody JoinRequestDto joinRequestDto) {
         // TODO: implement
         return ResponseEntity.ok(new Lobby(UUID.randomUUID(), new ArrayList<>(), "testCode", new LobbySettings()));
+    }
+
+    /**
+     * Id: R-8
+     * Quit a lobby
+     */
+    @PostMapping("/quit")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Quit the lobby"),
+            @ApiResponse(responseCode = "404", description = "Lobby not found")
+    })
+    public ResponseEntity quitLobby(@RequestBody UUID lobbyId) {
+        // TODO: implement
+        return ResponseEntity.ok().build();
     }
 }
