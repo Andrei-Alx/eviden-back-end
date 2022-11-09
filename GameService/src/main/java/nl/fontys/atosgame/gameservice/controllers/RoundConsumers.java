@@ -1,9 +1,11 @@
 package nl.fontys.atosgame.gameservice.controllers;
 
+import io.swagger.v3.oas.annotations.info.Contact;
 import nl.fontys.atosgame.gameservice.event.consumed.RoundEndedEvent;
 import nl.fontys.atosgame.gameservice.event.consumed.RoundStartedEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
+import org.springframework.stereotype.Controller;
 
 import java.util.function.Function;
 
@@ -13,6 +15,7 @@ import java.util.function.Function;
  * - RoundEndedEvent
  * @author Eli
  */
+@Controller
 public class RoundConsumers {
 
     /**
