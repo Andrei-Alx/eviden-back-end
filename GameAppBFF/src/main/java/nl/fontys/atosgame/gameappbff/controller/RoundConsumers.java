@@ -1,9 +1,6 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
-import nl.fontys.atosgame.gameappbff.event.consumed.PlayerPhaseEndedEvent;
-import nl.fontys.atosgame.gameappbff.event.consumed.PlayerPhaseStartedEvent;
-import nl.fontys.atosgame.gameappbff.event.consumed.RoundEndedEvent;
-import nl.fontys.atosgame.gameappbff.event.consumed.RoundStartedEvent;
+import nl.fontys.atosgame.gameappbff.event.consumed.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
@@ -16,6 +13,7 @@ import java.util.function.Function;
  * - RoundEndedEvent
  * - PlayerPhaseStartedEvent
  * - PlayerPhaseEndedEvent
+ * - PlayerCardsDistributedEvent
  */
 @Controller
 public class RoundConsumers {
@@ -70,6 +68,20 @@ public class RoundConsumers {
      */
     @Bean
     public Function<Message<PlayerPhaseEndedEvent>, Void> handlePlayerPhaseEnded() {
+        return message -> {
+            //TODO: implement
+            throw new UnsupportedOperationException("Not implemented yet");
+        };
+    }
+
+    /**
+     * Id: C-34
+     * Consumer for PlayerCardsDistributedEvent
+     * input topic: player-cards-distributed-topic
+     * output topic: -
+     */
+    @Bean
+    public Function<Message<PlayerCardsDistributedEvent>, Void> handlePlayerCardsDistributed() {
         return message -> {
             //TODO: implement
             throw new UnsupportedOperationException("Not implemented yet");
