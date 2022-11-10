@@ -1,4 +1,4 @@
-package nl.fontys.atosgame.roundservice.dto.event;
+package nl.fontys.atosgame.adminappbff.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

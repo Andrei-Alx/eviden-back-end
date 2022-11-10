@@ -2,6 +2,7 @@ package nl.fontys.atosgame.roundservice.controller;
 
 import nl.fontys.atosgame.roundservice.event.LobbyCreatedEvent;
 import nl.fontys.atosgame.roundservice.event.PlayerJoinedEvent;
+import nl.fontys.atosgame.roundservice.event.PlayerQuitEvent;
 import nl.fontys.atosgame.roundservice.service.GameService;
 import nl.fontys.atosgame.roundservice.service.LobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,9 +69,9 @@ public class LobbyEventConsumers {
      * output topic: -
      */
     @Bean
-    public Function<Message<PlayerJoinedEvent>, Void> handlePlayerQuit() {
+    public Function<Message<PlayerQuitEvent>, Void> handlePlayerQuit() {
         return message -> {
-            PlayerJoinedEvent event = message.getPayload();
+            PlayerQuitEvent event = message.getPayload();
             lobbyService.removePlayerFromLobby(event.getPlayerId(), event.getLobbyId());
             return null;
         };

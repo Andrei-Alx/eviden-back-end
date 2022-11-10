@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
+import nl.fontys.atosgame.gameappbff.event.consumed.LobbyCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.LobbyDeletedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerJoinedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerQuitEvent;
@@ -43,6 +44,20 @@ public class LobbyConsumers {
     public Function<Message<PlayerQuitEvent>, Void> handlePlayerQuit() {
         return message -> {
             // TODO: implement
+            throw new UnsupportedOperationException("Not implemented yet");
+        };
+    }
+
+    /**
+     * Id: C-56
+     * Consumer for LobbyCreatedEvent
+     * input topic: lobby-created-topic
+     * output topic: -
+     */
+    @Bean
+    public Function<Message<LobbyCreatedEvent>, Void> handleLobbyCreated() {
+        return message -> {
+            //TODO: implement
             throw new UnsupportedOperationException("Not implemented yet");
         };
     }

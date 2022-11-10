@@ -1,16 +1,15 @@
-package nl.fontys.atosgame.roundservice.dto.event.produced;
+package nl.fontys.atosgame.roundservice.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nl.fontys.atosgame.roundservice.dto.event.BaseEvent;
-import nl.fontys.atosgame.lobbyservice.model.Lobby;
+import nl.fontys.atosgame.roundservice.model.Lobby;
 
 import java.util.UUID;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 public class LobbyCreatedEvent extends BaseEvent {
     private Lobby lobby;
     private UUID gameId;

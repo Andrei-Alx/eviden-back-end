@@ -22,6 +22,20 @@ import java.util.function.Function;
 public class RoundConsumers {
 
     /**
+     * Id: C-55
+     * Consumer for RoundCreatedEvent
+     * input topic: round-created-topic
+     * output topic: -
+     */
+    @Bean
+    public Function<Message<RoundCreatedEvent>, Void> handleRoundCreated() {
+        return message -> {
+            //TODO: implement
+            throw new UnsupportedOperationException("Not implemented yet");
+        };
+    }
+
+    /**
      * Id: C-30
      * Consumer for RoundStartedEvent
      * input topic: round-started-topic
