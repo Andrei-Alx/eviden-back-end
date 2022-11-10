@@ -11,9 +11,10 @@ public class TestController {
     @Autowired
     private LobbySocketController lobbySocketController;
 
-    @PostMapping("/test")
+    /*@PostMapping("/test")
     public String test(@RequestBody String lobbyId) {
         lobbySocketController.playerJoined(lobbyId,"Test over websocket");
         return "test";
-    }
+    }*/
+
 }
