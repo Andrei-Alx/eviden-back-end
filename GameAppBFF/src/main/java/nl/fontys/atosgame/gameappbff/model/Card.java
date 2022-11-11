@@ -19,7 +19,6 @@ import java.util.UUID;
 @Data
 public class Card {
     @Id
-    @GeneratedValue(generator = "UUID")
     @Type(type = "org.hibernate.type.UUIDCharType")
     @JsonProperty
     private UUID id;

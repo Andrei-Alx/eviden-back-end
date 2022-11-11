@@ -3,6 +3,8 @@ package nl.fontys.atosgame.gameappbff.controller;
 import nl.fontys.atosgame.gameappbff.event.consumed.CardCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.CardDeletedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.CardUpdatedEvent;
+import nl.fontys.atosgame.gameappbff.service.CardService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,12 @@ import java.util.function.Function;
 @Controller
 public class CardConsumers {
 
+    private CardService cardService;
+
+    public CardConsumers(@Autowired CardService cardService) {
+        this.cardService = cardService;
+    }
+
     /**
      * Id: C-42
      * Consumer for CardCreatedEvent
@@ -29,8 +37,8 @@ public class CardConsumers {
     public Function<Message<CardCreatedEvent>, Void> handleCardCreated() {
         return cardCreatedEventMessage -> {
             CardCreatedEvent event = cardCreatedEventMessage.getPayload();
-            //TODO
-            throw new UnsupportedOperationException("Not implemented yet");
+            cardService.handleCardCreated(event.getCard());
+            return null;
         };
     }
 
