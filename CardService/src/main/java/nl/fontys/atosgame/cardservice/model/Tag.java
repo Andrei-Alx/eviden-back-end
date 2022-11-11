@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Embeddable
 public class Tag {
     @JsonProperty
-    private String name;
+    private String tagKey;
     @JsonProperty
     private String tagValue;
 }

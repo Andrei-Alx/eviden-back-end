@@ -27,6 +27,7 @@ public class GameEventConsumers {
     }
 
     /**
+     * Id: C-15
      * function to consume a GameCreated event
      * input topic: game-created-topic
      * output topic: -
@@ -41,6 +42,7 @@ public class GameEventConsumers {
     }
 
     /**
+     * Id: C-19
      * function to consume a GameStarted event
      * input topic: game-started-topic
      * output topic: -
