@@ -1,4 +1,4 @@
-package nl.fontys.atosgame.adminappbff.controller;
+package nl.fontys.atosgame.gameappbff.controller;
 
 import nl.fontys.atosgame.gameappbff.event.consumed.CardCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.CardDeletedEvent;

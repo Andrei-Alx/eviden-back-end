@@ -1,15 +1,20 @@
 package nl.fontys.atosgame.lobbyservice.controller;
 
-import nl.fontys.atosgame.lobbyservice.event.EventFactory;
 import nl.fontys.atosgame.lobbyservice.event.produced.LobbyCreatedEvent;
 import nl.fontys.atosgame.lobbyservice.event.produced.LobbyDeletedEvent;
 import nl.fontys.atosgame.lobbyservice.event.produced.PlayerJoinedEvent;
 import nl.fontys.atosgame.lobbyservice.event.produced.PlayerQuitEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
+import org.springframework.stereotype.Controller;
 
 import java.util.function.Function;
 
+/**
+ * Controller for the lobby events produced by the lobby service
+ * @author Aniek
+ */
+@Controller
 public class LobbyEventProducers {
 
     /**

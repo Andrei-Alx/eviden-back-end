@@ -13,7 +13,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Tag {
     @JsonProperty
-    private String name;
+    private String tagKey;
     @JsonProperty
     private String tagValue;
 }
