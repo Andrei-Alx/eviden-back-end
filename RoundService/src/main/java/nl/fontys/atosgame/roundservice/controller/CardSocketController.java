@@ -3,6 +3,7 @@ package nl.fontys.atosgame.roundservice.controller;
 
 import nl.fontys.atosgame.roundservice.dto.CardDislikeRequestDto;
 import nl.fontys.atosgame.roundservice.dto.CardLikeRequestDto;
+import nl.fontys.atosgame.roundservice.dto.CardSubmitRequestDto;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 
@@ -30,6 +31,14 @@ public class CardSocketController {
     @MessageMapping("/dislikeCard")
     public void dislikeCard(CardDislikeRequestDto cardDislikeRequestDto) {
         // TODO: implement
-        System.out.println("dislikeCard");
+    }
+
+    /**
+     * Id: S-3
+     * Socket endpoint that consumes card submit requests
+     */
+    @MessageMapping("/submitCards")
+    public void submitCards(CardSubmitRequestDto cardSubmitRequestDto) {
+        // TODO: implement
     }
 }
