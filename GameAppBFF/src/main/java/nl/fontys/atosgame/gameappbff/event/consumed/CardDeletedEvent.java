@@ -11,5 +11,5 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 public class CardDeletedEvent extends BaseEvent {
-    private UUID cardid;
+    private UUID cardId;
 }

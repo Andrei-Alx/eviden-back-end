@@ -37,7 +37,7 @@ public class CardServiceImpl implements CardService {
      */
     @Override
     public void handleCardUpdated(Card card) {
-
+        cardRepository.save(card);
     }
 
     /**
@@ -47,6 +47,6 @@ public class CardServiceImpl implements CardService {
      */
     @Override
     public void handleCardDeleted(UUID cardId) {
-
+        cardRepository.deleteById(cardId);
     }
 }

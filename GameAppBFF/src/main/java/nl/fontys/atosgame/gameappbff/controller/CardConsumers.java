@@ -52,8 +52,8 @@ public class CardConsumers {
     public Function<Message<CardUpdatedEvent>, Void> handleCardUpdated() {
         return cardUpdatedEventMessage -> {
             CardUpdatedEvent event = cardUpdatedEventMessage.getPayload();
-            //TODO
-            throw new UnsupportedOperationException("Not implemented yet");
+            cardService.handleCardUpdated(event.getCard());
+            return null;
         };
     }
 
@@ -67,8 +67,8 @@ public class CardConsumers {
     public Function<Message<CardDeletedEvent>, Void> handleCardDeleted() {
         return cardDeletedEventMessage -> {
             CardDeletedEvent event = cardDeletedEventMessage.getPayload();
-            //TODO
-            throw new UnsupportedOperationException("Not implemented yet");
+            cardService.handleCardDeleted(event.getCardId());
+            return null;
         };
     }
 }
