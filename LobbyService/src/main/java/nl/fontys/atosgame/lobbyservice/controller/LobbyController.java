@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.lobbyservice.controller;
 
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import nl.fontys.atosgame.lobbyservice.dto.JoinRequestDto;
@@ -30,7 +31,8 @@ public class LobbyController {
     @PostMapping("/join")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Joined the lobby"
-                    , content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = Lobby.class))),
+                    , content = @Content(mediaType = "application/json", schema =
+                @Schema(implementation = Lobby.class))),
             @ApiResponse(responseCode = "406", description = "Lobby is full"),
             @ApiResponse(responseCode = "404", description = "Lobby not found")
     })
