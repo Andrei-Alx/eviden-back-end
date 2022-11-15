@@ -1,8 +1,7 @@
 package nl.fontys.atosgame.roundservice.service;
 
-import nl.fontys.atosgame.roundservice.model.Card;
-
 import java.util.UUID;
+import nl.fontys.atosgame.roundservice.model.Card;
 
 public interface CardService {
     /**

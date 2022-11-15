@@ -8,7 +8,11 @@ import java.util.UUID;
  */
 public class EventFactory {
 
-    private static BaseEvent initializeBaseEvent(BaseEvent event, String type, String service) {
+    private static BaseEvent initializeBaseEvent(
+        BaseEvent event,
+        String type,
+        String service
+    ) {
         event.setTimestamp(java.time.LocalDateTime.now());
         event.setId(UUID.randomUUID());
         event.setType(type);

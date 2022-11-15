@@ -10,5 +10,6 @@ import nl.fontys.atosgame.roundservice.model.Round;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoundCreatedEvent extends BaseEvent {
+
     private Round round;
 }

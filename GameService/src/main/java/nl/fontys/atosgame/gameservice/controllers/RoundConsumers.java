@@ -1,14 +1,13 @@
 package nl.fontys.atosgame.gameservice.controllers;
 
 import io.swagger.v3.oas.annotations.info.Contact;
+import java.util.function.Function;
 import nl.fontys.atosgame.gameservice.event.consumed.RoundCreatedEvent;
 import nl.fontys.atosgame.gameservice.event.consumed.RoundEndedEvent;
 import nl.fontys.atosgame.gameservice.event.consumed.RoundStartedEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
-
-import java.util.function.Function;
 
 /**
  * Collection of consumers for round related events:

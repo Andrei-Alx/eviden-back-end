@@ -1,15 +1,14 @@
 package nl.fontys.atosgame.roundservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
-
-import javax.persistence.*;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
 @Embeddable
 @Data

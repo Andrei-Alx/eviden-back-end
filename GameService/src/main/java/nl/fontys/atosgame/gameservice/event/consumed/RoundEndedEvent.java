@@ -9,5 +9,6 @@ import nl.fontys.atosgame.gameservice.event.BaseEvent;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoundEndedEvent extends BaseEvent {
+
     private String roundId;
 }

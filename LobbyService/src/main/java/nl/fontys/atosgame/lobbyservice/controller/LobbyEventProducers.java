@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.lobbyservice.controller;
 
+import java.util.function.Function;
 import nl.fontys.atosgame.lobbyservice.event.produced.LobbyCreatedEvent;
 import nl.fontys.atosgame.lobbyservice.event.produced.LobbyDeletedEvent;
 import nl.fontys.atosgame.lobbyservice.event.produced.PlayerJoinedEvent;
@@ -7,8 +8,6 @@ import nl.fontys.atosgame.lobbyservice.event.produced.PlayerQuitEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
-
-import java.util.function.Function;
 
 /**
  * Controller for the lobby events produced by the lobby service
@@ -24,7 +23,7 @@ public class LobbyEventProducers {
      */
     @Bean
     public Function<?, Message<LobbyCreatedEvent>> produceLobbyCreated() {
-        return (keyValue) -> {
+        return keyValue -> {
             // TODO implement
             throw new UnsupportedOperationException("Not implemented yet");
         };
@@ -37,7 +36,7 @@ public class LobbyEventProducers {
      */
     @Bean
     public Function<?, Message<LobbyDeletedEvent>> produceLobbyDeleted() {
-        return (keyValue) -> {
+        return keyValue -> {
             // TODO implement
             throw new UnsupportedOperationException("Not implemented yet");
         };
@@ -50,7 +49,7 @@ public class LobbyEventProducers {
      */
     @Bean
     public Function<?, Message<PlayerJoinedEvent>> producePlayerJoined() {
-        return (keyValue) -> {
+        return keyValue -> {
             // TODO implement
             throw new UnsupportedOperationException("Not implemented yet");
         };
@@ -63,7 +62,7 @@ public class LobbyEventProducers {
      */
     @Bean
     public Function<?, Message<PlayerQuitEvent>> producePlayerQuit() {
-        return (keyValue) -> {
+        return keyValue -> {
             // TODO implement
             throw new UnsupportedOperationException("Not implemented yet");
         };

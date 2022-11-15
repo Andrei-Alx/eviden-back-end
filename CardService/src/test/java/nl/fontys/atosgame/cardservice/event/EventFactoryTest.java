@@ -1,15 +1,14 @@
 package nl.fontys.atosgame.cardservice.event;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
+
+import java.util.UUID;
 import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.model.CardSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
 
 class EventFactoryTest {
 
@@ -45,7 +44,10 @@ class EventFactoryTest {
     void createCardDeletedEvent() {
         UUID id = UUID.randomUUID();
 
-        CardDeletedEvent cardDeletedEvent = EventFactory.createCardDeletedEvent("Test", id);
+        CardDeletedEvent cardDeletedEvent = EventFactory.createCardDeletedEvent(
+            "Test",
+            id
+        );
 
         assertNotNull(cardDeletedEvent);
         assertNotNull(cardDeletedEvent.getId());
@@ -59,7 +61,10 @@ class EventFactoryTest {
     void createCardSetCreatedEvent() {
         CardSet cardSet = mock(CardSet.class);
 
-        CardSetEvent cardSetCreatedEvent = EventFactory.createCardSetCreatedEvent("Test", cardSet);
+        CardSetEvent cardSetCreatedEvent = EventFactory.createCardSetCreatedEvent(
+            "Test",
+            cardSet
+        );
 
         assertNotNull(cardSetCreatedEvent);
         assertNotNull(cardSetCreatedEvent.getId());
@@ -73,7 +78,10 @@ class EventFactoryTest {
     void createCardSetUpdatedEvent() {
         CardSet cardSet = mock(CardSet.class);
 
-        CardSetEvent cardSetUpdatedEvent = EventFactory.createCardSetUpdatedEvent("Test", cardSet);
+        CardSetEvent cardSetUpdatedEvent = EventFactory.createCardSetUpdatedEvent(
+            "Test",
+            cardSet
+        );
 
         assertNotNull(cardSetUpdatedEvent);
         assertNotNull(cardSetUpdatedEvent.getId());
@@ -87,7 +95,10 @@ class EventFactoryTest {
     void createCardSetDeletedEvent() {
         UUID id = UUID.randomUUID();
 
-        CardSetDeletedEvent cardSetDeletedEvent = EventFactory.createCardSetDeletedEvent("Test", id);
+        CardSetDeletedEvent cardSetDeletedEvent = EventFactory.createCardSetDeletedEvent(
+            "Test",
+            id
+        );
 
         assertNotNull(cardSetDeletedEvent);
         assertNotNull(cardSetDeletedEvent.getId());
@@ -96,5 +107,4 @@ class EventFactoryTest {
         assertEquals("Test", cardSetDeletedEvent.getService());
         assertEquals(id, cardSetDeletedEvent.getCardSetId());
     }
-
 }

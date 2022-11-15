@@ -1,14 +1,14 @@
 package nl.fontys.atosgame.gameservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.Type;
-
-import javax.persistence.*;
 import java.util.Set;
 import java.util.UUID;
+import javax.persistence.*;
+import org.hibernate.annotations.Type;
 
 public class RoundSettings {
-    @Type(type="org.hibernate.type.UUIDCharType")
+
+    @Type(type = "org.hibernate.type.UUIDCharType")
     @JsonProperty
     private UUID id;
 

@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.roundservice.controller;
 
+import java.util.function.Function;
 import nl.fontys.atosgame.roundservice.event.CardSetDeletedEvent;
 import nl.fontys.atosgame.roundservice.event.CardSetEvent;
 import nl.fontys.atosgame.roundservice.service.CardSetService;
@@ -7,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
-
-import java.util.function.Function;
 
 @Controller
 public class CardSetEventConsumers {
@@ -19,12 +18,12 @@ public class CardSetEventConsumers {
         this.cardSetService = cardSetService;
     }
 
-//    private CardSetConverter cardSetConverter;
+    //    private CardSetConverter cardSetConverter;
 
-//    public CardSetEventConsumers(@Autowired CardSetService cardSetService, @Autowired CardSetConverter cardSetConverter) {
-//        this.cardSetService = cardSetService;
-//        this.cardSetConverter = cardSetConverter;
-//    }
+    //    public CardSetEventConsumers(@Autowired CardSetService cardSetService, @Autowired CardSetConverter cardSetConverter) {
+    //        this.cardSetService = cardSetService;
+    //        this.cardSetConverter = cardSetConverter;
+    //    }
 
     /**
      * Id: C-23
@@ -71,5 +70,4 @@ public class CardSetEventConsumers {
             return null;
         };
     }
-
 }

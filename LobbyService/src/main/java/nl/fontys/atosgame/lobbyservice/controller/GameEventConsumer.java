@@ -1,13 +1,12 @@
 package nl.fontys.atosgame.lobbyservice.controller;
 
+import java.util.function.Function;
 import nl.fontys.atosgame.lobbyservice.event.consumed.GameCreatedEvent;
 import nl.fontys.atosgame.lobbyservice.event.consumed.GameEndedEvent;
 import nl.fontys.atosgame.lobbyservice.event.produced.LobbyCreatedEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
-
-import java.util.function.Function;
 
 /**
  * Controller for the game events for the lobby service
@@ -23,7 +22,7 @@ public class GameEventConsumer {
      */
     @Bean
     public Function<?, Message<GameCreatedEvent>> consumeGameCreated() {
-        return (keyValue) -> {
+        return keyValue -> {
             // TODO implement
             throw new UnsupportedOperationException("Not implemented yet");
         };
@@ -36,7 +35,7 @@ public class GameEventConsumer {
      */
     @Bean
     public Function<?, Message<GameEndedEvent>> consumeGameEnded() {
-        return (keyValue) -> {
+        return keyValue -> {
             // TODO implement
             throw new UnsupportedOperationException("Not implemented yet");
         };

@@ -1,5 +1,11 @@
 package nl.fontys.atosgame.cardservice.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
 import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.repository.CardRepository;
@@ -7,13 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.w3c.dom.stylesheets.LinkStyle;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class CardServiceImplTest {
 

@@ -1,13 +1,12 @@
 package nl.fontys.atosgame.adminappbff.controller;
 
+import java.util.function.Function;
 import nl.fontys.atosgame.adminappbff.event.consumed.CardCreatedEvent;
 import nl.fontys.atosgame.adminappbff.event.consumed.CardDeletedEvent;
 import nl.fontys.atosgame.adminappbff.event.consumed.CardUpdatedEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
-
-import java.util.function.Function;
 
 /**
  * Collection of consumers for cardset related events:

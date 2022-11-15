@@ -1,5 +1,10 @@
 package nl.fontys.atosgame.roundservice.controller;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.List;
+import java.util.UUID;
 import nl.fontys.atosgame.roundservice.event.CardDeletedEvent;
 import nl.fontys.atosgame.roundservice.event.CardEvent;
 import nl.fontys.atosgame.roundservice.model.Card;
@@ -7,12 +12,6 @@ import nl.fontys.atosgame.roundservice.service.CardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.messaging.Message;
-
-import java.util.List;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class CardEventConsumersTest {
 
@@ -37,7 +36,7 @@ class CardEventConsumersTest {
 
         cardEventConsumers.handleCardCreated().apply(message);
 
-        verify(cardService).createCard(new nl.fontys.atosgame.roundservice.model.Card(message.getPayload().getCard().getId(), message.getPayload().getCard().getTags()));
+        verify(cardService).createCard(card);
     }
 
     @Test
@@ -52,7 +51,7 @@ class CardEventConsumersTest {
 
         cardEventConsumers.handleCardUpdated().apply(message);
 
-        verify(cardService).updateCard(new nl.fontys.atosgame.roundservice.model.Card(message.getPayload().getCard().getId(), message.getPayload().getCard().getTags()));
+        verify(cardService).updateCard(card);
     }
 
     @Test

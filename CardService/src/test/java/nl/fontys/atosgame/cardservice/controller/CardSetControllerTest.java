@@ -1,18 +1,16 @@
 package nl.fontys.atosgame.cardservice.controller;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.UUID;
+import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
 import nl.fontys.atosgame.cardservice.model.CardSet;
 import nl.fontys.atosgame.cardservice.service.CardService;
 import nl.fontys.atosgame.cardservice.service.CardSetService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import javax.persistence.EntityNotFoundException;
-
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class CardSetControllerTest {
 
@@ -40,7 +38,8 @@ class CardSetControllerTest {
     @Test
     void createCard400() {
         CreateCardSetDto createCardSetDto = new CreateCardSetDto();
-        when(cardSetService.createCardSet(createCardSetDto)).thenThrow(new RuntimeException());
+        when(cardSetService.createCardSet(createCardSetDto))
+            .thenThrow(new RuntimeException());
 
         var response = cardSetController.createCardSet(createCardSetDto);
 
@@ -62,7 +61,8 @@ class CardSetControllerTest {
     @Test
     void updateCard404() {
         CardSet cardSet = new CardSet();
-        when(cardSetService.updateCardSet(cardSet)).thenThrow(new EntityNotFoundException());
+        when(cardSetService.updateCardSet(cardSet))
+            .thenThrow(new EntityNotFoundException());
 
         var response = cardSetController.updateCardSet(cardSet);
 

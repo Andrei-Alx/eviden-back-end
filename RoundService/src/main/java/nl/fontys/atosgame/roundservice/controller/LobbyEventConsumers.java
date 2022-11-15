@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.roundservice.controller;
 
+import java.util.function.Function;
 import nl.fontys.atosgame.roundservice.event.LobbyCreatedEvent;
 import nl.fontys.atosgame.roundservice.event.PlayerJoinedEvent;
 import nl.fontys.atosgame.roundservice.event.PlayerQuitEvent;
@@ -9,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
-
-import java.util.function.Function;
 
 /**
  *  Collection of all event consumers for lobby events:
@@ -26,7 +25,10 @@ public class LobbyEventConsumers {
     private GameService gameService;
     private LobbyService lobbyService;
 
-    public LobbyEventConsumers(@Autowired GameService gameService, @Autowired LobbyService lobbyService) {
+    public LobbyEventConsumers(
+        @Autowired GameService gameService,
+        @Autowired LobbyService lobbyService
+    ) {
         this.gameService = gameService;
         this.lobbyService = lobbyService;
     }
@@ -76,5 +78,4 @@ public class LobbyEventConsumers {
             return null;
         };
     }
-
 }

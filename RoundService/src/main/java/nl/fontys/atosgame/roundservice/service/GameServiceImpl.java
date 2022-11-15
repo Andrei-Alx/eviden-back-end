@@ -1,5 +1,9 @@
 package nl.fontys.atosgame.roundservice.service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.model.Game;
 import nl.fontys.atosgame.roundservice.model.Lobby;
@@ -7,11 +11,6 @@ import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 /**
  * Service for game related operations
@@ -24,7 +23,10 @@ public class GameServiceImpl implements GameService {
 
     private GameRepository gameRepository;
 
-    public GameServiceImpl(@Autowired RoundService roundService, @Autowired GameRepository gameRepository) {
+    public GameServiceImpl(
+        @Autowired RoundService roundService,
+        @Autowired GameRepository gameRepository
+    ) {
         this.roundService = roundService;
         this.gameRepository = gameRepository;
     }

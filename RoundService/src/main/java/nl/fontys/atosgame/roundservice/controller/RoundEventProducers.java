@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.roundservice.controller;
 
+import java.util.function.Function;
 import nl.fontys.atosgame.roundservice.event.EventFactory;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
@@ -8,8 +9,6 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Controller;
-
-import java.util.function.Function;
 
 /**
  * Collection of all event producers for round events:
@@ -37,11 +36,15 @@ public class RoundEventProducers {
      */
     @Bean
     public Function<RoundCreatedEventKeyValue, Message<RoundCreatedEvent>> produceRoundCreated() {
-        return (keyValue) -> {
-            RoundCreatedEvent event = EventFactory.createRoundCreatedEvent("RoundService", keyValue.getRound());
-            return MessageBuilder.withPayload(event)
-                    .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
-                    .build();
+        return keyValue -> {
+            RoundCreatedEvent event = EventFactory.createRoundCreatedEvent(
+                "RoundService",
+                keyValue.getRound()
+            );
+            return MessageBuilder
+                .withPayload(event)
+                .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                .build();
         };
     }
 
@@ -53,7 +56,7 @@ public class RoundEventProducers {
      */
     @Bean
     public Function<?, Message<RoundCreatedEvent>> produceRoundStarted() {
-        return (keyValue) -> {
+        return keyValue -> {
             // TODO implement
             throw new UnsupportedOperationException("Not implemented yet");
         };
@@ -67,7 +70,7 @@ public class RoundEventProducers {
      */
     @Bean
     public Function<?, Message<RoundCreatedEvent>> produceRoundEnded() {
-        return (keyValue) -> {
+        return keyValue -> {
             // TODO implement
             throw new UnsupportedOperationException("Not implemented yet");
         };
@@ -81,7 +84,7 @@ public class RoundEventProducers {
      */
     @Bean
     public Function<?, Message<RoundCreatedEvent>> producePlayerPhaseStarted() {
-        return (keyValue) -> {
+        return keyValue -> {
             // TODO implement
             throw new UnsupportedOperationException("Not implemented yet");
         };
@@ -95,7 +98,7 @@ public class RoundEventProducers {
      */
     @Bean
     public Function<?, Message<RoundCreatedEvent>> producePlayerPhaseEnded() {
-        return (keyValue) -> {
+        return keyValue -> {
             // TODO implement
             throw new UnsupportedOperationException("Not implemented yet");
         };
@@ -109,7 +112,7 @@ public class RoundEventProducers {
      */
     @Bean
     public Function<?, Message<RoundCreatedEvent>> producePlayerCardsDistributed() {
-        return (keyValue) -> {
+        return keyValue -> {
             // TODO implement
             throw new UnsupportedOperationException("Not implemented yet");
         };
@@ -123,7 +126,7 @@ public class RoundEventProducers {
      */
     @Bean
     public Function<?, Message<RoundCreatedEvent>> producePlayerLikedCard() {
-        return (keyValue) -> {
+        return keyValue -> {
             // TODO implement
             throw new UnsupportedOperationException("Not implemented yet");
         };
@@ -137,7 +140,7 @@ public class RoundEventProducers {
      */
     @Bean
     public Function<?, Message<RoundCreatedEvent>> producePlayerDislikedCard() {
-        return (keyValue) -> {
+        return keyValue -> {
             // TODO implement
             throw new UnsupportedOperationException("Not implemented yet");
         };
@@ -151,7 +154,7 @@ public class RoundEventProducers {
      */
     @Bean
     public Function<?, Message<RoundCreatedEvent>> producePlayerSelectedCards() {
-        return (keyValue) -> {
+        return keyValue -> {
             // TODO implement
             throw new UnsupportedOperationException("Not implemented yet");
         };
@@ -165,7 +168,7 @@ public class RoundEventProducers {
      */
     @Bean
     public Function<?, Message<RoundCreatedEvent>> producePlayerResultDetermined() {
-        return (keyValue) -> {
+        return keyValue -> {
             // TODO implement
             throw new UnsupportedOperationException("Not implemented yet");
         };
@@ -179,7 +182,7 @@ public class RoundEventProducers {
      */
     @Bean
     public Function<?, Message<RoundCreatedEvent>> producePlayerResultIndeterminate() {
-        return (keyValue) -> {
+        return keyValue -> {
             // TODO implement
             throw new UnsupportedOperationException("Not implemented yet");
         };

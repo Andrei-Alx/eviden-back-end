@@ -1,11 +1,10 @@
 package nl.fontys.atosgame.roundservice.service;
 
+import java.util.List;
+import java.util.UUID;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.model.LobbySettings;
 import nl.fontys.atosgame.roundservice.model.Round;
-
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Service for round related operations

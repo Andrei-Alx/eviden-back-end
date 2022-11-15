@@ -1,10 +1,8 @@
 package nl.fontys.atosgame.roundservice.event;
 
-
+import java.util.UUID;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
 import nl.fontys.atosgame.roundservice.model.Round;
-
-import java.util.UUID;
 
 /**
  * Factory class for creating events
@@ -20,12 +18,16 @@ public class EventFactory {
      */
     public static RoundCreatedEvent createRoundCreatedEvent(String service, Round round) {
         RoundCreatedEvent event = new RoundCreatedEvent();
-        event = (RoundCreatedEvent) initializeBaseEvent(event, "RoundCreated",service);
+        event = (RoundCreatedEvent) initializeBaseEvent(event, "RoundCreated", service);
         event.setRound(round);
         return event;
     }
 
-    private static BaseEvent initializeBaseEvent(BaseEvent event, String type, String service) {
+    private static BaseEvent initializeBaseEvent(
+        BaseEvent event,
+        String type,
+        String service
+    ) {
         event.setTimestamp(java.time.LocalDateTime.now());
         event.setId(UUID.randomUUID());
         event.setType(type);

@@ -1,9 +1,8 @@
 package nl.fontys.atosgame.cardservice.event;
 
+import java.util.UUID;
 import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.model.CardSet;
-
-import java.util.UUID;
 
 /**
  * Factory class for creating BaseEvent objects
@@ -13,7 +12,7 @@ public class EventFactory {
 
     public static CardEvent createCardCreatedEvent(String service, Card card) {
         CardEvent event = new CardEvent();
-        event = (CardEvent) initializeBaseEvent(event, "CardCreated",service);
+        event = (CardEvent) initializeBaseEvent(event, "CardCreated", service);
         event.setCard(card);
         return event;
     }
@@ -32,14 +31,20 @@ public class EventFactory {
         return event;
     }
 
-    public static CardSetEvent createCardSetCreatedEvent(String service, CardSet cardSet) {
+    public static CardSetEvent createCardSetCreatedEvent(
+        String service,
+        CardSet cardSet
+    ) {
         CardSetEvent event = new CardSetEvent();
         event = (CardSetEvent) initializeBaseEvent(event, "CardSetCreated", service);
         event.setCardSet(cardSet);
         return event;
     }
 
-    public static CardSetEvent createCardSetUpdatedEvent(String service, CardSet cardSet) {
+    public static CardSetEvent createCardSetUpdatedEvent(
+        String service,
+        CardSet cardSet
+    ) {
         CardSetEvent event = new CardSetEvent();
         event = (CardSetEvent) initializeBaseEvent(event, "CardSetUpdated", service);
         event.setCardSet(cardSet);
@@ -48,12 +53,17 @@ public class EventFactory {
 
     public static CardSetDeletedEvent createCardSetDeletedEvent(String service, UUID id) {
         CardSetDeletedEvent event = new CardSetDeletedEvent();
-        event = (CardSetDeletedEvent) initializeBaseEvent(event, "CardSetDeleted", service);
+        event =
+            (CardSetDeletedEvent) initializeBaseEvent(event, "CardSetDeleted", service);
         event.setCardSetId(id);
         return event;
     }
 
-    private static BaseEvent initializeBaseEvent(BaseEvent event, String type, String service) {
+    private static BaseEvent initializeBaseEvent(
+        BaseEvent event,
+        String type,
+        String service
+    ) {
         event.setTimestamp(java.time.LocalDateTime.now());
         event.setId(java.util.UUID.randomUUID());
         event.setType(type);

@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
+import java.util.function.Function;
 import nl.fontys.atosgame.gameappbff.event.consumed.LobbyCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.LobbyDeletedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerJoinedEvent;
@@ -7,8 +8,6 @@ import nl.fontys.atosgame.gameappbff.event.consumed.PlayerQuitEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
-
-import java.util.function.Function;
 
 /**
  * Collection of consumers for lobby related events:

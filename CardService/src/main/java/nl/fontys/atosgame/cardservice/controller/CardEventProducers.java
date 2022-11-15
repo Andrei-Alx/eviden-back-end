@@ -1,5 +1,7 @@
 package nl.fontys.atosgame.cardservice.controller;
 
+import java.util.UUID;
+import java.util.function.Function;
 import nl.fontys.atosgame.cardservice.event.BaseEvent;
 import nl.fontys.atosgame.cardservice.event.CardDeletedEvent;
 import nl.fontys.atosgame.cardservice.event.CardEvent;
@@ -9,9 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
-
-import java.util.UUID;
-import java.util.function.Function;
 
 /**
  * Collection of all event producers for card events:
@@ -37,7 +36,7 @@ public class CardEventProducers {
      */
     @Bean
     public Function<Card, Message<CardEvent>> cardCreated() {
-        return (input) -> {
+        return input -> {
             return cardEventService.cardCreated(input);
         };
     }
@@ -50,7 +49,7 @@ public class CardEventProducers {
      */
     @Bean
     public Function<Card, Message<CardEvent>> cardUpdated() {
-        return (input) -> {
+        return input -> {
             return cardEventService.cardUpdated(input);
         };
     }
@@ -63,7 +62,7 @@ public class CardEventProducers {
      */
     @Bean
     public Function<UUID, Message<CardDeletedEvent>> cardDeleted() {
-        return (input) -> {
+        return input -> {
             return cardEventService.cardDeleted(input);
         };
     }

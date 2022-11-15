@@ -1,5 +1,7 @@
 package nl.fontys.atosgame.cardservice.service;
 
+import java.util.Collection;
+import java.util.UUID;
 import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
 import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.repository.CardRepository;
@@ -7,9 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.Collection;
-import java.util.UUID;
 
 /**
  * Service that handles all card requests
@@ -23,7 +22,10 @@ public class CardServiceImpl implements CardService {
     private CardRepository cardRepository;
     private StreamBridge streamBridge;
 
-    public CardServiceImpl(@Autowired CardRepository cardRepository, @Autowired StreamBridge streamBridge) {
+    public CardServiceImpl(
+        @Autowired CardRepository cardRepository,
+        @Autowired StreamBridge streamBridge
+    ) {
         this.cardRepository = cardRepository;
         this.streamBridge = streamBridge;
     }
@@ -35,7 +37,9 @@ public class CardServiceImpl implements CardService {
      */
     @Override
     public Card createCard(CreateCardDto createCardDto) {
-        Card card = cardRepository.save(new Card(null, createCardDto.getTags(), createCardDto.getTranslations()));
+        Card card = cardRepository.save(
+            new Card(null, createCardDto.getTags(), createCardDto.getTranslations())
+        );
         streamBridge.send("cardCreated-in-0", card);
         return card;
     }

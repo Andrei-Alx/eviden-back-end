@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.cardservice.service;
 
+import java.util.UUID;
 import nl.fontys.atosgame.cardservice.event.CardDeletedEvent;
 import nl.fontys.atosgame.cardservice.event.CardEvent;
 import nl.fontys.atosgame.cardservice.event.EventFactory;
@@ -8,8 +9,6 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 /**
  * Service to create card events
@@ -27,9 +26,10 @@ public class CardEventServiceImpl implements CardEventService {
     public Message<CardEvent> cardCreated(Card card) {
         CardEvent event = EventFactory.createCardCreatedEvent("CardService", card);
         Object key = card.getId();
-        return MessageBuilder.withPayload(event)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, key)
-                .build();
+        return MessageBuilder
+            .withPayload(event)
+            .setHeader(KafkaHeaders.MESSAGE_KEY, key)
+            .build();
     }
 
     /**
@@ -41,9 +41,10 @@ public class CardEventServiceImpl implements CardEventService {
     public Message<CardEvent> cardUpdated(Card card) {
         CardEvent event = EventFactory.createCardUpdatedEvent("CardService", card);
         Object key = card.getId();
-        return MessageBuilder.withPayload(event)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, key)
-                .build();
+        return MessageBuilder
+            .withPayload(event)
+            .setHeader(KafkaHeaders.MESSAGE_KEY, key)
+            .build();
     }
 
     /**
@@ -55,8 +56,9 @@ public class CardEventServiceImpl implements CardEventService {
     public Message<CardDeletedEvent> cardDeleted(UUID id) {
         CardDeletedEvent event = EventFactory.createCardDeletedEvent("CardService", id);
         Object key = id;
-        return MessageBuilder.withPayload(event)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, key)
-                .build();
+        return MessageBuilder
+            .withPayload(event)
+            .setHeader(KafkaHeaders.MESSAGE_KEY, key)
+            .build();
     }
 }

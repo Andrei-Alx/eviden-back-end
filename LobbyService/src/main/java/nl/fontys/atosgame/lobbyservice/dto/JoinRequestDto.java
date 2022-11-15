@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JoinRequestDto {
+
     private String lobbyCode;
     private String playerName;
 }

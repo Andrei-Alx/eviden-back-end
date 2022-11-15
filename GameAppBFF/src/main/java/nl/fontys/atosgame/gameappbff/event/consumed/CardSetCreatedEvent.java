@@ -10,5 +10,6 @@ import nl.fontys.atosgame.gameappbff.model.CardSet;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CardSetCreatedEvent extends BaseEvent {
+
     private CardSet cardSet;
 }

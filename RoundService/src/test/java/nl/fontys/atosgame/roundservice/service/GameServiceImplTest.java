@@ -1,18 +1,17 @@
 package nl.fontys.atosgame.roundservice.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import nl.fontys.atosgame.roundservice.model.Game;
 import nl.fontys.atosgame.roundservice.model.Lobby;
 import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.repository.GameRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class GameServiceImplTest {
 
@@ -63,7 +62,10 @@ class GameServiceImplTest {
         Lobby lobby = new Lobby();
         when(gameRepository.findById(gameId)).thenReturn(java.util.Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> gameService.addLobbyToGame(gameId, lobby));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> gameService.addLobbyToGame(gameId, lobby)
+        );
     }
 
     @Test
@@ -71,16 +73,20 @@ class GameServiceImplTest {
         UUID gameId = UUID.randomUUID();
         Game game = new Game();
         game.setId(gameId);
-        List<Round> rounds = new ArrayList<>(){{
-            add(new Round(UUID.randomUUID(), new ArrayList<>(), "NotStarted", null));
-            add(new Round(UUID.randomUUID(), new ArrayList<>(), "NotStarted", null));
-        }};
+        List<Round> rounds = new ArrayList<>() {
+            {
+                add(new Round(UUID.randomUUID(), new ArrayList<>(), "NotStarted", null));
+                add(new Round(UUID.randomUUID(), new ArrayList<>(), "NotStarted", null));
+            }
+        };
         game.setRounds(rounds);
         Lobby lobby = new Lobby();
-        List<UUID> players = new ArrayList<>(){{
-            add(UUID.randomUUID());
-            add(UUID.randomUUID());
-        }};
+        List<UUID> players = new ArrayList<>() {
+            {
+                add(UUID.randomUUID());
+                add(UUID.randomUUID());
+            }
+        };
         lobby.setPlayerIds(players);
         game.setLobby(lobby);
         when(gameRepository.findById(gameId)).thenReturn(java.util.Optional.of(game));
@@ -90,7 +96,8 @@ class GameServiceImplTest {
         Game updatedGame = gameService.startRound(gameId, 0);
 
         assertEquals(gameId, updatedGame.getId());
-        verify(roundService).initializeRound(rounds.get(0).getId(), game.getLobby().getPlayerIds());
+        verify(roundService)
+            .initializeRound(rounds.get(0).getId(), game.getLobby().getPlayerIds());
         verify(roundService).startRound(rounds.get(0).getId());
         verify(roundService, never()).startRound(rounds.get(1).getId());
     }

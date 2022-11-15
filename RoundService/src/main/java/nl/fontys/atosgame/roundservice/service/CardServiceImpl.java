@@ -1,11 +1,10 @@
 package nl.fontys.atosgame.roundservice.service;
 
+import java.util.UUID;
 import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 /**
  * Service for card related operations

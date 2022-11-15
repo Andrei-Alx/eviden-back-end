@@ -1,15 +1,14 @@
 package nl.fontys.atosgame.lobbyservice.event;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+
+import java.util.UUID;
 import nl.fontys.atosgame.lobbyservice.event.produced.LobbyCreatedEvent;
 import nl.fontys.atosgame.lobbyservice.event.produced.LobbyDeletedEvent;
 import nl.fontys.atosgame.lobbyservice.event.produced.PlayerJoinedEvent;
 import nl.fontys.atosgame.lobbyservice.model.Lobby;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class EventFactoryTest {
 
@@ -32,7 +31,10 @@ class EventFactoryTest {
         UUID id = UUID.randomUUID();
         UUID gameid = UUID.randomUUID();
 
-        LobbyDeletedEvent lobbyDeletedEvent = EventFactory.createLobbyDeletedEvent(id, gameid);
+        LobbyDeletedEvent lobbyDeletedEvent = EventFactory.createLobbyDeletedEvent(
+            id,
+            gameid
+        );
 
         assertNotNull(lobbyDeletedEvent);
         assertNotNull(lobbyDeletedEvent.getId());
@@ -49,7 +51,11 @@ class EventFactoryTest {
         UUID playerid = UUID.randomUUID();
         UUID gameid = UUID.randomUUID();
 
-        PlayerJoinedEvent playerJoinedEvent = EventFactory.createPlayerJoinedEvent(lobbyid, playerid, gameid);
+        PlayerJoinedEvent playerJoinedEvent = EventFactory.createPlayerJoinedEvent(
+            lobbyid,
+            playerid,
+            gameid
+        );
 
         assertNotNull(playerJoinedEvent);
         assertNotNull(playerJoinedEvent.getId());
@@ -67,7 +73,11 @@ class EventFactoryTest {
         UUID playerid = UUID.randomUUID();
         UUID gameid = UUID.randomUUID();
 
-        PlayerJoinedEvent playerJoinedEvent = EventFactory.createPlayerJoinedEvent(lobbyid, playerid, gameid);
+        PlayerJoinedEvent playerJoinedEvent = EventFactory.createPlayerJoinedEvent(
+            lobbyid,
+            playerid,
+            gameid
+        );
 
         assertNotNull(playerJoinedEvent);
         assertNotNull(playerJoinedEvent.getId());

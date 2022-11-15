@@ -1,13 +1,12 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
+import java.util.function.Function;
 import nl.fontys.atosgame.gameappbff.event.consumed.GameCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.GameEndedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.GameStartedEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
-
-import java.util.function.Function;
 
 /**
  * Collection of consumers for game related events:

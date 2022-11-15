@@ -1,11 +1,10 @@
 package nl.fontys.atosgame.cardservice.service;
 
-import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
-import nl.fontys.atosgame.cardservice.model.Card;
-
-import javax.persistence.EntityNotFoundException;
 import java.util.Collection;
 import java.util.UUID;
+import javax.persistence.EntityNotFoundException;
+import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
+import nl.fontys.atosgame.cardservice.model.Card;
 
 public interface CardService {
     Card createCard(CreateCardDto createCardDto);

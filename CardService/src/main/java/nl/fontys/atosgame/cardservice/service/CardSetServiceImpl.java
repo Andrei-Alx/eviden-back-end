@@ -1,5 +1,7 @@
 package nl.fontys.atosgame.cardservice.service;
 
+import java.util.Collection;
+import java.util.UUID;
 import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
 import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.model.CardSet;
@@ -7,9 +9,6 @@ import nl.fontys.atosgame.cardservice.repository.CardSetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
-
-import java.util.Collection;
-import java.util.UUID;
 
 /**
  * Service that handles all card set requests
@@ -24,7 +23,11 @@ public class CardSetServiceImpl implements CardSetService {
     private CardService cardService;
     private StreamBridge streamBridge;
 
-    public CardSetServiceImpl(@Autowired CardSetRepository cardSetRepository, @Autowired CardService cardService, @Autowired StreamBridge streamBridge) {
+    public CardSetServiceImpl(
+        @Autowired CardSetRepository cardSetRepository,
+        @Autowired CardService cardService,
+        @Autowired StreamBridge streamBridge
+    ) {
         this.cardSetRepository = cardSetRepository;
         this.cardService = cardService;
         this.streamBridge = streamBridge;
@@ -38,7 +41,12 @@ public class CardSetServiceImpl implements CardSetService {
     @Override
     public CardSet createCardSet(CreateCardSetDto createCardSetDto) {
         Collection<Card> cards = cardService.getCardsByIds(createCardSetDto.getCards());
-        CardSet cardSet = new CardSet(null, createCardSetDto.getName(), createCardSetDto.getType(), cards);
+        CardSet cardSet = new CardSet(
+            null,
+            createCardSetDto.getName(),
+            createCardSetDto.getType(),
+            cards
+        );
 
         cardSet = cardSetRepository.save(cardSet);
         streamBridge.send("cardSetCreated-in-0", cardSet);

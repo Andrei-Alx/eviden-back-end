@@ -1,14 +1,13 @@
 package nl.fontys.atosgame.roundservice.service;
 
+import java.util.Optional;
+import java.util.UUID;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Lob;
 import nl.fontys.atosgame.roundservice.model.Lobby;
 import nl.fontys.atosgame.roundservice.repository.LobbyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.Lob;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class LobbyServiceImpl implements LobbyService {
@@ -18,7 +17,6 @@ public class LobbyServiceImpl implements LobbyService {
     public LobbyServiceImpl(@Autowired LobbyRepository lobbyRepository) {
         this.lobbyRepository = lobbyRepository;
     }
-
 
     /**
      * Create a new lobby
@@ -50,7 +48,8 @@ public class LobbyServiceImpl implements LobbyService {
      * @return The updated lobby
      */
     @Override
-    public Lobby addPlayerToLobby(UUID playerId, UUID lobbyId) throws EntityNotFoundException {
+    public Lobby addPlayerToLobby(UUID playerId, UUID lobbyId)
+        throws EntityNotFoundException {
         Optional<Lobby> lobbyOptional = this.getLobbyById(lobbyId);
         if (lobbyOptional.isPresent()) {
             Lobby lobby = lobbyOptional.get();
@@ -69,7 +68,8 @@ public class LobbyServiceImpl implements LobbyService {
      * @return The updated lobby
      */
     @Override
-    public Lobby removePlayerFromLobby(UUID playerId, UUID lobbyId) throws EntityNotFoundException {
+    public Lobby removePlayerFromLobby(UUID playerId, UUID lobbyId)
+        throws EntityNotFoundException {
         Optional<Lobby> lobbyOptional = this.getLobbyById(lobbyId);
         if (lobbyOptional.isPresent()) {
             Lobby lobby = lobbyOptional.get();

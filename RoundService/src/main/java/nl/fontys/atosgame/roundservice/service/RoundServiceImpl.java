@@ -1,5 +1,11 @@
 package nl.fontys.atosgame.roundservice.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.model.*;
@@ -7,13 +13,6 @@ import nl.fontys.atosgame.roundservice.repository.RoundRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 /**
  * Service for round related operations
@@ -30,7 +29,12 @@ public class RoundServiceImpl implements RoundService {
 
     private StreamBridge streamBridge;
 
-    public RoundServiceImpl(@Autowired RoundRepository roundRepository, @Autowired CardSetService cardSetService, @Autowired StreamBridge streamBridge, @Autowired PlayerRoundService playerRoundService) {
+    public RoundServiceImpl(
+        @Autowired RoundRepository roundRepository,
+        @Autowired CardSetService cardSetService,
+        @Autowired StreamBridge streamBridge,
+        @Autowired PlayerRoundService playerRoundService
+    ) {
         this.roundRepository = roundRepository;
         this.cardSetService = cardSetService;
         this.playerRoundService = playerRoundService;
@@ -47,7 +51,7 @@ public class RoundServiceImpl implements RoundService {
     public List<Round> createRounds(UUID gameId, List<RoundSettingsDto> roundSettings) {
         List<Round> rounds = new ArrayList<>();
 
-        for(RoundSettingsDto roundSetting : roundSettings) {
+        for (RoundSettingsDto roundSetting : roundSettings) {
             rounds.add(createRound(gameId, roundSetting));
         }
 
@@ -76,10 +80,15 @@ public class RoundServiceImpl implements RoundService {
      */
     @Override
     public Round initializeRound(UUID roundId, List<UUID> playerIds) {
-        Round round = roundRepository.findById(roundId).orElseThrow(EntityNotFoundException::new);
+        Round round = roundRepository
+            .findById(roundId)
+            .orElseThrow(EntityNotFoundException::new);
         List<PlayerRound> playerRounds = new ArrayList<>();
         for (UUID playerId : playerIds) {
-            PlayerRound playerRound = playerRoundService.createPlayerRound(roundId, playerId);
+            PlayerRound playerRound = playerRoundService.createPlayerRound(
+                roundId,
+                playerId
+            );
             playerRounds.add(playerRound);
         }
         round.setPlayerRounds(playerRounds);
@@ -106,9 +115,18 @@ public class RoundServiceImpl implements RoundService {
     public Round createRound(UUID gameId, RoundSettingsDto roundSettings) {
         Round round = new Round(null, new ArrayList<>(), "NotStarted", null);
         // Create round settings
-        RoundSettings settings = new RoundSettings(roundSettings.isShowPersonalOrGroupResults(), roundSettings.getNrOfLikedCards(), roundSettings.getNrOfPickedCards(), roundSettings.getShuffleMethod(), roundSettings.isShowSameCardOrder(), null);
+        RoundSettings settings = new RoundSettings(
+            roundSettings.isShowPersonalOrGroupResults(),
+            roundSettings.getNrOfLikedCards(),
+            roundSettings.getNrOfPickedCards(),
+            roundSettings.getShuffleMethod(),
+            roundSettings.isShowSameCardOrder(),
+            null
+        );
         // Get card set
-        Optional<CardSet> cardSet = cardSetService.getCardSet(roundSettings.getCardSetId());
+        Optional<CardSet> cardSet = cardSetService.getCardSet(
+            roundSettings.getCardSetId()
+        );
         if (cardSet.isEmpty()) {
             throw new IllegalArgumentException("Card set not found");
         }
@@ -121,9 +139,11 @@ public class RoundServiceImpl implements RoundService {
 
         round = roundRepository.save(round);
 
-
         // Produce round created event
-        streamBridge.send("produceRoundCreated-in-0", new RoundCreatedEventKeyValue(gameId, round));
+        streamBridge.send(
+            "produceRoundCreated-in-0",
+            new RoundCreatedEventKeyValue(gameId, round)
+        );
         return round;
     }
 }
