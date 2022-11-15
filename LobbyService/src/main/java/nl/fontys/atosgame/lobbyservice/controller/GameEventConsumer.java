@@ -4,37 +4,49 @@ import java.util.function.Function;
 import nl.fontys.atosgame.lobbyservice.event.consumed.GameCreatedEvent;
 import nl.fontys.atosgame.lobbyservice.event.consumed.GameEndedEvent;
 import nl.fontys.atosgame.lobbyservice.event.produced.LobbyCreatedEvent;
+import nl.fontys.atosgame.lobbyservice.service.LobbyService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
 
 /**
  * Controller for the game events for the lobby service
- * @author Aniek
+ * @author Aniek, Eli
  */
 @Controller
 public class GameEventConsumer {
 
+    private final LobbyService lobbyService;
+
+    public GameEventConsumer(@Autowired LobbyService lobbyService) {
+        this.lobbyService = lobbyService;
+    }
+
     /**
+     * Id: C-1
      * function to consume a GameCreated event
-     * input topic: -
-     * output topic: game-created-topic
+     * input topic: game-created-topic
+     * output topic: -
      */
     @Bean
-    public Function<?, Message<GameCreatedEvent>> consumeGameCreated() {
+    public Function<Message<GameCreatedEvent>, Void> handleGameCreated() {
         return keyValue -> {
             // TODO implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            GameCreatedEvent event = keyValue.getPayload();
+            lobbyService.createLobby(event.getLobbySettings(), event.getGameId());
+            return null;
         };
     }
 
     /**
+     * Id: C-2
      * function to consume a GameEnded event
-     * input topic: -
-     * output topic: game-ended-topic
+     * input topic: game-ended-topic
+     * output topic: -
      */
     @Bean
-    public Function<?, Message<GameEndedEvent>> consumeGameEnded() {
+    public Function<Message<GameEndedEvent>, Void> handleGameEnded() {
         return keyValue -> {
             // TODO implement
             throw new UnsupportedOperationException("Not implemented yet");

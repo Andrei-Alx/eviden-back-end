@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 public class LobbyEventProducers {
 
     /**
+     * Id: P-7
      * function to produce a LobbyCreated event
      * input topic: -
      * output topic: lobby-created-topic
@@ -30,6 +31,7 @@ public class LobbyEventProducers {
     }
 
     /**
+     * Id: P-8
      * function to produce a LobbyDeleted event
      * input topic: -
      * output topic: lobby-deleted-topic
@@ -43,6 +45,7 @@ public class LobbyEventProducers {
     }
 
     /**
+     * Id: P-9
      * function to produce a PlayerJoined event
      * input topic: -
      * output topic: player-joined-topic
@@ -56,6 +59,7 @@ public class LobbyEventProducers {
     }
 
     /**
+     * Id: P-10
      * function to produce a PlayerQuit event
      * input topic: -
      * output topic: player-quit-topic
