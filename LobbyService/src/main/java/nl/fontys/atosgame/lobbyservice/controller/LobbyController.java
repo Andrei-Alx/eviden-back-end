@@ -49,7 +49,8 @@ public class LobbyController {
                 UUID.randomUUID(),
                 new ArrayList<>(),
                 "testCode",
-                new LobbySettings()
+                new LobbySettings(),
+                UUID.randomUUID()
             )
         );
     }
