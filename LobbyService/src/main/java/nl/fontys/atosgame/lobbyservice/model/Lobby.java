@@ -30,8 +30,10 @@ public class Lobby {
     @ElementCollection
     private Collection<Player> players = new java.util.ArrayList<>();
 
+    @JsonProperty
     private String lobbyCode;
 
+    @JsonProperty
     private LobbySettings lobbySettings;
 
     @Type(type = "org.hibernate.type.UUIDCharType")

@@ -15,8 +15,12 @@ class EventFactoryTest {
     @Test
     void createLobbyCreatedEvent() {
         Lobby lobby = mock(Lobby.class);
+        UUID gameId = UUID.randomUUID();
 
-        LobbyCreatedEvent lobbyCreatedEvent = EventFactory.createLobbyCreatedEvent(lobby);
+        LobbyCreatedEvent lobbyCreatedEvent = EventFactory.createLobbyCreatedEvent(
+            lobby,
+            gameId
+        );
 
         assertNotNull(lobbyCreatedEvent);
         assertNotNull(lobbyCreatedEvent.getId());
@@ -24,6 +28,7 @@ class EventFactoryTest {
         assertEquals("LobbyCreated", lobbyCreatedEvent.getType());
         assertEquals("LobbyService", lobbyCreatedEvent.getService());
         assertEquals(lobby, lobbyCreatedEvent.getLobby());
+        assertEquals(gameId, lobbyCreatedEvent.getGameId());
     }
 
     @Test

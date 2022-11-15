@@ -1,11 +1,13 @@
 package nl.fontys.atosgame.lobbyservice.service;
 
+import java.util.Optional;
 import java.util.UUID;
+import nl.fontys.atosgame.lobbyservice.dto.LobbyDeletedDto;
 import nl.fontys.atosgame.lobbyservice.model.Lobby;
 import nl.fontys.atosgame.lobbyservice.model.LobbySettings;
 import nl.fontys.atosgame.lobbyservice.repository.LobbyRepository;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,12 +22,16 @@ public class LobbyServiceImpl implements LobbyService {
 
     private final LobbyCodeGenerator lobbyCodeGenerator;
 
+    private final StreamBridge streamBridge;
+
     public LobbyServiceImpl(
         @Autowired LobbyRepository lobbyRepository,
-        @Autowired LobbyCodeGenerator lobbyCodeGenerator
+        @Autowired LobbyCodeGenerator lobbyCodeGenerator,
+        @Autowired StreamBridge streamBridge
     ) {
         this.lobbyRepository = lobbyRepository;
         this.lobbyCodeGenerator = lobbyCodeGenerator;
+        this.streamBridge = streamBridge;
     }
 
     /**
@@ -41,6 +47,8 @@ public class LobbyServiceImpl implements LobbyService {
         lobby.setLobbySettings(settings);
         lobby.setGameId(gameId);
         lobby.setLobbyCode(lobbyCodeGenerator.generateLobbyCode());
+        Lobby createdLobby = lobbyRepository.save(lobby);
+        streamBridge.send("produceLobbyCreated-in-0", createdLobby);
         return lobbyRepository.save(lobby);
     }
 
@@ -51,6 +59,11 @@ public class LobbyServiceImpl implements LobbyService {
      */
     @Override
     public void deleteLobbyByGameId(UUID gameId) {
+        UUID lobbyId = lobbyRepository.getByGameId(gameId).getId();
         lobbyRepository.deleteByGameId(gameId);
+        streamBridge.send(
+            "produceLobbyDeleted-in-0",
+            new LobbyDeletedDto(lobbyId, gameId)
+        );
     }
 }

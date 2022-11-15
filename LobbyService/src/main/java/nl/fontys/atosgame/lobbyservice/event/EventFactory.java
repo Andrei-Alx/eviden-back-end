@@ -13,7 +13,7 @@ import nl.fontys.atosgame.lobbyservice.model.Lobby;
  */
 public class EventFactory {
 
-    public static LobbyCreatedEvent createLobbyCreatedEvent(Lobby lobby) {
+    public static LobbyCreatedEvent createLobbyCreatedEvent(Lobby lobby, UUID gameId) {
         LobbyCreatedEvent event = new LobbyCreatedEvent();
         event =
             (LobbyCreatedEvent) initializeBaseEvent(
@@ -22,6 +22,7 @@ public class EventFactory {
                 "LobbyService"
             );
         event.setLobby(lobby);
+        event.setGameId(gameId);
         return event;
     }
 
