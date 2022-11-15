@@ -43,4 +43,14 @@ public class LobbyServiceImpl implements LobbyService {
         lobby.setLobbyCode(lobbyCodeGenerator.generateLobbyCode());
         return lobbyRepository.save(lobby);
     }
+
+    /**
+     * Deletes a lobby by gameId.
+     *
+     * @param gameId The gameid of the lobby.
+     */
+    @Override
+    public void deleteLobbyByGameId(UUID gameId) {
+        lobbyRepository.deleteByGameId(gameId);
+    }
 }

@@ -15,4 +15,10 @@ public interface LobbyService {
      * @return The created lobby.
      */
     Lobby createLobby(LobbySettings settings, UUID gameId);
+
+    /**
+     * Deletes a lobby by gameId.
+     * @param gameId The gameid of the lobby.
+     */
+    void deleteLobbyByGameId(UUID gameId);
 }

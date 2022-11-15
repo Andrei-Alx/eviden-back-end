@@ -3,6 +3,7 @@ package nl.fontys.atosgame.lobbyservice.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.UUID;
@@ -45,5 +46,14 @@ class LobbyServiceImplTest {
         assertNotNull(lobby.getPlayers());
         assertTrue(lobby.getPlayers().isEmpty());
         assertNotNull(lobby.getId());
+    }
+
+    @Test
+    void deleteLobbyByGameId() {
+        UUID gameId = UUID.randomUUID();
+
+        lobbyService.deleteLobbyByGameId(gameId);
+
+        verify(lobbyRepository).deleteByGameId(gameId);
     }
 }

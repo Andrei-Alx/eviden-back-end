@@ -32,7 +32,6 @@ public class GameEventConsumer {
     @Bean
     public Function<Message<GameCreatedEvent>, Void> handleGameCreated() {
         return keyValue -> {
-            // TODO implement
             GameCreatedEvent event = keyValue.getPayload();
             lobbyService.createLobby(event.getLobbySettings(), event.getGameId());
             return null;
@@ -48,8 +47,9 @@ public class GameEventConsumer {
     @Bean
     public Function<Message<GameEndedEvent>, Void> handleGameEnded() {
         return keyValue -> {
-            // TODO implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            GameEndedEvent event = keyValue.getPayload();
+            lobbyService.deleteLobbyByGameId(event.getGameId());
+            return null;
         };
     }
 }
