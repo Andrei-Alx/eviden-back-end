@@ -1,9 +1,12 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
 import java.util.function.Function;
+
+import nl.fontys.atosgame.gameappbff.event.consumed.CardSetCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.GameCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.GameEndedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.GameStartedEvent;
+import nl.fontys.atosgame.gameappbff.service.GameService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
@@ -13,10 +16,12 @@ import org.springframework.stereotype.Controller;
  * - GameCreatedEvent
  * - GameStartedEvent
  * - GameEndedEvent
- * @author Eli
+ * @author Eli, Aniek
  */
 @Controller
 public class GameConsumers {
+
+    private GameService gameService;
 
     /**
      * Id: C-26
@@ -27,8 +32,9 @@ public class GameConsumers {
     @Bean
     public Function<Message<GameCreatedEvent>, Void> handleGameCreated() {
         return message -> {
-            // TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            GameCreatedEvent event = message.getPayload();
+            gameService.handleGameCreated(event.getGameId());
+            return null;
         };
     }
 
@@ -41,7 +47,8 @@ public class GameConsumers {
     @Bean
     public Function<Message<GameStartedEvent>, Void> handleGameStarted() {
         return message -> {
-            // TODO: implement
+            GameStartedEvent event = message.getPayload();
+            gameService.handleGameStarted(event.getGameId());
             throw new UnsupportedOperationException("Not implemented yet");
         };
     }
