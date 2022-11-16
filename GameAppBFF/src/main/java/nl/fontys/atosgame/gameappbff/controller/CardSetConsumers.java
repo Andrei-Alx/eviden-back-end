@@ -28,7 +28,7 @@ public class CardSetConsumers {
     public Function<Message<CardSetCreatedEvent>, Void> handleCardSetCreated() {
         return cardSetCreatedEventMessage -> {
             CardSetCreatedEvent event = cardSetCreatedEventMessage.getPayload();
-            //TODO
+            //TODO save cardset in database
             throw new UnsupportedOperationException("Not implemented yet");
         };
     }
@@ -43,7 +43,7 @@ public class CardSetConsumers {
     public Function<Message<CardSetUpdatedEvent>, Void> handleCardSetUpdated() {
         return cardSetUpdatedEventMessage -> {
             CardSetUpdatedEvent event = cardSetUpdatedEventMessage.getPayload();
-            //TODO
+            //TODO update cardset in database
             throw new UnsupportedOperationException("Not implemented yet");
         };
     }
@@ -58,7 +58,7 @@ public class CardSetConsumers {
     public Function<Message<CardSetDeletedEvent>, Void> handleCardSetDeleted() {
         return cardSetDeletedEventMessage -> {
             CardSetDeletedEvent event = cardSetDeletedEventMessage.getPayload();
-            //TODO
+            //TODO delete cardset in database
             throw new UnsupportedOperationException("Not implemented yet");
         };
     }
