@@ -110,4 +110,42 @@ public class GameServiceImpl implements GameService {
         game.getRounds().set(0, firstRound);
         return gameRepository.save(game);
     }
+
+    /**
+     * Check if the next round should be started
+     *
+     * @param gameId The id of the game
+     */
+    @Override
+    public void checkForNextRound(UUID gameId) {
+        // Get game
+        Game game = gameRepository
+            .findById(gameId)
+            .orElseThrow(EntityNotFoundException::new);
+
+        // Get current round
+        Optional<Round> currentRound = game.getCurrentRound();
+        // If there is no current round, the game is done
+        if (currentRound.isEmpty()) {
+            return;
+        }
+
+        // If the current round is done, start the next round
+        Round round = currentRound.get();
+        if (round.isDone()) {
+            // End the current round
+            roundService.endRound(round.getId(), gameId);
+            // Check if there is a next round
+            Optional<Round> nextRound = game.getNextRound();
+            if (nextRound.isPresent()) {
+                // Start the next round
+                roundService.startRound(
+                    nextRound.get().getId(),
+                    game.getLobby().getPlayerIds(),
+                    gameId
+                );
+            }
+            gameRepository.save(game);
+        }
+    }
 }

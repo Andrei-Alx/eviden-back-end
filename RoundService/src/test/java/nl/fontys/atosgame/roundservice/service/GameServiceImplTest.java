@@ -101,4 +101,103 @@ class GameServiceImplTest {
             .startRound(firstRound.getId(), lobby.getPlayerIds(), game.getId());
         verify(gameRepository).save(updatedGame);
     }
+
+    @Test
+    void checkForNextRoundIsNextRound() {
+        Round firstRound = mock(Round.class);
+        doReturn(UUID.randomUUID()).when(firstRound).getId();
+        Round secondRound = mock(Round.class);
+        doReturn(UUID.randomUUID()).when(secondRound).getId();
+        Round thirdRound = mock(Round.class);
+        List<Round> rounds = new ArrayList<>(
+            List.of(firstRound, secondRound, thirdRound)
+        );
+        Game game = spy(new Game(UUID.randomUUID(), rounds, mock(Lobby.class)));
+        doReturn(Optional.of(firstRound)).when(game).getCurrentRound();
+        doReturn(Optional.of(secondRound)).when(game).getNextRound();
+        doReturn(true).when(firstRound).isDone();
+        // Set behavior of repository
+        when(gameRepository.findById(game.getId())).thenReturn(Optional.of(game));
+        when(gameRepository.save(any(Game.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        // Act
+        gameService.checkForNextRound(game.getId());
+
+        verify(roundService).endRound(firstRound.getId(), game.getId());
+        verify(roundService)
+            .startRound(
+                secondRound.getId(),
+                game.getLobby().getPlayerIds(),
+                game.getId()
+            );
+    }
+
+    @Test
+    void checkForNextRoundIsLastRound() {
+        Round firstRound = mock(Round.class);
+        doReturn(UUID.randomUUID()).when(firstRound).getId();
+        Round secondRound = mock(Round.class);
+        doReturn(UUID.randomUUID()).when(secondRound).getId();
+        Round thirdRound = mock(Round.class);
+        List<Round> rounds = new ArrayList<>(
+            List.of(firstRound, secondRound, thirdRound)
+        );
+        Game game = spy(new Game(UUID.randomUUID(), rounds, mock(Lobby.class)));
+        doReturn(Optional.of(thirdRound)).when(game).getCurrentRound();
+        doReturn(Optional.empty()).when(game).getNextRound();
+        doReturn(true).when(thirdRound).isDone();
+        // Set behavior of repository
+        when(gameRepository.findById(game.getId())).thenReturn(Optional.of(game));
+        when(gameRepository.save(any(Game.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        // Act
+        gameService.checkForNextRound(game.getId());
+
+        verify(roundService).endRound(thirdRound.getId(), game.getId());
+        verify(roundService, never())
+            .startRound(any(UUID.class), any(List.class), any(UUID.class));
+    }
+
+    @Test
+    void checkForNextRoundIsNotDone() {
+        Round firstRound = mock(Round.class);
+        doReturn(UUID.randomUUID()).when(firstRound).getId();
+        Round secondRound = mock(Round.class);
+        doReturn(UUID.randomUUID()).when(secondRound).getId();
+        Round thirdRound = mock(Round.class);
+        List<Round> rounds = new ArrayList<>(
+            List.of(firstRound, secondRound, thirdRound)
+        );
+        Game game = spy(new Game(UUID.randomUUID(), rounds, mock(Lobby.class)));
+        doReturn(Optional.of(thirdRound)).when(game).getCurrentRound();
+        doReturn(Optional.empty()).when(game).getNextRound();
+        doReturn(false).when(thirdRound).isDone();
+        // Set behavior of repository
+        when(gameRepository.findById(game.getId())).thenReturn(Optional.of(game));
+        when(gameRepository.save(any(Game.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        // Act
+        gameService.checkForNextRound(game.getId());
+
+        verify(roundService, never()).endRound(any(UUID.class), any(UUID.class));
+        verify(roundService, never())
+            .startRound(any(UUID.class), any(List.class), any(UUID.class));
+    }
+
+    @Test
+    void checkForNextRoundAllFinished() {
+        List<Round> rounds = mock(List.class);
+        Game game = spy(new Game(UUID.randomUUID(), rounds, mock(Lobby.class)));
+        doReturn(Optional.empty()).when(game).getCurrentRound();
+        // Set behavior of repository
+        when(gameRepository.findById(game.getId())).thenReturn(Optional.of(game));
+        when(gameRepository.save(any(Game.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        // Act
+        gameService.checkForNextRound(game.getId());
+
+        verify(roundService, never()).endRound(any(UUID.class), any(UUID.class));
+        verify(roundService, never())
+            .startRound(any(UUID.class), any(List.class), any(UUID.class));
+    }
 }
