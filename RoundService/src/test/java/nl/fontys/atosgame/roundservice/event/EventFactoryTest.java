@@ -8,6 +8,7 @@ import java.util.UUID;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerCardsDistributed;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
+import nl.fontys.atosgame.roundservice.event.produced.RoundStartedEvent;
 import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.model.RoundSettings;
 import org.junit.jupiter.api.Test;
@@ -55,6 +56,24 @@ class EventFactoryTest {
         assertEquals(playerId, event.getPlayerId());
         assertEquals(gameId, event.getGameId());
         assertEquals(cardIds, event.getCardIds());
+        assertNotNull(event.getTimestamp());
+        assertNotNull(event.getId());
+    }
+
+    @Test
+    void createRoundStartedEvent() {
+        UUID roundId = UUID.randomUUID();
+        UUID gameId = UUID.randomUUID();
+
+        RoundStartedEvent event = EventFactory.createRoundStartedEvent(
+            roundId,
+            gameId
+        );
+
+        assertEquals("RoundStarted", event.getType());
+        assertEquals("RoundService", event.getService());
+        assertEquals(roundId, event.getRoundId());
+        assertEquals(gameId, event.getGameId());
         assertNotNull(event.getTimestamp());
         assertNotNull(event.getId());
     }
