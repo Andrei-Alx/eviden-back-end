@@ -24,7 +24,7 @@ public class Round {
     @JsonProperty
     private UUID id;
 
-    @ElementCollection
+    @OneToMany
     @JsonProperty
     private List<PlayerRound> playerRounds = new ArrayList<>();
 
@@ -34,4 +34,12 @@ public class Round {
     @JsonProperty
     @Embedded
     private RoundSettings roundSettings;
+
+    /**
+     * Add a playerRound to the round
+     * @param playerRound The playerRound to add
+     */
+    public void addPlayerRound(PlayerRound playerRound) {
+        playerRounds.add(playerRound);
+    }
 }
