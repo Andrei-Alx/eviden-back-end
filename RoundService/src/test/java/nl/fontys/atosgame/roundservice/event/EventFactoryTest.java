@@ -8,6 +8,7 @@ import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerCardsDistributed;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseStartedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
+import nl.fontys.atosgame.roundservice.event.produced.RoundEndedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundStartedEvent;
 import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.model.RoundSettings;
@@ -95,6 +96,21 @@ class EventFactoryTest {
         assertEquals(playerId, event.getPlayerId());
         assertEquals(gameId, event.getGameId());
         assertEquals(phaseNumber, event.getPhaseNumber());
+        assertNotNull(event.getTimestamp());
+        assertNotNull(event.getId());
+    }
+
+    @Test
+    void createRoundEndedEvent() {
+        UUID roundId = UUID.randomUUID();
+        UUID gameId = UUID.randomUUID();
+
+        RoundEndedEvent event = EventFactory.createRoundEndedEvent(roundId, gameId);
+
+        assertEquals("RoundEnded", event.getType());
+        assertEquals("RoundService", event.getService());
+        assertEquals(roundId, event.getRoundId());
+        assertEquals(gameId, event.getGameId());
         assertNotNull(event.getTimestamp());
         assertNotNull(event.getId());
     }

@@ -3,12 +3,14 @@ package nl.fontys.atosgame.roundservice.controller;
 import java.util.function.Function;
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
 import nl.fontys.atosgame.roundservice.dto.PlayerPhaseStartedDto;
+import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.event.EventFactory;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerCardsDistributed;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseStartedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
+import nl.fontys.atosgame.roundservice.event.produced.RoundEndedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundStartedEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -82,10 +84,16 @@ public class RoundEventProducers {
      * output topic: round-ended-topic
      */
     @Bean
-    public Function<?, Message<RoundCreatedEvent>> produceRoundEnded() {
-        return keyValue -> {
-            // TODO implement
-            throw new UnsupportedOperationException("Not implemented yet");
+    public Function<RoundEndedDto, Message<RoundEndedEvent>> produceRoundEnded() {
+        return dto -> {
+            RoundEndedEvent event = EventFactory.createRoundEndedEvent(
+                dto.getRoundId(),
+                dto.getGameId()
+            );
+            return MessageBuilder
+                .withPayload(event)
+                .setHeader(KafkaHeaders.MESSAGE_KEY, dto.getGameId())
+                .build();
         };
     }
 

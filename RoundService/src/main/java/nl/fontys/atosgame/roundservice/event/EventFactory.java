@@ -5,6 +5,7 @@ import java.util.UUID;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerCardsDistributed;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseStartedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
+import nl.fontys.atosgame.roundservice.event.produced.RoundEndedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundStartedEvent;
 import nl.fontys.atosgame.roundservice.model.Round;
 
@@ -69,6 +70,15 @@ public class EventFactory {
                 "RoundStarted",
                 "RoundService"
             );
+        event.setRoundId(roundId);
+        event.setGameId(gameId);
+        return event;
+    }
+
+    public static RoundEndedEvent createRoundEndedEvent(UUID roundId, UUID gameId) {
+        RoundEndedEvent event = new RoundEndedEvent();
+        event =
+            (RoundEndedEvent) initializeBaseEvent(event, "RoundEnded", "RoundService");
         event.setRoundId(roundId);
         event.setGameId(gameId);
         return event;

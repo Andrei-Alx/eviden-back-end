@@ -8,11 +8,13 @@ import java.util.UUID;
 import java.util.function.Function;
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
 import nl.fontys.atosgame.roundservice.dto.PlayerPhaseStartedDto;
+import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerCardsDistributed;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseStartedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
+import nl.fontys.atosgame.roundservice.event.produced.RoundEndedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundStartedEvent;
 import nl.fontys.atosgame.roundservice.model.Round;
 import org.junit.jupiter.api.Test;
@@ -126,6 +128,28 @@ class RoundEventProducersTest {
         );
         assertEquals(
             playerPhaseStartedDto.getGameId(),
+            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+        );
+    }
+
+    @Test
+    void produceRoundEnded() {
+        RoundEndedDto roundEndedDto = new RoundEndedDto(
+            UUID.randomUUID(),
+            UUID.randomUUID()
+        );
+        RoundEventProducers roundEventProducers = new RoundEventProducers();
+
+        Message<RoundEndedEvent> message = roundEventProducers
+            .produceRoundEnded()
+            .apply(roundEndedDto);
+
+        assertEquals("RoundService", message.getPayload().getService());
+        assertEquals("RoundEnded", message.getPayload().getType());
+        assertEquals(roundEndedDto.getRoundId(), message.getPayload().getRoundId());
+        assertEquals(roundEndedDto.getGameId(), message.getPayload().getGameId());
+        assertEquals(
+            roundEndedDto.getGameId(),
             message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
         );
     }
