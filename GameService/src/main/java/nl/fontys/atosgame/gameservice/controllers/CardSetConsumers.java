@@ -5,6 +5,7 @@ import nl.fontys.atosgame.gameservice.event.consumed.CardSetCreatedEvent;
 import nl.fontys.atosgame.gameservice.event.consumed.CardSetDeletedEvent;
 import nl.fontys.atosgame.gameservice.event.consumed.CardSetUpdatedEvent;
 import nl.fontys.atosgame.gameservice.service.CardSetService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
@@ -19,9 +20,10 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class CardSetConsumers {
 
+
     private CardSetService cardSetService;
 
-    public CardSetConsumers(CardSetService cardSetService) {
+    public CardSetConsumers(@Autowired CardSetService cardSetService) {
         this.cardSetService = cardSetService;
     }
 
