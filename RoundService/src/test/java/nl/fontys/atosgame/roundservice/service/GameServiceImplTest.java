@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
@@ -14,18 +15,21 @@ import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.repository.GameRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.cloud.stream.function.StreamBridge;
 
 class GameServiceImplTest {
 
     private RoundService roundService;
     private GameRepository gameRepository;
+    private StreamBridge streamBridge;
     private GameServiceImpl gameService;
 
     @BeforeEach
     void setUp() {
         roundService = mock(RoundService.class);
         gameRepository = mock(GameRepository.class);
-        gameService = new GameServiceImpl(roundService, gameRepository);
+        streamBridge = mock(StreamBridge.class);
+        gameService = new GameServiceImpl(roundService, gameRepository, streamBridge);
     }
 
     @Test
@@ -71,36 +75,32 @@ class GameServiceImplTest {
     }
 
     @Test
-    void startRound() {
-        UUID gameId = UUID.randomUUID();
-        Game game = new Game();
-        game.setId(gameId);
-        List<Round> rounds = new ArrayList<>() {
-            {
-                add(new Round(UUID.randomUUID(), new ArrayList<>(), RoundStatus.CREATED, null));
-                add(new Round(UUID.randomUUID(), new ArrayList<>(), RoundStatus.CREATED, null));
-            }
-        };
-        game.setRounds(rounds);
-        Lobby lobby = new Lobby();
-        List<UUID> players = new ArrayList<>() {
-            {
-                add(UUID.randomUUID());
-                add(UUID.randomUUID());
-            }
-        };
-        lobby.setPlayerIds(players);
-        game.setLobby(lobby);
-        when(gameRepository.findById(gameId)).thenReturn(java.util.Optional.of(game));
+    void startGame() {
+        Round firstRound = mock(Round.class);
+        List<Round> rounds = new ArrayList<>(List.of(firstRound, mock(Round.class)));
+        Lobby lobby = mock(Lobby.class);
+        Game game = new Game(
+            UUID.randomUUID(),
+            rounds,
+            lobby
+        );
+        // Set behavior of repository
+        when(gameRepository.findById(game.getId())).thenReturn(Optional.of(game));
         when(gameRepository.save(any(Game.class))).thenAnswer(i -> i.getArguments()[0]);
-        when(roundService.startRound(rounds.get(0).getId())).thenReturn(rounds.get(0));
+        // Set behavior of round service
+        when(roundService.startRound(any(UUID.class), any(List.class), any(UUID.class))).thenAnswer(i -> {
+            // find round where parameter 0 is equal to the id of the round
+            return rounds.stream()
+                .filter(r -> r.getId().equals(i.getArguments()[0]))
+                .findFirst()
+                .orElseThrow();
+        });
 
-        Game updatedGame = gameService.startRound(gameId, 0);
+        // Act
+        Game updatedGame = gameService.startGame(game.getId());
 
-        assertEquals(gameId, updatedGame.getId());
-        verify(roundService)
-            .initializeRound(rounds.get(0).getId(), game.getLobby().getPlayerIds());
-        verify(roundService).startRound(rounds.get(0).getId());
-        verify(roundService, never()).startRound(rounds.get(1).getId());
+        // Assert
+        verify(roundService).startRound(firstRound.getId(), lobby.getPlayerIds(), game.getId());
+        verify(gameRepository).save(updatedGame);
     }
 }

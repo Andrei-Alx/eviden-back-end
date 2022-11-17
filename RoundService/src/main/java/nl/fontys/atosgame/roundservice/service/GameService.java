@@ -31,13 +31,4 @@ public interface GameService {
      * @return The updated game
      */
     Game startGame(UUID gameId) throws EntityNotFoundException;
-
-    /**
-     * Start a round in a game
-     * @param gameId The id of the game
-     * @param roundNumber The number of the round
-     * @return The updated game
-     * @throws EntityNotFoundException When the game or round is not found
-     */
-    Game startRound(UUID gameId, int roundNumber) throws EntityNotFoundException;
 }

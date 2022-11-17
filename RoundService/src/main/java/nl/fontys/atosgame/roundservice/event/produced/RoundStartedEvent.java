@@ -9,7 +9,7 @@ import nl.fontys.atosgame.roundservice.event.BaseEvent;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoundStarted extends BaseEvent {
+public class RoundStartedEvent extends BaseEvent {
 
     private UUID gameId;
     private UUID roundId;

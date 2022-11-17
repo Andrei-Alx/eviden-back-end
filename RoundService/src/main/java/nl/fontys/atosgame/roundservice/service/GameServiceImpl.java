@@ -10,6 +10,7 @@ import nl.fontys.atosgame.roundservice.model.Lobby;
 import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,13 +23,16 @@ public class GameServiceImpl implements GameService {
     private RoundService roundService;
 
     private GameRepository gameRepository;
+    private StreamBridge streamBridge;
 
     public GameServiceImpl(
         @Autowired RoundService roundService,
-        @Autowired GameRepository gameRepository
+        @Autowired GameRepository gameRepository,
+        @Autowired StreamBridge streamBridge
     ) {
         this.roundService = roundService;
         this.gameRepository = gameRepository;
+        this.streamBridge = streamBridge;
     }
 
     /**
@@ -78,38 +82,10 @@ public class GameServiceImpl implements GameService {
      */
     @Override
     public Game startGame(UUID gameId) throws EntityNotFoundException {
-        return this.startRound(gameId, 0);
-    }
-
-    /**
-     * Start a round in a game
-     *
-     * @param gameId      The id of the game
-     * @param roundNumber The number of the round
-     * @return The updated game
-     * @throws EntityNotFoundException When the game or round is not found
-     */
-    @Override
-    public Game startRound(UUID gameId, int roundNumber) throws EntityNotFoundException {
-        Optional<Game> gameOptional = gameRepository.findById(gameId);
-        if (gameOptional.isPresent()) {
-            Game game = gameOptional.get();
-
-            if (game.getRounds().size() <= roundNumber) {
-                throw new EntityNotFoundException("Round not found");
-            }
-
-            // Initialize the round
-            Round round = game.getRounds().get(roundNumber);
-            roundService.initializeRound(round.getId(), game.getLobby().getPlayerIds());
-
-            // Start the round
-            round = roundService.startRound(round.getId());
-            game.getRounds().set(roundNumber, round);
-
-            return gameRepository.save(game);
-        } else {
-            throw new EntityNotFoundException("Game not found");
-        }
+        Game game = gameRepository.findById(gameId).orElseThrow(EntityNotFoundException::new);
+        Round firstRound = game.getRounds().get(0);
+        firstRound = roundService.startRound(firstRound.getId(), game.getLobby().getPlayerIds(), gameId);
+        game.getRounds().set(0, firstRound);
+        return gameRepository.save(game);
     }
 }
