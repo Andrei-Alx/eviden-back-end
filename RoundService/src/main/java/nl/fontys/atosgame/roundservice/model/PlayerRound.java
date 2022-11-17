@@ -41,6 +41,11 @@ public class PlayerRound {
     private int nrOfPickedCards;
     private String importantTag;
 
+    /**
+     * Check if a playerRound is done.
+     * A playerRound is done when the player has liked and picked enough cards and has a determinate result.
+     * @return True if the playerRound is done, false otherwise.
+     */
     public boolean isDone() {
         return (
             likedCards.size() == nrOfLikedCards &&
@@ -49,6 +54,12 @@ public class PlayerRound {
         );
     }
 
+    /**
+     * Check if the playerRound has a determinate result.
+     * A playerRound has a determinate result when, in pickedCards, the importantTag is has a value
+     * that has been picked most often.
+     * @return True if the playerRound has a determinate result, false otherwise.
+     */
     public boolean hasDeterminateResult() {
         // Count how often each tag is picked
         Map<String, Integer> tagCount = new HashMap<>();
