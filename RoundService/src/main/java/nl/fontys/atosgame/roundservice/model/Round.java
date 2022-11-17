@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -23,8 +25,9 @@ public class Round {
     @JsonProperty
     private UUID id;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonProperty
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<PlayerRound> playerRounds = new ArrayList<>();
 
     @JsonProperty

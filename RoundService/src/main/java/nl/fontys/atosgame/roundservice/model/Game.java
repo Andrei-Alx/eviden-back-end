@@ -9,6 +9,8 @@ import jdk.jfr.DataAmount;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
 
 @Data
@@ -24,9 +26,10 @@ public class Game {
 
     @JsonProperty
     @OneToMany
-    private List<Round> rounds;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Round> rounds = new java.util.ArrayList<>();
 
-    @OneToOne(orphanRemoval = true)
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "lobby_id")
     @JsonProperty
     private Lobby lobby;

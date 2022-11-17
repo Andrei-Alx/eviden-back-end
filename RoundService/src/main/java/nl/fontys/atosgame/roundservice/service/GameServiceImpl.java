@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.roundservice.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -50,6 +51,20 @@ public class GameServiceImpl implements GameService {
 
         List<Round> rounds = roundService.createRounds(gameId, roundSettings);
         game.setRounds(rounds);
+
+        // TODO: REMOVE HARDCODED LOBBY
+        Lobby lobby = new Lobby(
+            UUID.randomUUID(),
+            new ArrayList<>(
+                List.of(
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    UUID.randomUUID()
+                )
+            )
+        );
+        game.setLobby(lobby);
 
         return gameRepository.save(game);
     }

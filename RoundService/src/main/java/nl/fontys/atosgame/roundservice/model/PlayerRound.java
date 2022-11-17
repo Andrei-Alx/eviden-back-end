@@ -32,6 +32,6 @@ public class PlayerRound {
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Card> pickedCards = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = { CascadeType.PERSIST })
     private List<Card> distributedCards = new ArrayList<>();
 }
