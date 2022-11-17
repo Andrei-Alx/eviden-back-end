@@ -44,4 +44,13 @@ public class Round {
     public void addPlayerRound(PlayerRound playerRound) {
         playerRounds.add(playerRound);
     }
+
+    /**
+     * Check if the round is done.
+     * A round is done when all playerRounds are done.
+     * @return True if the round is done, false otherwise.
+     */
+    public boolean isDone() {
+        return playerRounds.stream().allMatch(PlayerRound::isDone);
+    }
 }
