@@ -2,13 +2,14 @@ package nl.fontys.atosgame.roundservice.controller;
 
 import java.util.function.Function;
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
+import nl.fontys.atosgame.roundservice.dto.PlayerPhaseStartedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.event.EventFactory;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerCardsDistributed;
+import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseStartedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.event.produced.RoundStartedEvent;
-import nl.fontys.atosgame.roundservice.model.Round;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
@@ -95,10 +96,18 @@ public class RoundEventProducers {
      * output topic: player-phase-started-topic
      */
     @Bean
-    public Function<?, Message<RoundCreatedEvent>> producePlayerPhaseStarted() {
-        return keyValue -> {
-            // TODO implement
-            throw new UnsupportedOperationException("Not implemented yet");
+    public Function<PlayerPhaseStartedDto, Message<PlayerPhaseStartedEvent>> producePlayerPhaseStarted() {
+        return playerPhaseStartedDto -> {
+            PlayerPhaseStartedEvent event = EventFactory.createPlayerPhaseStartedEvent(
+                playerPhaseStartedDto.getPhaseNumber(),
+                playerPhaseStartedDto.getRoundId(),
+                playerPhaseStartedDto.getGameId(),
+                playerPhaseStartedDto.getPlayerId()
+            );
+            return MessageBuilder
+                .withPayload(event)
+                .setHeader(KafkaHeaders.MESSAGE_KEY, playerPhaseStartedDto.getGameId())
+                .build();
         };
     }
 
