@@ -1,5 +1,7 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import nl.fontys.atosgame.gameappbff.dto.GameResponseDto;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class GameController {
 
     /**
+     * Id: R-11
+     *
      * Getting all games.
      *
      * @return all games.
@@ -22,8 +26,15 @@ public class GameController {
     @GetMapping("/games")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Getting all the games"),
-                    @ApiResponse(responseCode = "404", description = "No games found"),
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Getting all the games",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = GameResponseDto.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "404", description = "Games not found"),
             }
     )
     public GameResponseDto getGames() {
