@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
@@ -161,5 +162,24 @@ class RoundServiceImplTest {
         // Assert
         verify(roundLogicService).initializeRound(round, playerIds);
         verify(roundLogicService).distributeCards(round);
+    }
+
+    @Test
+    void endRound() {
+        //Arrange
+        Round round = new Round(UUID.randomUUID(), null, RoundStatus.IN_PROGRESS, null);
+        UUID gameId = UUID.randomUUID();
+        // Set behavior of repository
+        when(roundRepository.findById(round.getId())).thenReturn(Optional.of(round));
+        when(roundRepository.save(round)).thenReturn(round);
+
+        // Act
+        Round result = roundService.endRound(round.getId(), gameId);
+
+        // Assert
+        assertEquals(RoundStatus.FINISHED, result.getStatus());
+        verify(streamBridge)
+            .send("produceRoundEnded-in-0", new RoundEndedDto(gameId, result.getId()));
+        verify(roundRepository).save(result);
     }
 }

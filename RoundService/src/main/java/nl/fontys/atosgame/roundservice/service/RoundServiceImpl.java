@@ -7,6 +7,7 @@ import java.util.UUID;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.roundservice.dto.PlayerPhaseStartedDto;
+import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
@@ -111,6 +112,29 @@ public class RoundServiceImpl implements RoundService {
             );
         }
 
+        return round;
+    }
+
+    /**
+     * End a round
+     *
+     * @param roundId The id of the round
+     * @param gameId  The id of the game
+     * @return The updated round
+     */
+    @Override
+    public Round endRound(UUID roundId, UUID gameId) {
+        // Get the round
+        Round round = roundRepository
+            .findById(roundId)
+            .orElseThrow(EntityNotFoundException::new);
+
+        // Change the status of the round to Finished and send event
+        round.setStatus(RoundStatus.FINISHED);
+        streamBridge.send("produceRoundEnded-in-0", new RoundEndedDto(gameId, roundId));
+
+        // Save to db
+        round = roundRepository.save(round);
         return round;
     }
 

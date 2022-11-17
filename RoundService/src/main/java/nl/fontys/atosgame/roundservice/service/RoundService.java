@@ -25,4 +25,12 @@ public interface RoundService {
      * @return The updated round
      */
     Round startRound(UUID roundId, List<UUID> playerIds, UUID gameId);
+
+    /**
+     * End a round
+     * @param roundId The id of the round
+     * @param gameId The id of the game
+     * @return The updated round
+     */
+    Round endRound(UUID roundId, UUID gameId);
 }
