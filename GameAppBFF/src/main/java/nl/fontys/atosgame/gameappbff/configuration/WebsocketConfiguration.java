@@ -17,7 +17,7 @@ public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry
-            .addEndpoint("/websocket")
+            .addEndpoint("/websocket/gameappbff")
             // TODO: Not very secure, but for now it will do
             .setAllowedOrigins("*");
     }
