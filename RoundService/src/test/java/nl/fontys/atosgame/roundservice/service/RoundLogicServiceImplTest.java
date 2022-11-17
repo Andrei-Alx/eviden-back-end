@@ -58,21 +58,30 @@ class RoundLogicServiceImplTest {
                     UUID.randomUUID(),
                     new ArrayList<>(),
                     new ArrayList<>(),
-                    new ArrayList<>()
+                    new ArrayList<>(),
+                    0,
+                    0,
+                    "test"
                 ),
                 new PlayerRound(
                     UUID.randomUUID(),
                     UUID.randomUUID(),
                     new ArrayList<>(),
                     new ArrayList<>(),
-                    new ArrayList<>()
+                    new ArrayList<>(),
+                    0,
+                    0,
+                    "test"
                 ),
                 new PlayerRound(
                     UUID.randomUUID(),
                     UUID.randomUUID(),
                     new ArrayList<>(),
                     new ArrayList<>(),
-                    new ArrayList<>()
+                    new ArrayList<>(),
+                    0,
+                    0,
+                    "test"
                 )
             )
         );
@@ -110,21 +119,30 @@ class RoundLogicServiceImplTest {
                     UUID.randomUUID(),
                     new ArrayList<>(),
                     new ArrayList<>(),
-                    new ArrayList<>()
+                    new ArrayList<>(),
+                    0,
+                    0,
+                    "test"
                 ),
                 new PlayerRound(
                     UUID.randomUUID(),
                     UUID.randomUUID(),
                     new ArrayList<>(),
                     new ArrayList<>(),
-                    new ArrayList<>()
+                    new ArrayList<>(),
+                    0,
+                    0,
+                    "test"
                 ),
                 new PlayerRound(
                     UUID.randomUUID(),
                     UUID.randomUUID(),
                     new ArrayList<>(),
                     new ArrayList<>(),
-                    new ArrayList<>()
+                    new ArrayList<>(),
+                    0,
+                    0,
+                    "test"
                 )
             )
         );

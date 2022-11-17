@@ -2,7 +2,9 @@ package nl.fontys.atosgame.roundservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
@@ -34,4 +36,62 @@ public class PlayerRound {
 
     @ManyToMany(cascade = { CascadeType.PERSIST })
     private List<Card> distributedCards = new ArrayList<>();
+
+    private int nrOfLikedCards;
+    private int nrOfPickedCards;
+    private String importantTag;
+
+    public boolean isDone() {
+        return (
+            likedCards.size() == nrOfLikedCards &&
+            pickedCards.size() == nrOfPickedCards &&
+            this.hasDeterminateResult()
+        );
+    }
+
+    public boolean hasDeterminateResult() {
+        // Count how often each tag is picked
+        Map<String, Integer> tagCount = new HashMap<>();
+        for (Card card : pickedCards) {
+            for (Tag tag : card.getTags()) {
+                if (tag.getTagKey().equals(importantTag)) {
+                    tagCount.put(
+                        tag.getTagValue(),
+                        tagCount.getOrDefault(tag.getTagValue(), 0) + 1
+                    );
+                }
+            }
+        }
+        // Check if there is a single tag that is picked more often than the others
+        if (tagCount.isEmpty()) {
+            return false;
+        }
+        if (tagCount.size() == 1) {
+            return true;
+        }
+        // Get two tags with the highest count
+        String highestTagValue = null;
+        for (String tagValue : tagCount.keySet()) {
+            if (
+                highestTagValue == null ||
+                tagCount.get(tagValue) > tagCount.get(highestTagValue)
+            ) {
+                highestTagValue = tagValue;
+            }
+        }
+        String secondHighestTagValue = null;
+        for (String tagValue : tagCount.keySet()) {
+            if (
+                (
+                    secondHighestTagValue == null ||
+                    tagCount.get(tagValue) > tagCount.get(secondHighestTagValue)
+                ) &&
+                !tagValue.equals(highestTagValue)
+            ) {
+                secondHighestTagValue = tagValue;
+            }
+        }
+        // Check if the highest tag is picked more often than the second highest tag
+        return tagCount.get(highestTagValue) > tagCount.get(secondHighestTagValue);
+    }
 }

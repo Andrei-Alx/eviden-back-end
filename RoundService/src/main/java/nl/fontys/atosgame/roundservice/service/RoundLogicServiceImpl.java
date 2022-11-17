@@ -29,6 +29,9 @@ public class RoundLogicServiceImpl implements RoundLogicService {
         for (UUID playerId : playerIds) {
             PlayerRound playerRound = new PlayerRound();
             playerRound.setPlayerId(playerId);
+            playerRound.setNrOfLikedCards(round.getRoundSettings().getNrOfLikedCards());
+            playerRound.setNrOfPickedCards(round.getRoundSettings().getNrOfPickedCards());
+            playerRound.setImportantTag("color");
             round.addPlayerRound(playerRound);
         }
         return round;
