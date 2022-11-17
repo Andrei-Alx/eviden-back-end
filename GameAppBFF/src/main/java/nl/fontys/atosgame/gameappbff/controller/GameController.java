@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/gameappbff")
@@ -40,13 +42,13 @@ public class GameController {
     )
     public ResponseEntity<GameResponseDto> getGames() {
         LobbyResponseDto lobby = new LobbyResponseDto();
-        lobby.setId("1");
+        lobby.setLobbyId(UUID.randomUUID());
         lobby.setTitle("TestLobby");
         lobby.setCode("1234");
 
         GameResponseDto game = new GameResponseDto();
         game.setLobby(lobby);
-        game.setId("1");
+        game.setGameId(UUID.randomUUID());
         game.setCompanyType("banking");
         return ResponseEntity.ok(game);
     }

@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class GameResponseDto {
 
-    private UUID id;
+    private UUID gameId;
     private LobbyResponseDto lobby;
     private String companyType;
 }

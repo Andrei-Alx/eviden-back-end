@@ -10,7 +10,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LobbyResponseDto {
-    private UUID id;
+    private UUID lobbyId;
     private String title;
     private String code;
 }
