@@ -1,14 +1,11 @@
 package nl.fontys.atosgame.gameservice.service;
 
-import nl.fontys.atosgame.gameservice.model.Card;
 import nl.fontys.atosgame.gameservice.model.CardSet;
 import nl.fontys.atosgame.gameservice.repository.CardSetRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.stream.function.StreamBridge;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.UUID;
 
 import static org.mockito.Mockito.mock;
@@ -30,11 +27,7 @@ public class CardSetServiceImplTest {
     @Test
     void createCardSet() {
         UUID cardSetId = UUID.randomUUID();
-        String name = "testCardSet";
-        String type = "testType";
-        Collection<Card> cards = new ArrayList<>();
-        CardSet cardSet = new CardSet(cardSetId, name, type, cards);
-
+        CardSet cardSet = new CardSet(cardSetId);
         cardSetService.handleCardSetCreated(cardSet);
 
         verify(cardSetRepository).save(cardSet);
@@ -43,10 +36,7 @@ public class CardSetServiceImplTest {
     @Test
     void updateCardSet(){
         UUID cardSetId = UUID.randomUUID();
-        String name = "testCardSet";
-        String type = "testType";
-        Collection<Card> cards = new ArrayList<>();
-        CardSet cardSet = new CardSet(cardSetId, name, type, cards);
+        CardSet cardSet = new CardSet(cardSetId);
 
         cardSetService.handleCardSetUpdated(cardSet);
 
@@ -56,10 +46,7 @@ public class CardSetServiceImplTest {
     @Test
     void deleteCardSet(){
         UUID cardSetId = UUID.randomUUID();
-        String name = "testCardSet";
-        String type = "testType";
-        Collection<Card> cards = new ArrayList<>();
-        CardSet cardSet = new CardSet(cardSetId, name, type, cards);
+        CardSet cardSet = new CardSet(cardSetId);
         cardSetService.handleCardSetCreated(cardSet);
 
         cardSetService.handleCardSetDeleted(cardSetId);
