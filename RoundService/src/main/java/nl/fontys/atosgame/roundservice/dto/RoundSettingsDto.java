@@ -7,6 +7,7 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.fontys.atosgame.roundservice.enums.ShuffleMethod;
 import org.hibernate.annotations.Type;
 
 @Data
@@ -28,7 +29,7 @@ public class RoundSettingsDto {
     private int nrOfPickedCards;
 
     @JsonProperty
-    private String shuffleMethod;
+    private ShuffleMethod shuffleMethod;
 
     @JsonProperty
     private boolean showSameCardOrder;

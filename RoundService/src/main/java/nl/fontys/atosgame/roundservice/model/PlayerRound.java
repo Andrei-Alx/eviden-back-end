@@ -12,11 +12,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
-@Embeddable
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlayerRound {
+
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    private UUID id;
+
     @JsonProperty
     private UUID playerId;
 
@@ -27,4 +33,7 @@ public class PlayerRound {
     @JsonProperty
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Card> pickedCards = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<Card> distributedCards = new ArrayList<>();
 }
