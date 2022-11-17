@@ -48,4 +48,17 @@ public class Game {
         }
         return Optional.empty();
     }
+
+    /**
+     * Get the next round
+     * @return An optional containing the next round or an empty optional if there is no more rounds
+     */
+    public Optional<Round> getNextRound() {
+        for (Round round : rounds) {
+            if (round.getStatus() == RoundStatus.CREATED) {
+                return Optional.of(round);
+            }
+        }
+        return Optional.empty();
+    }
 }
