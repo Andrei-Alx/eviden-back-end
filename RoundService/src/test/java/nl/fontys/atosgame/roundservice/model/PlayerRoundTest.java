@@ -89,7 +89,7 @@ class PlayerRoundTest {
         playerRound.setPickedCards(pickedCards);
         playerRound.setImportantTag("color");
 
-        assertFalse(playerRound.hasDeterminateResult());
+        assertTrue(playerRound.hasDeterminateResult());
     }
 
     @Test

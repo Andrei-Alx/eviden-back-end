@@ -75,7 +75,7 @@ public class PlayerRound {
         }
         // Check if there is a single tag that is picked more often than the others
         if (tagCount.isEmpty()) {
-            return false;
+            return true;
         }
         if (tagCount.size() == 1) {
             return true;
