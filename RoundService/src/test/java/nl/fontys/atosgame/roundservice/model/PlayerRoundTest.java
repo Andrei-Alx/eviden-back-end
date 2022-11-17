@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import nl.fontys.atosgame.roundservice.enums.PlayerRoundPhase;
 import org.junit.jupiter.api.Test;
 
 class PlayerRoundTest {
@@ -191,5 +192,73 @@ class PlayerRoundTest {
         when(playerRound.hasDeterminateResult()).thenReturn(true);
 
         assertFalse(playerRound.isDone());
+    }
+
+    @Test
+    void getPhaseLiking() {
+        PlayerRound playerRound = new PlayerRound();
+        playerRound.setLikedCards(
+            new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>())))
+        );
+        playerRound.setNrOfLikedCards(2);
+        playerRound.setPickedCards(
+            new ArrayList<>(
+                List.of(
+                    new Card(UUID.randomUUID(), new ArrayList<>()),
+                    new Card(UUID.randomUUID(), new ArrayList<>()),
+                    new Card(UUID.randomUUID(), new ArrayList<>())
+                )
+            )
+        );
+        playerRound.setNrOfPickedCards(4);
+
+        assertEquals(PlayerRoundPhase.LIKING, playerRound.getPhase());
+    }
+
+    @Test
+    void getPhasePicking() {
+        PlayerRound playerRound = new PlayerRound();
+        playerRound.setLikedCards(
+            new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>())))
+        );
+        playerRound.setNrOfLikedCards(1);
+        playerRound.setPickedCards(
+            new ArrayList<>(
+                List.of(
+                    new Card(UUID.randomUUID(), new ArrayList<>()),
+                    new Card(UUID.randomUUID(), new ArrayList<>())
+                )
+            )
+        );
+        playerRound.setNrOfPickedCards(4);
+
+        assertEquals(PlayerRoundPhase.PICKING, playerRound.getPhase());
+    }
+
+    @Test
+    void getPhaseResult() {
+        PlayerRound playerRound = spy(new PlayerRound());
+        playerRound.setLikedCards(
+            new ArrayList<>(
+                List.of(
+                    new Card(UUID.randomUUID(), new ArrayList<>()),
+                    new Card(UUID.randomUUID(), new ArrayList<>())
+                )
+            )
+        );
+        playerRound.setNrOfLikedCards(2);
+        playerRound.setPickedCards(
+            new ArrayList<>(
+                List.of(
+                    new Card(UUID.randomUUID(), new ArrayList<>()),
+                    new Card(UUID.randomUUID(), new ArrayList<>()),
+                    new Card(UUID.randomUUID(), new ArrayList<>())
+                )
+            )
+        );
+        playerRound.setNrOfPickedCards(3);
+        when(playerRound.hasDeterminateResult()).thenReturn(true);
+
+        assertEquals(PlayerRoundPhase.RESULT, playerRound.getPhase());
     }
 }

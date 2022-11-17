@@ -10,6 +10,7 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.fontys.atosgame.roundservice.enums.PlayerRoundPhase;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -52,6 +53,20 @@ public class PlayerRound {
             pickedCards.size() == nrOfPickedCards &&
             this.hasDeterminateResult()
         );
+    }
+
+    /**
+     * Get the current phase of the playerRound.
+     * @return The current phase of the playerRound.
+     */
+    public PlayerRoundPhase getPhase() {
+        if (likedCards.size() < nrOfLikedCards) {
+            return PlayerRoundPhase.LIKING;
+        } else if (pickedCards.size() < nrOfPickedCards) {
+            return PlayerRoundPhase.PICKING;
+        } else {
+            return PlayerRoundPhase.RESULT;
+        }
     }
 
     /**

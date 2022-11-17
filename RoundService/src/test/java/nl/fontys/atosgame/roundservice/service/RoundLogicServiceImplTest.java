@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
+import nl.fontys.atosgame.roundservice.enums.ShuffleMethod;
 import nl.fontys.atosgame.roundservice.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ class RoundLogicServiceImplTest {
             UUID.randomUUID(),
             new ArrayList<>(),
             RoundStatus.CREATED,
-            null
+            new RoundSettings(false, 4, 3, ShuffleMethod.FULLY_RANDOM, false, null)
         );
         List<UUID> playerIds = new ArrayList<>(
             List.of(UUID.randomUUID(), UUID.randomUUID())
@@ -41,6 +42,11 @@ class RoundLogicServiceImplTest {
         assertEquals(2, result.getPlayerRounds().size());
         assertEquals(playerIds.get(0), result.getPlayerRounds().get(0).getPlayerId());
         assertEquals(playerIds.get(1), result.getPlayerRounds().get(1).getPlayerId());
+        for (PlayerRound playerRound : result.getPlayerRounds()) {
+            assertEquals(4, playerRound.getNrOfLikedCards());
+            assertEquals(3, playerRound.getNrOfPickedCards());
+            // TODO: Add importantTag
+        }
     }
 
     @Test
