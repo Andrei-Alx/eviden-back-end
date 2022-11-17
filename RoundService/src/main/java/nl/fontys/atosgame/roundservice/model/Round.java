@@ -7,6 +7,7 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -26,7 +27,7 @@ public class Round {
     private List<PlayerRound> playerRounds;
 
     @JsonProperty
-    private String status;
+    private RoundStatus status;
 
     @JsonProperty
     @Embedded

@@ -7,6 +7,7 @@ import java.util.UUID;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
+import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.model.*;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
@@ -113,7 +114,7 @@ public class RoundServiceImpl implements RoundService {
      * @param roundSettings The settings for the round
      */
     public Round createRound(UUID gameId, RoundSettingsDto roundSettings) {
-        Round round = new Round(null, new ArrayList<>(), "NotStarted", null);
+        Round round = new Round(null, new ArrayList<>(), RoundStatus.CREATED, null);
         // Create round settings
         RoundSettings settings = new RoundSettings(
             roundSettings.isShowPersonalOrGroupResults(),

@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.UUID;
+
+import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
 import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.model.RoundSettings;
@@ -16,7 +18,7 @@ class EventFactoryTest {
         Round round = new Round(
             UUID.randomUUID(),
             new ArrayList<>(),
-            "Status",
+            RoundStatus.CREATED,
             new RoundSettings()
         );
 

@@ -6,6 +6,8 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.model.Game;
 import nl.fontys.atosgame.roundservice.model.Lobby;
 import nl.fontys.atosgame.roundservice.model.Round;
@@ -75,8 +77,8 @@ class GameServiceImplTest {
         game.setId(gameId);
         List<Round> rounds = new ArrayList<>() {
             {
-                add(new Round(UUID.randomUUID(), new ArrayList<>(), "NotStarted", null));
-                add(new Round(UUID.randomUUID(), new ArrayList<>(), "NotStarted", null));
+                add(new Round(UUID.randomUUID(), new ArrayList<>(), RoundStatus.CREATED, null));
+                add(new Round(UUID.randomUUID(), new ArrayList<>(), RoundStatus.CREATED, null));
             }
         };
         game.setRounds(rounds);

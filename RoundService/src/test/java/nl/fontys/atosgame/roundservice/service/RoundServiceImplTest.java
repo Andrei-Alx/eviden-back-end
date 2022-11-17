@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
+import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.model.CardSet;
@@ -66,7 +67,7 @@ class RoundServiceImplTest {
         );
         when(cardSetService.getCardSet(roundSettings.getCardSetId()))
             .thenReturn(Optional.of(mock(CardSet.class)));
-        Round round = new Round(null, new ArrayList<>(), "NotStarted", settings);
+        Round round = new Round(null, new ArrayList<>(), RoundStatus.CREATED, settings);
         when(roundRepository.save(round)).thenReturn(round);
         UUID gameId = UUID.randomUUID();
 
