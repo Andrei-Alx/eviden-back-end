@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -33,23 +35,25 @@ public class GameController {
                             responseCode = "200",
                             description = "Getting all the games",
                             content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = GameResponseDto.class)
+                                    mediaType = "application/json"
+//                                    ,
+//                                    schema = @Schema(implementation = GameResponseDto.class)
                             )
                     ),
                     @ApiResponse(responseCode = "404", description = "Games not found"),
             }
     )
-    public ResponseEntity<GameResponseDto> getGames() {
-        LobbyResponseDto lobby = new LobbyResponseDto();
-        lobby.setLobbyId(UUID.randomUUID());
-        lobby.setTitle("TestLobby");
-        lobby.setCode("1234");
+    public ResponseEntity<List<GameResponseDto>> getGames() {
+        LobbyResponseDto lobby = new LobbyResponseDto(UUID.randomUUID(), "game1", "1234");
+        GameResponseDto game = new GameResponseDto(UUID.randomUUID(), lobby, "Sports");
 
-        GameResponseDto game = new GameResponseDto();
-        game.setLobby(lobby);
-        game.setGameId(UUID.randomUUID());
-        game.setCompanyType("banking");
-        return ResponseEntity.ok(game);
+        LobbyResponseDto lobby1 = new LobbyResponseDto(UUID.randomUUID(), "game2", "5678");
+        GameResponseDto game1 = new GameResponseDto(UUID.randomUUID(), lobby1, "Sports");
+
+        List<GameResponseDto> games = new ArrayList<>();
+        games.add(game);
+        games.add(game1);
+
+        return ResponseEntity.ok(games);
     }
 }
