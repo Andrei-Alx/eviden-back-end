@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerCardsDistributed;
+import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseEndedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseStartedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundEndedEvent;
@@ -111,6 +112,30 @@ class EventFactoryTest {
         assertEquals("RoundService", event.getService());
         assertEquals(roundId, event.getRoundId());
         assertEquals(gameId, event.getGameId());
+        assertNotNull(event.getTimestamp());
+        assertNotNull(event.getId());
+    }
+
+    @Test
+    void createPlayerPhaseEndedEvent() {
+        int phaseNumber = 1;
+        UUID roundId = UUID.randomUUID();
+        UUID playerId = UUID.randomUUID();
+        UUID gameId = UUID.randomUUID();
+
+        PlayerPhaseEndedEvent event = EventFactory.createPlayerPhaseEndedEvent(
+            phaseNumber,
+            roundId,
+            gameId,
+            playerId
+        );
+
+        assertEquals("PlayerPhaseEnded", event.getType());
+        assertEquals("RoundService", event.getService());
+        assertEquals(roundId, event.getRoundId());
+        assertEquals(playerId, event.getPlayerId());
+        assertEquals(gameId, event.getGameId());
+        assertEquals(phaseNumber, event.getPhaseNumber());
         assertNotNull(event.getTimestamp());
         assertNotNull(event.getId());
     }

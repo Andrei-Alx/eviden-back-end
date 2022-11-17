@@ -9,7 +9,7 @@ import nl.fontys.atosgame.roundservice.event.BaseEvent;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlayerPhaseEnded extends BaseEvent {
+public class PlayerPhaseEndedEvent extends BaseEvent {
 
     private int phaseNumber;
     private UUID playerId;

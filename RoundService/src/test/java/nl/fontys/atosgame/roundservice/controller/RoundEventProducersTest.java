@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
+import nl.fontys.atosgame.roundservice.dto.PlayerPhaseEndedDto;
 import nl.fontys.atosgame.roundservice.dto.PlayerPhaseStartedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerCardsDistributed;
+import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseEndedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseStartedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
@@ -150,6 +152,38 @@ class RoundEventProducersTest {
         assertEquals(roundEndedDto.getGameId(), message.getPayload().getGameId());
         assertEquals(
             roundEndedDto.getGameId(),
+            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+        );
+    }
+
+    @Test
+    void producePlayerPhaseEnded() {
+        PlayerPhaseEndedDto playerPhaseEndedDto = new PlayerPhaseEndedDto(
+            0,
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            UUID.randomUUID()
+        );
+        RoundEventProducers roundEventProducers = new RoundEventProducers();
+
+        Message<PlayerPhaseEndedEvent> message = roundEventProducers
+            .producePlayerPhaseEnded()
+            .apply(playerPhaseEndedDto);
+
+        assertEquals("RoundService", message.getPayload().getService());
+        assertEquals("PlayerPhaseEnded", message.getPayload().getType());
+        assertEquals(playerPhaseEndedDto.getRoundId(), message.getPayload().getRoundId());
+        assertEquals(
+            playerPhaseEndedDto.getPlayerId(),
+            message.getPayload().getPlayerId()
+        );
+        assertEquals(playerPhaseEndedDto.getGameId(), message.getPayload().getGameId());
+        assertEquals(
+            playerPhaseEndedDto.getPhaseNumber(),
+            message.getPayload().getPhaseNumber()
+        );
+        assertEquals(
+            playerPhaseEndedDto.getGameId(),
             message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
         );
     }

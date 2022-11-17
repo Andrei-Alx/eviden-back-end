@@ -3,6 +3,7 @@ package nl.fontys.atosgame.roundservice.event;
 import java.util.List;
 import java.util.UUID;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerCardsDistributed;
+import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseEndedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseStartedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundEndedEvent;
@@ -103,6 +104,34 @@ public class EventFactory {
             (PlayerPhaseStartedEvent) initializeBaseEvent(
                 event,
                 "PlayerPhaseStarted",
+                "RoundService"
+            );
+        event.setPhaseNumber(phaseNumber);
+        event.setRoundId(roundId);
+        event.setGameId(gameId);
+        event.setPlayerId(playerId);
+        return event;
+    }
+
+    /**
+     * Create a PlayerPhaseEndedEvent
+     * @param phaseNumber The number of the phase
+     * @param roundId The id of the round
+     * @param gameId The id of the game
+     * @param playerId The id of the player
+     * @return The created event
+     */
+    public static PlayerPhaseEndedEvent createPlayerPhaseEndedEvent(
+        int phaseNumber,
+        UUID roundId,
+        UUID gameId,
+        UUID playerId
+    ) {
+        PlayerPhaseEndedEvent event = new PlayerPhaseEndedEvent();
+        event =
+            (PlayerPhaseEndedEvent) initializeBaseEvent(
+                event,
+                "PlayerPhaseEnded",
                 "RoundService"
             );
         event.setPhaseNumber(phaseNumber);

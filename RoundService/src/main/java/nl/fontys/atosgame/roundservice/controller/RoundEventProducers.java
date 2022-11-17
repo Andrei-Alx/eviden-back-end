@@ -2,11 +2,13 @@ package nl.fontys.atosgame.roundservice.controller;
 
 import java.util.function.Function;
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
+import nl.fontys.atosgame.roundservice.dto.PlayerPhaseEndedDto;
 import nl.fontys.atosgame.roundservice.dto.PlayerPhaseStartedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.event.EventFactory;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerCardsDistributed;
+import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseEndedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseStartedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
@@ -126,10 +128,18 @@ public class RoundEventProducers {
      * output topic: player-phase-ended-topic
      */
     @Bean
-    public Function<?, Message<RoundCreatedEvent>> producePlayerPhaseEnded() {
-        return keyValue -> {
-            // TODO implement
-            throw new UnsupportedOperationException("Not implemented yet");
+    public Function<PlayerPhaseEndedDto, Message<PlayerPhaseEndedEvent>> producePlayerPhaseEnded() {
+        return dto -> {
+            PlayerPhaseEndedEvent event = EventFactory.createPlayerPhaseEndedEvent(
+                dto.getPhaseNumber(),
+                dto.getRoundId(),
+                dto.getGameId(),
+                dto.getPlayerId()
+            );
+            return MessageBuilder
+                .withPayload(event)
+                .setHeader(KafkaHeaders.MESSAGE_KEY, dto.getGameId())
+                .build();
         };
     }
 
