@@ -4,6 +4,7 @@ import java.util.function.Function;
 import nl.fontys.atosgame.gameservice.event.consumed.CardSetCreatedEvent;
 import nl.fontys.atosgame.gameservice.event.consumed.CardSetDeletedEvent;
 import nl.fontys.atosgame.gameservice.event.consumed.CardSetUpdatedEvent;
+import nl.fontys.atosgame.gameservice.service.CardSetService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
@@ -13,10 +14,16 @@ import org.springframework.stereotype.Controller;
  * - CardSetCreated
  * - CardSetUpdated
  * - CardSetDeleted
- * @author Eli
+ * @author Eli, Aniek
  */
 @Controller
 public class CardSetConsumers {
+
+    private CardSetService cardSetService;
+
+    public CardSetConsumers(CardSetService cardSetService) {
+        this.cardSetService = cardSetService;
+    }
 
     /**
      * Id: C-5
@@ -28,8 +35,8 @@ public class CardSetConsumers {
     public Function<Message<CardSetCreatedEvent>, Void> handleCardSetCreated() {
         return cardSetCreatedEventMessage -> {
             CardSetCreatedEvent event = cardSetCreatedEventMessage.getPayload();
-            //TODO
-            throw new UnsupportedOperationException("Not implemented yet");
+            cardSetService.handleCardSetCreated(event.getCardSet());
+            return null;
         };
     }
 
@@ -43,8 +50,8 @@ public class CardSetConsumers {
     public Function<Message<CardSetUpdatedEvent>, Void> handleCardSetUpdated() {
         return cardSetUpdatedEventMessage -> {
             CardSetUpdatedEvent event = cardSetUpdatedEventMessage.getPayload();
-            //TODO
-            throw new UnsupportedOperationException("Not implemented yet");
+            cardSetService.handleCardSetUpdated(event.getCardSet());
+            return null;
         };
     }
 
@@ -58,8 +65,8 @@ public class CardSetConsumers {
     public Function<Message<CardSetDeletedEvent>, Void> handleCardSetDeleted() {
         return cardSetDeletedEventMessage -> {
             CardSetDeletedEvent event = cardSetDeletedEventMessage.getPayload();
-            //TODO
-            throw new UnsupportedOperationException("Not implemented yet");
+            cardSetService.handleCardSetDeleted(event.getCardSetId());
+            return null;
         };
     }
 }
