@@ -3,17 +3,18 @@ stages:          # List of stages for jobs, and their order of execution
   - test
   - deploy
 
-build-job:       # This job runs in the build stage, which runs first.
-  stage: build-card-service
+build-card-service-job:       # This job runs in the build stage, which runs first.
+  stage: build
   script:
     - echo "Running Build"
     - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\CardService
     - ./mvnw package -U
     - echo "Build complete."
 
-unit-test-job:   # This job runs in the test stage.
+unit-test-card-service-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
   script:
     - echo "Running unit tests."
-    - mvn test
+    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\CardService
+    - ./mvnw test
     - echo "Tests complete."
