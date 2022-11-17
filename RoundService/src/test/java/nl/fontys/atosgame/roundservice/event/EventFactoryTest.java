@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.UUID;
-
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerCardsDistributed;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
@@ -65,10 +64,7 @@ class EventFactoryTest {
         UUID roundId = UUID.randomUUID();
         UUID gameId = UUID.randomUUID();
 
-        RoundStartedEvent event = EventFactory.createRoundStartedEvent(
-            roundId,
-            gameId
-        );
+        RoundStartedEvent event = EventFactory.createRoundStartedEvent(roundId, gameId);
 
         assertEquals("RoundStarted", event.getType());
         assertEquals("RoundService", event.getService());

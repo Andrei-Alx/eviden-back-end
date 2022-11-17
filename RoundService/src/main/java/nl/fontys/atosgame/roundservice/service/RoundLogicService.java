@@ -1,9 +1,8 @@
 package nl.fontys.atosgame.roundservice.service;
 
-import nl.fontys.atosgame.roundservice.model.Round;
-
 import java.util.List;
 import java.util.UUID;
+import nl.fontys.atosgame.roundservice.model.Round;
 
 /**
  * Service for round logic operations.
@@ -12,7 +11,6 @@ import java.util.UUID;
  * @author Eli
  */
 public interface RoundLogicService {
-
     /**
      * Initializes a round by creating player rounds for all players
      * @param round The round to initiate

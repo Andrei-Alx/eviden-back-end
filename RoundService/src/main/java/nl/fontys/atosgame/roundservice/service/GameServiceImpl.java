@@ -82,9 +82,16 @@ public class GameServiceImpl implements GameService {
      */
     @Override
     public Game startGame(UUID gameId) throws EntityNotFoundException {
-        Game game = gameRepository.findById(gameId).orElseThrow(EntityNotFoundException::new);
+        Game game = gameRepository
+            .findById(gameId)
+            .orElseThrow(EntityNotFoundException::new);
         Round firstRound = game.getRounds().get(0);
-        firstRound = roundService.startRound(firstRound.getId(), game.getLobby().getPlayerIds(), gameId);
+        firstRound =
+            roundService.startRound(
+                firstRound.getId(),
+                game.getLobby().getPlayerIds(),
+                gameId
+            );
         game.getRounds().set(0, firstRound);
         return gameRepository.save(game);
     }

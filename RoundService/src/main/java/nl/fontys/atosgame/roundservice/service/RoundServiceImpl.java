@@ -95,7 +95,10 @@ public class RoundServiceImpl implements RoundService {
         round = roundRepository.save(round);
 
         // Send round started event
-        streamBridge.send("produceRoundStarted-in-0", new RoundStartedDto(gameId, roundId));
+        streamBridge.send(
+            "produceRoundStarted-in-0",
+            new RoundStartedDto(gameId, roundId)
+        );
 
         // TODO: send distributed cards events with P-19 (and add to unit test)
 

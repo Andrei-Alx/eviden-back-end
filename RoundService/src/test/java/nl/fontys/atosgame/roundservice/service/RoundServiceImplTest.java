@@ -58,7 +58,7 @@ class RoundServiceImplTest {
             true,
             1,
             1,
-                ShuffleMethod.FULLY_RANDOM,
+            ShuffleMethod.FULLY_RANDOM,
             true,
             UUID.randomUUID()
         );
@@ -89,10 +89,10 @@ class RoundServiceImplTest {
     @Test
     void testStartRoundChangesStatus() {
         Round round = new Round(
-                UUID.randomUUID(),
-                new ArrayList<>(),
-                RoundStatus.CREATED,
-                new RoundSettings()
+            UUID.randomUUID(),
+            new ArrayList<>(),
+            RoundStatus.CREATED,
+            new RoundSettings()
         );
         List<UUID> playerIds = new ArrayList<>();
         UUID gameId = UUID.randomUUID();
@@ -113,10 +113,10 @@ class RoundServiceImplTest {
     @Test
     public void testStartRoundSendsEvents() {
         Round round = new Round(
-                UUID.randomUUID(),
-                new ArrayList<>(),
-                RoundStatus.CREATED,
-                new RoundSettings()
+            UUID.randomUUID(),
+            new ArrayList<>(),
+            RoundStatus.CREATED,
+            new RoundSettings()
         );
         List<UUID> playerIds = new ArrayList<>();
         UUID gameId = UUID.randomUUID();
@@ -131,16 +131,20 @@ class RoundServiceImplTest {
         Round result = roundService.startRound(round.getId(), playerIds, gameId);
 
         // Assert
-        verify(streamBridge).send("produceRoundStarted-in-0", new RoundStartedDto(gameId, result.getId()));
+        verify(streamBridge)
+            .send(
+                "produceRoundStarted-in-0",
+                new RoundStartedDto(gameId, result.getId())
+            );
     }
 
     @Test
     public void testStartRoundInitializesAndDistributes() {
         Round round = new Round(
-                UUID.randomUUID(),
-                new ArrayList<>(),
-                RoundStatus.CREATED,
-                new RoundSettings()
+            UUID.randomUUID(),
+            new ArrayList<>(),
+            RoundStatus.CREATED,
+            new RoundSettings()
         );
         List<UUID> playerIds = new ArrayList<>();
         UUID gameId = UUID.randomUUID();

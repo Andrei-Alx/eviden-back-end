@@ -1,18 +1,17 @@
 package nl.fontys.atosgame.roundservice.service;
 
-import nl.fontys.atosgame.roundservice.enums.RoundStatus;
-import nl.fontys.atosgame.roundservice.model.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyCollection;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import nl.fontys.atosgame.roundservice.enums.RoundStatus;
+import nl.fontys.atosgame.roundservice.model.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class RoundLogicServiceImplTest {
 
@@ -28,12 +27,14 @@ class RoundLogicServiceImplTest {
     @Test
     void initializeRound() {
         Round round = new Round(
-                UUID.randomUUID(),
-                new ArrayList<>(),
-                RoundStatus.CREATED,
-                null
+            UUID.randomUUID(),
+            new ArrayList<>(),
+            RoundStatus.CREATED,
+            null
         );
-        List<UUID> playerIds = new ArrayList<>(List.of(UUID.randomUUID(), UUID.randomUUID()));
+        List<UUID> playerIds = new ArrayList<>(
+            List.of(UUID.randomUUID(), UUID.randomUUID())
+        );
 
         Round result = roundLogicService.initializeRound(round, playerIds);
 
@@ -51,17 +52,35 @@ class RoundLogicServiceImplTest {
         doReturn(cards).when(cardSet).getCards();
         roundSettings.setCardSet(cardSet);
         List<PlayerRound> playerRounds = new ArrayList<>(
-                List.of(
-                        new PlayerRound(UUID.randomUUID(), UUID.randomUUID(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()),
-                        new PlayerRound(UUID.randomUUID(), UUID.randomUUID(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()),
-                        new PlayerRound(UUID.randomUUID(), UUID.randomUUID(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
+            List.of(
+                new PlayerRound(
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    new ArrayList<>()
+                ),
+                new PlayerRound(
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    new ArrayList<>()
+                ),
+                new PlayerRound(
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    new ArrayList<>()
                 )
+            )
         );
         Round round = new Round(
-                UUID.randomUUID(),
-                playerRounds,
-                RoundStatus.CREATED,
-                roundSettings
+            UUID.randomUUID(),
+            playerRounds,
+            RoundStatus.CREATED,
+            roundSettings
         );
         // Set behaviour of cardShuffler
         List<Card> cards1 = mock(List.class);
@@ -85,23 +104,43 @@ class RoundLogicServiceImplTest {
         doReturn(cards).when(cardSet).getCards();
         roundSettings.setCardSet(cardSet);
         List<PlayerRound> playerRounds = new ArrayList<>(
-                List.of(
-                        new PlayerRound(UUID.randomUUID(), UUID.randomUUID(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()),
-                        new PlayerRound(UUID.randomUUID(), UUID.randomUUID(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()),
-                        new PlayerRound(UUID.randomUUID(), UUID.randomUUID(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
+            List.of(
+                new PlayerRound(
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    new ArrayList<>()
+                ),
+                new PlayerRound(
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    new ArrayList<>()
+                ),
+                new PlayerRound(
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    new ArrayList<>()
                 )
+            )
         );
         Round round = new Round(
-                UUID.randomUUID(),
-                playerRounds,
-                RoundStatus.CREATED,
-                roundSettings
+            UUID.randomUUID(),
+            playerRounds,
+            RoundStatus.CREATED,
+            roundSettings
         );
         // Set behaviour of cardShuffler
         List<Card> cards1 = mock(List.class);
         List<Card> cards2 = mock(List.class);
         List<Card> cards3 = mock(List.class);
-        doReturn(cards1, cards2, cards3).when(cardShuffler).randomShuffle(anyCollection());
+        doReturn(cards1, cards2, cards3)
+            .when(cardShuffler)
+            .randomShuffle(anyCollection());
 
         Round result = roundLogicService.distributeCards(round);
 

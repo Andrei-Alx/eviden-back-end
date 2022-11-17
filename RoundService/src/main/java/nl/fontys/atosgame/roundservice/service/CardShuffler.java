@@ -1,9 +1,8 @@
 package nl.fontys.atosgame.roundservice.service;
 
-import nl.fontys.atosgame.roundservice.model.Card;
-
 import java.util.Collection;
 import java.util.List;
+import nl.fontys.atosgame.roundservice.model.Card;
 
 public interface CardShuffler {
     /**

@@ -1,7 +1,6 @@
 package nl.fontys.atosgame.roundservice.controller;
 
 import java.util.function.Function;
-
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.event.EventFactory;

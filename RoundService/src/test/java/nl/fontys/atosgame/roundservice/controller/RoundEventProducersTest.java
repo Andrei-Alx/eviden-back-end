@@ -6,7 +6,6 @@ import static org.mockito.Mockito.mock;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
-
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerCardsDistributed;
@@ -46,30 +45,51 @@ class RoundEventProducersTest {
 
     @Test
     void producePlayerCardsDistributed() {
-        CardsDistributedDto cardsDistributedDto = new CardsDistributedDto(UUID.randomUUID(), mock(List.class), UUID.randomUUID(), UUID.randomUUID());
+        CardsDistributedDto cardsDistributedDto = new CardsDistributedDto(
+            UUID.randomUUID(),
+            mock(List.class),
+            UUID.randomUUID(),
+            UUID.randomUUID()
+        );
         RoundEventProducers roundEventProducers = new RoundEventProducers();
 
-        Message<PlayerCardsDistributed> message = roundEventProducers.producePlayerCardsDistributed().apply(cardsDistributedDto);
+        Message<PlayerCardsDistributed> message = roundEventProducers
+            .producePlayerCardsDistributed()
+            .apply(cardsDistributedDto);
 
         assertEquals("RoundService", message.getPayload().getService());
         assertEquals("PlayerCardsDistributed", message.getPayload().getType());
         assertEquals(cardsDistributedDto.getRoundId(), message.getPayload().getRoundId());
-        assertEquals(cardsDistributedDto.getPlayerId(), message.getPayload().getPlayerId());
+        assertEquals(
+            cardsDistributedDto.getPlayerId(),
+            message.getPayload().getPlayerId()
+        );
         assertEquals(cardsDistributedDto.getCardIds(), message.getPayload().getCardIds());
-        assertEquals(cardsDistributedDto.getGameId(), message.getHeaders().get(KafkaHeaders.MESSAGE_KEY));
+        assertEquals(
+            cardsDistributedDto.getGameId(),
+            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+        );
     }
 
     @Test
     void produceRoundStarted() {
-        RoundStartedDto roundStartedDto = new RoundStartedDto(UUID.randomUUID(), UUID.randomUUID());
+        RoundStartedDto roundStartedDto = new RoundStartedDto(
+            UUID.randomUUID(),
+            UUID.randomUUID()
+        );
         RoundEventProducers roundEventProducers = new RoundEventProducers();
 
-        Message<RoundStartedEvent> message = roundEventProducers.produceRoundStarted().apply(roundStartedDto);
+        Message<RoundStartedEvent> message = roundEventProducers
+            .produceRoundStarted()
+            .apply(roundStartedDto);
 
         assertEquals("RoundService", message.getPayload().getService());
         assertEquals("RoundStarted", message.getPayload().getType());
         assertEquals(roundStartedDto.getRoundId(), message.getPayload().getRoundId());
         assertEquals(roundStartedDto.getGameId(), message.getPayload().getGameId());
-        assertEquals(roundStartedDto.getGameId(), message.getHeaders().get(KafkaHeaders.MESSAGE_KEY));
+        assertEquals(
+            roundStartedDto.getGameId(),
+            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+        );
     }
 }

@@ -1,15 +1,15 @@
 package nl.fontys.atosgame.roundservice.service;
 
-import nl.fontys.atosgame.roundservice.model.Card;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import nl.fontys.atosgame.roundservice.model.Card;
+import org.springframework.stereotype.Service;
 
 @Service
 public class CardShufflerImpl implements CardShuffler {
+
     /**
      * Shuffles a list of cards completely random
      *

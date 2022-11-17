@@ -2,7 +2,6 @@ package nl.fontys.atosgame.roundservice.event;
 
 import java.util.List;
 import java.util.UUID;
-
 import nl.fontys.atosgame.roundservice.event.produced.PlayerCardsDistributed;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
 import nl.fontys.atosgame.roundservice.event.produced.RoundStartedEvent;
@@ -35,9 +34,19 @@ public class EventFactory {
      * @param cardIds The ids of the cards
      * @return
      */
-    public static PlayerCardsDistributed createPlayerCardsDistributedEvent(UUID roundId, UUID playerId, UUID gameId, List<UUID> cardIds) {
+    public static PlayerCardsDistributed createPlayerCardsDistributedEvent(
+        UUID roundId,
+        UUID playerId,
+        UUID gameId,
+        List<UUID> cardIds
+    ) {
         PlayerCardsDistributed event = new PlayerCardsDistributed();
-        event = (PlayerCardsDistributed) initializeBaseEvent(event, "PlayerCardsDistributed", "RoundService");
+        event =
+            (PlayerCardsDistributed) initializeBaseEvent(
+                event,
+                "PlayerCardsDistributed",
+                "RoundService"
+            );
         event.setRoundId(roundId);
         event.setPlayerId(playerId);
         event.setGameId(gameId);
@@ -53,7 +62,12 @@ public class EventFactory {
      */
     public static RoundStartedEvent createRoundStartedEvent(UUID roundId, UUID gameId) {
         RoundStartedEvent event = new RoundStartedEvent();
-        event = (RoundStartedEvent) initializeBaseEvent(event, "RoundStarted", "RoundService");
+        event =
+            (RoundStartedEvent) initializeBaseEvent(
+                event,
+                "RoundStarted",
+                "RoundService"
+            );
         event.setRoundId(roundId);
         event.setGameId(gameId);
         return event;
