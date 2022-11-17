@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
+import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
+import nl.fontys.atosgame.roundservice.enums.ShuffleMethod;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.model.CardSet;
@@ -26,6 +28,7 @@ class RoundServiceImplTest {
     private CardSetService cardSetService;
     private RoundRepository roundRepository;
     private PlayerRoundService playerRoundService;
+    private RoundLogicService roundLogicService;
     private StreamBridge streamBridge;
     private RoundServiceImpl roundService;
 
@@ -34,6 +37,7 @@ class RoundServiceImplTest {
         cardSetService = mock(CardSetService.class);
         roundRepository = mock(RoundRepository.class);
         playerRoundService = mock(PlayerRoundService.class);
+        roundLogicService = mock(RoundLogicService.class);
         streamBridge = mock(StreamBridge.class);
         roundService =
             spy(
@@ -41,7 +45,8 @@ class RoundServiceImplTest {
                     roundRepository,
                     cardSetService,
                     streamBridge,
-                    playerRoundService
+                    playerRoundService,
+                    roundLogicService
                 )
             );
     }
@@ -53,7 +58,7 @@ class RoundServiceImplTest {
             true,
             1,
             1,
-            "shuffle",
+                ShuffleMethod.FULLY_RANDOM,
             true,
             UUID.randomUUID()
         );
@@ -82,37 +87,75 @@ class RoundServiceImplTest {
     }
 
     @Test
-    void startRound() {
-        assertTrue(false);
+    void testStartRoundChangesStatus() {
+        Round round = new Round(
+                UUID.randomUUID(),
+                new ArrayList<>(),
+                RoundStatus.CREATED,
+                new RoundSettings()
+        );
+        List<UUID> playerIds = new ArrayList<>();
+        UUID gameId = UUID.randomUUID();
+        // Set behavior of repository
+        when(roundRepository.findById(round.getId())).thenReturn(Optional.of(round));
+        when(roundRepository.save(round)).thenReturn(round);
+        // Set behavior of logic service
+        when(roundLogicService.initializeRound(round, playerIds)).thenReturn(round);
+        when(roundLogicService.distributeCards(round)).thenReturn(round);
+
+        // Act
+        Round result = roundService.startRound(round.getId(), playerIds, gameId);
+
+        // Assert
+        assertEquals(RoundStatus.IN_PROGRESS, result.getStatus());
     }
 
     @Test
-    void initializeRound() {
-        Round round = new Round();
-        UUID roundId = UUID.randomUUID();
-        round.setId(roundId);
-        doReturn(Optional.of(round)).when(roundRepository).findById(roundId);
-        List<UUID> playerIds = new ArrayList<>() {
-            {
-                add(UUID.randomUUID());
-                add(UUID.randomUUID());
-            }
-        };
-        List<PlayerRound> playerRounds = new ArrayList<>() {
-            {
-                add(new PlayerRound());
-                add(new PlayerRound());
-            }
-        };
-        doReturn(playerRounds.get(0), playerRounds.get(1))
-            .when(playerRoundService)
-            .createPlayerRound(any(), any());
+    public void testStartRoundSendsEvents() {
+        Round round = new Round(
+                UUID.randomUUID(),
+                new ArrayList<>(),
+                RoundStatus.CREATED,
+                new RoundSettings()
+        );
+        List<UUID> playerIds = new ArrayList<>();
+        UUID gameId = UUID.randomUUID();
+        // Set behavior of repository
+        when(roundRepository.findById(round.getId())).thenReturn(Optional.of(round));
         when(roundRepository.save(round)).thenReturn(round);
+        // Set behavior of logic service
+        when(roundLogicService.initializeRound(round, playerIds)).thenReturn(round);
+        when(roundLogicService.distributeCards(round)).thenReturn(round);
 
-        Round result = roundService.initializeRound(roundId, playerIds);
+        // Act
+        Round result = roundService.startRound(round.getId(), playerIds, gameId);
 
-        assertEquals(playerRounds, result.getPlayerRounds());
-        verify(roundRepository).save(round);
-        verify(playerRoundService, times(2)).createPlayerRound(any(), any());
+        // Assert
+        verify(streamBridge).send("produceRoundStarted-in-0", new RoundStartedDto(gameId, result.getId()));
+    }
+
+    @Test
+    public void testStartRoundInitializesAndDistributes() {
+        Round round = new Round(
+                UUID.randomUUID(),
+                new ArrayList<>(),
+                RoundStatus.CREATED,
+                new RoundSettings()
+        );
+        List<UUID> playerIds = new ArrayList<>();
+        UUID gameId = UUID.randomUUID();
+        // Set behavior of repository
+        when(roundRepository.findById(round.getId())).thenReturn(Optional.of(round));
+        when(roundRepository.save(round)).thenReturn(round);
+        // Set behavior of logic service
+        when(roundLogicService.initializeRound(round, playerIds)).thenReturn(round);
+        when(roundLogicService.distributeCards(round)).thenReturn(round);
+
+        // Act
+        Round result = roundService.startRound(round.getId(), playerIds, gameId);
+
+        // Assert
+        verify(roundLogicService).initializeRound(round, playerIds);
+        verify(roundLogicService).distributeCards(round);
     }
 }

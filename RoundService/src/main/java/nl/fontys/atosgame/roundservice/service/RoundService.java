@@ -20,22 +20,9 @@ public interface RoundService {
     /**
      * Start a round
      * @param roundId The id of the round
+     * @param playerIds the ids of the players to start the round for
+     * @param gameId the id of the game
      * @return The updated round
      */
-    Round startRound(UUID roundId);
-
-    /**
-     * Initialize a round
-     * @param roundId The id of the round
-     * @param playerIds The ids of the players
-     * @return The updated round
-     */
-    Round initializeRound(UUID roundId, List<UUID> playerIds);
-
-    /**
-     * distribute cards to all players
-     * @param roundId The id of the round
-     * @return The updated round
-     */
-    Round distributeCards(UUID roundId);
+    Round startRound(UUID roundId, List<UUID> playerIds, UUID gameId);
 }

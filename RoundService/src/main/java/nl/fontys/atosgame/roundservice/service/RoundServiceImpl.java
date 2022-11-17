@@ -7,6 +7,7 @@ import java.util.UUID;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
+import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.model.*;
@@ -28,18 +29,22 @@ public class RoundServiceImpl implements RoundService {
 
     private final PlayerRoundService playerRoundService;
 
+    private final RoundLogicService roundLogicService;
+
     private StreamBridge streamBridge;
 
     public RoundServiceImpl(
         @Autowired RoundRepository roundRepository,
         @Autowired CardSetService cardSetService,
         @Autowired StreamBridge streamBridge,
-        @Autowired PlayerRoundService playerRoundService
+        @Autowired PlayerRoundService playerRoundService,
+        @Autowired RoundLogicService roundLogicService
     ) {
         this.roundRepository = roundRepository;
         this.cardSetService = cardSetService;
         this.playerRoundService = playerRoundService;
         this.streamBridge = streamBridge;
+        this.roundLogicService = roundLogicService;
     }
 
     /**
@@ -64,48 +69,37 @@ public class RoundServiceImpl implements RoundService {
      * Changes the status of the round to InProgress
      * Distributes the cards to the players
      * @param roundId The id of the round
+     * @param playerIds the ids of the players to start the round for
+     * @param gameId The id of the game
      * @return The updated round
      */
     @Override
-    public Round startRound(UUID roundId) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Initialize a round
-     * Create all the player rounds
-     * @param roundId   The id of the round
-     * @param playerIds The ids of the players
-     * @return The updated round
-     */
-    @Override
-    public Round initializeRound(UUID roundId, List<UUID> playerIds) {
-        Round round = roundRepository
-            .findById(roundId)
-            .orElseThrow(EntityNotFoundException::new);
-        List<PlayerRound> playerRounds = new ArrayList<>();
-        for (UUID playerId : playerIds) {
-            PlayerRound playerRound = playerRoundService.createPlayerRound(
-                roundId,
-                playerId
-            );
-            playerRounds.add(playerRound);
+    public Round startRound(UUID roundId, List<UUID> playerIds, UUID gameId) {
+        // Get the round
+        Optional<Round> roundOptional = roundRepository.findById(roundId);
+        if (roundOptional.isEmpty()) {
+            throw new EntityNotFoundException("Round not found");
         }
-        round.setPlayerRounds(playerRounds);
-        return roundRepository.save(round);
-    }
+        Round round = roundOptional.get();
 
-    /**
-     * distribute cards to all players
-     *
-     * @param roundId The id of the round
-     * @return The updated round
-     */
-    @Override
-    public Round distributeCards(UUID roundId) {
-        // TODO
-        throw new UnsupportedOperationException();
+        // Initialize the round so that it has all the player rounds
+        round = roundLogicService.initializeRound(round, playerIds);
+
+        // Change the status of the round to InProgress and send event
+        round.setStatus(RoundStatus.IN_PROGRESS);
+
+        // Distribute the cards to the players
+        round = roundLogicService.distributeCards(round);
+
+        // Save to db
+        round = roundRepository.save(round);
+
+        // Send round started event
+        streamBridge.send("produceRoundStarted-in-0", new RoundStartedDto(gameId, roundId));
+
+        // TODO: send distributed cards events with P-19 (and add to unit test)
+
+        return round;
     }
 
     /**
