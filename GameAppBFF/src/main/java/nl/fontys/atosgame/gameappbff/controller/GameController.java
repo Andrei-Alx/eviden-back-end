@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import nl.fontys.atosgame.gameappbff.dto.GameResponseDto;
 import nl.fontys.atosgame.gameappbff.dto.LobbyResponseDto;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +38,7 @@ public class GameController {
                     @ApiResponse(responseCode = "404", description = "Games not found"),
             }
     )
-    public GameResponseDto getGames() {
+    public ResponseEntity<GameResponseDto> getGames() {
         LobbyResponseDto lobby = new LobbyResponseDto();
         lobby.setId("1");
         lobby.setTitle("TestLobby");
@@ -47,6 +48,6 @@ public class GameController {
         game.setLobby(lobby);
         game.setId("1");
         game.setCompanyType("banking");
-        return game;
+        return ResponseEntity.ok(game);
     }
 }
