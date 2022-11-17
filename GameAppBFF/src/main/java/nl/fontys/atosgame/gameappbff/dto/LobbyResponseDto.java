@@ -11,6 +11,5 @@ import java.util.UUID;
 @NoArgsConstructor
 public class LobbyResponseDto {
     private UUID lobbyId;
-    private String title;
     private String code;
 }

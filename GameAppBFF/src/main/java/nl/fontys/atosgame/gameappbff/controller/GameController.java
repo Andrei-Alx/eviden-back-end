@@ -44,11 +44,11 @@ public class GameController {
             }
     )
     public ResponseEntity<List<GameResponseDto>> getGames() {
-        LobbyResponseDto lobby = new LobbyResponseDto(UUID.randomUUID(), "game1", "1234");
-        GameResponseDto game = new GameResponseDto(UUID.randomUUID(), lobby, "Sports");
+        LobbyResponseDto lobby = new LobbyResponseDto(UUID.randomUUID(), "1234");
+        GameResponseDto game = new GameResponseDto(UUID.randomUUID(), lobby, "game1","Sports");
 
-        LobbyResponseDto lobby1 = new LobbyResponseDto(UUID.randomUUID(), "game2", "5678");
-        GameResponseDto game1 = new GameResponseDto(UUID.randomUUID(), lobby1, "Sports");
+        LobbyResponseDto lobby1 = new LobbyResponseDto(UUID.randomUUID(), "5678");
+        GameResponseDto game1 = new GameResponseDto(UUID.randomUUID(), lobby1, "game2" ,"Sports");
 
         List<GameResponseDto> games = new ArrayList<>();
         games.add(game);
