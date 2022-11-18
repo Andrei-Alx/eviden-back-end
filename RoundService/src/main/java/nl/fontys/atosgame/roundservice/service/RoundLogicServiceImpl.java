@@ -8,6 +8,12 @@ import nl.fontys.atosgame.roundservice.model.Round;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service for round logic related operations
+ * This class is only supposed to perform logic, not interact with the database.
+ *
+ * @author Eli
+ */
 @Service
 public class RoundLogicServiceImpl implements RoundLogicService {
 

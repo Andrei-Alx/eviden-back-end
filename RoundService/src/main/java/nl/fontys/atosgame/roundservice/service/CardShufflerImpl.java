@@ -7,6 +7,11 @@ import java.util.List;
 import nl.fontys.atosgame.roundservice.model.Card;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class that shuffles cards
+ *
+ * @author Eli
+ */
 @Service
 public class CardShufflerImpl implements CardShuffler {
 
