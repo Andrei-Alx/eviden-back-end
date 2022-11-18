@@ -1,5 +1,7 @@
 package nl.fontys.atosgame.gameappbff.service;
 
+import nl.fontys.atosgame.gameappbff.enums.GameStatus;
+import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,18 +27,39 @@ public class GameServiceImpl implements GameService{
      * @param gameId The game to create.
      */
     @Override
-    public void handleGameCreated(UUID gameId) {
-        gameRepository.save(gameId);
+    public Game handleGameCreated(UUID gameId) {
+        Game game = new Game(gameId, GameStatus.CREATED);
+        gameRepository.save(game);
+        return game;
     }
 
     /**
-     * start a game in the database.
+     * start a game in the database by updating the status.
      *
      * @param gameId The game to start.
      */
     @Override
-    public void handleGameStarted(UUID gameId) {
-        // todo start game and start round by starting playerrounds
+    public Game handleGameStarted(UUID gameId) {
+        Game game = null;
+        if(gameRepository.findById(gameId).isPresent()) {
+            game = gameRepository.findById(gameId).get();
+            game.setStatus(GameStatus.STARTED);
+            gameRepository.save(game);
+        }
 
+        return game;
+    }
+
+    /**
+     * end a game in the database by updating the status.
+     *
+     * @param gameId, status The game to end.
+     */
+    @Override
+    public Game handleGameEnded(UUID gameId) {
+        Game game = gameRepository.findById(gameId).get();
+        game.setStatus(GameStatus.ENDED);
+        gameRepository.save(game);
+        return game;
     }
 }

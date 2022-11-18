@@ -2,10 +2,12 @@ package nl.fontys.atosgame.gameappbff.controller;
 
 import java.util.function.Function;
 
+import nl.fontys.atosgame.gameappbff.enums.GameStatus;
 import nl.fontys.atosgame.gameappbff.event.consumed.CardSetCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.GameCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.GameEndedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.GameStartedEvent;
+import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.service.GameService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
@@ -49,7 +51,7 @@ public class GameConsumers {
         return message -> {
             GameStartedEvent event = message.getPayload();
             gameService.handleGameStarted(event.getGameId());
-            throw new UnsupportedOperationException("Not implemented yet");
+            return null;
         };
     }
 
@@ -62,8 +64,9 @@ public class GameConsumers {
     @Bean
     public Function<Message<GameEndedEvent>, Void> handleGameEnded() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            GameEndedEvent event = message.getPayload();
+            gameService.handleGameEnded(event.getGameId());
+            return null;
         };
     }
 }
