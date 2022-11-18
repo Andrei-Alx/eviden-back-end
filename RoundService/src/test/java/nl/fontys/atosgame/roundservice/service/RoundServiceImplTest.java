@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
@@ -113,18 +114,37 @@ class RoundServiceImplTest {
 
     @Test
     public void testStartRoundSendsEvents() {
+        List<UUID> playerIds = new ArrayList<>(
+            List.of(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID())
+        );
+        List<Card> cards = new ArrayList<>(
+            List.of(
+                new Card(UUID.randomUUID(), null),
+                new Card(UUID.randomUUID(), null),
+                new Card(UUID.randomUUID(), null)
+            )
+        );
+        List<PlayerRound> playerRounds = new ArrayList<>(
+            List.of(
+                new PlayerRound(null, playerIds.get(0), null, null, cards, 0, 0, null),
+                new PlayerRound(null, playerIds.get(1), null, null, cards, 0, 0, null),
+                new PlayerRound(null, playerIds.get(2), null, null, cards, 0, 0, null)
+            )
+        );
+        List<UUID> cardIds = new ArrayList<>(
+            List.of(cards.get(0).getId(), cards.get(1).getId(), cards.get(2).getId())
+        );
+        UUID gameId = UUID.randomUUID();
         Round round = new Round(
             UUID.randomUUID(),
-            new ArrayList<>(),
+            playerRounds,
             RoundStatus.CREATED,
             new RoundSettings()
         );
-        List<UUID> playerIds = new ArrayList<>();
-        UUID gameId = UUID.randomUUID();
-        // Set behavior of repository
+        // Set repository
         when(roundRepository.findById(round.getId())).thenReturn(Optional.of(round));
-        when(roundRepository.save(round)).thenReturn(round);
-        // Set behavior of logic service
+        when(roundRepository.save(any(Round.class))).thenAnswer(i -> i.getArguments()[0]);
+        // Set logic service
         when(roundLogicService.initializeRound(round, playerIds)).thenReturn(round);
         when(roundLogicService.distributeCards(round)).thenReturn(round);
 
@@ -136,6 +156,21 @@ class RoundServiceImplTest {
             .send(
                 "produceRoundStarted-in-0",
                 new RoundStartedDto(gameId, result.getId())
+            );
+        verify(streamBridge)
+            .send(
+                "producePlayerCardsDistributed-in-0",
+                new CardsDistributedDto(result.getId(), cardIds, playerIds.get(0), gameId)
+            );
+        verify(streamBridge)
+            .send(
+                "producePlayerCardsDistributed-in-0",
+                new CardsDistributedDto(result.getId(), cardIds, playerIds.get(1), gameId)
+            );
+        verify(streamBridge)
+            .send(
+                "producePlayerCardsDistributed-in-0",
+                new CardsDistributedDto(result.getId(), cardIds, playerIds.get(2), gameId)
             );
     }
 

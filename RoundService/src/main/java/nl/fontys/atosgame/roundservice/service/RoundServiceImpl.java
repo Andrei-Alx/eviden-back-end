@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
 import nl.fontys.atosgame.roundservice.dto.PlayerPhaseStartedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
@@ -103,6 +105,21 @@ public class RoundServiceImpl implements RoundService {
         );
 
         // TODO: send distributed cards events with P-19 (and add to unit test)
+        for (PlayerRound playerRound : round.getPlayerRounds()) {
+            streamBridge.send(
+                "producePlayerCardsDistributed-in-0",
+                new CardsDistributedDto(
+                    roundId,
+                    playerRound
+                        .getDistributedCards()
+                        .stream()
+                        .map(Card::getId)
+                        .collect(Collectors.toList()),
+                    playerRound.getPlayerId(),
+                    gameId
+                )
+            );
+        }
 
         // TODO: send player phase started events
         for (PlayerRound playerRound : round.getPlayerRounds()) {
