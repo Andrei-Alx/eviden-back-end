@@ -21,8 +21,6 @@
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}\target\site\jacoco\jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.language>java</sonar.language>
-        <sonar.host.url> http://localhost:9000 </sonar.host.url>
-        <sonar.login>sqa_ce94d94bc4815f6078eb64c342248cf9b43860c5</sonar.login>
         <!--Prettier settings-->
         <plugin.prettier.goal>write</plugin.prettier.goal>
     </properties>
