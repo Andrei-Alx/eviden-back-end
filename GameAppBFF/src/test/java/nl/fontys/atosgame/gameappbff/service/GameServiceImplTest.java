@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.gameappbff.service;
 
+import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import nl.fontys.atosgame.gameappbff.enums.GameStatus;
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
@@ -20,12 +21,14 @@ public class GameServiceImplTest {
     GameRepository gameRepository;
     StreamBridge streamBridge;
     GameServiceImpl gameService;
+    GameSocketController gameSocketController;
 
     @BeforeEach
     void setUp() {
         gameRepository = mock(GameRepository.class);
+        gameSocketController = mock(GameSocketController.class);
         streamBridge = mock(StreamBridge.class);
-        gameService = new GameServiceImpl(gameRepository);
+        gameService = new GameServiceImpl(gameRepository, gameSocketController);
     }
 
     @Test
