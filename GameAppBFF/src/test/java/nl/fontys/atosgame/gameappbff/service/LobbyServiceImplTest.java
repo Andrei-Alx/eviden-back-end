@@ -26,7 +26,6 @@ class LobbyServiceImplTest {
 
         Lobby result = lobbyService.createLobby(lobby);
 
-        assertNotNull(result);
         verify(lobbyRepository).save(lobby);
     }
 }

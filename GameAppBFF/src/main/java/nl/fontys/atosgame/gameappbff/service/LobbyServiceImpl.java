@@ -4,11 +4,13 @@ import nl.fontys.atosgame.gameappbff.dto.LobbyResponseDto;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.repository.LobbyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Service for handling lobbies.
  * @author Eli
  */
+@Service
 public class LobbyServiceImpl implements LobbyService {
 
     private LobbyRepository lobbyRepository;

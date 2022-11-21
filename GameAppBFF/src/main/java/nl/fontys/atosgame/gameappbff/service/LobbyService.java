@@ -2,6 +2,7 @@ package nl.fontys.atosgame.gameappbff.service;
 
 import nl.fontys.atosgame.gameappbff.controller.LobbyConsumers;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
+import org.springframework.stereotype.Service;
 
 /**
  * Service for handling lobbies.
