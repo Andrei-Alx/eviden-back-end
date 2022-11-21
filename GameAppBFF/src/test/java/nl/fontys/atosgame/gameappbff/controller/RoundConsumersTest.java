@@ -1,5 +1,8 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import nl.fontys.atosgame.gameappbff.event.consumed.RoundCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.RoundEndedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.RoundStartedEvent;
@@ -9,9 +12,6 @@ import nl.fontys.atosgame.gameappbff.service.RoundService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.messaging.Message;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class RoundConsumersTest {
 

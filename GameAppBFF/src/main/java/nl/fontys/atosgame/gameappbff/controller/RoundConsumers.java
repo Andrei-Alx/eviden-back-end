@@ -25,11 +25,9 @@ public class RoundConsumers {
 
     private RoundService roundService;
 
-    public RoundConsumers(
-            @Autowired RoundService roundService) {
+    public RoundConsumers(@Autowired RoundService roundService) {
         this.roundService = roundService;
     }
-
 
     /**
      * Id: C-55

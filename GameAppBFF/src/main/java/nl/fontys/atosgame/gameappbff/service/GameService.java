@@ -1,17 +1,15 @@
 package nl.fontys.atosgame.gameappbff.service;
 
+import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.model.Round;
-
-import java.util.UUID;
 
 /**
  * Service for handling games.
  * @author Aniek
  */
 public interface GameService {
-
     /**
      * Create a new game in the database.
      * @param gameId The game to create.

@@ -1,9 +1,7 @@
 package nl.fontys.atosgame.gameappbff.repository;
 
+import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.model.Round;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.UUID;
-
-public interface RoundRepository extends JpaRepository<Round, UUID> {
-}
+public interface RoundRepository extends JpaRepository<Round, UUID> {}

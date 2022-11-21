@@ -134,8 +134,8 @@ public class GameSocketController {
      */
     public UUID roundEnded(UUID gameId, UUID roundId) {
         template.convertAndSend(
-                String.format("/socket/gameapp/%s/roundEnded", gameId),
-                roundId
+            String.format("/socket/gameapp/%s/roundEnded", gameId),
+            roundId
         );
         return roundId;
     }

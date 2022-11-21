@@ -1,5 +1,7 @@
 package nl.fontys.atosgame.gameappbff.service;
 
+import java.util.ArrayList;
+import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.enums.GameStatus;
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
@@ -8,15 +10,12 @@ import nl.fontys.atosgame.gameappbff.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
 /**
  * Service for handling games.
  * @author Aniek
  */
 @Service
-public class GameServiceImpl implements GameService{
+public class GameServiceImpl implements GameService {
 
     private GameRepository gameRepository;
 
@@ -44,7 +43,7 @@ public class GameServiceImpl implements GameService{
     @Override
     public Game handleGameStarted(UUID gameId) {
         Game game = null;
-        if(gameRepository.findById(gameId).isPresent()) {
+        if (gameRepository.findById(gameId).isPresent()) {
             game = gameRepository.findById(gameId).get();
             game.setStatus(GameStatus.STARTED);
             gameRepository.save(game);

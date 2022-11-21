@@ -1,5 +1,9 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.event.consumed.LobbyCreatedEvent;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.service.GameService;
@@ -7,12 +11,6 @@ import nl.fontys.atosgame.gameappbff.service.LobbyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.messaging.Message;
-
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 
 class LobbyConsumersTest {
 
@@ -35,7 +33,8 @@ class LobbyConsumersTest {
         doReturn(lobbyCreatedEvent).when(message).getPayload();
         Lobby lobby = mock(Lobby.class);
         doReturn(lobby).when(lobbyCreatedEvent).getLobby();
-        when(lobbyService.createLobby(any(Lobby.class))).thenAnswer(i -> i.getArguments()[0]);
+        when(lobbyService.createLobby(any(Lobby.class)))
+            .thenAnswer(i -> i.getArguments()[0]);
         UUID gameId = UUID.randomUUID();
         doReturn(gameId).when(lobbyCreatedEvent).getGameId();
 

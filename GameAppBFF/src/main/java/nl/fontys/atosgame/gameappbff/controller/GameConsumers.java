@@ -1,7 +1,6 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
 import java.util.function.Function;
-
 import nl.fontys.atosgame.gameappbff.enums.GameStatus;
 import nl.fontys.atosgame.gameappbff.event.consumed.CardSetCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.GameCreatedEvent;
@@ -26,8 +25,7 @@ public class GameConsumers {
 
     private GameService gameService;
 
-    public GameConsumers(
-            @Autowired GameService gameService) {
+    public GameConsumers(@Autowired GameService gameService) {
         this.gameService = gameService;
     }
 

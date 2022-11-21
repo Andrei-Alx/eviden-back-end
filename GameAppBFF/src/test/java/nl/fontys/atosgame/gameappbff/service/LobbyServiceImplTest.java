@@ -1,13 +1,13 @@
 package nl.fontys.atosgame.gameappbff.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.repository.LobbyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 class LobbyServiceImplTest {
 
