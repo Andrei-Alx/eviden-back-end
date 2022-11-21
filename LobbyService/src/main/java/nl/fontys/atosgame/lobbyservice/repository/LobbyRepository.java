@@ -16,4 +16,8 @@ public interface LobbyRepository extends JpaRepository<Lobby, UUID> {
     void deleteByGameId(UUID gameId);
 
     Lobby getByGameId(UUID gameId);
+
+    Lobby getByLobbyCode(String lobbyCode);
+
+    Lobby getById(UUID lobbyId);
 }

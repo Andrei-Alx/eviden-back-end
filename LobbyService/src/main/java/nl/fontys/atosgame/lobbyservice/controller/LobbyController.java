@@ -9,6 +9,9 @@ import java.util.UUID;
 import nl.fontys.atosgame.lobbyservice.dto.JoinRequestDto;
 import nl.fontys.atosgame.lobbyservice.model.Lobby;
 import nl.fontys.atosgame.lobbyservice.model.LobbySettings;
+import nl.fontys.atosgame.lobbyservice.model.Player;
+import nl.fontys.atosgame.lobbyservice.service.LobbyService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/lobby")
 public class LobbyController {
 
+    public LobbyController(@Autowired LobbyService lobbyService){ this.lobbyService = lobbyService;}
+
+    private LobbyService lobbyService;
     /**
      * Id: R-7
      * Join a lobby
@@ -42,15 +48,19 @@ public class LobbyController {
             @ApiResponse(responseCode = "404", description = "Lobby not found"),
         }
     )
-    public ResponseEntity<Lobby> joinLobby(@RequestBody JoinRequestDto joinRequestDto) {
-        // TODO: implement
+    /**
+     * R-7
+     * this method adds a player to the lobby
+     */
+    public ResponseEntity<Lobby> joinLobby(@RequestBody JoinRequestDto joinRequestDto) throws Exception {
+        Lobby lobby = lobbyService.joinLobby(joinRequestDto.getLobbyCode(), joinRequestDto.getPlayerName());
         return ResponseEntity.ok(
             new Lobby(
-                UUID.randomUUID(),
-                new ArrayList<>(),
-                "testCode",
-                new LobbySettings(),
-                UUID.randomUUID()
+                lobby.getId(),
+                lobby.getPlayers(),
+                    lobby.getLobbyCode(),
+                lobby.getLobbySettings(),
+                lobby.getGameId()
             )
         );
     }
@@ -66,8 +76,13 @@ public class LobbyController {
             @ApiResponse(responseCode = "404", description = "Lobby not found"),
         }
     )
-    public ResponseEntity quitLobby(@RequestBody UUID lobbyId) {
-        // TODO: implement
+
+    /**
+     * R-9
+     * This method removes a player from the lobby
+     */
+    public ResponseEntity quitLobby(@RequestBody UUID lobbyId, UUID playerId) {
+        lobbyService.quitLobby(lobbyId, playerId);
         return ResponseEntity.ok().build();
     }
 }
