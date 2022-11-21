@@ -9,6 +9,7 @@ import nl.fontys.atosgame.gameappbff.event.consumed.GameEndedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.GameStartedEvent;
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.service.GameService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,11 @@ import org.springframework.stereotype.Controller;
 public class GameConsumers {
 
     private GameService gameService;
+
+    public GameConsumers(
+            @Autowired GameService gameService) {
+        this.gameService = gameService;
+    }
 
     /**
      * Id: C-26
