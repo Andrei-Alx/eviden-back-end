@@ -31,7 +31,7 @@ sonarqube-check-card-service:
       - .sonar/cache
   script: 
     - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\CardService
-    - ./mvnw verify sonar:sonar -Dsonar.projectKey=AtosGameGlobal
+    - ./mvnw verify sonar:sonar
   allow_failure: true
   only:
     - develop
