@@ -53,6 +53,7 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
             playerId,
             new ArrayList<>(),
             new ArrayList<>(),
+            new ArrayList<>(),
             new ArrayList<>()
         );
         playerRound = playerRoundRepository.save(playerRound);

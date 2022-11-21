@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.dto.CardDislikedDto;
+import nl.fontys.atosgame.gameappbff.dto.CardLikedDto;
 import nl.fontys.atosgame.gameappbff.dto.CardsDto;
 import nl.fontys.atosgame.gameappbff.dto.PlayerPhaseDto;
 import nl.fontys.atosgame.gameappbff.model.Card;
@@ -67,7 +68,7 @@ class GameSocketControllerTest {
         verify(simpMessagingTemplate)
             .convertAndSend(
                 "/socket/gameapp/00000000-0000-0000-0000-000000000000/cardLiked",
-                new CardDislikedDto(playerId, card)
+                new CardLikedDto(playerId, card)
             );
     }
 }
