@@ -2,6 +2,7 @@ package nl.fontys.atosgame.gameappbff.service;
 
 import nl.fontys.atosgame.gameappbff.enums.GameStatus;
 import nl.fontys.atosgame.gameappbff.model.Game;
+import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class GameServiceImpl implements GameService{
      */
     @Override
     public Game handleGameCreated(UUID gameId) {
-        Game game = new Game(gameId, GameStatus.CREATED);
+        Game game = new Game(gameId, null, GameStatus.CREATED);
         gameRepository.save(game);
         return game;
     }
@@ -61,5 +62,19 @@ public class GameServiceImpl implements GameService{
         game.setStatus(GameStatus.ENDED);
         gameRepository.save(game);
         return game;
+    }
+
+    /**
+     * Add a lobby to a game in the database.
+     *
+     * @param gameId The game to add the lobby to.
+     * @param lobby  The lobby to add.
+     * @return The game with the added lobby.
+     */
+    @Override
+    public Game addLobbyToGame(UUID gameId, Lobby lobby) {
+        Game game = gameRepository.findById(gameId).get();
+        game.setLobby(lobby);
+        return gameRepository.save(game);
     }
 }
