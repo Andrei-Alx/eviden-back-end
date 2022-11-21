@@ -25,15 +25,18 @@ class EventFactoryTest {
             RoundStatus.CREATED,
             new RoundSettings()
         );
+        UUID gameId = UUID.randomUUID();
 
         RoundCreatedEvent event = EventFactory.createRoundCreatedEvent(
             "RoundService",
-            round
+            round,
+               gameId
         );
 
         assertEquals("RoundCreated", event.getType());
         assertEquals("RoundService", event.getService());
         assertEquals(round, event.getRound());
+        assertEquals(gameId, event.getGameId());
         assertNotNull(event.getTimestamp());
         assertNotNull(event.getId());
     }

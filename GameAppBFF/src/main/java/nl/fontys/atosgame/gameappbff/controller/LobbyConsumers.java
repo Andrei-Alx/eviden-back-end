@@ -5,6 +5,10 @@ import nl.fontys.atosgame.gameappbff.event.consumed.LobbyCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.LobbyDeletedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerJoinedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerQuitEvent;
+import nl.fontys.atosgame.gameappbff.model.Lobby;
+import nl.fontys.atosgame.gameappbff.service.GameService;
+import nl.fontys.atosgame.gameappbff.service.LobbyService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
@@ -18,6 +22,17 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 public class LobbyConsumers {
+
+    private GameService gameService;
+
+    private LobbyService lobbyService;
+
+    public LobbyConsumers(
+            @Autowired GameService gameService,
+            @Autowired LobbyService lobbyService) {
+        this.gameService = gameService;
+        this.lobbyService = lobbyService;
+    }
 
     /**
      * Id: C-26
@@ -56,8 +71,11 @@ public class LobbyConsumers {
     @Bean
     public Function<Message<LobbyCreatedEvent>, Void> handleLobbyCreated() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            LobbyCreatedEvent event = message.getPayload();
+            Lobby lobby = event.getLobby();
+            lobby = lobbyService.createLobby(lobby);
+            gameService.addLobbyToGame(event.getGameId(), lobby);
+            return null;
         };
     }
 
