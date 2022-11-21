@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.gameservice.service;
 
+import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
 import nl.fontys.atosgame.gameservice.enums.ShuffleMethod;
 import nl.fontys.atosgame.gameservice.model.CardSet;
 import nl.fontys.atosgame.gameservice.model.Game;
@@ -8,6 +9,7 @@ import nl.fontys.atosgame.gameservice.model.RoundSettings;
 import nl.fontys.atosgame.gameservice.repository.GameRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.cloud.stream.function.StreamBridge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,20 +18,21 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class GameServiceImplTest {
 
     private GameRepository gameRepository;
     private CardSetService cardSetService;
+    private StreamBridge streamBridge;
     private GameServiceImpl gameService;
 
     @BeforeEach
     void setUp() {
         gameRepository = mock(GameRepository.class);
         cardSetService = mock(CardSetService.class);
-        gameService = new GameServiceImpl(gameRepository, cardSetService);
+        streamBridge = mock(StreamBridge.class);
+        gameService = new GameServiceImpl(gameRepository, cardSetService, streamBridge);
     }
 
     @Test
@@ -53,6 +56,8 @@ class GameServiceImplTest {
         assertEquals(companyType, result.getCompanyType());
         assertNull(result.getLobby());
         assertNull(result.getRounds());
+        verify(gameRepository, times(1)).save(any());
+        verify(streamBridge, times(1)).send("produceGameCreated-in-0", new CreateGameEventDto(result.getId(), companyType, roundSettings, lobbySettings));
     }
 
     @Test

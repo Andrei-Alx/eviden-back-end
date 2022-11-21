@@ -1,11 +1,14 @@
 package nl.fontys.atosgame.gameservice.service;
 
+import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
 import nl.fontys.atosgame.gameservice.model.CardSet;
 import nl.fontys.atosgame.gameservice.model.Game;
 import nl.fontys.atosgame.gameservice.model.LobbySettings;
 import nl.fontys.atosgame.gameservice.model.RoundSettings;
 import nl.fontys.atosgame.gameservice.repository.GameRepository;
+import org.apache.kafka.streams.StreamsBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,11 +21,15 @@ public class GameServiceImpl implements GameService {
 
     private final CardSetService cardSetService;
 
+    private final StreamBridge streamBridge;
+
     public GameServiceImpl(
             @Autowired GameRepository gameRepository,
-            @Autowired CardSetService cardSetService) {
+            @Autowired CardSetService cardSetService,
+            @Autowired StreamBridge streamBridge) {
         this.gameRepository = gameRepository;
         this.cardSetService = cardSetService;
+        this.streamBridge = streamBridge;
     }
 
     /**
@@ -44,6 +51,8 @@ public class GameServiceImpl implements GameService {
         game.setCompanyType(companyType);
         game = gameRepository.save(game);
         // TODO Produce event
+        CreateGameEventDto createGameEventDto = new CreateGameEventDto(game.getId(), companyType, roundSettings, lobbySettings);
+        streamBridge.send("produceGameCreated-in-0", createGameEventDto);
         return game;
     }
 }
