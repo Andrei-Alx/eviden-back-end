@@ -2,6 +2,7 @@ package nl.fontys.atosgame.gameservice.service;
 
 import nl.fontys.atosgame.gameservice.model.CardSet;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -26,4 +27,11 @@ public interface CardSetService {
      * @param cardSetId The id of the card to delete.
      */
     void handleCardSetDeleted(UUID cardSetId);
+
+    /**
+     * Get a cardSet from the database.
+     * @param cardSetId The id of the cardSet.
+     * @return The cardSet.
+     */
+    Optional<CardSet> getCardSet(UUID cardSetId);
 }
