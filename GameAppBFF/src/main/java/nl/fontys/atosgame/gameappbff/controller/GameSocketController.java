@@ -67,11 +67,13 @@ public class GameSocketController {
     /**
      * S-8
      * Send a message to the game that the cards have been selected
-     * @param cardsDto
+     * @param gameId the id of the game
+     * @param playerId the id of the player
+     * @param cards the cards that have been selected
      * @return
      */
-    public CardsDto cardsSelected(String gameId, CardsDto cardsDto) {
-        //TODO
+    public CardsDto cardsSelected(UUID gameId, UUID playerId, List<Card> cards) {
+        CardsDto cardsDto = new CardsDto(playerId, cards);
         template.convertAndSend(
             String.format("/socket/gameapp/%s/cardsSelected", gameId),
             cardsDto

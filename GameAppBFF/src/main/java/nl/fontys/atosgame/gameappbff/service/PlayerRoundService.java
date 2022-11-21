@@ -62,21 +62,31 @@ public interface PlayerRoundService {
 
     /**
      * Add cards to liked cards
-     * @param playerId
-     * @param roundId
-     * @param gameId
-     * @param cardId
+     * @param playerId The id of the player
+     * @param roundId The id of the round
+     * @param gameId The id of the game
+     * @param cardId The id of the card
      * @return The updated playerRound
      */
     PlayerRound likeCard(UUID playerId, UUID roundId, UUID gameId, UUID cardId);
 
     /**
      * Add cards to disliked cards
-     * @param playerId
-     * @param roundId
-     * @param gameId
-     * @param cardId
+     * @param playerId The id of the player
+     * @param roundId The id of the round
+     * @param gameId The id of the game
+     * @param cardId The id of the card
      * @return The updated playerRound
      */
     PlayerRound dislikeCard(UUID playerId, UUID roundId, UUID gameId, UUID cardId);
+
+    /**
+     * Add cards to picked cards
+     * @param playerId The id of the player
+     * @param roundId The id of the round
+     * @param gameId The id of the game
+     * @param cardIds The ids of the cards
+     * @return The updated playerRound
+     */
+    PlayerRound selectCards(UUID playerId, UUID roundId, UUID gameId, List<UUID> cardIds);
 }

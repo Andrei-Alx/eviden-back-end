@@ -237,4 +237,31 @@ class PlayerRoundServiceImplTest {
         assertEquals(cardId, playerRound.getDislikedCards().get(0).getId());
         verify(gameSocketController).cardDisliked(gameID, playerId, card);
     }
+
+    @Test
+    void selectCards() {
+        UUID playerId = UUID.randomUUID();
+        UUID roundId = UUID.randomUUID();
+        UUID gameID = UUID.randomUUID();
+        List<UUID> cardIds = new ArrayList<>();
+        List<Card> cards = new ArrayList<>();
+        PlayerRound playerRound = new PlayerRound();
+        doReturn(Optional.of(playerRound))
+            .when(playerRoundService)
+            .getPlayerRound(playerId, roundId);
+        doReturn(cards).when(cardService).getCards(cardIds);
+        when(playerRoundRepository.save(any(PlayerRound.class)))
+            .thenAnswer(i -> i.getArgument(0));
+
+        PlayerRound result = playerRoundService.selectCards(
+            playerId,
+            roundId,
+            gameID,
+            cardIds
+        );
+
+        verify(playerRoundRepository).save(result);
+        assertEquals(cards, result.getSelectedCards());
+        verify(gameSocketController).cardsSelected(gameID, playerId, cards);
+    }
 }

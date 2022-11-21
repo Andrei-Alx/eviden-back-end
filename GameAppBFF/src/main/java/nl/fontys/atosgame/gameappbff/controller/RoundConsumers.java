@@ -2,8 +2,6 @@ package nl.fontys.atosgame.gameappbff.controller;
 
 import java.util.function.Function;
 import nl.fontys.atosgame.gameappbff.event.consumed.*;
-import nl.fontys.atosgame.gameappbff.model.PlayerRound;
-import nl.fontys.atosgame.gameappbff.model.RoundSettings;
 import nl.fontys.atosgame.gameappbff.service.PlayerRoundService;
 import nl.fontys.atosgame.gameappbff.service.RoundService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -190,8 +188,14 @@ public class RoundConsumers {
     @Bean
     public Function<Message<PlayerSelectedCardsEvent>, Void> handlePlayerSelectedCards() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerSelectedCardsEvent event = message.getPayload();
+            playerRoundService.selectCards(
+                event.getPlayerId(),
+                event.getRoundId(),
+                event.getGameId(),
+                event.getCardIds()
+            );
+            return null;
         };
     }
 }

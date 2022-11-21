@@ -8,6 +8,7 @@ import nl.fontys.atosgame.gameappbff.event.consumed.PlayerDislikedCardEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerLikedCardEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerPhaseEndedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerPhaseStartedEvent;
+import nl.fontys.atosgame.gameappbff.event.consumed.PlayerSelectedCardsEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.RoundCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.RoundEndedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.RoundStartedEvent;
@@ -148,6 +149,23 @@ class RoundConsumersTest {
                 event.getRoundId(),
                 event.getGameId(),
                 event.getCardId()
+            );
+    }
+
+    @Test
+    void handlePlayerSelectedCards() {
+        Message<PlayerSelectedCardsEvent> message = mock(Message.class);
+        PlayerSelectedCardsEvent event = mock(PlayerSelectedCardsEvent.class);
+        when(message.getPayload()).thenReturn(event);
+
+        roundConsumers.handlePlayerSelectedCards().apply(message);
+
+        verify(playerRoundService)
+            .selectCards(
+                event.getPlayerId(),
+                event.getRoundId(),
+                event.getGameId(),
+                event.getCardIds()
             );
     }
 }

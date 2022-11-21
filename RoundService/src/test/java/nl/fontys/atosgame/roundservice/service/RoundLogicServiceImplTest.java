@@ -44,7 +44,7 @@ class RoundLogicServiceImplTest {
         assertEquals(playerIds.get(1), result.getPlayerRounds().get(1).getPlayerId());
         for (PlayerRound playerRound : result.getPlayerRounds()) {
             assertEquals(4, playerRound.getNrOfLikedCards());
-            assertEquals(3, playerRound.getNrOfPickedCards());
+            assertEquals(3, playerRound.getNrOfSelectedCards());
             // TODO: Add importantTag
         }
     }

@@ -26,7 +26,7 @@ public class RoundSettingsDto {
     private int nrOfLikedCards;
 
     @JsonProperty
-    private int nrOfPickedCards;
+    private int nrOfSelectedCards;
 
     @JsonProperty
     private ShuffleMethod shuffleMethod;

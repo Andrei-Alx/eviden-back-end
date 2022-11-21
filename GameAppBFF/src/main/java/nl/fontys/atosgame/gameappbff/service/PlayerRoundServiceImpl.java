@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import nl.fontys.atosgame.gameappbff.model.Card;
 import nl.fontys.atosgame.gameappbff.model.PlayerRound;
@@ -213,6 +212,33 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
 
         // Send to socket
         gameSocketController.cardDisliked(gameId, playerId, card);
+        return playerRoundRepository.save(playerRound);
+    }
+
+    /**
+     * Add cards to picked cards
+     *
+     * @param playerId The id of the player
+     * @param roundId  The id of the round
+     * @param gameId   The id of the game
+     * @param cardIds  The ids of the cards
+     * @return The updated playerRound
+     */
+    @Override
+    public PlayerRound selectCards(
+        UUID playerId,
+        UUID roundId,
+        UUID gameId,
+        List<UUID> cardIds
+    ) {
+        PlayerRound playerRound = getPlayerRound(playerId, roundId).get();
+
+        // Add the card to the disliked cards
+        List<Card> cards = cardService.getCards(cardIds);
+        playerRound.addSelectedCards(cards);
+
+        // Send to socket
+        gameSocketController.cardsSelected(gameId, playerId, cards);
         return playerRoundRepository.save(playerRound);
     }
 }

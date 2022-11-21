@@ -40,7 +40,7 @@ public class PlayerRound {
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonProperty
     @ManyToMany(cascade = CascadeType.PERSIST)
-    private List<Card> pickedCards = new ArrayList<>();
+    private List<Card> selectedCards = new ArrayList<>();
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonProperty
@@ -53,5 +53,9 @@ public class PlayerRound {
 
     public void addDislikedCard(Card card) {
         dislikedCards.add(card);
+    }
+
+    public void addSelectedCards(List cards) {
+        selectedCards.addAll(cards);
     }
 }
