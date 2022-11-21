@@ -15,7 +15,7 @@ public interface LobbyService {
      * @param lobby The lobby to create.
      * @return The created lobby.
      */
-    Lobby createLobby(Lobby lobby);
+    Lobby createLobby(Lobby lobby, UUID gameId);
 
     /**
      * Delete a lobby in the database.

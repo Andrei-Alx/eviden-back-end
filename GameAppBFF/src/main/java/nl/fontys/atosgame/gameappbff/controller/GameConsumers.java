@@ -42,6 +42,7 @@ public class GameConsumers {
         return message -> {
             GameCreatedEvent event = message.getPayload();
             gameService.handleGameCreated(event.getGameId());
+            // TODO: send websocket message
             return null;
         };
     }

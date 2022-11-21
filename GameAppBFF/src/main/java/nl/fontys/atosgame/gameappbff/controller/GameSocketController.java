@@ -105,8 +105,8 @@ public class GameSocketController {
      * @param lobby
      * @return
      */
-    public Lobby lobby(String gameId, Lobby lobby) {
-        //TODO
+    public Lobby lobby(UUID gameId, Lobby lobby) {
+
         template.convertAndSend(String.format("/socket/gameapp/%s/lobby", gameId), lobby);
         return lobby;
     }

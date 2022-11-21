@@ -73,7 +73,7 @@ public class LobbyConsumers {
         return message -> {
             LobbyCreatedEvent event = message.getPayload();
             Lobby lobby = event.getLobby();
-            lobby = lobbyService.createLobby(lobby);
+            lobby = lobbyService.createLobby(lobby, event.getGameId());
             gameService.addLobbyToGame(event.getGameId(), lobby);
             return null;
         };

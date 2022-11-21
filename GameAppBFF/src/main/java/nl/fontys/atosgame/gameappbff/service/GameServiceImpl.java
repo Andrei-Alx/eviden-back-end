@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.gameappbff.service;
 
+import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import nl.fontys.atosgame.gameappbff.enums.GameStatus;
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
@@ -17,9 +18,11 @@ import java.util.UUID;
 public class GameServiceImpl implements GameService{
 
     private GameRepository gameRepository;
+    private GameSocketController gameSocketController;
 
-    public GameServiceImpl(@Autowired GameRepository gameRepository) {
+    public GameServiceImpl(@Autowired GameRepository gameRepository, @Autowired GameSocketController gameSocketController) {
         this.gameRepository = gameRepository;
+        this.gameSocketController = gameSocketController;
     }
 
     /**

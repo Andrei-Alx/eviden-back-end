@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.gameappbff.service;
 
+import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.repository.LobbyRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,18 +16,21 @@ class LobbyServiceImplTest {
 
     private LobbyRepository lobbyRepository;
     private LobbyServiceImpl lobbyService;
+    private GameSocketController gameSocketController;
 
     @BeforeEach
     void setUp() {
         lobbyRepository = mock(LobbyRepository.class);
-        lobbyService = new LobbyServiceImpl(lobbyRepository);
+        gameSocketController = mock(GameSocketController.class);
+        lobbyService = new LobbyServiceImpl(lobbyRepository, gameSocketController);
     }
 
     @Test
     void createLobby() {
         Lobby lobby = new Lobby();
+        UUID gameId = UUID.randomUUID();
 
-        Lobby result = lobbyService.createLobby(lobby);
+        Lobby result = lobbyService.createLobby(lobby, gameId);
 
         verify(lobbyRepository).save(lobby);
     }
