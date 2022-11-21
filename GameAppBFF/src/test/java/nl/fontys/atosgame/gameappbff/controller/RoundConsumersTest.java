@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
 import nl.fontys.atosgame.gameappbff.event.consumed.RoundCreatedEvent;
+import nl.fontys.atosgame.gameappbff.event.consumed.RoundEndedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.RoundStartedEvent;
 import nl.fontys.atosgame.gameappbff.model.Round;
 import nl.fontys.atosgame.gameappbff.model.RoundSettings;
@@ -44,5 +45,16 @@ class RoundConsumersTest {
         roundConsumers.handleRoundStarted().apply(message);
 
         verify(roundService).startRound(event.getRoundId(), event.getGameId());
+    }
+
+    @Test
+    void handleRoundEnded() {
+        Message<RoundEndedEvent> message = mock(Message.class);
+        RoundEndedEvent event = mock(RoundEndedEvent.class);
+        when(message.getPayload()).thenReturn(event);
+
+        roundConsumers.handleRoundEnded().apply(message);
+
+        verify(roundService).endRound(event.getRoundId(), event.getGameId());
     }
 }

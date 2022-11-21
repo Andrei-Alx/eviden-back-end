@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.gameappbff.service;
 
 import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
+import nl.fontys.atosgame.gameappbff.enums.RoundStatus;
 import nl.fontys.atosgame.gameappbff.model.Round;
 import nl.fontys.atosgame.gameappbff.repository.RoundRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,10 +45,26 @@ class RoundServiceImplTest {
         UUID gameId = UUID.randomUUID();
         when(roundRepository.findById(roundId)).thenReturn(Optional.of(round));
 
-        roundService.startRound(roundId, gameId);
+        Round result = roundService.startRound(roundId, gameId);
 
         verify(roundRepository).findById(roundId);
         verify(roundRepository).save(round);
+        assertEquals(RoundStatus.IN_PROGRESS, result.getStatus());
         verify(gameSocketController).roundStarted(gameId, roundId);
+    }
+
+    @Test
+    void endRound() {
+        Round round = new Round();
+        UUID roundId = UUID.randomUUID();
+        UUID gameId = UUID.randomUUID();
+        when(roundRepository.findById(any())).thenReturn(Optional.of(round));
+
+        Round result = roundService.endRound(roundId, gameId);
+
+        verify(roundRepository).findById(roundId);
+        verify(roundRepository).save(round);
+        assertEquals(RoundStatus.FINISHED, result.getStatus());
+        verify(gameSocketController).roundEnded(gameId, roundId);
     }
 }

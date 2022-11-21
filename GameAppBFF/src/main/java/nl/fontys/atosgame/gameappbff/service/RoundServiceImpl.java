@@ -56,4 +56,20 @@ public class RoundServiceImpl implements RoundService {
         gameSocketController.roundStarted(gameId, roundId);
         return round;
     }
+
+    /**
+     * Marks a round as ended and sends an event over the websocket
+     *
+     * @param roundId The id of the round to update
+     * @param gameId  The id of the game the round belongs to
+     * @return The updated round
+     */
+    @Override
+    public Round endRound(UUID roundId, UUID gameId) {
+        Round round = roundRepository.findById(roundId).get();
+        round.setStatus(RoundStatus.FINISHED);
+        roundRepository.save(round);
+        gameSocketController.roundEnded(gameId, roundId);
+        return round;
+    }
 }

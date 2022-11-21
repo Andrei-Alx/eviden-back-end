@@ -124,4 +124,19 @@ public class GameSocketController {
         );
         return roundId;
     }
+
+    /**
+     * S-14
+     * Send a message to the game that the round has ended
+     * @param gameId The id of the game
+     * @param roundId The id of the round
+     * @return The id of the round
+     */
+    public UUID roundEnded(UUID gameId, UUID roundId) {
+        template.convertAndSend(
+                String.format("/socket/gameapp/%s/roundEnded", gameId),
+                roundId
+        );
+        return roundId;
+    }
 }

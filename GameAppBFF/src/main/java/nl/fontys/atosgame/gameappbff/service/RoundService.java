@@ -16,9 +16,17 @@ public interface RoundService {
     void handleRoundCreatedEvent(Round round, UUID gameId);
 
     /**
-     * Updates the round with the given id
+     * Marks a round as started and sends an event over the websocket
      * @param roundId The id of the round to update
      * @param gameId The id of the game the round belongs to
      */
     Round startRound(UUID roundId, UUID gameId);
+
+    /**
+     * Marks a round as ended and sends an event over the websocket
+     * @param roundId The id of the round to update
+     * @param gameId The id of the game the round belongs to
+     * @return The updated round
+     */
+    Round endRound(UUID roundId, UUID gameId);
 }

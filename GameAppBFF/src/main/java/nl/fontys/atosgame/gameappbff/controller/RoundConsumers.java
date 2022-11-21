@@ -70,8 +70,9 @@ public class RoundConsumers {
     @Bean
     public Function<Message<RoundEndedEvent>, Void> handleRoundEnded() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            RoundEndedEvent event = message.getPayload();
+            roundService.endRound(event.getRoundId(), event.getGameId());
+            return null;
         };
     }
 
