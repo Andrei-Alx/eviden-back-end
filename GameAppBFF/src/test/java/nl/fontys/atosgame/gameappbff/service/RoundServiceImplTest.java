@@ -87,4 +87,20 @@ class RoundServiceImplTest {
         assertEquals(1, result.getPlayerRounds().size());
         assertEquals(playerRound, result.getPlayerRounds().get(0));
     }
+
+    @Test
+    void getRound() {
+        // Arrange
+        Round round = new Round();
+        UUID roundId = UUID.randomUUID();
+        when(roundRepository.findById(any())).thenReturn(Optional.of(round));
+
+        // Act
+        Optional<Round> result = roundService.getRound(roundId);
+
+        // Assert
+        verify(roundRepository).findById(roundId);
+        assertTrue(result.isPresent());
+        assertEquals(round, result.get());
+    }
 }

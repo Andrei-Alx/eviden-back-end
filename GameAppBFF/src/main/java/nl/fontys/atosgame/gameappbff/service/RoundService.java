@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.gameappbff.service;
 
+import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.model.PlayerRound;
 import nl.fontys.atosgame.gameappbff.model.Round;
@@ -8,6 +9,13 @@ import nl.fontys.atosgame.gameappbff.model.Round;
  * Handle
  */
 public interface RoundService {
+    /**
+     * Get a round by id
+     * @param id The id of the round
+     * @return Optional of the round
+     */
+    Optional<Round> getRound(UUID id);
+
     /**
      * Creates a new round for the given game
      * @param round The round to create

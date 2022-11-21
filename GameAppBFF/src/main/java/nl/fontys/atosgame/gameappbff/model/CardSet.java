@@ -16,7 +16,6 @@ import org.hibernate.annotations.Type;
 public class CardSet {
 
     @Id
-    @GeneratedValue(generator = "UUID")
     @Type(type = "org.hibernate.type.UUIDCharType")
     @JsonProperty
     private UUID id;

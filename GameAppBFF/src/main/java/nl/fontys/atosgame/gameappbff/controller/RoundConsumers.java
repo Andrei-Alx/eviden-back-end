@@ -2,7 +2,9 @@ package nl.fontys.atosgame.gameappbff.controller;
 
 import java.util.function.Function;
 import nl.fontys.atosgame.gameappbff.event.consumed.*;
+import nl.fontys.atosgame.gameappbff.model.PlayerRound;
 import nl.fontys.atosgame.gameappbff.model.RoundSettings;
+import nl.fontys.atosgame.gameappbff.service.PlayerRoundService;
 import nl.fontys.atosgame.gameappbff.service.RoundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,9 +26,14 @@ import org.springframework.stereotype.Controller;
 public class RoundConsumers {
 
     private RoundService roundService;
+    private PlayerRoundService playerRoundService;
 
-    public RoundConsumers(@Autowired RoundService roundService) {
+    public RoundConsumers(
+        @Autowired RoundService roundService,
+        @Autowired PlayerRoundService playerRoundService
+    ) {
         this.roundService = roundService;
+        this.playerRoundService = playerRoundService;
     }
 
     /**
@@ -83,8 +90,14 @@ public class RoundConsumers {
     @Bean
     public Function<Message<PlayerPhaseStartedEvent>, Void> handlePlayerPhaseStarted() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerPhaseStartedEvent event = message.getPayload();
+            playerRoundService.startPhase(
+                event.getPlayerId(),
+                event.getRoundId(),
+                event.getGameId(),
+                event.getPhaseNumber()
+            );
+            return null;
         };
     }
 
@@ -97,8 +110,14 @@ public class RoundConsumers {
     @Bean
     public Function<Message<PlayerPhaseEndedEvent>, Void> handlePlayerPhaseEnded() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerPhaseEndedEvent event = message.getPayload();
+            playerRoundService.endPhase(
+                event.getPlayerId(),
+                event.getRoundId(),
+                event.getGameId(),
+                event.getPhaseNumber()
+            );
+            return null;
         };
     }
 

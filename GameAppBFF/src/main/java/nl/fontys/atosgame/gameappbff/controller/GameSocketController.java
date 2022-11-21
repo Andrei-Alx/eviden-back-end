@@ -24,6 +24,10 @@ public class GameSocketController {
     @Autowired
     private SimpMessagingTemplate template;
 
+    public GameSocketController(@Autowired SimpMessagingTemplate template) {
+        this.template = template;
+    }
+
     /**
      * S-6
      * Send a message to the game that a card has been liked
@@ -72,11 +76,13 @@ public class GameSocketController {
     /**
      * S-9
      * Send a message to the game that the player has changed phase
-     * @param playerPhaseDto
-     * @return
+     * @param gameId The id of the game
+     * @param playerId The id of the player
+     * @param phaseNumber The phase number
      */
-    public PlayerPhaseDto playerPhase(String gameId, PlayerPhaseDto playerPhaseDto) {
+    public PlayerPhaseDto playerPhase(UUID gameId, UUID playerId, int phaseNumber) {
         //TODO
+        PlayerPhaseDto playerPhaseDto = new PlayerPhaseDto(playerId, phaseNumber);
         template.convertAndSend(
             String.format("/socket/gameapp/%s/playerPhase", gameId),
             playerPhaseDto

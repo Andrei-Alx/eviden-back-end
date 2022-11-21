@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.gameappbff.service;
 
 import java.awt.geom.RoundRectangle2D;
+import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import nl.fontys.atosgame.gameappbff.enums.RoundStatus;
@@ -29,6 +30,17 @@ public class RoundServiceImpl implements RoundService {
         this.gameService = gameService;
         this.roundRepository = roundRepository;
         this.gameSocketController = gameSocketController;
+    }
+
+    /**
+     * Get a round by id
+     *
+     * @param id The id of the round
+     * @return Optional of the round
+     */
+    @Override
+    public Optional<Round> getRound(UUID id) {
+        return roundRepository.findById(id);
     }
 
     /**

@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 public class PlayerPhaseDto {
 
     private UUID playerId;
-    private int phase;
+    private int phaseNumber;
 }
