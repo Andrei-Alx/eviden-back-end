@@ -4,9 +4,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.UUID;
 import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PlayerRound {
 
     @Id
@@ -19,10 +25,14 @@ public class PlayerRound {
     private UUID playerId;
 
     @JsonProperty
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Card> likedCards;
 
     @JsonProperty
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Card> pickedCards;
+
+    @JsonProperty
+    @ManyToMany(cascade = { CascadeType.PERSIST })
+    private List<Card> distributedCards;
 }

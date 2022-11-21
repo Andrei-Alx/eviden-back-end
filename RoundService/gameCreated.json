@@ -1,0 +1,22 @@
+{
+  "id": "ddc2e8c0-299f-4208-8b5c-90dd7bf32ceb",
+  "timestamp": "2022-11-15T22:13:20.3613134",
+  "type": "GameCreated",
+  "service": "GameService",
+  "lobbySettings": {
+    "id": "ddc2e8c0-299f-4208-8b5c-90dd7bf32ceb",
+    "maxPlayers": 7
+  },
+  "roundSettings": [
+    {
+      "id": "ddc2e8c0-299f-4208-8b5c-90dd7bf32ceb",
+      "showPersonalOrGroupResults": true,
+      "nrOfLikedCards": 3,
+      "nrOfPickedCards": 3,
+      "shuffleMethod": "FULLY_RANDOM",
+      "showSameCardOrder": true,
+      "cardSetId": "ddc2e8c0-299f-4208-8b5c-90dd7bf32ceb"
+    }
+  ],
+  "gameId": "ddc2e8c0-299f-4208-8b5c-90dd7bf32ceb"
+}

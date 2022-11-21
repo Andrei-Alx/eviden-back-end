@@ -1,8 +1,8 @@
 package nl.fontys.atosgame.gameappbff.service;
 
-import nl.fontys.atosgame.gameappbff.model.Round;
-
 import java.util.UUID;
+import nl.fontys.atosgame.gameappbff.model.PlayerRound;
+import nl.fontys.atosgame.gameappbff.model.Round;
 
 /**
  * Handle
@@ -29,4 +29,12 @@ public interface RoundService {
      * @return The updated round
      */
     Round endRound(UUID roundId, UUID gameId);
+
+    /**
+     * Adds a playerRound to the round
+     * @param roundId The id of the round
+     * @param playerRound The playerRound to add
+     * @return The updated round
+     */
+    Round addPlayerRound(UUID roundId, PlayerRound playerRound);
 }

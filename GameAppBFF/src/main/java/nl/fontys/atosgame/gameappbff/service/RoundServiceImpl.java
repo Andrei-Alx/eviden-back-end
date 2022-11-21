@@ -1,14 +1,14 @@
 package nl.fontys.atosgame.gameappbff.service;
 
+import java.awt.geom.RoundRectangle2D;
+import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import nl.fontys.atosgame.gameappbff.enums.RoundStatus;
+import nl.fontys.atosgame.gameappbff.model.PlayerRound;
 import nl.fontys.atosgame.gameappbff.model.Round;
 import nl.fontys.atosgame.gameappbff.repository.RoundRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.awt.geom.RoundRectangle2D;
-import java.util.UUID;
 
 /**
  * Service that manages the rounds
@@ -22,9 +22,10 @@ public class RoundServiceImpl implements RoundService {
     private GameSocketController gameSocketController;
 
     public RoundServiceImpl(
-            @Autowired GameService gameService,
-            @Autowired RoundRepository roundRepository,
-            @Autowired GameSocketController gameSocketController) {
+        @Autowired GameService gameService,
+        @Autowired RoundRepository roundRepository,
+        @Autowired GameSocketController gameSocketController
+    ) {
         this.gameService = gameService;
         this.roundRepository = roundRepository;
         this.gameSocketController = gameSocketController;
@@ -70,6 +71,21 @@ public class RoundServiceImpl implements RoundService {
         round.setStatus(RoundStatus.FINISHED);
         roundRepository.save(round);
         gameSocketController.roundEnded(gameId, roundId);
+        return round;
+    }
+
+    /**
+     * Adds a playerRound to the round
+     *
+     * @param roundId     The id of the round
+     * @param playerRound The playerRound to add
+     * @return The updated round
+     */
+    @Override
+    public Round addPlayerRound(UUID roundId, PlayerRound playerRound) {
+        Round round = roundRepository.findById(roundId).get();
+        round.addPlayerRound(playerRound);
+        roundRepository.save(round);
         return round;
     }
 }
