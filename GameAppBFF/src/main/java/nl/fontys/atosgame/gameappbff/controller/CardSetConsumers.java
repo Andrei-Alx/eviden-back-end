@@ -4,6 +4,7 @@ import java.util.function.Function;
 import nl.fontys.atosgame.gameappbff.event.consumed.CardSetCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.CardSetDeletedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.CardSetUpdatedEvent;
+import nl.fontys.atosgame.gameappbff.service.CardSetService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class CardSetConsumers {
 
+    private CardSetService cardSetService;
+
     /**
      * Id: C-45
      * Consumer for CardSetCreatedEvent
@@ -28,8 +31,8 @@ public class CardSetConsumers {
     public Function<Message<CardSetCreatedEvent>, Void> handleCardSetCreated() {
         return cardSetCreatedEventMessage -> {
             CardSetCreatedEvent event = cardSetCreatedEventMessage.getPayload();
-            //TODO save cardset in database
-            throw new UnsupportedOperationException("Not implemented yet");
+            cardSetService.handleCardSetCreated(event.getCardSet());
+            return null;
         };
     }
 
@@ -43,8 +46,8 @@ public class CardSetConsumers {
     public Function<Message<CardSetUpdatedEvent>, Void> handleCardSetUpdated() {
         return cardSetUpdatedEventMessage -> {
             CardSetUpdatedEvent event = cardSetUpdatedEventMessage.getPayload();
-            //TODO update cardset in database
-            throw new UnsupportedOperationException("Not implemented yet");
+            cardSetService.handleCardSetUpdated(event.getCardSet());
+            return null;
         };
     }
 
@@ -58,7 +61,7 @@ public class CardSetConsumers {
     public Function<Message<CardSetDeletedEvent>, Void> handleCardSetDeleted() {
         return cardSetDeletedEventMessage -> {
             CardSetDeletedEvent event = cardSetDeletedEventMessage.getPayload();
-            //TODO delete cardset in database
+            cardSetService.handleCardSetDeleted(event.getId());
             throw new UnsupportedOperationException("Not implemented yet");
         };
     }
