@@ -50,4 +50,8 @@ public class PlayerRound {
     public void addLikedCard(Card card) {
         likedCards.add(card);
     }
+
+    public void addDislikedCard(Card card) {
+        dislikedCards.add(card);
+    }
 }

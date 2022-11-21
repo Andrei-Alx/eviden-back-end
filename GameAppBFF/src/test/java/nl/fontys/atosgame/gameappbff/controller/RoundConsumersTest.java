@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerCardsDistributedEvent;
+import nl.fontys.atosgame.gameappbff.event.consumed.PlayerDislikedCardEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerLikedCardEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerPhaseEndedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerPhaseStartedEvent;
@@ -126,6 +127,23 @@ class RoundConsumersTest {
 
         verify(playerRoundService)
             .likeCard(
+                event.getPlayerId(),
+                event.getRoundId(),
+                event.getGameId(),
+                event.getCardId()
+            );
+    }
+
+    @Test
+    void handlePlayerDislikedCard() {
+        Message<PlayerDislikedCardEvent> message = mock(Message.class);
+        PlayerDislikedCardEvent event = mock(PlayerDislikedCardEvent.class);
+        when(message.getPayload()).thenReturn(event);
+
+        roundConsumers.handlePlayerDislikedCard().apply(message);
+
+        verify(playerRoundService)
+            .dislikeCard(
                 event.getPlayerId(),
                 event.getRoundId(),
                 event.getGameId(),

@@ -50,11 +50,13 @@ public class GameSocketController {
     /**
      * S-7
      * Send a message to the game that a card has been disliked
-     * @param cardDislikedDto
+     * @param gameId the id of the game
+     * @param playerId the id of the player
+     * @param card the card that has been disliked
      * @return
      */
-    public CardDislikedDto cardDisliked(String gameId, CardDislikedDto cardDislikedDto) {
-        //TODO
+    public CardDislikedDto cardDisliked(UUID gameId, UUID playerId, Card card) {
+        CardDislikedDto cardDislikedDto = new CardDislikedDto(playerId, card);
         template.convertAndSend(
             String.format("/socket/gameapp/%s/cardDisliked", gameId),
             cardDislikedDto
