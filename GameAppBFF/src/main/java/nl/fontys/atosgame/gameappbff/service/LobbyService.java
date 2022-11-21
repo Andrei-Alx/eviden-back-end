@@ -1,8 +1,6 @@
 package nl.fontys.atosgame.gameappbff.service;
 
-import nl.fontys.atosgame.gameappbff.controller.LobbyConsumers;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
-import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
@@ -22,4 +20,18 @@ public interface LobbyService {
      * @param lobbyId The lobby to delete.
      */
     void deleteLobby(UUID lobbyId);
+
+    /**
+     * Add a player to a lobby.
+     * @param lobbyId The lobby to add the player to.
+     * @param playerId The player to add to the lobby.
+     */
+    Lobby addPlayer(UUID lobbyId, UUID playerId);
+
+    /**
+     * Quit a player to a lobby.
+     * @param lobbyId The lobby to quit the player to.
+     * @param playerId The player to quit to the lobby.
+     */
+    void quitPlayer(UUID lobbyId, UUID playerId);
 }

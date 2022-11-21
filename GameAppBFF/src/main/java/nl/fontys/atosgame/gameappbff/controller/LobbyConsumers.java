@@ -43,8 +43,9 @@ public class LobbyConsumers {
     @Bean
     public Function<Message<PlayerJoinedEvent>, Void> handlePlayerJoined() {
         return message -> {
-            // TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerJoinedEvent event = message.getPayload();
+            lobbyService.addPlayer(event.getLobbyId(), event.getPlayerId());
+            return null;
         };
     }
 
@@ -57,8 +58,9 @@ public class LobbyConsumers {
     @Bean
     public Function<Message<PlayerQuitEvent>, Void> handlePlayerQuit() {
         return message -> {
-            // TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerQuitEvent event = message.getPayload();
+            lobbyService.quitPlayer(event.getLobbyId(), event.getPlayerId());
+            return null;
         };
     }
 

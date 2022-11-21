@@ -1,10 +1,10 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
-import nl.fontys.atosgame.gameappbff.dto.PlayerJoinedDto;
-import nl.fontys.atosgame.gameappbff.dto.PlayerQuitDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+
+import java.util.UUID;
 
 /**
  * Collection of lobby websockets for lobby related sockets:
@@ -21,30 +21,26 @@ public class LobbySocketController {
     /**
      * S-4
      * Send a message to the lobby that a player has joined
-     * @param playerJoinedDto
+     * @param lobbyId, playerId
      * @return
      */
-    public PlayerJoinedDto playerJoined(String lobbyId, PlayerJoinedDto playerJoinedDto) {
-        //TODO
+    public void playerJoined(UUID lobbyId, UUID playerId) {
         template.convertAndSend(
             String.format("/socket/gameapp/%s/playerJoined", lobbyId),
-            playerJoinedDto
+            playerId
         );
-        return playerJoinedDto;
     }
 
     /**
      * S-5
      * Send a message to the lobby that a player has quit
-     * @param playerQuitDto
+     * @param lobbyId, playerId
      * @return
      */
-    public PlayerQuitDto playerQuit(String lobbyId, PlayerQuitDto playerQuitDto) {
-        //TODO
+    public void playerQuit(UUID lobbyId, UUID playerId) {
         template.convertAndSend(
             String.format("/socket/gameapp/%s/playerQuit", lobbyId),
-            playerQuitDto
+            playerId
         );
-        return playerQuitDto;
     }
 }
