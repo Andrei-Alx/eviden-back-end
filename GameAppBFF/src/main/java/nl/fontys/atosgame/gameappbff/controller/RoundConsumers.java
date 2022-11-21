@@ -150,8 +150,14 @@ public class RoundConsumers {
     @Bean
     public Function<Message<PlayerLikedCardEvent>, Void> handlePlayerLikedCard() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerLikedCardEvent event = message.getPayload();
+            playerRoundService.likeCard(
+                event.getPlayerId(),
+                event.getRoundId(),
+                event.getGameId(),
+                event.getCardId()
+            );
+            return null;
         };
     }
 

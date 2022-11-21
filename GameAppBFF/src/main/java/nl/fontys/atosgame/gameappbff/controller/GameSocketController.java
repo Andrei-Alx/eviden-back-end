@@ -33,11 +33,13 @@ public class GameSocketController {
     /**
      * S-6
      * Send a message to the game that a card has been liked
-     * @param cardLikedDto
+     * @param gameId the id of the game
+     * @param playerId the id of the player
+     * @param card the card that has been liked
      * @return
      */
-    public CardLikedDto cardLiked(String gameId, CardLikedDto cardLikedDto) {
-        //TODO
+    public CardLikedDto cardLiked(UUID gameId, UUID playerId, Card card) {
+        CardLikedDto cardLikedDto = new CardLikedDto(playerId, card);
         template.convertAndSend(
             String.format("/socket/gameapp/%s/cardLiked", gameId),
             cardLikedDto

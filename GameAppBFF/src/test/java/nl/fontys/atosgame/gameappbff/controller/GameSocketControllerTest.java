@@ -55,4 +55,19 @@ class GameSocketControllerTest {
                 new CardsDto(playerId, cards)
             );
     }
+
+    @Test
+    void cardLiked() {
+        UUID gameId = UUID.fromString("00000000-0000-0000-0000-000000000000");
+        UUID playerId = UUID.randomUUID();
+        Card card = new Card();
+
+        gameSocketController.cardLiked(gameId, playerId, card);
+
+        verify(simpMessagingTemplate)
+            .convertAndSend(
+                "/socket/gameapp/00000000-0000-0000-0000-000000000000/cardLiked",
+                new CardDislikedDto(playerId, card)
+            );
+    }
 }

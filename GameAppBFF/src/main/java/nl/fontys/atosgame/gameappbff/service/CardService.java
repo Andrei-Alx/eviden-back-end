@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.gameappbff.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.model.Card;
 
@@ -33,4 +34,11 @@ public interface CardService {
      * @return The list of cards
      */
     List<Card> getCards(List<UUID> cardIds);
+
+    /**
+     * Get a card by id
+     * @param cardId The id of the card
+     * @return The card
+     */
+    Optional<Card> getCard(UUID cardId);
 }

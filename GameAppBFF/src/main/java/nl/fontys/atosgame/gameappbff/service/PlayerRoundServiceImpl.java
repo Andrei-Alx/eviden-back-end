@@ -165,4 +165,26 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
 
         return playerRoundRepository.save(playerRound);
     }
+
+    /**
+     * Add cards to liked cards
+     *
+     * @param playerId
+     * @param roundId
+     * @param gameId
+     * @param cardId
+     * @return The updated playerRound
+     */
+    @Override
+    public PlayerRound likeCard(UUID playerId, UUID roundId, UUID gameId, UUID cardId) {
+        PlayerRound playerRound = getPlayerRound(playerId, roundId).get();
+
+        // Add the card to the liked cards
+        Card card = cardService.getCard(cardId).get();
+        playerRound.addLikedCard(card);
+
+        // Send to socket
+        gameSocketController.cardLiked(gameId, playerId, card);
+        return playerRoundRepository.save(playerRound);
+    }
 }

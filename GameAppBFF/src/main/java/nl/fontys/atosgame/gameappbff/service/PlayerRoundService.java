@@ -59,4 +59,14 @@ public interface PlayerRoundService {
         UUID gameId,
         List<UUID> cardIds
     );
+
+    /**
+     * Add cards to liked cards
+     * @param playerId
+     * @param roundId
+     * @param gameId
+     * @param cardId
+     * @return The updated playerRound
+     */
+    PlayerRound likeCard(UUID playerId, UUID roundId, UUID gameId, UUID cardId);
 }

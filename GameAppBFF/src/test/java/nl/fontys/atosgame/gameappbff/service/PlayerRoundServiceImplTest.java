@@ -187,4 +187,29 @@ class PlayerRoundServiceImplTest {
         assertEquals(cards, result.getDistributedCards());
         verify(gameSocketController).cardsDistributed(gameID, playerId, cards);
     }
+
+    @Test
+    void likeCard() {
+        UUID playerId = UUID.randomUUID();
+        UUID roundId = UUID.randomUUID();
+        UUID gameID = UUID.randomUUID();
+        UUID cardId = UUID.randomUUID();
+        PlayerRound playerRound = new PlayerRound();
+        playerRound.setPlayerId(playerId);
+        doReturn(Optional.of(playerRound))
+            .when(playerRoundService)
+            .getPlayerRound(playerId, roundId);
+        Card card = new Card();
+        card.setId(cardId);
+        doReturn(Optional.of(card)).when(cardService).getCard(cardId);
+        when(playerRoundRepository.save(any(PlayerRound.class)))
+            .thenAnswer(i -> i.getArgument(0));
+
+        playerRoundService.likeCard(playerId, roundId, gameID, cardId);
+
+        verify(playerRoundRepository).save(playerRound);
+        assertEquals(1, playerRound.getLikedCards().size());
+        assertEquals(cardId, playerRound.getLikedCards().get(0).getId());
+        verify(gameSocketController).cardLiked(gameID, playerId, card);
+    }
 }
