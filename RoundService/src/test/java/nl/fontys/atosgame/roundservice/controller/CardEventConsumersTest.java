@@ -36,7 +36,12 @@ class CardEventConsumersTest {
 
         cardEventConsumers.handleCardCreated().apply(message);
 
+<<<<<<< Updated upstream
         verify(cardService).createCard(card);
+=======
+        verify(cardService).createCard(new nl.fontys.atosgame.roundservice.model.Card(message.getPayload().getCard().getId(),
+                message.getPayload().getCard().getTags()));
+>>>>>>> Stashed changes
     }
 
     @Test
