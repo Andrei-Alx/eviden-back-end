@@ -1,15 +1,14 @@
-package nl.fontys.atosgame.roundservice.event.produced;
+package nl.fontys.atosgame.roundservice.dto;
 
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nl.fontys.atosgame.roundservice.event.BaseEvent;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class PlayerPhaseStarted extends BaseEvent {
+@AllArgsConstructor
+public class PlayerPhaseStartedDto {
 
     private int phaseNumber;
     private UUID playerId;

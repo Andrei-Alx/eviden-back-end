@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.roundservice.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -10,6 +11,7 @@ import nl.fontys.atosgame.roundservice.model.Lobby;
 import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,13 +24,16 @@ public class GameServiceImpl implements GameService {
     private RoundService roundService;
 
     private GameRepository gameRepository;
+    private StreamBridge streamBridge;
 
     public GameServiceImpl(
         @Autowired RoundService roundService,
-        @Autowired GameRepository gameRepository
+        @Autowired GameRepository gameRepository,
+        @Autowired StreamBridge streamBridge
     ) {
         this.roundService = roundService;
         this.gameRepository = gameRepository;
+        this.streamBridge = streamBridge;
     }
 
     /**
@@ -46,6 +51,20 @@ public class GameServiceImpl implements GameService {
 
         List<Round> rounds = roundService.createRounds(gameId, roundSettings);
         game.setRounds(rounds);
+
+        // TODO: REMOVE HARDCODED LOBBY
+        Lobby lobby = new Lobby(
+            UUID.randomUUID(),
+            new ArrayList<>(
+                List.of(
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    UUID.randomUUID()
+                )
+            )
+        );
+        game.setLobby(lobby);
 
         return gameRepository.save(game);
     }
@@ -78,38 +97,58 @@ public class GameServiceImpl implements GameService {
      */
     @Override
     public Game startGame(UUID gameId) throws EntityNotFoundException {
-        return this.startRound(gameId, 0);
+        Game game = gameRepository
+            .findById(gameId)
+            .orElseThrow(EntityNotFoundException::new);
+        Round firstRound = game.getRounds().get(0);
+        firstRound =
+            roundService.startRound(
+                firstRound.getId(),
+                game.getLobby().getPlayerIds(),
+                gameId
+            );
+        game.getRounds().set(0, firstRound);
+        return gameRepository.save(game);
     }
 
     /**
-     * Start a round in a game
+     * Check if the next round should be started
      *
-     * @param gameId      The id of the game
-     * @param roundNumber The number of the round
-     * @return The updated game
-     * @throws EntityNotFoundException When the game or round is not found
+     * @param gameId The id of the game
      */
     @Override
-    public Game startRound(UUID gameId, int roundNumber) throws EntityNotFoundException {
-        Optional<Game> gameOptional = gameRepository.findById(gameId);
-        if (gameOptional.isPresent()) {
-            Game game = gameOptional.get();
+    public void checkForNextRound(UUID gameId) {
+        // Get game
+        Game game = gameRepository
+            .findById(gameId)
+            .orElseThrow(EntityNotFoundException::new);
 
-            if (game.getRounds().size() <= roundNumber) {
-                throw new EntityNotFoundException("Round not found");
+        // Get current round
+        Optional<Round> currentRound = game.getCurrentRound();
+        // If there is no current round, the game is done
+        if (currentRound.isEmpty()) {
+            throw new IllegalStateException("Game is already done, but checkForNextRound was called. This means the game appears to be done, but some logic still happened.");
+        }
+
+        // If the current round is done, start the next round
+        Round round = currentRound.get();
+        if (round.isDone()) {
+            // End the current round
+            roundService.endRound(round.getId(), gameId);
+            // Check if there is a next round
+            Optional<Round> nextRound = game.getNextRound();
+            if (nextRound.isPresent()) {
+                // Start the next round
+                roundService.startRound(
+                    nextRound.get().getId(),
+                    game.getLobby().getPlayerIds(),
+                    gameId
+                );
+            } else {
+                // Game is done
+                // TODO: Publish event, change status?
             }
-
-            // Initialize the round
-            Round round = game.getRounds().get(roundNumber);
-            roundService.initializeRound(round.getId(), game.getLobby().getPlayerIds());
-
-            // Start the round
-            round = roundService.startRound(round.getId());
-            game.getRounds().set(roundNumber, round);
-
-            return gameRepository.save(game);
-        } else {
-            throw new EntityNotFoundException("Game not found");
+            gameRepository.save(game);
         }
     }
 }

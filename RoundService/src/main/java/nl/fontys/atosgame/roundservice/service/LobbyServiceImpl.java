@@ -9,6 +9,11 @@ import nl.fontys.atosgame.roundservice.repository.LobbyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service for lobby related operations
+ *
+ * @author Eli
+ */
 @Service
 public class LobbyServiceImpl implements LobbyService {
 

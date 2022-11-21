@@ -1,12 +1,16 @@
 package nl.fontys.atosgame.roundservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.fontys.atosgame.roundservice.enums.RoundStatus;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -21,14 +25,32 @@ public class Round {
     @JsonProperty
     private UUID id;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonProperty
-    private List<PlayerRound> playerRounds;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<PlayerRound> playerRounds = new ArrayList<>();
 
     @JsonProperty
-    private String status;
+    private RoundStatus status;
 
     @JsonProperty
     @Embedded
     private RoundSettings roundSettings;
+
+    /**
+     * Add a playerRound to the round
+     * @param playerRound The playerRound to add
+     */
+    public void addPlayerRound(PlayerRound playerRound) {
+        playerRounds.add(playerRound);
+    }
+
+    /**
+     * Check if the round is done.
+     * A round is done when all playerRounds are done.
+     * @return True if the round is done, false otherwise.
+     */
+    public boolean isDone() {
+        return playerRounds.stream().allMatch(PlayerRound::isDone);
+    }
 }
