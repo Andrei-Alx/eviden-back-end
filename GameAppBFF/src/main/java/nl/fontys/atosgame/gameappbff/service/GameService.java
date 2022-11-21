@@ -2,6 +2,7 @@ package nl.fontys.atosgame.gameappbff.service;
 
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
+import nl.fontys.atosgame.gameappbff.model.Round;
 
 import java.util.UUID;
 
@@ -36,4 +37,12 @@ public interface GameService {
      * @return The game with the added lobby.
      */
     Game addLobbyToGame(UUID gameId, Lobby lobby);
+
+    /**
+     * Add a round to a game in the database.
+     * @param round The round to add.
+     * @param gameId The game to add the round to.
+     * @return The game with the added round.
+     */
+    Game addRoundToGame(Round round, UUID gameId);
 }

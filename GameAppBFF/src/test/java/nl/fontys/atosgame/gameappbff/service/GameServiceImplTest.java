@@ -3,6 +3,7 @@ package nl.fontys.atosgame.gameappbff.service;
 import nl.fontys.atosgame.gameappbff.enums.GameStatus;
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
+import nl.fontys.atosgame.gameappbff.model.Round;
 import nl.fontys.atosgame.gameappbff.repository.GameRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,7 @@ public class GameServiceImplTest {
     void startGame() {
         UUID gameId = UUID.randomUUID();
         when(gameRepository.save(any(Game.class))).thenAnswer(i -> i.getArguments()[0]);
-        when(gameRepository.findById(gameId)).thenReturn(Optional.of(new Game(gameId, null, GameStatus.CREATED)));
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(new Game(gameId, null, GameStatus.CREATED, null)));
 
         Game game = gameService.handleGameStarted(gameId);
 
@@ -55,7 +56,7 @@ public class GameServiceImplTest {
     void endGame() {
         UUID gameId = UUID.randomUUID();
         when(gameRepository.save(any(Game.class))).thenAnswer(i -> i.getArguments()[0]);
-        when(gameRepository.findById(gameId)).thenReturn(Optional.of(new Game(gameId, null, GameStatus.CREATED)));
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(new Game(gameId, null, GameStatus.CREATED, null)));
 
         Game game = gameService.handleGameEnded(gameId);
 
@@ -68,11 +69,25 @@ public class GameServiceImplTest {
         UUID gameId = UUID.randomUUID();
         Lobby lobby = mock(Lobby.class);
         when(gameRepository.save(any(Game.class))).thenAnswer(i -> i.getArguments()[0]);
-        when(gameRepository.findById(gameId)).thenReturn(Optional.of(new Game(gameId, null, GameStatus.CREATED)));
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(new Game(gameId, null, GameStatus.CREATED, null)));
 
         Game game = gameService.addLobbyToGame(gameId, lobby);
 
         verify(gameRepository).save(game);
         assertEquals(lobby, game.getLobby());
+    }
+
+    @Test
+    void addRoundToGame() {
+        UUID gameId = UUID.randomUUID();
+        Round round = mock(Round.class);
+        Game game = new Game();
+        when(gameRepository.save(any(Game.class))).thenAnswer(i -> i.getArguments()[0]);
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(game));
+
+        gameService.addRoundToGame(round, gameId);
+
+        verify(gameRepository).save(game);
+        assertEquals(round, game.getRounds().get(0));
     }
 }

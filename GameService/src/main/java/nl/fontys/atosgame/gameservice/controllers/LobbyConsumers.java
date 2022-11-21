@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
 public class LobbyConsumers {
 
     /**
-     * Id: C-55
+     * Id: C-57
      * Consumer for LobbyCreatedEvent
      * input topic: lobby-created-topic
      * output topic: -

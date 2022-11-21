@@ -2,6 +2,9 @@ package nl.fontys.atosgame.gameappbff.controller;
 
 import java.util.function.Function;
 import nl.fontys.atosgame.gameappbff.event.consumed.*;
+import nl.fontys.atosgame.gameappbff.model.RoundSettings;
+import nl.fontys.atosgame.gameappbff.service.RoundService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,14 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class RoundConsumers {
 
+    private RoundService roundService;
+
+    public RoundConsumers(
+            @Autowired RoundService roundService) {
+        this.roundService = roundService;
+    }
+
+
     /**
      * Id: C-55
      * Consumer for RoundCreatedEvent
@@ -29,8 +40,9 @@ public class RoundConsumers {
     @Bean
     public Function<Message<RoundCreatedEvent>, Void> handleRoundCreated() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            RoundCreatedEvent event = message.getPayload();
+            roundService.handleRoundCreatedEvent(event.getRound(), event.getGameId());
+            return null;
         };
     }
 

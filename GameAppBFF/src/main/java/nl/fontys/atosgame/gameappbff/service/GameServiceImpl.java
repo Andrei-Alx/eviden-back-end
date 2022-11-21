@@ -3,10 +3,12 @@ package nl.fontys.atosgame.gameappbff.service;
 import nl.fontys.atosgame.gameappbff.enums.GameStatus;
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
+import nl.fontys.atosgame.gameappbff.model.Round;
 import nl.fontys.atosgame.gameappbff.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -29,7 +31,7 @@ public class GameServiceImpl implements GameService{
      */
     @Override
     public Game handleGameCreated(UUID gameId) {
-        Game game = new Game(gameId, null, GameStatus.CREATED);
+        Game game = new Game(gameId, null, GameStatus.CREATED, new ArrayList<>());
         gameRepository.save(game);
         return game;
     }
@@ -75,6 +77,20 @@ public class GameServiceImpl implements GameService{
     public Game addLobbyToGame(UUID gameId, Lobby lobby) {
         Game game = gameRepository.findById(gameId).get();
         game.setLobby(lobby);
+        return gameRepository.save(game);
+    }
+
+    /**
+     * Add a round to a game in the database.
+     *
+     * @param round  The round to add.
+     * @param gameId The game to add the round to.
+     * @return The game with the added round.
+     */
+    @Override
+    public Game addRoundToGame(Round round, UUID gameId) {
+        Game game = gameRepository.findById(gameId).get();
+        game.addRound(round);
         return gameRepository.save(game);
     }
 }
