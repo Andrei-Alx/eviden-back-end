@@ -6,10 +6,13 @@ import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.roundservice.event.BaseEvent;
 import nl.fontys.atosgame.roundservice.model.Round;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoundCreatedEvent extends BaseEvent {
 
     private Round round;
+    private UUID gameId;
 }
