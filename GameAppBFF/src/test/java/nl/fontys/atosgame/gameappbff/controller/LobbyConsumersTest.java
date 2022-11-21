@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
 import nl.fontys.atosgame.gameappbff.event.consumed.LobbyCreatedEvent;
+import nl.fontys.atosgame.gameappbff.event.consumed.LobbyDeletedEvent;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.service.GameService;
 import nl.fontys.atosgame.gameappbff.service.LobbyService;

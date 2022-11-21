@@ -6,6 +6,8 @@ import nl.fontys.atosgame.gameappbff.repository.LobbyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 /**
  * Service for handling lobbies.
  * @author Eli
@@ -27,5 +29,15 @@ public class LobbyServiceImpl implements LobbyService {
     @Override
     public Lobby createLobby(Lobby lobby) {
         return lobbyRepository.save(lobby);
+    }
+
+    /**
+     * Delete a lobby in the database.
+     *
+     * @param lobbyId The lobby to delete.
+     */
+    @Override
+    public void deleteLobby(UUID lobbyId) {
+        lobbyRepository.deleteById(lobbyId);
     }
 }

@@ -88,8 +88,9 @@ public class LobbyConsumers {
     @Bean
     public Function<Message<LobbyDeletedEvent>, Void> handleLobbyDeleted() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            LobbyDeletedEvent event = message.getPayload();
+            lobbyService.deleteLobby(event.getLobbyId());
+            return null;
         };
     }
 }

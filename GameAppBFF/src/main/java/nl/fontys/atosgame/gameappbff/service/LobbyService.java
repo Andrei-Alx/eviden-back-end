@@ -4,6 +4,8 @@ import nl.fontys.atosgame.gameappbff.controller.LobbyConsumers;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 /**
  * Service for handling lobbies.
  */
@@ -14,4 +16,10 @@ public interface LobbyService {
      * @return The created lobby.
      */
     Lobby createLobby(Lobby lobby);
+
+    /**
+     * Delete a lobby in the database.
+     * @param lobbyId The lobby to delete.
+     */
+    void deleteLobby(UUID lobbyId);
 }

@@ -5,6 +5,8 @@ import nl.fontys.atosgame.gameappbff.repository.LobbyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -27,5 +29,14 @@ class LobbyServiceImplTest {
         Lobby result = lobbyService.createLobby(lobby);
 
         verify(lobbyRepository).save(lobby);
+    }
+
+    @Test
+    void deleteLobby() {
+        UUID lobbyId = UUID.randomUUID();
+
+        lobbyService.deleteLobby(lobbyId);
+
+        verify(lobbyRepository).deleteById(lobbyId);
     }
 }
