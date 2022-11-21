@@ -17,7 +17,6 @@ import org.hibernate.annotations.Type;
 public class Round {
 
     @Id
-    @GeneratedValue(generator = "UUID")
     @Type(type = "org.hibernate.type.UUIDCharType")
     @JsonProperty
     private UUID id;

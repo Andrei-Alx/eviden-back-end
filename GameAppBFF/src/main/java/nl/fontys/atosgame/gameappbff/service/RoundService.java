@@ -14,4 +14,11 @@ public interface RoundService {
      * @param gameId The id of the game to create the round for
      */
     void handleRoundCreatedEvent(Round round, UUID gameId);
+
+    /**
+     * Updates the round with the given id
+     * @param roundId The id of the round to update
+     * @param gameId The id of the game the round belongs to
+     */
+    Round startRound(UUID roundId, UUID gameId);
 }
