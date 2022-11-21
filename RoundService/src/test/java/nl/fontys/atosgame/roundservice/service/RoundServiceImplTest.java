@@ -126,9 +126,39 @@ class RoundServiceImplTest {
         );
         List<PlayerRound> playerRounds = new ArrayList<>(
             List.of(
-                new PlayerRound(null, playerIds.get(0), null, null, cards, 0, 0, null),
-                new PlayerRound(null, playerIds.get(1), null, null, cards, 0, 0, null),
-                new PlayerRound(null, playerIds.get(2), null, null, cards, 0, 0, null)
+                new PlayerRound(
+                    null,
+                    playerIds.get(0),
+                    null,
+                    null,
+                    null,
+                    cards,
+                    0,
+                    0,
+                    null
+                ),
+                new PlayerRound(
+                    null,
+                    playerIds.get(1),
+                    null,
+                    null,
+                    null,
+                    cards,
+                    0,
+                    0,
+                    null
+                ),
+                new PlayerRound(
+                    null,
+                    playerIds.get(2),
+                    null,
+                    null,
+                    null,
+                    cards,
+                    0,
+                    0,
+                    null
+                )
             )
         );
         List<UUID> cardIds = new ArrayList<>(

@@ -33,6 +33,10 @@ public class PlayerRound {
 
     @JsonProperty
     @OneToMany(cascade = CascadeType.PERSIST)
+    private List<Card> dislikedCards = new ArrayList<>();
+
+    @JsonProperty
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Card> pickedCards = new ArrayList<>();
 
     @ManyToMany(cascade = { CascadeType.PERSIST })

@@ -35,6 +35,11 @@ public class PlayerRound {
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonProperty
     @ManyToMany(cascade = CascadeType.PERSIST)
+    private List<Card> dislikedCards = new ArrayList<>();
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonProperty
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Card> pickedCards = new ArrayList<>();
 
     @LazyCollection(LazyCollectionOption.FALSE)

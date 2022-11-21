@@ -30,7 +30,7 @@ class EventFactoryTest {
         RoundCreatedEvent event = EventFactory.createRoundCreatedEvent(
             "RoundService",
             round,
-               gameId
+            gameId
         );
 
         assertEquals("RoundCreated", event.getType());

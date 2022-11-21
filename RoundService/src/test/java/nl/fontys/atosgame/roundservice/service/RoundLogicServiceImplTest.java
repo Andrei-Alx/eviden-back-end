@@ -65,15 +65,6 @@ class RoundLogicServiceImplTest {
                     new ArrayList<>(),
                     new ArrayList<>(),
                     new ArrayList<>(),
-                    0,
-                    0,
-                    "test"
-                ),
-                new PlayerRound(
-                    UUID.randomUUID(),
-                    UUID.randomUUID(),
-                    new ArrayList<>(),
-                    new ArrayList<>(),
                     new ArrayList<>(),
                     0,
                     0,
@@ -82,6 +73,18 @@ class RoundLogicServiceImplTest {
                 new PlayerRound(
                     UUID.randomUUID(),
                     UUID.randomUUID(),
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    0,
+                    0,
+                    "test"
+                ),
+                new PlayerRound(
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    new ArrayList<>(),
                     new ArrayList<>(),
                     new ArrayList<>(),
                     new ArrayList<>(),
@@ -126,15 +129,6 @@ class RoundLogicServiceImplTest {
                     new ArrayList<>(),
                     new ArrayList<>(),
                     new ArrayList<>(),
-                    0,
-                    0,
-                    "test"
-                ),
-                new PlayerRound(
-                    UUID.randomUUID(),
-                    UUID.randomUUID(),
-                    new ArrayList<>(),
-                    new ArrayList<>(),
                     new ArrayList<>(),
                     0,
                     0,
@@ -143,6 +137,18 @@ class RoundLogicServiceImplTest {
                 new PlayerRound(
                     UUID.randomUUID(),
                     UUID.randomUUID(),
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    0,
+                    0,
+                    "test"
+                ),
+                new PlayerRound(
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    new ArrayList<>(),
                     new ArrayList<>(),
                     new ArrayList<>(),
                     new ArrayList<>(),
