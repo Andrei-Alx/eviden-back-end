@@ -1,7 +1,9 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
+import java.util.List;
 import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.dto.*;
+import nl.fontys.atosgame.gameappbff.model.Card;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -93,11 +95,10 @@ public class GameSocketController {
     /**
      * S-11
      * Send a message to the game that the cards have been distributed
-     * @param cardsDto
      * @return
      */
-    public CardsDto cardsDistributed(String gameId, CardsDto cardsDto) {
-        //TODO
+    public CardsDto cardsDistributed(UUID gameId, UUID playerId, List<Card> cards) {
+        CardsDto cardsDto = new CardsDto(playerId, cards);
         template.convertAndSend(
             String.format("/socket/gameapp/%s/cardsDistributed", gameId),
             cardsDto

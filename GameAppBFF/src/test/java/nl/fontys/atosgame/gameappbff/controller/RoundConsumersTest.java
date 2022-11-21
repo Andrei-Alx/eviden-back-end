@@ -3,6 +3,7 @@ package nl.fontys.atosgame.gameappbff.controller;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import nl.fontys.atosgame.gameappbff.event.consumed.PlayerCardsDistributedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerPhaseEndedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerPhaseStartedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.RoundCreatedEvent;
@@ -94,6 +95,23 @@ class RoundConsumersTest {
                 event.getRoundId(),
                 event.getGameId(),
                 event.getPhaseNumber()
+            );
+    }
+
+    @Test
+    void handlePlayerCardsDistributed() {
+        Message<PlayerCardsDistributedEvent> message = mock(Message.class);
+        PlayerCardsDistributedEvent event = mock(PlayerCardsDistributedEvent.class);
+        when(message.getPayload()).thenReturn(event);
+
+        roundConsumers.handlePlayerCardsDistributed().apply(message);
+
+        verify(playerRoundService)
+            .distributeCards(
+                event.getPlayerId(),
+                event.getRoundId(),
+                event.getGameId(),
+                event.getCardIds()
             );
     }
 }

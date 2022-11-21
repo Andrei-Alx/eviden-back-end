@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.gameappbff.service;
 
+import java.util.List;
 import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.model.Card;
 
@@ -25,4 +26,11 @@ public interface CardService {
      * @param cardId The id of the card to delete.
      */
     void handleCardDeleted(UUID cardId);
+
+    /**
+     * Get a list card by ids
+     * @param cardIds The ids of the cards
+     * @return The list of cards
+     */
+    List<Card> getCards(List<UUID> cardIds);
 }

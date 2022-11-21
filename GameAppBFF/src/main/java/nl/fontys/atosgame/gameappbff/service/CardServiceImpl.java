@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.gameappbff.service;
 
+import java.util.List;
 import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.model.Card;
 import nl.fontys.atosgame.gameappbff.repository.CardRepository;
@@ -47,5 +48,16 @@ public class CardServiceImpl implements CardService {
     @Override
     public void handleCardDeleted(UUID cardId) {
         cardRepository.deleteById(cardId);
+    }
+
+    /**
+     * Get a list card by ids
+     *
+     * @param cardIds The ids of the cards
+     * @return The list of cards
+     */
+    @Override
+    public List<Card> getCards(List<UUID> cardIds) {
+        return cardRepository.findAllById(cardIds);
     }
 }
