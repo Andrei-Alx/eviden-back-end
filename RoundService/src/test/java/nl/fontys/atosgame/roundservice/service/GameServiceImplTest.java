@@ -153,6 +153,7 @@ class GameServiceImplTest {
         // Act
         gameService.checkForNextRound(game.getId());
 
+        // TODO: verify that the game is ended
         verify(roundService).endRound(thirdRound.getId(), game.getId());
         verify(roundService, never())
             .startRound(any(UUID.class), any(List.class), any(UUID.class));
@@ -185,7 +186,7 @@ class GameServiceImplTest {
     }
 
     @Test
-    void checkForNextRoundAllFinished() {
+    void checkForNextRoundAllFinishedSoThrowsException() {
         List<Round> rounds = mock(List.class);
         Game game = spy(new Game(UUID.randomUUID(), rounds, mock(Lobby.class)));
         doReturn(Optional.empty()).when(game).getCurrentRound();
@@ -194,7 +195,10 @@ class GameServiceImplTest {
         when(gameRepository.save(any(Game.class))).thenAnswer(i -> i.getArguments()[0]);
 
         // Act
-        gameService.checkForNextRound(game.getId());
+        assertThrows(
+            IllegalStateException.class,
+            () -> gameService.checkForNextRound(game.getId())
+        );
 
         verify(roundService, never()).endRound(any(UUID.class), any(UUID.class));
         verify(roundService, never())

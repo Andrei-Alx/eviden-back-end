@@ -127,7 +127,7 @@ public class GameServiceImpl implements GameService {
         Optional<Round> currentRound = game.getCurrentRound();
         // If there is no current round, the game is done
         if (currentRound.isEmpty()) {
-            return;
+            throw new IllegalStateException("Game is already done, but checkForNextRound was called. This means the game appears to be done, but some logic still happened.");
         }
 
         // If the current round is done, start the next round
@@ -144,6 +144,9 @@ public class GameServiceImpl implements GameService {
                     game.getLobby().getPlayerIds(),
                     gameId
                 );
+            } else {
+                // Game is done
+                // TODO: Publish event, change status?
             }
             gameRepository.save(game);
         }
