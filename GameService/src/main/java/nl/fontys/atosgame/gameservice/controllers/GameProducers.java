@@ -7,7 +7,6 @@ import nl.fontys.atosgame.gameservice.event.EventFactory;
 import nl.fontys.atosgame.gameservice.event.produced.GameCreatedEvent;
 import nl.fontys.atosgame.gameservice.event.produced.GameEndedEvent;
 import nl.fontys.atosgame.gameservice.event.produced.GameStartedEvent;
-import nl.fontys.atosgame.gameservice.model.Game;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
@@ -35,6 +34,7 @@ public class GameProducers {
         return input -> {
             GameCreatedEvent event = EventFactory.createGameCreatedEvent(
                 input.getGameId(),
+                input.getTitle(),
                 input.getCompanyType(),
                 input.getRoundSettings(),
                 input.getLobbySettings()

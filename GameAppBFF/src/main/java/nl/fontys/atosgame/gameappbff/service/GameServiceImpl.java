@@ -10,6 +10,8 @@ import nl.fontys.atosgame.gameappbff.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+
 /**
  * Service for handling games.
  * @author Aniek
@@ -17,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class GameServiceImpl implements GameService {
 
-    private GameRepository gameRepository;
+    private final GameRepository gameRepository;
 
     public GameServiceImpl(@Autowired GameRepository gameRepository) {
         this.gameRepository = gameRepository;
@@ -26,11 +28,11 @@ public class GameServiceImpl implements GameService {
     /**
      * Create a new game in the database.
      *
-     * @param gameId The game to create.
+     * @param gameId, title The game to create.
      */
     @Override
-    public Game handleGameCreated(UUID gameId) {
-        Game game = new Game(gameId, null, GameStatus.CREATED, new ArrayList<>());
+    public Game handleGameCreated(UUID gameId, String title) {
+        Game game = new Game(gameId, title, null, GameStatus.CREATED, new ArrayList<>());
         gameRepository.save(game);
         return game;
     }
@@ -48,6 +50,9 @@ public class GameServiceImpl implements GameService {
             game.setStatus(GameStatus.STARTED);
             gameRepository.save(game);
         }
+        else {
+            throw new EntityNotFoundException("Game not found");
+        }
 
         return game;
     }
@@ -59,9 +64,16 @@ public class GameServiceImpl implements GameService {
      */
     @Override
     public Game handleGameEnded(UUID gameId) {
-        Game game = gameRepository.findById(gameId).get();
-        game.setStatus(GameStatus.ENDED);
-        gameRepository.save(game);
+        Game game = null;
+        if (gameRepository.findById(gameId).isPresent()) {
+            game = gameRepository.findById(gameId).get();
+            game.setStatus(GameStatus.ENDED);
+            gameRepository.save(game);
+        }
+        else {
+            throw new EntityNotFoundException("Game not found");
+        }
+
         return game;
     }
 
@@ -74,9 +86,17 @@ public class GameServiceImpl implements GameService {
      */
     @Override
     public Game addLobbyToGame(UUID gameId, Lobby lobby) {
-        Game game = gameRepository.findById(gameId).get();
-        game.setLobby(lobby);
-        return gameRepository.save(game);
+        Game game = null;
+        if (gameRepository.findById(gameId).isPresent()) {
+            game = gameRepository.findById(gameId).get();
+            game.setLobby(lobby);
+            gameRepository.save(game);
+        }
+        else {
+            throw new EntityNotFoundException("Game not found");
+        }
+
+        return game;
     }
 
     /**
@@ -88,8 +108,16 @@ public class GameServiceImpl implements GameService {
      */
     @Override
     public Game addRoundToGame(Round round, UUID gameId) {
-        Game game = gameRepository.findById(gameId).get();
-        game.addRound(round);
-        return gameRepository.save(game);
+        Game game = null;
+        if(gameRepository.findById(gameId).isPresent()) {
+            game = gameRepository.findById(gameId).get();
+            game.getRounds().add(round);
+            gameRepository.save(game);
+        }
+        else {
+            throw new EntityNotFoundException("Game not found");
+        }
+
+        return game;
     }
 }

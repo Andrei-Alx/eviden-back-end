@@ -12,9 +12,9 @@ import nl.fontys.atosgame.gameappbff.model.Round;
 public interface GameService {
     /**
      * Create a new game in the database.
-     * @param gameId The game to create.
+     * @param gameId, title The game to create.
      */
-    Game handleGameCreated(UUID gameId);
+    Game handleGameCreated(UUID gameId, String title);
 
     /**
      * Start a game in the database.

@@ -16,6 +16,7 @@ public class EventFactory {
 
     public static GameCreatedEvent createGameCreatedEvent(
         UUID gameId,
+        String title,
         String companyType,
         List<RoundSettings> roundSettings,
         LobbySettings lobbySettings

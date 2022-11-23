@@ -37,6 +37,7 @@ class GameServiceImplTest {
 
     @Test
     void createGameCardSetsExist() {
+        String title = "titleGame";
         String companyType = "companyType";
         LobbySettings lobbySettings = new LobbySettings();
         List<RoundSettings> roundSettings = new ArrayList<>(
@@ -50,14 +51,15 @@ class GameServiceImplTest {
             return game;
         });
 
-        Game result = gameService.createGame("companyType", lobbySettings, roundSettings);
+        Game result = gameService.createGame("titleGame", "companyType", lobbySettings, roundSettings);
 
         assertNotNull(result.getId());
+        assertEquals(title, result.getTitle());
         assertEquals(companyType, result.getCompanyType());
         assertNull(result.getLobby());
         assertNull(result.getRounds());
         verify(gameRepository, times(1)).save(any());
-        verify(streamBridge, times(1)).send("produceGameCreated-in-0", new CreateGameEventDto(result.getId(), companyType, roundSettings, lobbySettings));
+        verify(streamBridge, times(1)).send("produceGameCreated-in-0", new CreateGameEventDto(result.getId(), title, companyType, roundSettings, lobbySettings));
     }
 
     @Test
@@ -70,6 +72,6 @@ class GameServiceImplTest {
         );
         when(cardSetService.getCardSet(any())).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> gameService.createGame("companyType", lobbySettings, roundSettings));
+        assertThrows(IllegalArgumentException.class, () -> gameService.createGame("titleGame", "companyType", lobbySettings, roundSettings));
     }
 }

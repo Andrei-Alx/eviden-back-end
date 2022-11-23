@@ -12,10 +12,11 @@ import java.util.List;
 public interface GameService {
     /**
      * Creates a new game
+     * @param title The title of the game
      * @param companyType The type of company
      * @param lobbySettings The settings for the lobby
      * @param roundSettings The settings for the rounds
      * @return The created game
      */
-    Game createGame(String companyType, LobbySettings lobbySettings, List<RoundSettings> roundSettings);
+    Game createGame(String title, String companyType, LobbySettings lobbySettings, List<RoundSettings> roundSettings);
 }
