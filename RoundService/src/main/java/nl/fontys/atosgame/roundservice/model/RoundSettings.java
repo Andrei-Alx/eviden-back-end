@@ -1,15 +1,11 @@
 package nl.fontys.atosgame.roundservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.roundservice.enums.ShuffleMethod;
-import org.hibernate.annotations.Type;
 
 @Embeddable
 @Data
@@ -24,7 +20,7 @@ public class RoundSettings {
     private int nrOfLikedCards;
 
     @JsonProperty
-    private int nrOfPickedCards;
+    private int nrOfSelectedCards;
 
     @JsonProperty
     private ShuffleMethod shuffleMethod;

@@ -18,6 +18,7 @@ public class LobbyServiceImpl implements LobbyService {
     public LobbyServiceImpl(@Autowired LobbyRepository lobbyRepository) {
         this.lobbyRepository = lobbyRepository;
     }
+
     /**
      * Create a new lobby in the database.
      *

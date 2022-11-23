@@ -33,13 +33,17 @@ public class PlayerRound {
 
     @JsonProperty
     @OneToMany(cascade = CascadeType.PERSIST)
-    private List<Card> pickedCards = new ArrayList<>();
+    private List<Card> dislikedCards = new ArrayList<>();
+
+    @JsonProperty
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<Card> selectedCards = new ArrayList<>();
 
     @ManyToMany(cascade = { CascadeType.PERSIST })
     private List<Card> distributedCards = new ArrayList<>();
 
     private int nrOfLikedCards;
-    private int nrOfPickedCards;
+    private int nrOfSelectedCards;
     private String importantTag;
 
     /**
@@ -50,7 +54,7 @@ public class PlayerRound {
     public boolean isDone() {
         return (
             likedCards.size() == nrOfLikedCards &&
-            pickedCards.size() == nrOfPickedCards &&
+            selectedCards.size() == nrOfSelectedCards &&
             this.hasDeterminateResult()
         );
     }
@@ -62,7 +66,7 @@ public class PlayerRound {
     public PlayerRoundPhase getPhase() {
         if (likedCards.size() < nrOfLikedCards) {
             return PlayerRoundPhase.LIKING;
-        } else if (pickedCards.size() < nrOfPickedCards) {
+        } else if (selectedCards.size() < nrOfSelectedCards) {
             return PlayerRoundPhase.PICKING;
         } else {
             return PlayerRoundPhase.RESULT;
@@ -78,7 +82,7 @@ public class PlayerRound {
     public boolean hasDeterminateResult() {
         // Count how often each tag is picked
         Map<String, Integer> tagCount = new HashMap<>();
-        for (Card card : pickedCards) {
+        for (Card card : selectedCards) {
             for (Tag tag : card.getTags()) {
                 if (tag.getTagKey().equals(importantTag)) {
                     tagCount.put(

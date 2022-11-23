@@ -22,7 +22,7 @@ public class RoundSettings {
     private int nrOfLikedCards;
 
     @JsonProperty
-    private int nrOfPickedCards;
+    private int nrOfSelectedCards;
 
     @JsonProperty
     private String shuffleMethod;

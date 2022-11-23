@@ -15,7 +15,7 @@ class PlayerRoundTest {
     @Test
     void hasDeterminateResult() {
         PlayerRound playerRound = new PlayerRound();
-        List<Card> pickedCards = new ArrayList<>(
+        List<Card> selectedCards = new ArrayList<>(
             List.of(
                 new Card(
                     UUID.randomUUID(),
@@ -31,7 +31,7 @@ class PlayerRoundTest {
                 )
             )
         );
-        playerRound.setPickedCards(pickedCards);
+        playerRound.setSelectedCards(selectedCards);
         playerRound.setImportantTag("color");
 
         assertTrue(playerRound.hasDeterminateResult());
@@ -40,7 +40,7 @@ class PlayerRoundTest {
     @Test
     void hasDeterminateResultIsIndeterminate() {
         PlayerRound playerRound = new PlayerRound();
-        List<Card> pickedCards = new ArrayList<>(
+        List<Card> selectedCards = new ArrayList<>(
             List.of(
                 new Card(
                     UUID.randomUUID(),
@@ -60,7 +60,7 @@ class PlayerRoundTest {
                 )
             )
         );
-        playerRound.setPickedCards(pickedCards);
+        playerRound.setSelectedCards(selectedCards);
         playerRound.setImportantTag("color");
 
         assertFalse(playerRound.hasDeterminateResult());
@@ -69,7 +69,7 @@ class PlayerRoundTest {
     @Test
     void hasDeterminateResultOneCard() {
         PlayerRound playerRound = new PlayerRound();
-        List<Card> pickedCards = new ArrayList<>(
+        List<Card> selectedCards = new ArrayList<>(
             List.of(
                 new Card(
                     UUID.randomUUID(),
@@ -77,7 +77,7 @@ class PlayerRoundTest {
                 )
             )
         );
-        playerRound.setPickedCards(pickedCards);
+        playerRound.setSelectedCards(selectedCards);
         playerRound.setImportantTag("color");
 
         assertTrue(playerRound.hasDeterminateResult());
@@ -86,8 +86,8 @@ class PlayerRoundTest {
     @Test
     void hasDeterminateResultNoCards() {
         PlayerRound playerRound = new PlayerRound();
-        List<Card> pickedCards = new ArrayList<>();
-        playerRound.setPickedCards(pickedCards);
+        List<Card> selectedCards = new ArrayList<>();
+        playerRound.setSelectedCards(selectedCards);
         playerRound.setImportantTag("color");
 
         assertTrue(playerRound.hasDeterminateResult());
@@ -96,7 +96,7 @@ class PlayerRoundTest {
     @Test
     void hasDeterminateResultWithMissingTags() {
         PlayerRound playerRound = new PlayerRound();
-        List<Card> pickedCards = new ArrayList<>(
+        List<Card> selectedCards = new ArrayList<>(
             List.of(
                 new Card(
                     UUID.randomUUID(),
@@ -109,7 +109,7 @@ class PlayerRoundTest {
                 )
             )
         );
-        playerRound.setPickedCards(pickedCards);
+        playerRound.setSelectedCards(selectedCards);
         playerRound.setImportantTag("color");
 
         assertTrue(playerRound.hasDeterminateResult());
@@ -118,10 +118,10 @@ class PlayerRoundTest {
     @Test
     void isDone() {
         PlayerRound playerRound = spy(new PlayerRound());
-        playerRound.setPickedCards(
+        playerRound.setSelectedCards(
             new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>())))
         );
-        playerRound.setNrOfPickedCards(1);
+        playerRound.setNrOfSelectedCards(1);
         playerRound.setLikedCards(
             new ArrayList<>(
                 List.of(
@@ -139,10 +139,10 @@ class PlayerRoundTest {
     @Test
     void isDoneNotDoneBecauseIndeterminate() {
         PlayerRound playerRound = spy(new PlayerRound());
-        playerRound.setPickedCards(
+        playerRound.setSelectedCards(
             new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>())))
         );
-        playerRound.setNrOfPickedCards(1);
+        playerRound.setNrOfSelectedCards(1);
         playerRound.setLikedCards(
             new ArrayList<>(
                 List.of(
@@ -160,10 +160,10 @@ class PlayerRoundTest {
     @Test
     void isDoneNotDoneBecauseNotEnoughLikedCards() {
         PlayerRound playerRound = spy(new PlayerRound());
-        playerRound.setPickedCards(
+        playerRound.setSelectedCards(
             new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>())))
         );
-        playerRound.setNrOfPickedCards(1);
+        playerRound.setNrOfSelectedCards(1);
         playerRound.setLikedCards(
             new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>())))
         );
@@ -174,12 +174,12 @@ class PlayerRoundTest {
     }
 
     @Test
-    void isDoneNotDoneBecauseNotEnoughPickedCards() {
+    void isDoneNotDoneBecauseNotEnoughSelectedCards() {
         PlayerRound playerRound = spy(new PlayerRound());
-        playerRound.setPickedCards(
+        playerRound.setSelectedCards(
             new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>())))
         );
-        playerRound.setNrOfPickedCards(2);
+        playerRound.setNrOfSelectedCards(2);
         playerRound.setLikedCards(
             new ArrayList<>(
                 List.of(
@@ -201,7 +201,7 @@ class PlayerRoundTest {
             new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>())))
         );
         playerRound.setNrOfLikedCards(2);
-        playerRound.setPickedCards(
+        playerRound.setSelectedCards(
             new ArrayList<>(
                 List.of(
                     new Card(UUID.randomUUID(), new ArrayList<>()),
@@ -210,7 +210,7 @@ class PlayerRoundTest {
                 )
             )
         );
-        playerRound.setNrOfPickedCards(4);
+        playerRound.setNrOfSelectedCards(4);
 
         assertEquals(PlayerRoundPhase.LIKING, playerRound.getPhase());
     }
@@ -222,7 +222,7 @@ class PlayerRoundTest {
             new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>())))
         );
         playerRound.setNrOfLikedCards(1);
-        playerRound.setPickedCards(
+        playerRound.setSelectedCards(
             new ArrayList<>(
                 List.of(
                     new Card(UUID.randomUUID(), new ArrayList<>()),
@@ -230,7 +230,7 @@ class PlayerRoundTest {
                 )
             )
         );
-        playerRound.setNrOfPickedCards(4);
+        playerRound.setNrOfSelectedCards(4);
 
         assertEquals(PlayerRoundPhase.PICKING, playerRound.getPhase());
     }
@@ -247,7 +247,7 @@ class PlayerRoundTest {
             )
         );
         playerRound.setNrOfLikedCards(2);
-        playerRound.setPickedCards(
+        playerRound.setSelectedCards(
             new ArrayList<>(
                 List.of(
                     new Card(UUID.randomUUID(), new ArrayList<>()),
@@ -256,7 +256,7 @@ class PlayerRoundTest {
                 )
             )
         );
-        playerRound.setNrOfPickedCards(3);
+        playerRound.setNrOfSelectedCards(3);
         when(playerRound.hasDeterminateResult()).thenReturn(true);
 
         assertEquals(PlayerRoundPhase.RESULT, playerRound.getPhase());

@@ -1,11 +1,10 @@
 package nl.fontys.atosgame.gameappbff.service;
 
+import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.model.CardSet;
 import nl.fontys.atosgame.gameappbff.repository.CardSetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 /**
  * Service for handling cardsets.

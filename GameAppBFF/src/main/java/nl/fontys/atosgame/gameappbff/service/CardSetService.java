@@ -1,8 +1,7 @@
 package nl.fontys.atosgame.gameappbff.service;
 
-import nl.fontys.atosgame.gameappbff.model.CardSet;
-
 import java.util.UUID;
+import nl.fontys.atosgame.gameappbff.model.CardSet;
 
 /**
  * Service for handling cardsets.

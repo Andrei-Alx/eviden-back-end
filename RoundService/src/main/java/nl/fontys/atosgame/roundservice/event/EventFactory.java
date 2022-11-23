@@ -23,7 +23,11 @@ public class EventFactory {
      * @param gameId The id of the game the round was created for
      * @return The created event
      */
-    public static RoundCreatedEvent createRoundCreatedEvent(String service, Round round, UUID gameId) {
+    public static RoundCreatedEvent createRoundCreatedEvent(
+        String service,
+        Round round,
+        UUID gameId
+    ) {
         RoundCreatedEvent event = new RoundCreatedEvent();
         event = (RoundCreatedEvent) initializeBaseEvent(event, "RoundCreated", service);
         event.setRound(round);

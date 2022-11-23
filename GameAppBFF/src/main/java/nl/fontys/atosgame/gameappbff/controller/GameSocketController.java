@@ -1,7 +1,9 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
+import java.util.List;
 import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.dto.*;
+import nl.fontys.atosgame.gameappbff.model.Card;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -24,14 +26,20 @@ public class GameSocketController {
     @Autowired
     private SimpMessagingTemplate template;
 
+    public GameSocketController(@Autowired SimpMessagingTemplate template) {
+        this.template = template;
+    }
+
     /**
      * S-6
      * Send a message to the game that a card has been liked
-     * @param cardLikedDto
+     * @param gameId the id of the game
+     * @param playerId the id of the player
+     * @param card the card that has been liked
      * @return
      */
-    public CardLikedDto cardLiked(String gameId, CardLikedDto cardLikedDto) {
-        //TODO
+    public CardLikedDto cardLiked(UUID gameId, UUID playerId, Card card) {
+        CardLikedDto cardLikedDto = new CardLikedDto(playerId, card);
         template.convertAndSend(
             String.format("/socket/gameapp/%s/cardLiked", gameId),
             cardLikedDto
@@ -42,11 +50,13 @@ public class GameSocketController {
     /**
      * S-7
      * Send a message to the game that a card has been disliked
-     * @param cardDislikedDto
+     * @param gameId the id of the game
+     * @param playerId the id of the player
+     * @param card the card that has been disliked
      * @return
      */
-    public CardDislikedDto cardDisliked(String gameId, CardDislikedDto cardDislikedDto) {
-        //TODO
+    public CardDislikedDto cardDisliked(UUID gameId, UUID playerId, Card card) {
+        CardDislikedDto cardDislikedDto = new CardDislikedDto(playerId, card);
         template.convertAndSend(
             String.format("/socket/gameapp/%s/cardDisliked", gameId),
             cardDislikedDto
@@ -57,11 +67,13 @@ public class GameSocketController {
     /**
      * S-8
      * Send a message to the game that the cards have been selected
-     * @param cardsDto
+     * @param gameId the id of the game
+     * @param playerId the id of the player
+     * @param cards the cards that have been selected
      * @return
      */
-    public CardsDto cardsSelected(String gameId, CardsDto cardsDto) {
-        //TODO
+    public CardsDto cardsSelected(UUID gameId, UUID playerId, List<Card> cards) {
+        CardsDto cardsDto = new CardsDto(playerId, cards);
         template.convertAndSend(
             String.format("/socket/gameapp/%s/cardsSelected", gameId),
             cardsDto
@@ -72,11 +84,13 @@ public class GameSocketController {
     /**
      * S-9
      * Send a message to the game that the player has changed phase
-     * @param playerPhaseDto
-     * @return
+     * @param gameId The id of the game
+     * @param playerId The id of the player
+     * @param phaseNumber The phase number
      */
-    public PlayerPhaseDto playerPhase(String gameId, PlayerPhaseDto playerPhaseDto) {
+    public PlayerPhaseDto playerPhase(UUID gameId, UUID playerId, int phaseNumber) {
         //TODO
+        PlayerPhaseDto playerPhaseDto = new PlayerPhaseDto(playerId, phaseNumber);
         template.convertAndSend(
             String.format("/socket/gameapp/%s/playerPhase", gameId),
             playerPhaseDto
@@ -87,11 +101,10 @@ public class GameSocketController {
     /**
      * S-11
      * Send a message to the game that the cards have been distributed
-     * @param cardsDto
      * @return
      */
-    public CardsDto cardsDistributed(String gameId, CardsDto cardsDto) {
-        //TODO
+    public CardsDto cardsDistributed(UUID gameId, UUID playerId, List<Card> cards) {
+        CardsDto cardsDto = new CardsDto(playerId, cards);
         template.convertAndSend(
             String.format("/socket/gameapp/%s/cardsDistributed", gameId),
             cardsDto
@@ -117,10 +130,24 @@ public class GameSocketController {
      * @param roundId
      * @return
      */
-    public UUID roundStarted(String gameId, UUID roundId) {
-        //TODO
+    public UUID roundStarted(UUID gameId, UUID roundId) {
         template.convertAndSend(
             String.format("/socket/gameapp/%s/roundStarted", gameId),
+            roundId
+        );
+        return roundId;
+    }
+
+    /**
+     * S-14
+     * Send a message to the game that the round has ended
+     * @param gameId The id of the game
+     * @param roundId The id of the round
+     * @return The id of the round
+     */
+    public UUID roundEnded(UUID gameId, UUID roundId) {
+        template.convertAndSend(
+            String.format("/socket/gameapp/%s/roundEnded", gameId),
             roundId
         );
         return roundId;

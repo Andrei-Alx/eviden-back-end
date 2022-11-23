@@ -1,7 +1,7 @@
 package nl.fontys.atosgame.gameappbff.enums;
 
-public enum GameStatus {
+public enum RoundStatus {
     CREATED,
-    STARTED,
-    ENDED,
+    IN_PROGRESS,
+    FINISHED,
 }

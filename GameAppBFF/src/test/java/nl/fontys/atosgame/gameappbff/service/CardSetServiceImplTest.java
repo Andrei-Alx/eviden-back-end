@@ -1,20 +1,19 @@
 package nl.fontys.atosgame.gameappbff.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.model.Card;
 import nl.fontys.atosgame.gameappbff.model.CardSet;
 import nl.fontys.atosgame.gameappbff.repository.CardSetRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.stream.function.StreamBridge;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 class CardSetServiceImplTest {
 
@@ -43,7 +42,7 @@ class CardSetServiceImplTest {
     }
 
     @Test
-    void updateCardSet(){
+    void updateCardSet() {
         UUID cardSetId = UUID.randomUUID();
         String name = "testCardSet";
         String type = "testType";
@@ -56,7 +55,7 @@ class CardSetServiceImplTest {
     }
 
     @Test
-    void deleteCardSet(){
+    void deleteCardSet() {
         UUID cardSetId = UUID.randomUUID();
         String name = "testCardSet";
         String type = "testType";

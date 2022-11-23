@@ -166,7 +166,7 @@ public class RoundServiceImpl implements RoundService {
         RoundSettings settings = new RoundSettings(
             roundSettings.isShowPersonalOrGroupResults(),
             roundSettings.getNrOfLikedCards(),
-            roundSettings.getNrOfPickedCards(),
+            roundSettings.getNrOfSelectedCards(),
             roundSettings.getShuffleMethod(),
             roundSettings.isShowSameCardOrder(),
             null

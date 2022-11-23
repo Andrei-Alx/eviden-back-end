@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -23,10 +25,12 @@ public class Card {
     @JsonProperty
     private UUID id;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
     @JsonProperty
     private Collection<Tag> tags;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
     @JsonProperty
     private Collection<Translation> translations;
