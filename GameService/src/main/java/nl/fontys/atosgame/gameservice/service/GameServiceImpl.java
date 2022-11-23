@@ -34,7 +34,7 @@ public class GameServiceImpl implements GameService {
 
     /**
      * Creates a new game
-     *
+     * @param title The title of the game
      * @param companyType   The type of company
      * @param lobbySettings The settings for the lobby
      * @param roundSettings The settings for the rounds

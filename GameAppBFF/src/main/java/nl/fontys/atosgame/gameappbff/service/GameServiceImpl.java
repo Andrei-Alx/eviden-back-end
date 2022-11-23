@@ -10,6 +10,8 @@ import nl.fontys.atosgame.gameappbff.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+
 /**
  * Service for handling games.
  * @author Aniek
@@ -48,6 +50,9 @@ public class GameServiceImpl implements GameService {
             game.setStatus(GameStatus.STARTED);
             gameRepository.save(game);
         }
+        else {
+            throw new EntityNotFoundException("Game not found");
+        }
 
         return game;
     }
@@ -64,6 +69,9 @@ public class GameServiceImpl implements GameService {
             game = gameRepository.findById(gameId).get();
             game.setStatus(GameStatus.ENDED);
             gameRepository.save(game);
+        }
+        else {
+            throw new EntityNotFoundException("Game not found");
         }
 
         return game;
@@ -84,6 +92,9 @@ public class GameServiceImpl implements GameService {
             game.setLobby(lobby);
             gameRepository.save(game);
         }
+        else {
+            throw new EntityNotFoundException("Game not found");
+        }
 
         return game;
     }
@@ -102,6 +113,9 @@ public class GameServiceImpl implements GameService {
             game = gameRepository.findById(gameId).get();
             game.getRounds().add(round);
             gameRepository.save(game);
+        }
+        else {
+            throw new EntityNotFoundException("Game not found");
         }
 
         return game;
