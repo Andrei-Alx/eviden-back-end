@@ -48,7 +48,6 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
         playerRound.addLikedCard(card);
         playerRound = playerRoundRepository.save(playerRound);
 
-        // TODO: produce event
         streamBridge.send("producePlayerLikedCard-in-0", new CardLikedEventDto(playerRound.getPlayerId(), gameId, roundId, cardId));
         return playerRound;
     }
@@ -69,7 +68,6 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
         playerRound.addDislikedCard(card);
         playerRound = playerRoundRepository.save(playerRound);
 
-        // TODO: produce event
         streamBridge.send("producePlayerDislikedCard-in-0", new CardDislikedEventDto(playerRound.getPlayerId(), gameId, roundId, cardId));
         return playerRound;
     }
@@ -90,7 +88,6 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
         playerRound.addSelectedCards(List.copyOf(cards));
         playerRound = playerRoundRepository.save(playerRound);
 
-        // TODO: produce event
         streamBridge.send("producePlayerSelectedCards-in-0", new CardsSelectedEventDto(playerRound.getPlayerId(), cardIds, roundId, gameId));
         return playerRound;
     }
