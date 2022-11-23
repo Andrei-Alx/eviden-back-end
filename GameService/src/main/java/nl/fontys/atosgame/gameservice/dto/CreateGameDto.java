@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateGameDto {
+    private String title;
     private String companyType;
     private LobbySettings lobbySettings;
     private List<RoundSettings> roundSettings;

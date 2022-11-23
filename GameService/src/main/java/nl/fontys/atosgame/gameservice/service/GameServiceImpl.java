@@ -41,7 +41,7 @@ public class GameServiceImpl implements GameService {
      * @return The created game
      */
     @Override
-    public Game createGame(String companyType, LobbySettings lobbySettings, List<RoundSettings> roundSettings) {
+    public Game createGame(String title, String companyType, LobbySettings lobbySettings, List<RoundSettings> roundSettings) {
         // Check if all cardsets exist
         for (RoundSettings roundSetting : roundSettings) {
             cardSetService.getCardSet(roundSetting.getCardSetId()).orElseThrow(() -> new IllegalArgumentException("CardSet not found"));
@@ -49,9 +49,10 @@ public class GameServiceImpl implements GameService {
         // Create game
         Game game = new Game();
         game.setCompanyType(companyType);
+        game.setTitle(title);
         game = gameRepository.save(game);
         // TODO Produce event
-        CreateGameEventDto createGameEventDto = new CreateGameEventDto(game.getId(), companyType, roundSettings, lobbySettings);
+        CreateGameEventDto createGameEventDto = new CreateGameEventDto(game.getId(), title, companyType, roundSettings, lobbySettings);
         streamBridge.send("produceGameCreated-in-0", createGameEventDto);
         return game;
     }

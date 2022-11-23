@@ -17,6 +17,7 @@ class GameProducersTest {
     void produceGameCreated() {
         CreateGameEventDto dto = new CreateGameEventDto(
             UUID.randomUUID(),
+            "titleGame",
             "companyType",
             new ArrayList<>(),
             new LobbySettings()

@@ -18,6 +18,7 @@ public class Game {
     @GeneratedValue(generator = "UUID")
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
+    private String title;
     @OneToOne
     private Lobby lobby;
     @OneToMany

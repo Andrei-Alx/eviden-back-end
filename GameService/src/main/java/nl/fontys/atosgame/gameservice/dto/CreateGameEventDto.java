@@ -14,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CreateGameEventDto {
     private UUID gameId;
+    private String title;
     private String companyType;
     private List<RoundSettings> roundSettings;
     private LobbySettings lobbySettings;

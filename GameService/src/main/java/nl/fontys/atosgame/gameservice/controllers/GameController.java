@@ -4,8 +4,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import java.util.ArrayList;
-import java.util.UUID;
 
 import nl.fontys.atosgame.gameservice.dto.CreateGameDto;
 import nl.fontys.atosgame.gameservice.model.Game;
@@ -54,7 +52,7 @@ public class GameController {
     )
     public ResponseEntity<Game> createGame(@RequestBody CreateGameDto createGameDto) {
         try {
-            Game game = gameService.createGame(createGameDto.getCompanyType(), createGameDto.getLobbySettings(), createGameDto.getRoundSettings());
+            Game game = gameService.createGame(createGameDto.getTitle(), createGameDto.getCompanyType(), createGameDto.getLobbySettings(), createGameDto.getRoundSettings());
             return ResponseEntity.ok(game);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
