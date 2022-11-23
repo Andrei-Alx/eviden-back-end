@@ -4,7 +4,6 @@ stages:          # List of stages for jobs, and their order of execution
   - QC
 
 # Tests for Card service
-
 build-card-service:       # This job runs in the build stage, which runs first.
   stage: build
   script:
@@ -40,7 +39,6 @@ sonarqube-check-card-service:
 
 
 # Tests for Game service
-
 build-game-service:       # This job runs in the build stage, which runs first.
   stage: build
   script:
@@ -75,7 +73,6 @@ sonarqube-check-game-service:
     - develop
 
 # Tests for Lobby service
-
 build-lobby-service:       # This job runs in the build stage, which runs first.
   stage: build
   script:
@@ -109,8 +106,7 @@ sonarqube-check-lobby-service:
   only:
     - develop
 
-    # Tests for Round service
-
+# Tests for Round service
 build-round-service:       # This job runs in the build stage, which runs first.
   stage: build
   script:
@@ -118,6 +114,7 @@ build-round-service:       # This job runs in the build stage, which runs first.
     - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\RoundService
     - ./mvnw install -DskipTests
     - echo "Build complete."
+  allow_failure: true
 
 unit-test-round-service:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
@@ -126,6 +123,7 @@ unit-test-round-service:   # This job runs in the test stage.
     - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\RoundService
     - ./mvnw test
     - echo "Tests complete."
+  allow_failure: true
 
 sonarqube-check-round-service:
   stage: QC
@@ -143,3 +141,12 @@ sonarqube-check-round-service:
   allow_failure: true
   only:
     - develop
+
+# Tests for Round service
+build-api-gateway:       # This job runs in the build stage, which runs first.
+  stage: build
+  script:
+    - echo "Running Build"
+    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\ApiGateway
+    - ./mvnw install -DskipTests
+    - echo "Build complete."
