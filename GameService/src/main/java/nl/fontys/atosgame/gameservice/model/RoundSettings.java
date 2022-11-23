@@ -7,8 +7,8 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.fontys.atosgame.gameservice.enums.ShowResults;
 import nl.fontys.atosgame.gameservice.enums.ShuffleMethod;
-import org.hibernate.annotations.Type;
 
 @Embeddable
 @Data
@@ -17,7 +17,7 @@ import org.hibernate.annotations.Type;
 public class RoundSettings {
 
     @JsonProperty
-    private boolean showPersonalOrGroupResults;
+    private ShowResults showPersonalOrGroupResults;
 
     @JsonProperty
     private int nrOfLikedCards;

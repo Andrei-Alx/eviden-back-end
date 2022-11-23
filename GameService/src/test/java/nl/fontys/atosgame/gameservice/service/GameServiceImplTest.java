@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.gameservice.service;
 
 import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
+import nl.fontys.atosgame.gameservice.enums.ShowResults;
 import nl.fontys.atosgame.gameservice.enums.ShuffleMethod;
 import nl.fontys.atosgame.gameservice.model.CardSet;
 import nl.fontys.atosgame.gameservice.model.Game;
@@ -41,8 +42,8 @@ class GameServiceImplTest {
         String companyType = "companyType";
         LobbySettings lobbySettings = new LobbySettings();
         List<RoundSettings> roundSettings = new ArrayList<>(
-                List.of(new RoundSettings(false, 1, 1, ShuffleMethod.FULLY_RANDOM, false, UUID.randomUUID()),
-                        new RoundSettings(false, 1, 1, ShuffleMethod.FULLY_RANDOM, false, UUID.randomUUID()))
+                List.of(new RoundSettings(ShowResults.PERSONAL, 1, 1, ShuffleMethod.FULLY_RANDOM, false, UUID.randomUUID()),
+                        new RoundSettings(ShowResults.PERSONAL, 1, 1, ShuffleMethod.FULLY_RANDOM, false, UUID.randomUUID()))
         );
         when(cardSetService.getCardSet(any())).thenReturn(Optional.of(mock(CardSet.class)));
         when(gameRepository.save(any())).thenAnswer(invocation -> {
@@ -64,11 +65,10 @@ class GameServiceImplTest {
 
     @Test
     void createGameCardSetsDoNotExist() {
-        String companyType = "companyType";
         LobbySettings lobbySettings = new LobbySettings();
         List<RoundSettings> roundSettings = new ArrayList<>(
-                List.of(new RoundSettings(false, 1, 1, ShuffleMethod.FULLY_RANDOM, false, UUID.randomUUID()),
-                        new RoundSettings(false, 1, 1, ShuffleMethod.FULLY_RANDOM, false, UUID.randomUUID()))
+                List.of(new RoundSettings(ShowResults.PERSONAL, 1, 1, ShuffleMethod.FULLY_RANDOM, false, UUID.randomUUID()),
+                        new RoundSettings(ShowResults.PERSONAL, 1, 1, ShuffleMethod.FULLY_RANDOM, false, UUID.randomUUID()))
         );
         when(cardSetService.getCardSet(any())).thenReturn(Optional.empty());
 
