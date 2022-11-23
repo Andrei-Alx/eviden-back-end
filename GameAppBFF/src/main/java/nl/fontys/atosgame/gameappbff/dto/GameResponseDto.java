@@ -1,6 +1,5 @@
 package nl.fontys.atosgame.gameappbff.dto;
 
-import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -33,6 +33,8 @@ public class Game {
     @OneToOne
     private Lobby lobby;
 
+    private String companyType;
+
     private GameStatus status;
 
     @LazyCollection(LazyCollectionOption.FALSE)

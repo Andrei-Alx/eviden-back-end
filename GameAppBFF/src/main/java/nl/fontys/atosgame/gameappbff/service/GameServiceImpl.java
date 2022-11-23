@@ -2,7 +2,9 @@ package nl.fontys.atosgame.gameappbff.service;
 
 import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+
 import nl.fontys.atosgame.gameappbff.enums.GameStatus;
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
@@ -21,7 +23,7 @@ import java.util.Optional;
 @Service
 public class GameServiceImpl implements GameService {
 
-    private final GameRepository gameRepository;
+    private GameRepository gameRepository;
     private GameSocketController gameSocketController;
 
     public GameServiceImpl(@Autowired GameRepository gameRepository, @Autowired GameSocketController gameSocketController) {
@@ -36,7 +38,7 @@ public class GameServiceImpl implements GameService {
      */
     @Override
     public Game handleGameCreated(UUID gameId, String title) {
-        Game game = new Game(gameId, title, null, GameStatus.CREATED, new ArrayList<>());
+        Game game = new Game(gameId, title, null, "university", GameStatus.CREATED, new ArrayList<>());
         gameRepository.save(game);
         return game;
     }
@@ -119,5 +121,15 @@ public class GameServiceImpl implements GameService {
         else {
             throw new EntityNotFoundException("Game not found");
         }
+    }
+
+    /**
+     * Get all games from the database.
+     *
+     * @return List of games.
+     */
+    @Override
+    public List<Game> getAllGames() {
+        return gameRepository.findAll();
     }
 }

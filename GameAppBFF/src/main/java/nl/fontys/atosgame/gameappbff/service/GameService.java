@@ -1,6 +1,8 @@
 package nl.fontys.atosgame.gameappbff.service;
 
+import java.util.List;
 import java.util.UUID;
+
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.model.Round;
@@ -43,4 +45,10 @@ public interface GameService {
      * @return The game with the added round.
      */
     Game addRoundToGame(Round round, UUID gameId);
+
+    /**
+     * Get all games from the database.
+     * @return List of games.
+     */
+    List<Game> getAllGames();
 }
