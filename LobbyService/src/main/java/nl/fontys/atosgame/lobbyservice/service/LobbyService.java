@@ -21,4 +21,20 @@ public interface LobbyService {
      * @param gameId The gameid of the lobby.
      */
     void deleteLobbyByGameId(UUID gameId);
+
+    /**
+     * This method adds the player to the lobby
+     * @param lobbyCode
+     * @param playerName
+     * @return
+     * @throws Exception
+     */
+    Lobby joinLobby(String lobbyCode, String playerName) throws Exception;
+
+    /**
+     * This method removes a player from the lobby
+     * @param lobbyId
+     * @param playerId
+     */
+    void quitLobby(UUID lobbyId, UUID playerId);
 }
