@@ -250,9 +250,9 @@ class RoundEventProducersTest {
     void producePlayerSelectedCards() {
         CardsSelectedEventDto playerSelectedCardsDto = new CardsSelectedEventDto(
             UUID.randomUUID(),
+                List.of(UUID.randomUUID(), UUID.randomUUID()),
             UUID.randomUUID(),
-            UUID.randomUUID(),
-            List.of(UUID.randomUUID(), UUID.randomUUID())
+            UUID.randomUUID()
         );
         RoundEventProducers roundEventProducers = new RoundEventProducers();
 

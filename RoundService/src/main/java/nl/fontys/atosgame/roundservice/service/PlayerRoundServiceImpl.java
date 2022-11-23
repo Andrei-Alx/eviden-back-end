@@ -91,7 +91,7 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
         playerRound = playerRoundRepository.save(playerRound);
 
         // TODO: produce event
-        streamBridge.send("producePlayerSelectedCards-in-0", new CardsSelectedEventDto(playerRound.getPlayerId(), gameId, roundId, cardIds));
+        streamBridge.send("producePlayerSelectedCards-in-0", new CardsSelectedEventDto(playerRound.getPlayerId(), cardIds, roundId, gameId));
         return playerRound;
     }
 }

@@ -48,7 +48,7 @@ public interface RoundService {
      * Produces an event and updates the player round
      * @param playerId The player to like the card for
      * @param cardId  The card to like
-     * @param gameId The game id
+     * @param gameId  The game id
      * @param roundId The round id
      * @return The updated player round
      */

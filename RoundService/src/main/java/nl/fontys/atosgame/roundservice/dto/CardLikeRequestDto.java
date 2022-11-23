@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CardLikeRequestDto {
 
-    private UUID roundId;
     private UUID playerId;
     private UUID cardId;
+    private UUID roundId;
+    private UUID gameId;
 }

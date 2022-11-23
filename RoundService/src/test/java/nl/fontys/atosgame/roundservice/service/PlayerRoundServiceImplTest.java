@@ -94,6 +94,6 @@ class PlayerRoundServiceImplTest {
         assertEquals(playerRound, result);
         assertTrue(playerRound.getSelectedCards().containsAll(List.of(card1, card2)));
         verify(playerRoundRepository).save(playerRound);
-        verify(streamBridge).send("producePlayerSelectedCards-in-0", new CardsSelectedEventDto(playerRound.getPlayerId(), gameId, roundId, cardIds));
+        verify(streamBridge).send("producePlayerSelectedCards-in-0", new CardsSelectedEventDto(playerRound.getPlayerId(), cardIds, roundId, gameId));
     }
 }

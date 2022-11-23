@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.roundservice.enums.PlayerRoundPhase;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -27,18 +29,22 @@ public class PlayerRound {
     @JsonProperty
     private UUID playerId;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JsonProperty
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Card> likedCards = new ArrayList<>();
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JsonProperty
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Card> dislikedCards = new ArrayList<>();
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JsonProperty
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Card> selectedCards = new ArrayList<>();
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(cascade = { CascadeType.PERSIST })
     private List<Card> distributedCards = new ArrayList<>();
 
@@ -172,6 +178,6 @@ public class PlayerRound {
      * @return True if the card is in the hand of the player, false otherwise.
      */
     private boolean hasCardInHand(Card card) {
-        return distributedCards.contains(card);
+        return distributedCards.stream().anyMatch(c -> c.getId().equals(card.getId()));
     }
 }

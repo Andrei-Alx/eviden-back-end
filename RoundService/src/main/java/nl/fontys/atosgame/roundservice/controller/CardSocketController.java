@@ -3,6 +3,8 @@ package nl.fontys.atosgame.roundservice.controller;
 import nl.fontys.atosgame.roundservice.dto.CardDislikeRequestDto;
 import nl.fontys.atosgame.roundservice.dto.CardLikeRequestDto;
 import nl.fontys.atosgame.roundservice.dto.CardSubmitRequestDto;
+import nl.fontys.atosgame.roundservice.service.RoundService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 
@@ -13,6 +15,13 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class CardSocketController {
 
+    private final RoundService roundService;
+
+    public CardSocketController(
+           @Autowired RoundService roundService) {
+        this.roundService = roundService;
+    }
+
     /**
      * Id: S-1
      * Socket endpoint that consumes like requests
@@ -20,7 +29,7 @@ public class CardSocketController {
      */
     @MessageMapping("/likeCard")
     public void likeCard(CardLikeRequestDto cardLikeRequestDto) {
-        // TODO: implement
+        this.roundService.likeCard(cardLikeRequestDto.getPlayerId(), cardLikeRequestDto.getCardId(), cardLikeRequestDto.getGameId(), cardLikeRequestDto.getRoundId());
     }
 
     /**
@@ -29,15 +38,15 @@ public class CardSocketController {
      */
     @MessageMapping("/dislikeCard")
     public void dislikeCard(CardDislikeRequestDto cardDislikeRequestDto) {
-        // TODO: implement
+        this.roundService.dislikeCard(cardDislikeRequestDto.getPlayerId(), cardDislikeRequestDto.getCardId(), cardDislikeRequestDto.getGameId(), cardDislikeRequestDto.getRoundId());
     }
 
     /**
      * Id: S-3
-     * Socket endpoint that consumes card submit requests
+     * Socket endpoint that consumes card select requests
      */
     @MessageMapping("/submitCards")
-    public void submitCards(CardSubmitRequestDto cardSubmitRequestDto) {
-        // TODO: implement
+    public void selectCards(CardSubmitRequestDto cardSubmitRequestDto) {
+        this.roundService.selectCards(cardSubmitRequestDto.getPlayerId(), cardSubmitRequestDto.getCardIds(), cardSubmitRequestDto.getGameId(), cardSubmitRequestDto.getRoundId());
     }
 }

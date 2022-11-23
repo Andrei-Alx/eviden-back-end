@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CardsSelectedEventDto {
     private UUID playerId;
-    private UUID gameId;
-    private UUID roundId;
     private List<UUID> cardIds;
+    private UUID roundId;
+    private UUID gameId;
 }
