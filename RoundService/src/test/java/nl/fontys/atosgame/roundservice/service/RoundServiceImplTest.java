@@ -1,7 +1,6 @@
 package nl.fontys.atosgame.roundservice.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
@@ -255,5 +254,50 @@ class RoundServiceImplTest {
         Optional<Round> result = roundService.getRound(round.getId());
 
         assertEquals(Optional.of(round), result);
+    }
+
+    @Test
+    void likeCard() {
+        UUID roundId = UUID.randomUUID();
+        UUID playerId = UUID.randomUUID();
+        UUID cardId = UUID.randomUUID();
+        PlayerRound playerRound = new PlayerRound();
+        playerRound.setPlayerId(playerId);
+        Round round = new Round(roundId, List.of(playerRound), RoundStatus.IN_PROGRESS, null);
+        doReturn(Optional.of(round)).when(roundService).getRound(roundId);
+
+        Round result = roundService.likeCard(playerId, roundId, cardId);
+
+        verify(playerRoundService).likeCard(playerRound, cardId);
+    }
+
+    @Test
+    void dislikeCard() {
+        UUID roundId = UUID.randomUUID();
+        UUID playerId = UUID.randomUUID();
+        UUID cardId = UUID.randomUUID();
+        PlayerRound playerRound = new PlayerRound();
+        playerRound.setPlayerId(playerId);
+        Round round = new Round(roundId, List.of(playerRound), RoundStatus.IN_PROGRESS, null);
+        doReturn(Optional.of(round)).when(roundService).getRound(roundId);
+
+        Round result = roundService.dislikeCard(playerId, roundId, cardId);
+
+        verify(playerRoundService).dislikeCard(playerRound, cardId);
+    }
+
+    @Test
+    void selectCards() {
+        UUID roundId = UUID.randomUUID();
+        UUID playerId = UUID.randomUUID();
+        UUID cardId = UUID.randomUUID();
+        PlayerRound playerRound = new PlayerRound();
+        playerRound.setPlayerId(playerId);
+        Round round = new Round(roundId, List.of(playerRound), RoundStatus.IN_PROGRESS, null);
+        doReturn(Optional.of(round)).when(roundService).getRound(roundId);
+
+        Round result = roundService.selectCards(playerId, roundId, List.of(cardId));
+
+        verify(playerRoundService).selectCards(playerRound, List.of(cardId));
     }
 }

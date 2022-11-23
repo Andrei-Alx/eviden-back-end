@@ -167,6 +167,54 @@ public class RoundServiceImpl implements RoundService {
     }
 
     /**
+     * Like a card
+     * Produces an event and updates the player round
+     *
+     * @param playerId The player to like the card for
+     * @param roundId  The round to like the card for
+     * @param cardId   The card to like
+     * @return The updated round
+     */
+    @Override
+    public Round likeCard(UUID playerId, UUID roundId, UUID cardId) {
+        Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
+        playerRoundService.likeCard(round.getPlayerRound(playerId), cardId);
+        return round;
+    }
+
+    /**
+     * Dislike a card
+     * Produces an event and updates the player round
+     *
+     * @param playerId The player to dislike the card for
+     * @param roundId  The round to dislike the card for
+     * @param cardId   The card to dislike
+     * @return
+     */
+    @Override
+    public Round dislikeCard(UUID playerId, UUID roundId, UUID cardId) {
+        Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
+        playerRoundService.dislikeCard(round.getPlayerRound(playerId), cardId);
+        return round;
+    }
+
+    /**
+     * Add cards to the selected cards of the player round
+     * Produces an event and updates the round
+     *
+     * @param playerId The id of the player
+     * @param roundId  The id of the round
+     * @param cardIds  The ids of the cards to select
+     * @return The updated round
+     */
+    @Override
+    public Round selectCards(UUID playerId, UUID roundId, List<UUID> cardIds) {
+        Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
+        playerRoundService.selectCards(round.getPlayerRound(playerId), cardIds);
+        return round;
+    }
+
+    /**
      * Create a round for a game
      * @param gameId The id of the game
      * @param roundSettings The settings for the round

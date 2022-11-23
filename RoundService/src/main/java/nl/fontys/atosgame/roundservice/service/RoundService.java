@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.model.LobbySettings;
+import nl.fontys.atosgame.roundservice.model.PlayerRound;
 import nl.fontys.atosgame.roundservice.model.Round;
 
 /**
@@ -41,4 +42,34 @@ public interface RoundService {
      * @return The round
      */
     Optional<Round> getRound(UUID roundId);
+
+    /**
+     * Like a card
+     * Produces an event and updates the player round
+     * @param playerId The player to like the card for
+     * @param roundId   The round to like the card for
+     * @param cardId   The card to like
+     * @return The updated round
+     */
+    Round likeCard(UUID playerId, UUID roundId, UUID cardId);
+
+    /**
+     * Dislike a card
+     * Produces an event and updates the player round
+     * @param playerId The player to dislike the card for
+     * @param roundId  The round to dislike the card for
+     * @param cardId  The card to dislike
+     * @return
+     */
+    Round dislikeCard(UUID playerId, UUID roundId, UUID cardId);
+
+    /**
+     * Add cards to the selected cards of the player round
+     * Produces an event and updates the round
+     * @param playerId The id of the player
+     * @param roundId The id of the round
+     * @param cardIds The ids of the cards to select
+     * @return The updated round
+     */
+    Round selectCards(UUID playerId, UUID roundId, List<UUID> cardIds);
 }
