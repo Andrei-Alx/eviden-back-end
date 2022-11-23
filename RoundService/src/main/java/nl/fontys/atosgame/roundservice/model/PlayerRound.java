@@ -124,4 +124,34 @@ public class PlayerRound {
         // Check if the highest tag is picked more often than the second highest tag
         return tagCount.get(highestTagValue) > tagCount.get(secondHighestTagValue);
     }
+
+    void addLikedCard(Card card) {
+        if (hasCardInHand(card) && !likedCards.contains(card)) {
+            likedCards.add(card);
+        } else {
+            throw new IllegalArgumentException("Card is not in hand or already liked");
+        }
+    }
+
+    void addDislikedCard(Card card) {
+        if (hasCardInHand(card) && !dislikedCards.contains(card)) {
+            dislikedCards.add(card);
+        } else {
+            throw new IllegalArgumentException("Card is not in hand or already disliked");
+        }
+    }
+
+    void addSelectedCards(List<Card> card) {
+        for (Card c : card) {
+            if (hasCardInHand(c) && !selectedCards.contains(c)) {
+                selectedCards.add(c);
+            } else {
+                throw new IllegalArgumentException("Card is not in hand or already selected");
+            }
+        }
+    }
+
+    boolean hasCardInHand(Card card) {
+        return distributedCards.contains(card);
+    }
 }

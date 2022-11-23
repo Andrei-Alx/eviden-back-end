@@ -261,4 +261,122 @@ class PlayerRoundTest {
 
         assertEquals(PlayerRoundPhase.RESULT, playerRound.getPhase());
     }
+
+    @Test
+    void addLikedCardCorrectFlow() {
+        PlayerRound playerRound = new PlayerRound();
+        playerRound.setLikedCards(new ArrayList<>());
+        Card card = new Card(UUID.randomUUID(), new ArrayList<>());
+        playerRound.setDistributedCards(
+            new ArrayList<>(List.of(card, new Card(UUID.randomUUID(), new ArrayList<>())))
+        );
+
+        playerRound.addLikedCard(card);
+
+        assertEquals(1, playerRound.getLikedCards().size());
+        assertEquals(card, playerRound.getLikedCards().get(0));
+    }
+
+    @Test
+    void addLikedCardNotInHand() {
+        PlayerRound playerRound = new PlayerRound();
+        playerRound.setLikedCards(new ArrayList<>());
+        Card card = new Card(UUID.randomUUID(), new ArrayList<>());
+
+        assertThrows(IllegalArgumentException.class, () -> playerRound.addLikedCard(card));
+    }
+
+    @Test
+    void addLikedCardAlreadyLiked() {
+        PlayerRound playerRound = new PlayerRound();
+        playerRound.setLikedCards(new ArrayList<>());
+        Card card = new Card(UUID.randomUUID(), new ArrayList<>());
+
+        assertThrows(IllegalArgumentException.class, () -> playerRound.addLikedCard(card));
+    }
+
+    @Test
+    void addDislikedCardCorrectFlow() {
+        PlayerRound playerRound = new PlayerRound();
+        playerRound.setDislikedCards(new ArrayList<>());
+        Card card = new Card(UUID.randomUUID(), new ArrayList<>());
+        playerRound.setDistributedCards(
+            new ArrayList<>(List.of(card, new Card(UUID.randomUUID(), new ArrayList<>())))
+        );
+
+        playerRound.addDislikedCard(card);
+
+        assertEquals(1, playerRound.getDislikedCards().size());
+        assertEquals(card, playerRound.getDislikedCards().get(0));
+    }
+
+    @Test
+    void addDislikedCardNotInHand() {
+        PlayerRound playerRound = new PlayerRound();
+        playerRound.setDislikedCards(new ArrayList<>());
+        Card card = new Card(UUID.randomUUID(), new ArrayList<>());
+
+        assertThrows(IllegalArgumentException.class, () -> playerRound.addDislikedCard(card));
+    }
+
+    @Test
+    void addDislikedCardAlreadyDisliked() {
+        PlayerRound playerRound = new PlayerRound();
+        playerRound.setDislikedCards(new ArrayList<>());
+        Card card = new Card(UUID.randomUUID(), new ArrayList<>());
+
+        assertThrows(IllegalArgumentException.class, () -> playerRound.addDislikedCard(card));
+    }
+
+    @Test
+    void addSelectedCardsCorrectFlow() {
+        PlayerRound playerRound = new PlayerRound();
+        playerRound.setSelectedCards(new ArrayList<>());
+        Card card1 = new Card(UUID.randomUUID(), new ArrayList<>());
+        Card card2 = new Card(UUID.randomUUID(), new ArrayList<>());
+        List<Card> cards = new ArrayList<>(List.of(
+                card1,
+                card2
+                ));
+        playerRound.setDistributedCards(
+            new ArrayList<>(List.of(card1, card2))
+        );
+
+        playerRound.addSelectedCards(cards);
+
+        assertEquals(2, playerRound.getSelectedCards().size());
+        assertEquals(card1, playerRound.getSelectedCards().get(0));
+        assertEquals(card2, playerRound.getSelectedCards().get(1));
+    }
+
+    @Test
+    void addSelectedCardsNotInHand() {
+        PlayerRound playerRound = new PlayerRound();
+        playerRound.setSelectedCards(new ArrayList<>());
+        Card card1 = new Card(UUID.randomUUID(), new ArrayList<>());
+        Card card2 = new Card(UUID.randomUUID(), new ArrayList<>());
+        List<Card> cards = new ArrayList<>(List.of(
+                card1,
+                card2
+                ));
+
+        assertThrows(IllegalArgumentException.class, () -> playerRound.addSelectedCards(cards));
+    }
+
+    @Test
+    void addSelectedCardsAlreadySelected() {
+        PlayerRound playerRound = new PlayerRound();
+        playerRound.setSelectedCards(new ArrayList<>());
+        Card card1 = new Card(UUID.randomUUID(), new ArrayList<>());
+        Card card2 = new Card(UUID.randomUUID(), new ArrayList<>());
+        List<Card> cards = new ArrayList<>(List.of(
+                card1,
+                card2
+                ));
+        playerRound.setSelectedCards(cards);
+
+        assertThrows(IllegalArgumentException.class, () -> playerRound.addSelectedCards(cards));
+    }
+
+
 }
