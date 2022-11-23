@@ -2,8 +2,8 @@ package nl.fontys.atosgame.gameappbff.service;
 
 import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import nl.fontys.atosgame.gameappbff.controller.LobbySocketController;
-import nl.fontys.atosgame.gameappbff.model.PlayerJoined;
-import static org.junit.jupiter.api.Assertions.*;
+import nl.fontys.atosgame.gameappbff.model.Player;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -55,9 +54,9 @@ class LobbyServiceImplTest {
     @Test
     void addPlayerTest() {
         UUID lobbyId = UUID.randomUUID();
-        PlayerJoined player = new PlayerJoined();
-        player.setPlayerId(UUID.randomUUID());
-        player.setPlayerName("test");
+        Player player = new Player();
+        player.setId(UUID.randomUUID());
+        player.setName("test");
         Lobby lobby = new Lobby();
         lobby.setId(lobbyId);
         lobbyRepository.save(lobby);

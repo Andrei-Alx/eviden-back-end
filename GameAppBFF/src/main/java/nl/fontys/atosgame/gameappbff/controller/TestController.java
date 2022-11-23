@@ -1,6 +1,5 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
-import nl.fontys.atosgame.gameappbff.model.PlayerJoined;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

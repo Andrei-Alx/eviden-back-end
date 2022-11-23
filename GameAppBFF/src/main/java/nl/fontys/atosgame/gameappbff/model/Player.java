@@ -13,12 +13,12 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlayerJoined {
+public class Player {
 
     @Type(type = "org.hibernate.type.UUIDCharType")
     @JsonProperty
-    private UUID playerId;
+    private UUID id;
 
     @JsonProperty
-    private String playerName;
+    private String name;
 }

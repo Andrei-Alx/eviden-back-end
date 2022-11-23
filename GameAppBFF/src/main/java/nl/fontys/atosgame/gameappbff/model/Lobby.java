@@ -1,7 +1,8 @@
 package nl.fontys.atosgame.gameappbff.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
+
+import java.util.Collection;
 import java.util.UUID;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -24,13 +25,16 @@ public class Lobby {
 
     @ElementCollection(fetch = javax.persistence.FetchType.EAGER)
     @JsonProperty
-    private List<PlayerJoined> players = new java.util.ArrayList<>();
+    private Collection<Player> players = new java.util.ArrayList<>();
+
+    @JsonProperty
+    private String lobbyCode;
 
     /**
      * Add a player to the lobby
      * @param player The id of the player
      */
-    public void addPlayer(PlayerJoined player) {
+    public void addPlayer(Player player) {
         players.add(player);
     }
 

@@ -2,7 +2,7 @@ package nl.fontys.atosgame.gameappbff.service;
 
 import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import nl.fontys.atosgame.gameappbff.controller.LobbySocketController;
-import nl.fontys.atosgame.gameappbff.model.PlayerJoined;
+import nl.fontys.atosgame.gameappbff.model.Player;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.repository.LobbyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class LobbyServiceImpl implements LobbyService {
      * @param player The player to add to the lobby.
      */
     @Override
-    public Lobby addPlayer(UUID lobbyId, PlayerJoined player){
+    public Lobby addPlayer(UUID lobbyId, Player player){
         Optional<Lobby> lobby = lobbyRepository.findById(lobbyId);
         if(lobby.isPresent()){
             Lobby lobby1 = lobby.get();
