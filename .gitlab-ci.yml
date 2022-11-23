@@ -10,7 +10,7 @@ build-card-service:       # This job runs in the build stage, which runs first.
   script:
     - echo "Running Build"
     - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\CardService
-    - ./mvnw package -U
+    - ./mvnw install -DskipTests
     - echo "Build complete."
 
 unit-test-card-service:   # This job runs in the test stage.
@@ -46,7 +46,7 @@ build-game-service:       # This job runs in the build stage, which runs first.
   script:
     - echo "Running Build"
     - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\GameService
-    - ./mvnw package -U
+    - ./mvnw install -DskipTests
     - echo "Build complete."
 
 unit-test-game-service:   # This job runs in the test stage.
