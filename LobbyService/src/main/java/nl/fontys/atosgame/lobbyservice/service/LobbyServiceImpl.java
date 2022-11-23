@@ -3,6 +3,7 @@ package nl.fontys.atosgame.lobbyservice.service;
 import java.util.*;
 
 import kotlin.collections.UCollectionsKt;
+import nl.fontys.atosgame.lobbyservice.CustomException.FullLobbyException;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyDeletedDto;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyJoinedDto;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyQuitDto;
@@ -13,6 +14,8 @@ import nl.fontys.atosgame.lobbyservice.repository.LobbyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
 
 /**
  * Service for handling lobbies.
@@ -83,9 +86,9 @@ public class LobbyServiceImpl implements LobbyService {
     public Lobby joinLobby(String lobbyCode, String playerName) throws Exception {
         //get lobby to edit
         Lobby lobby = lobbyRepository.getByLobbyCode(lobbyCode);
-        if(lobby == null){throw new IllegalArgumentException("No lobby found for lobbycode"+ lobbyCode);}
+        if(lobby == null){throw new EntityNotFoundException("No lobby found for lobbycode"+ lobbyCode);}
         //check whether the lobby is already full
-        if (lobby.getPlayers().stream().count() >= lobby.getLobbySettings().getMaxPlayers()) { throw new Exception("Maximum number of players in lobby reached");
+        if (lobby.getPlayers().stream().count() >= lobby.getLobbySettings().getMaxPlayers()) { throw new FullLobbyException("Maximum number of players in lobby reached");
         }
         //add player
         Player player = new Player();
@@ -96,27 +99,26 @@ public class LobbyServiceImpl implements LobbyService {
         //point of no return
         lobbyRepository.saveAndFlush(lobby);
 
-        //get the newly generated player id.
-        lobby = lobbyRepository.getByLobbyCode(lobbyCode);
-        Player currentPlayer = lobby.getPlayers().stream().filter(
-                player1 -> playerName.equals(player1.getName()))
-                .findAny()
-                .orElseThrow(); // throw exception?
-
-
-        LobbyJoinedDto lobbyJoinedDto = new LobbyJoinedDto(lobby.getId(), lobby.getPlayers(), currentPlayer.getId(), lobby.getLobbyCode());
-        streamBridge.send("producePlayerJoined-out-0", lobbyJoinedDto);
+        LobbyJoinedDto lobbyJoinedDto = new LobbyJoinedDto(lobby.getId(), lobby.getPlayers(), player.getId(), lobby.getLobbyCode());
+        streamBridge.send("producePlayerJoined-in-0", lobbyJoinedDto);
         return lobby;
     }
 
+    /**
+     * R-8
+     * This method removes a player from the lobby
+     * @param lobbyId
+     * @param playerId
+     */
     @Override
     public void quitLobby(UUID lobbyId, UUID playerId){
         Lobby lobby = lobbyRepository.getById(lobbyId);
-        lobby.players.remove(lobby.getPlayers().stream().filter(player -> player.getId() == playerId).findFirst().orElse(null));
+        if(lobby == null){throw new EntityNotFoundException("No lobby found for lobbyId"+ lobbyId);}
+        lobby.getPlayers().remove(lobby.getPlayers().stream().filter(player -> player.getId() == playerId).findFirst().orElse(null));
 
         lobbyRepository.saveAndFlush(lobby);
 
         LobbyQuitDto lobbyQuitDto = new LobbyQuitDto(lobbyId, playerId, lobby.getGameId());
-        streamBridge.send("producePlayerQuit-out-0", lobbyQuitDto);
+        streamBridge.send("producePlayerQuit-in-0", lobbyQuitDto);
     }
 }

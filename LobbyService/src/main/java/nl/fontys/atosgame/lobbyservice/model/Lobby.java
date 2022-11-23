@@ -28,7 +28,7 @@ public class Lobby {
 
     @JsonProperty
     @ElementCollection
-    public Collection<Player> players = new java.util.ArrayList<>();
+    private Collection<Player> players = new java.util.ArrayList<>();
 
     @JsonProperty
     private String lobbyCode;

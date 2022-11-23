@@ -75,24 +75,25 @@ class LobbyServiceImplTest {
 
     @Test
     void joinLobby() throws Exception {
+        when(lobbyCodeGenerator.generateLobbyCode()).thenReturn("ABCDEF");
         // arrange player and lobby
         String lobbyCode = lobbyCodeGenerator.generateLobbyCode();
         String playerName = "PlayerOne";
-        Collection<Player> players = List.of(new Player[]{new Player(UUID.randomUUID(), playerName)});
 
         LobbySettings lobbySettings = new LobbySettings(UUID.randomUUID(), 8);
         Lobby lobby = new Lobby(UUID.randomUUID(), new ArrayList<Player>(),lobbyCode, lobbySettings, UUID.randomUUID());
         // arrange mock
         when(lobbyRepository.getByLobbyCode(lobbyCode)).thenReturn(lobby);
 
+
         // act
         Lobby joinedLobby = lobbyService.joinLobby(lobbyCode,playerName);
         LobbyJoinedDto lobbyJoinedDto = new LobbyJoinedDto(joinedLobby.getId(), joinedLobby.getPlayers(), joinedLobby.getPlayers().stream().findFirst().get().getId(), joinedLobby.getLobbyCode());
 
         //assert
-        verify(lobbyRepository, times(2)).getByLobbyCode(lobbyCode);
+        verify(lobbyRepository, times(1)).getByLobbyCode(lobbyCode);
         verify(streamBridge)
-                .send("producePlayerJoined-out-0", lobbyJoinedDto);
+                .send("producePlayerJoined-in-0", lobbyJoinedDto);
     }
 
     @Test
@@ -113,6 +114,6 @@ class LobbyServiceImplTest {
         Assert.isTrue(lobby.getPlayers().stream().count() == 0, "player has been successfully removed from the lobby");
         LobbyQuitDto lobbyQuitDto = new LobbyQuitDto(lobbyId, playerId, lobby.getGameId());
         verify(streamBridge)
-                .send("producePlayerQuit-out-0", lobbyQuitDto);
+                .send("producePlayerQuit-in-0", lobbyQuitDto);
     }
 }
