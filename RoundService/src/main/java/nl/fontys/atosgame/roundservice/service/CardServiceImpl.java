@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.roundservice.service;
 
+import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.repository.CardRepository;
@@ -44,5 +45,16 @@ public class CardServiceImpl implements CardService {
     @Override
     public void deleteCard(UUID uuid) {
         cardRepository.deleteById(uuid);
+    }
+
+    /**
+     * Get a card by id
+     *
+     * @param id The id of the card to get
+     * @return Optional of the card
+     */
+    @Override
+    public Optional<Card> getCard(UUID id) {
+        return cardRepository.findById(id);
     }
 }
