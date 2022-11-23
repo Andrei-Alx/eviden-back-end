@@ -3,12 +3,13 @@ package nl.fontys.atosgame.gameappbff.service;
 import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import nl.fontys.atosgame.gameappbff.controller.LobbySocketController;
 import nl.fontys.atosgame.gameappbff.model.PlayerJoined;
-import nl.fontys.atosgame.gameappbff.dto.PlayerQuitDto;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.repository.LobbyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -18,9 +19,9 @@ import java.util.UUID;
 @Service
 public class LobbyServiceImpl implements LobbyService {
 
-    private LobbyRepository lobbyRepository;
-    private GameSocketController gameSocketController;
-    private LobbySocketController lobbySocketController;
+    private final LobbyRepository lobbyRepository;
+    private final GameSocketController gameSocketController;
+    private final LobbySocketController lobbySocketController;
 
     public LobbyServiceImpl(@Autowired LobbyRepository lobbyRepository, @Autowired GameSocketController gameSocketController, @Autowired LobbySocketController lobbySocketController) {
         this.lobbyRepository = lobbyRepository;
@@ -57,15 +58,17 @@ public class LobbyServiceImpl implements LobbyService {
      */
     @Override
     public Lobby addPlayer(UUID lobbyId, PlayerJoined player){
-        Lobby lobby = null;
-        if(lobbyRepository.findById(lobbyId).isPresent()){
-            lobby = lobbyRepository.findById(lobbyId).get();
-            lobby.addPlayer(player);
-            lobbyRepository.save(lobby);
-            lobbySocketController.playerJoined(lobby);
+        Optional<Lobby> lobby = lobbyRepository.findById(lobbyId);
+        if(lobby.isPresent()){
+            Lobby lobby1 = lobby.get();
+            lobby1.addPlayer(player);
+            lobbyRepository.save(lobby1);
+            lobbySocketController.playerJoined(lobby1);
+            return lobby1;
         }
-
-        return lobby;
+        else {
+            throw new EntityNotFoundException("Game not found");
+        }
     }
 
     /**
@@ -75,12 +78,16 @@ public class LobbyServiceImpl implements LobbyService {
      */
     @Override
     public void quitPlayer(UUID lobbyId, UUID playerId){
-        if(lobbyRepository.findById(lobbyId).isPresent()){
-            Lobby lobby = lobbyRepository.findById(lobbyId).get();
-            lobby.removePlayer(playerId);
-            lobbyRepository.save(lobby);
+        Optional<Lobby> lobby = lobbyRepository.findById(lobbyId);
+        if(lobby.isPresent()){
+            Lobby lobby1 = lobby.get();
+            lobby1.removePlayer(playerId);
+            lobbyRepository.save(lobby1);
             lobbySocketController.playerQuit(lobbyId, playerId);
             // TODO: mark active playerrounds as 'quit' for that player
+        }
+        else {
+            throw new EntityNotFoundException("Game not found");
         }
     }
 }
