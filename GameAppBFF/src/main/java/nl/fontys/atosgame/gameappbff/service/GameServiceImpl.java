@@ -1,9 +1,12 @@
 package nl.fontys.atosgame.gameappbff.service;
 
 import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
+import java.util.ArrayList;
+import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.enums.GameStatus;
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
+import nl.fontys.atosgame.gameappbff.model.Round;
 import nl.fontys.atosgame.gameappbff.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +20,7 @@ import java.util.UUID;
  * @author Aniek
  */
 @Service
-public class GameServiceImpl implements GameService{
+public class GameServiceImpl implements GameService {
 
     private final GameRepository gameRepository;
     private GameSocketController gameSocketController;
@@ -30,11 +33,11 @@ public class GameServiceImpl implements GameService{
     /**
      * Create a new game in the database.
      *
-     * @param gameId The game to create.
+     * @param gameId, title The game to create.
      */
     @Override
-    public Game handleGameCreated(UUID gameId) {
-        Game game = new Game(gameId, null, GameStatus.CREATED);
+    public Game handleGameCreated(UUID gameId, String title) {
+        Game game = new Game(gameId, title, null, GameStatus.CREATED, new ArrayList<>());
         gameRepository.save(game);
         return game;
     }
@@ -96,5 +99,27 @@ public class GameServiceImpl implements GameService{
         else {
             throw new EntityNotFoundException("Game not found");
         }
+    }
+
+    /**
+     * Add a round to a game in the database.
+     *
+     * @param round  The round to add.
+     * @param gameId The game to add the round to.
+     * @return The game with the added round.
+     */
+    @Override
+    public Game addRoundToGame(Round round, UUID gameId) {
+        Game game = null;
+        if(gameRepository.findById(gameId).isPresent()) {
+            game = gameRepository.findById(gameId).get();
+            game.getRounds().add(round);
+            gameRepository.save(game);
+        }
+        else {
+            throw new EntityNotFoundException("Game not found");
+        }
+
+        return game;
     }
 }

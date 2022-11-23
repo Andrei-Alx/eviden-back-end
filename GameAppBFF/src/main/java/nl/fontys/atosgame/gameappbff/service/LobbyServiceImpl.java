@@ -28,6 +28,7 @@ public class LobbyServiceImpl implements LobbyService {
         this.gameSocketController = gameSocketController;
         this.lobbySocketController = lobbySocketController;
     }
+
     /**
      * Create a new lobby in the database.
      *

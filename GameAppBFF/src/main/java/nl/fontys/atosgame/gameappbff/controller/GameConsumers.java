@@ -1,13 +1,9 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
 import java.util.function.Function;
-
-import nl.fontys.atosgame.gameappbff.enums.GameStatus;
-import nl.fontys.atosgame.gameappbff.event.consumed.CardSetCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.GameCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.GameEndedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.GameStartedEvent;
-import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,8 +22,7 @@ public class GameConsumers {
 
     private GameService gameService;
 
-    public GameConsumers(
-            @Autowired GameService gameService) {
+    public GameConsumers(@Autowired GameService gameService) {
         this.gameService = gameService;
     }
 
@@ -41,7 +36,7 @@ public class GameConsumers {
     public Function<Message<GameCreatedEvent>, Void> handleGameCreated() {
         return message -> {
             GameCreatedEvent event = message.getPayload();
-            gameService.handleGameCreated(event.getGameId());
+            gameService.handleGameCreated(event.getGameId(), event.getTitle());
             return null;
         };
     }

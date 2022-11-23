@@ -49,7 +49,8 @@ public class RoundEventProducers {
         return keyValue -> {
             RoundCreatedEvent event = EventFactory.createRoundCreatedEvent(
                 "RoundService",
-                keyValue.getRound()
+                keyValue.getRound(),
+                keyValue.getGameId()
             );
             return MessageBuilder
                 .withPayload(event)

@@ -16,6 +16,8 @@ public class EventFactory {
 
     public static GameCreatedEvent createGameCreatedEvent(
         UUID gameId,
+        String title,
+        String companyType,
         List<RoundSettings> roundSettings,
         LobbySettings lobbySettings
     ) {
@@ -23,6 +25,7 @@ public class EventFactory {
         event =
             (GameCreatedEvent) initializeBaseEvent(event, "GameCreated", "GameService");
         event.setGameId(gameId);
+        event.setCompanyType(companyType);
         event.setRoundSettings(roundSettings);
         event.setLobbySettings(lobbySettings);
         return event;

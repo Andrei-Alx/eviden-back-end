@@ -15,6 +15,8 @@ import nl.fontys.atosgame.gameservice.model.RoundSettings;
 public class GameCreatedEvent extends BaseEvent {
 
     private UUID gameId;
+    private String title;
+    private String companyType;
     private List<RoundSettings> roundSettings;
     private LobbySettings lobbySettings;
 }

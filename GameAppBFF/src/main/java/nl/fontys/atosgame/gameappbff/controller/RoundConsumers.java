@@ -2,6 +2,9 @@ package nl.fontys.atosgame.gameappbff.controller;
 
 import java.util.function.Function;
 import nl.fontys.atosgame.gameappbff.event.consumed.*;
+import nl.fontys.atosgame.gameappbff.service.PlayerRoundService;
+import nl.fontys.atosgame.gameappbff.service.RoundService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,17 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class RoundConsumers {
 
+    private RoundService roundService;
+    private PlayerRoundService playerRoundService;
+
+    public RoundConsumers(
+        @Autowired RoundService roundService,
+        @Autowired PlayerRoundService playerRoundService
+    ) {
+        this.roundService = roundService;
+        this.playerRoundService = playerRoundService;
+    }
+
     /**
      * Id: C-55
      * Consumer for RoundCreatedEvent
@@ -29,8 +43,9 @@ public class RoundConsumers {
     @Bean
     public Function<Message<RoundCreatedEvent>, Void> handleRoundCreated() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            RoundCreatedEvent event = message.getPayload();
+            roundService.handleRoundCreatedEvent(event.getRound(), event.getGameId());
+            return null;
         };
     }
 
@@ -43,8 +58,9 @@ public class RoundConsumers {
     @Bean
     public Function<Message<RoundStartedEvent>, Void> handleRoundStarted() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            RoundStartedEvent event = message.getPayload();
+            roundService.startRound(event.getRoundId(), event.getGameId());
+            return null;
         };
     }
 
@@ -57,8 +73,9 @@ public class RoundConsumers {
     @Bean
     public Function<Message<RoundEndedEvent>, Void> handleRoundEnded() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            RoundEndedEvent event = message.getPayload();
+            roundService.endRound(event.getRoundId(), event.getGameId());
+            return null;
         };
     }
 
@@ -71,8 +88,14 @@ public class RoundConsumers {
     @Bean
     public Function<Message<PlayerPhaseStartedEvent>, Void> handlePlayerPhaseStarted() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerPhaseStartedEvent event = message.getPayload();
+            playerRoundService.startPhase(
+                event.getPlayerId(),
+                event.getRoundId(),
+                event.getGameId(),
+                event.getPhaseNumber()
+            );
+            return null;
         };
     }
 
@@ -85,8 +108,14 @@ public class RoundConsumers {
     @Bean
     public Function<Message<PlayerPhaseEndedEvent>, Void> handlePlayerPhaseEnded() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerPhaseEndedEvent event = message.getPayload();
+            playerRoundService.endPhase(
+                event.getPlayerId(),
+                event.getRoundId(),
+                event.getGameId(),
+                event.getPhaseNumber()
+            );
+            return null;
         };
     }
 
@@ -99,8 +128,14 @@ public class RoundConsumers {
     @Bean
     public Function<Message<PlayerCardsDistributedEvent>, Void> handlePlayerCardsDistributed() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerCardsDistributedEvent event = message.getPayload();
+            playerRoundService.distributeCards(
+                event.getPlayerId(),
+                event.getRoundId(),
+                event.getGameId(),
+                event.getCardIds()
+            );
+            return null;
         };
     }
 
@@ -113,8 +148,14 @@ public class RoundConsumers {
     @Bean
     public Function<Message<PlayerLikedCardEvent>, Void> handlePlayerLikedCard() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerLikedCardEvent event = message.getPayload();
+            playerRoundService.likeCard(
+                event.getPlayerId(),
+                event.getRoundId(),
+                event.getGameId(),
+                event.getCardId()
+            );
+            return null;
         };
     }
 
@@ -127,8 +168,14 @@ public class RoundConsumers {
     @Bean
     public Function<Message<PlayerDislikedCardEvent>, Void> handlePlayerDislikedCard() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerDislikedCardEvent event = message.getPayload();
+            playerRoundService.dislikeCard(
+                event.getPlayerId(),
+                event.getRoundId(),
+                event.getGameId(),
+                event.getCardId()
+            );
+            return null;
         };
     }
 
@@ -141,8 +188,14 @@ public class RoundConsumers {
     @Bean
     public Function<Message<PlayerSelectedCardsEvent>, Void> handlePlayerSelectedCards() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerSelectedCardsEvent event = message.getPayload();
+            playerRoundService.selectCards(
+                event.getPlayerId(),
+                event.getRoundId(),
+                event.getGameId(),
+                event.getCardIds()
+            );
+            return null;
         };
     }
 }

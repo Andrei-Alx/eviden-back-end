@@ -15,10 +15,6 @@ import org.hibernate.annotations.Type;
 @NoArgsConstructor
 public class RoundSettingsDto {
 
-    @Type(type = "org.hibernate.type.UUIDCharType")
-    @JsonProperty
-    private UUID id;
-
     @JsonProperty
     private boolean showPersonalOrGroupResults;
 
@@ -26,7 +22,7 @@ public class RoundSettingsDto {
     private int nrOfLikedCards;
 
     @JsonProperty
-    private int nrOfPickedCards;
+    private int nrOfSelectedCards;
 
     @JsonProperty
     private ShuffleMethod shuffleMethod;

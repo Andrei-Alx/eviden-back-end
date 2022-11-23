@@ -1,16 +1,20 @@
 package nl.fontys.atosgame.gameservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import nl.fontys.atosgame.gameservice.enums.ShuffleMethod;
 import org.hibernate.annotations.Type;
 
+@Embeddable
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RoundSettings {
-
-    @Type(type = "org.hibernate.type.UUIDCharType")
-    @JsonProperty
-    private UUID id;
 
     @JsonProperty
     private boolean showPersonalOrGroupResults;
@@ -19,10 +23,10 @@ public class RoundSettings {
     private int nrOfLikedCards;
 
     @JsonProperty
-    private int nrOfPickedCards;
+    private int nrOfSelectedCards;
 
     @JsonProperty
-    private String shuffleMethod;
+    private ShuffleMethod shuffleMethod;
 
     @JsonProperty
     private boolean showSameCardOrder;

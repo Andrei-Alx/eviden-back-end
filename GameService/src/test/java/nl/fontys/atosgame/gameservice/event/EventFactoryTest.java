@@ -18,11 +18,15 @@ class EventFactoryTest {
     @Test
     void createGameCreatedEvent() {
         UUID gameId = UUID.randomUUID();
+        String title = "gameTitle";
+        String companyType = "companyType";
         List<RoundSettings> roundSettings = new ArrayList<>();
         LobbySettings lobbySettings = new LobbySettings();
 
         GameCreatedEvent event = EventFactory.createGameCreatedEvent(
             gameId,
+            title,
+            companyType,
             roundSettings,
             lobbySettings
         );
@@ -32,6 +36,7 @@ class EventFactoryTest {
         assertNotNull(event.getTimestamp());
         assertNotNull(event.getId());
         assertEquals(gameId, event.getGameId());
+        assertEquals(companyType, event.getCompanyType());
         assertEquals(roundSettings, event.getRoundSettings());
         assertEquals(lobbySettings, event.getLobbySettings());
     }

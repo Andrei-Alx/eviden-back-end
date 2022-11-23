@@ -12,4 +12,5 @@ import nl.fontys.atosgame.gameappbff.event.BaseEvent;
 public class GameCreatedEvent extends BaseEvent {
 
     private UUID gameId;
+    private String title;
 }

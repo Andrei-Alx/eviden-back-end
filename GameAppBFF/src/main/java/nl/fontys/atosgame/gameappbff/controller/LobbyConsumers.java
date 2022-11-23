@@ -29,8 +29,9 @@ public class LobbyConsumers {
     private LobbyService lobbyService;
 
     public LobbyConsumers(
-            @Autowired GameService gameService,
-            @Autowired LobbyService lobbyService) {
+        @Autowired GameService gameService,
+        @Autowired LobbyService lobbyService
+    ) {
         this.gameService = gameService;
         this.lobbyService = lobbyService;
     }
