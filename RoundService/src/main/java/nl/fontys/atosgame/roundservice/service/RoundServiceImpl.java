@@ -156,6 +156,17 @@ public class RoundServiceImpl implements RoundService {
     }
 
     /**
+     * Get a round by id
+     *
+     * @param roundId The id of the round
+     * @return The round
+     */
+    @Override
+    public Optional<Round> getRound(UUID roundId) {
+        return roundRepository.findById(roundId);
+    }
+
+    /**
      * Create a round for a game
      * @param gameId The id of the game
      * @param roundSettings The settings for the round

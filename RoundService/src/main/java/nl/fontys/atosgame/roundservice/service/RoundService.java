@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.roundservice.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.model.LobbySettings;
@@ -33,4 +34,11 @@ public interface RoundService {
      * @return The updated round
      */
     Round endRound(UUID roundId, UUID gameId);
+
+    /**
+     * Get a round by id
+     * @param roundId The id of the round
+     * @return The round
+     */
+    Optional<Round> getRound(UUID roundId);
 }

@@ -56,7 +56,6 @@ class RoundServiceImplTest {
     @Test
     void createRound() {
         RoundSettingsDto roundSettings = new RoundSettingsDto(
-            UUID.randomUUID(),
             true,
             1,
             1,
@@ -246,5 +245,15 @@ class RoundServiceImplTest {
         verify(streamBridge)
             .send("produceRoundEnded-in-0", new RoundEndedDto(gameId, result.getId()));
         verify(roundRepository).save(result);
+    }
+
+    @Test
+    void getRound() {
+        Round round = mock(Round.class);
+        when(roundRepository.findById(round.getId())).thenReturn(Optional.of(round));
+
+        Optional<Round> result = roundService.getRound(round.getId());
+
+        assertEquals(Optional.of(round), result);
     }
 }
