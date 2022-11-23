@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+
+import nl.fontys.atosgame.roundservice.applicationevents.RoundFinishedAppEvent;
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
 import nl.fontys.atosgame.roundservice.dto.PlayerPhaseStartedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
@@ -18,6 +19,7 @@ import nl.fontys.atosgame.roundservice.model.*;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 /**
@@ -35,6 +37,8 @@ public class RoundServiceImpl implements RoundService {
 
     private final RoundLogicService roundLogicService;
 
+    private final ApplicationEventPublisher applicationEventPublisher;
+
     private StreamBridge streamBridge;
 
     public RoundServiceImpl(
@@ -42,13 +46,15 @@ public class RoundServiceImpl implements RoundService {
         @Autowired CardSetService cardSetService,
         @Autowired StreamBridge streamBridge,
         @Autowired PlayerRoundService playerRoundService,
-        @Autowired RoundLogicService roundLogicService
+        @Autowired RoundLogicService roundLogicService,
+        @Autowired ApplicationEventPublisher eventPublisher
     ) {
         this.roundRepository = roundRepository;
         this.cardSetService = cardSetService;
         this.playerRoundService = playerRoundService;
         this.streamBridge = streamBridge;
         this.roundLogicService = roundLogicService;
+        this.applicationEventPublisher = eventPublisher;
     }
 
     /**
@@ -121,7 +127,6 @@ public class RoundServiceImpl implements RoundService {
             );
         }
 
-        // TODO: send player phase started events
         for (PlayerRound playerRound : round.getPlayerRounds()) {
             streamBridge.send(
                 "producePlayerPhaseStarted-in-0",
@@ -217,56 +222,30 @@ public class RoundServiceImpl implements RoundService {
         return round;
     }
 
-//    /**
-//     * Like a card
-//     * Produces an event and updates the player round
-//     *
-//     * @param playerId The player to like the card for
-//     * @param roundId  The round to like the card for
-//     * @param cardId   The card to like
-//     * @param gameId   The game that the card was added to
-//     * @return The updated round
-//     */
-//    @Override
-//    public Round likeCard(UUID playerId, UUID roundId, UUID cardId, UUID gameId) {
-//        Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
-//        playerRoundService.likeCard(round.getPlayerRound(playerId), cardId, gameId, roundId);
-//        return round;
-//    }
-//
-//    /**
-//     * Dislike a card
-//     * Produces an event and updates the player round
-//     *
-//     * @param playerId The player to dislike the card for
-//     * @param roundId  The round to dislike the card for
-//     * @param cardId   The card to dislike
-//     * @param gameId   The game that the card was added to
-//     * @return
-//     */
-//    @Override
-//    public Round dislikeCard(UUID playerId, UUID roundId, UUID cardId, UUID gameId) {
-//        Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
-//        playerRoundService.dislikeCard(round.getPlayerRound(playerId), cardId, gameId, roundId);
-//        return round;
-//    }
-//
-//    /**
-//     * Add cards to the selected cards of the player round
-//     * Produces an event and updates the round
-//     *
-//     * @param playerId The id of the player
-//     * @param roundId  The id of the round
-//     * @param cardIds  The ids of the cards to select
-//     * @param gameId   The game that the card was added to
-//     * @return The updated round
-//     */
-//    @Override
-//    public Round selectCards(UUID playerId, UUID roundId, List<UUID> cardIds, UUID gameId) {
-//        Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
-//        playerRoundService.selectCards(round.getPlayerRound(playerId), cardIds, gameId, roundId);
-//        return round;
-//    }
+    /**
+     * When a playerround is finished, check if round is finished and if so, launch application event
+     *
+     * @param roundId The id of the round
+     */
+    @Override
+    public void checkRoundEnd(UUID roundId) {
+        Round round = getRound(roundId).get();
+        if (round.isDone()) {
+            applicationEventPublisher.publishEvent(new RoundFinishedAppEvent(this, round));
+        }
+    }
+
+    /**
+     * Get the round that contains a playerround
+     *
+     * @param playerRound The the player round
+     * @return The round
+     */
+    @Override
+    public Optional<Round> getRoundByPlayerRound(PlayerRound playerRound) {
+        return roundRepository.findByPlayerRoundsContaining(playerRound);
+    }
+
 
     /**
      * Create a round for a game

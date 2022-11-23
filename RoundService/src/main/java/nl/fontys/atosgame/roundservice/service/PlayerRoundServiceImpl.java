@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import nl.fontys.atosgame.roundservice.applicationevents.PlayerRoundFinishedAppEvent;
 import nl.fontys.atosgame.roundservice.dto.CardDislikedEventDto;
 import nl.fontys.atosgame.roundservice.dto.CardLikedEventDto;
 import nl.fontys.atosgame.roundservice.dto.CardsSelectedEventDto;
@@ -13,6 +14,7 @@ import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.repository.PlayerRoundRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,15 +22,18 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
 
     private CardService cardService;
     private StreamBridge streamBridge;
+    private ApplicationEventPublisher eventPublisher;
     private PlayerRoundRepository playerRoundRepository;
 
     public PlayerRoundServiceImpl(
             @Autowired CardService cardService,
             @Autowired StreamBridge streamBridge,
+            @Autowired ApplicationEventPublisher eventPublisher,
             @Autowired PlayerRoundRepository playerRoundRepository
     ) {
         this.cardService = cardService;
         this.streamBridge = streamBridge;
+        this.eventPublisher = eventPublisher;
         this.playerRoundRepository = playerRoundRepository;
     }
 
@@ -48,7 +53,9 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
         playerRound.addLikedCard(card);
         playerRound = playerRoundRepository.save(playerRound);
 
+        // Send event
         streamBridge.send("producePlayerLikedCard-in-0", new CardLikedEventDto(playerRound.getPlayerId(), gameId, roundId, cardId));
+
         return playerRound;
     }
 
@@ -88,7 +95,24 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
         playerRound.addSelectedCards(List.copyOf(cards));
         playerRound = playerRoundRepository.save(playerRound);
 
+        // Send event
         streamBridge.send("producePlayerSelectedCards-in-0", new CardsSelectedEventDto(playerRound.getPlayerId(), cardIds, roundId, gameId));
+
+        // Check if round is finished
+        this.checkIfPlayerRoundIsFinished(playerRound);
+
         return playerRound;
+    }
+
+    /**
+     * Check if a player round is finished and sends an application event if it is
+     *
+     * @param playerRound The player round to check
+     */
+    @Override
+    public void checkIfPlayerRoundIsFinished(PlayerRound playerRound) {
+        if (playerRound.isDone()) {
+            eventPublisher.publishEvent(new PlayerRoundFinishedAppEvent(this, playerRound));
+        }
     }
 }

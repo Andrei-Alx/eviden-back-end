@@ -57,10 +57,11 @@ public class GameServiceImpl implements GameService {
             UUID.randomUUID(),
             new ArrayList<>(
                 List.of(
-                    UUID.randomUUID(),
-                    UUID.randomUUID(),
-                    UUID.randomUUID(),
-                    UUID.randomUUID()
+                        UUID.randomUUID()
+//                    UUID.randomUUID(),
+//                    UUID.randomUUID(),
+//                    UUID.randomUUID(),
+//                    UUID.randomUUID()
                 )
             )
         );

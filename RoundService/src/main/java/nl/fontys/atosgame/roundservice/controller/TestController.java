@@ -34,7 +34,6 @@ public class TestController {
 
     @GetMapping("/test")
     public Game start(@RequestBody UUID gameId) {
-        gameService.startGame(gameId);
         return gameService.startGame(gameId);
     }
 

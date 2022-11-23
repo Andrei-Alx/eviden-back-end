@@ -75,4 +75,17 @@ public interface RoundService {
      * @return The updated round
      */
     Round selectCards(UUID playerId, List<UUID> cardIds, UUID gameId, UUID roundId);
+
+    /**
+     * When a playerround is finished, check if round is finished and if so, launch application event
+     * @param roundId The id of the round
+     */
+    void checkRoundEnd(UUID roundId);
+
+    /**
+     * Get the round that contains a playerround
+     * @param playerRound The player round
+     * @return The round
+     */
+    Optional<Round> getRoundByPlayerRound(PlayerRound playerRound);
 }

@@ -1,5 +1,7 @@
 package nl.fontys.atosgame.roundservice.service;
 
+import nl.fontys.atosgame.roundservice.applicationevents.PlayerRoundFinishedAppEvent;
+import nl.fontys.atosgame.roundservice.applicationevents.RoundFinishedAppEvent;
 import nl.fontys.atosgame.roundservice.dto.CardsSelectedEventDto;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerDislikedCard;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerLikedCard;
@@ -11,6 +13,7 @@ import nl.fontys.atosgame.roundservice.repository.PlayerRoundRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +25,7 @@ import static org.mockito.Mockito.*;
 class PlayerRoundServiceImplTest {
     private CardService cardService;
     private StreamBridge streamBridge;
+    private ApplicationEventPublisher eventPublisher;
     private PlayerRoundRepository playerRoundRepository;
     private PlayerRoundServiceImpl playerRoundService;
 
@@ -29,8 +33,9 @@ class PlayerRoundServiceImplTest {
     void setUp() {
         cardService = mock(CardService.class);
         streamBridge = mock(StreamBridge.class);
+        eventPublisher = mock(ApplicationEventPublisher.class);
         playerRoundRepository = mock(PlayerRoundRepository.class);
-        playerRoundService = spy(new PlayerRoundServiceImpl(cardService, streamBridge, playerRoundRepository));
+        playerRoundService = spy(new PlayerRoundServiceImpl(cardService, streamBridge, eventPublisher, playerRoundRepository));
     }
 
     @Test
@@ -95,5 +100,26 @@ class PlayerRoundServiceImplTest {
         assertTrue(playerRound.getSelectedCards().containsAll(List.of(card1, card2)));
         verify(playerRoundRepository).save(playerRound);
         verify(streamBridge).send("producePlayerSelectedCards-in-0", new CardsSelectedEventDto(playerRound.getPlayerId(), cardIds, roundId, gameId));
+        verify(playerRoundService).checkIfPlayerRoundIsFinished(playerRound);
+    }
+
+    @Test
+    void checkIfPlayerRoundIsFinishedWhenFinished() {
+        PlayerRound playerRound = mock(PlayerRound.class);
+        doReturn(true).when(playerRound).isDone();
+
+        playerRoundService.checkIfPlayerRoundIsFinished(playerRound);
+
+        verify(eventPublisher).publishEvent(any(PlayerRoundFinishedAppEvent.class));
+    }
+
+    @Test
+    void checkIfPlayerRoundIsFinishedWhenNotFinished() {
+        PlayerRound playerRound = mock(PlayerRound.class);
+        doReturn(false).when(playerRound).isDone();
+
+        playerRoundService.checkIfPlayerRoundIsFinished(playerRound);
+
+        verify(eventPublisher, never()).publishEvent(any());
     }
 }
