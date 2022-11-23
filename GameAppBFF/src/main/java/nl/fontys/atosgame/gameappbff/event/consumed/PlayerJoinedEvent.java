@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.gameappbff.event.BaseEvent;
-import nl.fontys.atosgame.gameappbff.model.PlayerJoined;
+import nl.fontys.atosgame.gameappbff.model.Player;
 
 @Data
 @AllArgsConstructor
@@ -13,6 +13,6 @@ import nl.fontys.atosgame.gameappbff.model.PlayerJoined;
 public class PlayerJoinedEvent extends BaseEvent {
 
     private UUID lobbyId;
-    private PlayerJoined player;
+    private Player player;
     private UUID gameId;
 }
