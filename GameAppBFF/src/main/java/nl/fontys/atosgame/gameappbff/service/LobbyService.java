@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.gameappbff.service;
 
+import nl.fontys.atosgame.gameappbff.model.PlayerJoined;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 
 import java.util.UUID;
@@ -24,9 +25,9 @@ public interface LobbyService {
     /**
      * Add a player to a lobby.
      * @param lobbyId The lobby to add the player to.
-     * @param playerId The player to add to the lobby.
+     * @param player The player to add to the lobby.
      */
-    Lobby addPlayer(UUID lobbyId, UUID playerId);
+    Lobby addPlayer(UUID lobbyId, PlayerJoined player);
 
     /**
      * Quit a player to a lobby.

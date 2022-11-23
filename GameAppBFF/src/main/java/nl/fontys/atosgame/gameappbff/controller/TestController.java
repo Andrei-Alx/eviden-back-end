@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
+import nl.fontys.atosgame.gameappbff.model.PlayerJoined;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,12 +18,14 @@ public class TestController {
     @Autowired
     private GameSocketController gameSocketController;
 
-    @PostMapping("/testPlayerJoined")
+    /*@PostMapping("/testPlayerJoined")
     public String test(@RequestBody UUID lobbyId) {
-        UUID playerId = UUID.randomUUID();
-        lobbySocketController.playerJoined(lobbyId, playerId);
+        PlayerJoined player = new PlayerJoined();
+        player.setPlayerId(UUID.randomUUID());
+        player.setPlayerName("test");
+        lobbySocketController.playerJoined(lobbyId, player);
         return "player joined";
-    }
+    }*/
 
     @PostMapping("/testLobbyCreated")
     public String testLobbyCreated(@RequestBody UUID gameId) {

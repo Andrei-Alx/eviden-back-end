@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
 import java.util.function.Function;
+
 import nl.fontys.atosgame.gameappbff.event.consumed.LobbyCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.LobbyDeletedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerJoinedEvent;
@@ -44,7 +45,7 @@ public class LobbyConsumers {
     public Function<Message<PlayerJoinedEvent>, Void> handlePlayerJoined() {
         return message -> {
             PlayerJoinedEvent event = message.getPayload();
-            lobbyService.addPlayer(event.getLobbyId(), event.getPlayerId());
+            lobbyService.addPlayer(event.getLobbyId(), event.getPlayer());
             return null;
         };
     }

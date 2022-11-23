@@ -2,6 +2,7 @@ package nl.fontys.atosgame.gameappbff.service;
 
 import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import nl.fontys.atosgame.gameappbff.controller.LobbySocketController;
+import nl.fontys.atosgame.gameappbff.model.PlayerJoined;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.repository.LobbyRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,12 +51,14 @@ class LobbyServiceImplTest {
     @Test
     void addPlayerTest() {
         UUID lobbyId = UUID.randomUUID();
-        UUID playerId = UUID.randomUUID();
+        PlayerJoined player = new PlayerJoined();
+        player.setPlayerId(UUID.randomUUID());
+        player.setPlayerName("test");
         Lobby lobby = new Lobby();
         lobby.setId(lobbyId);
         lobbyRepository.save(lobby);
 
-        Lobby result = lobbyService.addPlayer(lobbyId, playerId);
+        Lobby result = lobbyService.addPlayer(lobbyId, player);
 
         verify(lobbyRepository).save(lobby);
     }

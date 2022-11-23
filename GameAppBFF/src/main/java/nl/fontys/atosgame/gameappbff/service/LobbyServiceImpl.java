@@ -2,7 +2,7 @@ package nl.fontys.atosgame.gameappbff.service;
 
 import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import nl.fontys.atosgame.gameappbff.controller.LobbySocketController;
-import nl.fontys.atosgame.gameappbff.dto.PlayerJoinedDto;
+import nl.fontys.atosgame.gameappbff.model.PlayerJoined;
 import nl.fontys.atosgame.gameappbff.dto.PlayerQuitDto;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.repository.LobbyRepository;
@@ -53,16 +53,16 @@ public class LobbyServiceImpl implements LobbyService {
     /**
      * Add a player to a lobby.
      * @param lobbyId The lobby to add the player to.
-     * @param playerId The player to add to the lobby.
+     * @param player The player to add to the lobby.
      */
     @Override
-    public Lobby addPlayer(UUID lobbyId, UUID playerId){
+    public Lobby addPlayer(UUID lobbyId, PlayerJoined player){
         Lobby lobby = null;
         if(lobbyRepository.findById(lobbyId).isPresent()){
             lobby = lobbyRepository.findById(lobbyId).get();
-            lobby.addPlayer(playerId);
+            lobby.addPlayer(player);
             lobbyRepository.save(lobby);
-            lobbySocketController.playerJoined(lobbyId, playerId);
+            lobbySocketController.playerJoined(lobby);
         }
 
         return lobby;
@@ -80,6 +80,7 @@ public class LobbyServiceImpl implements LobbyService {
             lobby.removePlayer(playerId);
             lobbyRepository.save(lobby);
             lobbySocketController.playerQuit(lobbyId, playerId);
+            // TODO: mark active playerrounds as 'quit' for that player
         }
     }
 }

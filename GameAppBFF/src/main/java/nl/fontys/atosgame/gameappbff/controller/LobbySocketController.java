@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
+import nl.fontys.atosgame.gameappbff.model.Lobby;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -21,14 +22,16 @@ public class LobbySocketController {
     /**
      * S-4
      * Send a message to the lobby that a player has joined
-     * @param lobbyId, playerId
+     * @param lobby, player
      * @return
      */
-    public void playerJoined(UUID lobbyId, UUID playerId) {
+    public Lobby playerJoined(Lobby lobby) {
         template.convertAndSend(
-            String.format("/socket/gameapp/%s/playerJoined", lobbyId),
-            playerId
+            String.format("/socket/gameapp/%s/playerJoined", lobby.getId()),
+            lobby
         );
+
+        return lobby;
     }
 
     /**
