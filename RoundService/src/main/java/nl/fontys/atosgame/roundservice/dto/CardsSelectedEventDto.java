@@ -11,8 +11,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CardsSelectedEventDto {
+    private UUID playerId;
     private UUID gameId;
     private UUID roundId;
-    private UUID playerId;
     private List<UUID> cardIds;
 }

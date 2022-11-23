@@ -260,44 +260,47 @@ class RoundServiceImplTest {
     void likeCard() {
         UUID roundId = UUID.randomUUID();
         UUID playerId = UUID.randomUUID();
+        UUID gameId = UUID.randomUUID();
         UUID cardId = UUID.randomUUID();
         PlayerRound playerRound = new PlayerRound();
         playerRound.setPlayerId(playerId);
         Round round = new Round(roundId, List.of(playerRound), RoundStatus.IN_PROGRESS, null);
         doReturn(Optional.of(round)).when(roundService).getRound(roundId);
 
-        Round result = roundService.likeCard(playerId, roundId, cardId);
+        Round result = roundService.likeCard(playerId, cardId, gameId, roundId);
 
-        verify(playerRoundService).likeCard(playerRound, cardId);
+        verify(playerRoundService).likeCard(playerRound, cardId, gameId, roundId);
     }
 
     @Test
     void dislikeCard() {
         UUID roundId = UUID.randomUUID();
         UUID playerId = UUID.randomUUID();
+        UUID gameId = UUID.randomUUID();
         UUID cardId = UUID.randomUUID();
         PlayerRound playerRound = new PlayerRound();
         playerRound.setPlayerId(playerId);
         Round round = new Round(roundId, List.of(playerRound), RoundStatus.IN_PROGRESS, null);
         doReturn(Optional.of(round)).when(roundService).getRound(roundId);
 
-        Round result = roundService.dislikeCard(playerId, roundId, cardId);
+        Round result = roundService.dislikeCard(playerId, cardId, gameId, roundId);
 
-        verify(playerRoundService).dislikeCard(playerRound, cardId);
+        verify(playerRoundService).dislikeCard(playerRound, cardId, gameId, roundId);
     }
 
     @Test
     void selectCards() {
         UUID roundId = UUID.randomUUID();
         UUID playerId = UUID.randomUUID();
+        UUID gameId = UUID.randomUUID();
         UUID cardId = UUID.randomUUID();
         PlayerRound playerRound = new PlayerRound();
         playerRound.setPlayerId(playerId);
         Round round = new Round(roundId, List.of(playerRound), RoundStatus.IN_PROGRESS, null);
         doReturn(Optional.of(round)).when(roundService).getRound(roundId);
 
-        Round result = roundService.selectCards(playerId, roundId, List.of(cardId));
+        Round result = roundService.selectCards(playerId, List.of(cardId), gameId, roundId);
 
-        verify(playerRoundService).selectCards(playerRound, List.of(cardId));
+        verify(playerRoundService).selectCards(playerRound, List.of(cardId), gameId, roundId);
     }
 }

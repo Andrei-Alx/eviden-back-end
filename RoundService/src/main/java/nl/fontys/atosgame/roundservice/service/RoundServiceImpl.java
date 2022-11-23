@@ -171,14 +171,15 @@ public class RoundServiceImpl implements RoundService {
      * Produces an event and updates the player round
      *
      * @param playerId The player to like the card for
-     * @param roundId  The round to like the card for
      * @param cardId   The card to like
-     * @return The updated round
+     * @param gameId   The game id
+     * @param roundId  The round id
+     * @return The updated player round
      */
     @Override
-    public Round likeCard(UUID playerId, UUID roundId, UUID cardId) {
+    public Round likeCard(UUID playerId, UUID cardId, UUID gameId, UUID roundId) {
         Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
-        playerRoundService.likeCard(round.getPlayerRound(playerId), cardId);
+        playerRoundService.likeCard(round.getPlayerRound(playerId), cardId, gameId, roundId);
         return round;
     }
 
@@ -187,14 +188,15 @@ public class RoundServiceImpl implements RoundService {
      * Produces an event and updates the player round
      *
      * @param playerId The player to dislike the card for
-     * @param roundId  The round to dislike the card for
      * @param cardId   The card to dislike
+     * @param gameId   The game id
+     * @param roundId  The round id
      * @return
      */
     @Override
-    public Round dislikeCard(UUID playerId, UUID roundId, UUID cardId) {
+    public Round dislikeCard(UUID playerId, UUID cardId, UUID gameId, UUID roundId) {
         Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
-        playerRoundService.dislikeCard(round.getPlayerRound(playerId), cardId);
+        playerRoundService.dislikeCard(round.getPlayerRound(playerId), cardId, gameId, roundId);
         return round;
     }
 
@@ -203,16 +205,68 @@ public class RoundServiceImpl implements RoundService {
      * Produces an event and updates the round
      *
      * @param playerId The id of the player
-     * @param roundId  The id of the round
      * @param cardIds  The ids of the cards to select
+     * @param gameId   The id of the game
+     * @param roundId  The id of the round
      * @return The updated round
      */
     @Override
-    public Round selectCards(UUID playerId, UUID roundId, List<UUID> cardIds) {
+    public Round selectCards(UUID playerId, List<UUID> cardIds, UUID gameId, UUID roundId) {
         Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
-        playerRoundService.selectCards(round.getPlayerRound(playerId), cardIds);
+        playerRoundService.selectCards(round.getPlayerRound(playerId), cardIds, gameId, roundId);
         return round;
     }
+
+//    /**
+//     * Like a card
+//     * Produces an event and updates the player round
+//     *
+//     * @param playerId The player to like the card for
+//     * @param roundId  The round to like the card for
+//     * @param cardId   The card to like
+//     * @param gameId   The game that the card was added to
+//     * @return The updated round
+//     */
+//    @Override
+//    public Round likeCard(UUID playerId, UUID roundId, UUID cardId, UUID gameId) {
+//        Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
+//        playerRoundService.likeCard(round.getPlayerRound(playerId), cardId, gameId, roundId);
+//        return round;
+//    }
+//
+//    /**
+//     * Dislike a card
+//     * Produces an event and updates the player round
+//     *
+//     * @param playerId The player to dislike the card for
+//     * @param roundId  The round to dislike the card for
+//     * @param cardId   The card to dislike
+//     * @param gameId   The game that the card was added to
+//     * @return
+//     */
+//    @Override
+//    public Round dislikeCard(UUID playerId, UUID roundId, UUID cardId, UUID gameId) {
+//        Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
+//        playerRoundService.dislikeCard(round.getPlayerRound(playerId), cardId, gameId, roundId);
+//        return round;
+//    }
+//
+//    /**
+//     * Add cards to the selected cards of the player round
+//     * Produces an event and updates the round
+//     *
+//     * @param playerId The id of the player
+//     * @param roundId  The id of the round
+//     * @param cardIds  The ids of the cards to select
+//     * @param gameId   The game that the card was added to
+//     * @return The updated round
+//     */
+//    @Override
+//    public Round selectCards(UUID playerId, UUID roundId, List<UUID> cardIds, UUID gameId) {
+//        Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
+//        playerRoundService.selectCards(round.getPlayerRound(playerId), cardIds, gameId, roundId);
+//        return round;
+//    }
 
     /**
      * Create a round for a game

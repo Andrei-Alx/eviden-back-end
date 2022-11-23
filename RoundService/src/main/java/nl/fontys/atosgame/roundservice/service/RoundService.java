@@ -47,29 +47,32 @@ public interface RoundService {
      * Like a card
      * Produces an event and updates the player round
      * @param playerId The player to like the card for
-     * @param roundId   The round to like the card for
-     * @param cardId   The card to like
-     * @return The updated round
+     * @param cardId  The card to like
+     * @param gameId The game id
+     * @param roundId The round id
+     * @return The updated player round
      */
-    Round likeCard(UUID playerId, UUID roundId, UUID cardId);
+    Round likeCard(UUID playerId, UUID cardId, UUID gameId, UUID roundId);
 
     /**
      * Dislike a card
      * Produces an event and updates the player round
      * @param playerId The player to dislike the card for
-     * @param roundId  The round to dislike the card for
-     * @param cardId  The card to dislike
+     * @param cardId The card to dislike
+     * @param gameId The game id
+     * @param roundId The round id
      * @return
      */
-    Round dislikeCard(UUID playerId, UUID roundId, UUID cardId);
+    Round dislikeCard(UUID playerId, UUID cardId, UUID gameId, UUID roundId);
 
     /**
      * Add cards to the selected cards of the player round
      * Produces an event and updates the round
      * @param playerId The id of the player
-     * @param roundId The id of the round
      * @param cardIds The ids of the cards to select
+     * @param gameId The id of the game
+     * @param roundId The id of the round
      * @return The updated round
      */
-    Round selectCards(UUID playerId, UUID roundId, List<UUID> cardIds);
+    Round selectCards(UUID playerId, List<UUID> cardIds, UUID gameId, UUID roundId);
 }
