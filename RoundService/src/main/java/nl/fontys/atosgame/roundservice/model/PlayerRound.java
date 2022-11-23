@@ -125,7 +125,12 @@ public class PlayerRound {
         return tagCount.get(highestTagValue) > tagCount.get(secondHighestTagValue);
     }
 
-    void addLikedCard(Card card) {
+    /**
+     * Add a card to the likedCards list.
+     * Checks if the card is in the hand of the player and if the card is not already liked.
+     * @param card
+     */
+    public void addLikedCard(Card card) {
         if (hasCardInHand(card) && !likedCards.contains(card)) {
             likedCards.add(card);
         } else {
@@ -133,7 +138,12 @@ public class PlayerRound {
         }
     }
 
-    void addDislikedCard(Card card) {
+    /**
+     * Add a card to the disliked list.
+     * Checks if the card is in the hand of the player and if the card is not already disliked.
+     * @param card The card to add.
+     */
+    public void addDislikedCard(Card card) {
         if (hasCardInHand(card) && !dislikedCards.contains(card)) {
             dislikedCards.add(card);
         } else {
@@ -141,7 +151,12 @@ public class PlayerRound {
         }
     }
 
-    void addSelectedCards(List<Card> card) {
+    /**
+     * Add a card to the selectedCards list.
+     * Checks if the cards are in the hand and if the player has not already picked the cards
+     * @param card The card to add.
+     */
+    public void addSelectedCards(List<Card> card) {
         for (Card c : card) {
             if (hasCardInHand(c) && !selectedCards.contains(c)) {
                 selectedCards.add(c);
@@ -151,7 +166,12 @@ public class PlayerRound {
         }
     }
 
-    boolean hasCardInHand(Card card) {
+    /**
+     * Check if a card is in the hand of the player.
+     * @param card The card to check.
+     * @return True if the card is in the hand of the player, false otherwise.
+     */
+    private boolean hasCardInHand(Card card) {
         return distributedCards.contains(card);
     }
 }
