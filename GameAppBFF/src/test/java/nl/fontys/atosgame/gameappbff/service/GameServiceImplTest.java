@@ -20,12 +20,14 @@ public class GameServiceImplTest {
     GameRepository gameRepository;
     StreamBridge streamBridge;
     GameServiceImpl gameService;
+    GameSocketController gameSocketController;
 
     @BeforeEach
     void setUp() {
         gameRepository = mock(GameRepository.class);
+        gameSocketController = mock(GameSocketController.class);
         streamBridge = mock(StreamBridge.class);
-        gameService = new GameServiceImpl(gameRepository);
+        gameService = new GameServiceImpl(gameRepository, gameSocketController);
     }
 
     @Test

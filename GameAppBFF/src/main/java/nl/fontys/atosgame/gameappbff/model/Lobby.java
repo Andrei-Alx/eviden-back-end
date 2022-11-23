@@ -24,14 +24,14 @@ public class Lobby {
 
     @ElementCollection(fetch = javax.persistence.FetchType.EAGER)
     @JsonProperty
-    private List<UUID> playerIds = new java.util.ArrayList<>();
+    private List<PlayerJoined> players = new java.util.ArrayList<>();
 
     /**
      * Add a player to the lobby
-     * @param playerId The id of the player
+     * @param player The id of the player
      */
-    public void addPlayer(UUID playerId) {
-        playerIds.add(playerId);
+    public void addPlayer(PlayerJoined player) {
+        players.add(player);
     }
 
     /**
@@ -39,6 +39,6 @@ public class Lobby {
      * @param playerId The id of the player
      */
     public void removePlayer(UUID playerId) {
-        playerIds.remove(playerId);
+        players.remove(playerId);
     }
 }

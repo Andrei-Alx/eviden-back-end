@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
 import java.util.function.Function;
+
 import nl.fontys.atosgame.gameappbff.event.consumed.LobbyCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.LobbyDeletedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerJoinedEvent;
@@ -44,8 +45,9 @@ public class LobbyConsumers {
     @Bean
     public Function<Message<PlayerJoinedEvent>, Void> handlePlayerJoined() {
         return message -> {
-            // TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerJoinedEvent event = message.getPayload();
+            lobbyService.addPlayer(event.getLobbyId(), event.getPlayer());
+            return null;
         };
     }
 
@@ -58,8 +60,9 @@ public class LobbyConsumers {
     @Bean
     public Function<Message<PlayerQuitEvent>, Void> handlePlayerQuit() {
         return message -> {
-            // TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerQuitEvent event = message.getPayload();
+            lobbyService.quitPlayer(event.getLobbyId(), event.getPlayerId());
+            return null;
         };
     }
 
@@ -74,7 +77,7 @@ public class LobbyConsumers {
         return message -> {
             LobbyCreatedEvent event = message.getPayload();
             Lobby lobby = event.getLobby();
-            lobby = lobbyService.createLobby(lobby);
+            lobby = lobbyService.createLobby(lobby, event.getGameId());
             gameService.addLobbyToGame(event.getGameId(), lobby);
             return null;
         };
@@ -89,8 +92,9 @@ public class LobbyConsumers {
     @Bean
     public Function<Message<LobbyDeletedEvent>, Void> handleLobbyDeleted() {
         return message -> {
-            //TODO: implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            LobbyDeletedEvent event = message.getPayload();
+            lobbyService.deleteLobby(event.getLobbyId());
+            return null;
         };
     }
 }

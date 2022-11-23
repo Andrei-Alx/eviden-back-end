@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.event.consumed.LobbyCreatedEvent;
+import nl.fontys.atosgame.gameappbff.event.consumed.LobbyDeletedEvent;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.service.GameService;
 import nl.fontys.atosgame.gameappbff.service.LobbyService;
@@ -36,11 +37,12 @@ class LobbyConsumersTest {
         when(lobbyService.createLobby(any(Lobby.class)))
             .thenAnswer(i -> i.getArguments()[0]);
         UUID gameId = UUID.randomUUID();
+        when(lobbyService.createLobby(any(Lobby.class), gameId)).thenAnswer(i -> i.getArguments()[0]);
         doReturn(gameId).when(lobbyCreatedEvent).getGameId();
 
         lobbyConsumers.handleLobbyCreated().apply(message);
 
-        verify(lobbyService).createLobby(lobby);
+        verify(lobbyService).createLobby(lobby, gameId);
         verify(gameService).addLobbyToGame(gameId, lobby);
     }
 }
