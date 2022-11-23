@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import nl.fontys.atosgame.roundservice.enums.RoundStatus;
+
 import nl.fontys.atosgame.roundservice.model.Game;
 import nl.fontys.atosgame.roundservice.model.Lobby;
 import nl.fontys.atosgame.roundservice.model.Round;
@@ -203,5 +203,16 @@ class GameServiceImplTest {
         verify(roundService, never()).endRound(any(UUID.class), any(UUID.class));
         verify(roundService, never())
             .startRound(any(UUID.class), any(List.class), any(UUID.class));
+    }
+
+    @Test
+    void getGameByRoundId() {
+        Game game = mock(Game.class);
+        UUID roundId = UUID.randomUUID();
+        when(gameRepository.getGameByRoundsId(roundId)).thenReturn(Optional.of(game));
+
+        Optional<Game> result = gameService.getGameByRoundId(roundId);
+
+        assertEquals(Optional.of(game), result);
     }
 }
