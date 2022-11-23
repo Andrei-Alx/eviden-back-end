@@ -1,11 +1,9 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.event.consumed.LobbyCreatedEvent;
-import nl.fontys.atosgame.gameappbff.event.consumed.LobbyDeletedEvent;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.service.GameService;
 import nl.fontys.atosgame.gameappbff.service.LobbyService;
@@ -29,15 +27,13 @@ class LobbyConsumersTest {
 
     @Test
     void handleLobbyCreated() {
-        Message<LobbyCreatedEvent> message = mock(Message.class);
         LobbyCreatedEvent lobbyCreatedEvent = mock(LobbyCreatedEvent.class);
+        Message<LobbyCreatedEvent> message = mock(Message.class);
         doReturn(lobbyCreatedEvent).when(message).getPayload();
         Lobby lobby = mock(Lobby.class);
         doReturn(lobby).when(lobbyCreatedEvent).getLobby();
-        when(lobbyService.createLobby(any(Lobby.class)))
-            .thenAnswer(i -> i.getArguments()[0]);
         UUID gameId = UUID.randomUUID();
-        when(lobbyService.createLobby(any(Lobby.class), gameId)).thenAnswer(i -> i.getArguments()[0]);
+        when(lobbyService.createLobby(any(Lobby.class), eq(gameId))).thenAnswer(i -> i.getArguments()[0]);
         doReturn(gameId).when(lobbyCreatedEvent).getGameId();
 
         lobbyConsumers.handleLobbyCreated().apply(message);

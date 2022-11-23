@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * Service for handling games.
@@ -110,16 +109,15 @@ public class GameServiceImpl implements GameService {
      */
     @Override
     public Game addRoundToGame(Round round, UUID gameId) {
-        Game game = null;
-        if(gameRepository.findById(gameId).isPresent()) {
-            game = gameRepository.findById(gameId).get();
-            game.getRounds().add(round);
-            gameRepository.save(game);
+        Optional<Game> game = gameRepository.findById(gameId);
+        if(game.isPresent()) {
+            Game game1 = game.get();
+            game1.getRounds().add(round);
+            gameRepository.save(game1);
+            return game1;
         }
         else {
             throw new EntityNotFoundException("Game not found");
         }
-
-        return game;
     }
 }
