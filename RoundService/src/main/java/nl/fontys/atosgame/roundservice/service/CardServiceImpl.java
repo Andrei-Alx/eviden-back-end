@@ -1,5 +1,7 @@
 package nl.fontys.atosgame.roundservice.service;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.roundservice.model.Card;
@@ -56,5 +58,15 @@ public class CardServiceImpl implements CardService {
     @Override
     public Optional<Card> getCard(UUID id) {
         return cardRepository.findById(id);
+    }
+
+    /**
+     * Get multiple cards by ids
+     *
+     * @param ids The ids of the cards to get
+     */
+    @Override
+    public Collection<Card> getCards(List<UUID> ids) {
+        return cardRepository.findAllById(ids);
     }
 }

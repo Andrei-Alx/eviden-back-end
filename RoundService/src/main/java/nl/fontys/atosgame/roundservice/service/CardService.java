@@ -1,5 +1,7 @@
 package nl.fontys.atosgame.roundservice.service;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.roundservice.model.Card;
@@ -28,4 +30,10 @@ public interface CardService {
      * @return Optional of the card
      */
     Optional<Card> getCard(UUID id);
+
+    /**
+     * Get multiple cards by ids
+     * @param ids The ids of the cards to get
+     */
+    Collection<Card> getCards(List<UUID> ids);
 }

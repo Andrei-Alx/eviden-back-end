@@ -1,6 +1,9 @@
 package nl.fontys.atosgame.roundservice.controller;
 
+import java.util.Optional;
 import java.util.UUID;
+
+import nl.fontys.atosgame.roundservice.model.Game;
 import nl.fontys.atosgame.roundservice.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +23,7 @@ public class TestController {
     private GameService gameService;
 
     @GetMapping
-    public UUID test(@RequestBody UUID gameId) {
-        gameService.checkForNextRound(gameId);
-        return gameId;
+    public Optional<Game> test(@RequestBody UUID roundId) {
+        return gameService.getGameByRoundId(roundId);
     }
 }
