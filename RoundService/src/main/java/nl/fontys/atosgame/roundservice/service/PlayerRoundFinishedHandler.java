@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 
+/**
+ * Handler that handles PlayerRoundFinishedAppEvents and tells the round service to check if the round can be finished
+ * @author Eli
+ */
 @Service
 public class PlayerRoundFinishedHandler implements ApplicationListener<PlayerRoundFinishedAppEvent> {
     private final RoundService roundService;

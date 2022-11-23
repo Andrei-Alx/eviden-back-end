@@ -17,6 +17,10 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service for player round related operations
+ * @author Eli
+ */
 @Service
 public class PlayerRoundServiceImpl implements PlayerRoundService {
 
