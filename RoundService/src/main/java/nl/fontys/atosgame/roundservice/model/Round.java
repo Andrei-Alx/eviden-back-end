@@ -53,4 +53,13 @@ public class Round {
     public boolean isDone() {
         return playerRounds.stream().allMatch(PlayerRound::isDone);
     }
+
+    /**
+     * Get the playerRound for a player
+     * @param playerId The id of the player
+     * @return The playerRound for the player
+     */
+    public PlayerRound getPlayerRound(UUID playerId) {
+        return playerRounds.stream().filter(playerRound -> playerRound.getPlayerId().equals(playerId)).findFirst().orElse(null);
+    }
 }
