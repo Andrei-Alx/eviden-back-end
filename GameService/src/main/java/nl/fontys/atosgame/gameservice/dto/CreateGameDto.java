@@ -1,21 +1,18 @@
-package nl.fontys.atosgame.gameservice.event.produced;
+package nl.fontys.atosgame.gameservice.dto;
 
-import java.util.List;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nl.fontys.atosgame.gameservice.event.BaseEvent;
 import nl.fontys.atosgame.gameservice.model.LobbySettings;
 import nl.fontys.atosgame.gameservice.model.RoundSettings;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GameCreatedEvent extends BaseEvent {
-
-    private UUID gameId;
+public class CreateGameDto {
     private String companyType;
-    private List<RoundSettings> roundSettings;
     private LobbySettings lobbySettings;
+    private List<RoundSettings> roundSettings;
 }

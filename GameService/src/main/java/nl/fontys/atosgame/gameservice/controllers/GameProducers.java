@@ -1,11 +1,17 @@
 package nl.fontys.atosgame.gameservice.controllers;
 
 import java.util.function.Function;
+
+import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
+import nl.fontys.atosgame.gameservice.event.EventFactory;
 import nl.fontys.atosgame.gameservice.event.produced.GameCreatedEvent;
 import nl.fontys.atosgame.gameservice.event.produced.GameEndedEvent;
 import nl.fontys.atosgame.gameservice.event.produced.GameStartedEvent;
+import nl.fontys.atosgame.gameservice.model.Game;
 import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -25,10 +31,18 @@ public class GameProducers {
      * output topic: game-created-topic
      */
     @Bean
-    public Function<?, Message<GameCreatedEvent>> produceGameCreated() {
+    public Function<CreateGameEventDto, Message<GameCreatedEvent>> produceGameCreated() {
         return input -> {
-            //TODO
-            throw new UnsupportedOperationException("Not implemented yet");
+            GameCreatedEvent event = EventFactory.createGameCreatedEvent(
+                input.getGameId(),
+                input.getCompanyType(),
+                input.getRoundSettings(),
+                input.getLobbySettings()
+            );
+            Message<GameCreatedEvent> message = MessageBuilder.withPayload(event)
+                    .setHeader(KafkaHeaders.MESSAGE_KEY, input.getGameId())
+                    .build();
+            return message;
         };
     }
 

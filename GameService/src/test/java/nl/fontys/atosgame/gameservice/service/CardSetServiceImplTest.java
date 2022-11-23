@@ -53,4 +53,15 @@ public class CardSetServiceImplTest {
 
         verify(cardSetRepository).deleteById(cardSetId);
     }
+
+    @Test
+    void getCardSet() {
+        UUID cardSetId = UUID.randomUUID();
+        CardSet cardSet = new CardSet(cardSetId);
+        cardSetService.handleCardSetCreated(cardSet);
+
+        cardSetService.getCardSet(cardSetId);
+
+        verify(cardSetRepository).findById(cardSetId);
+    }
 }
