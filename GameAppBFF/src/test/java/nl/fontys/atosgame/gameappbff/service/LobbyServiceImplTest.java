@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static reactor.core.publisher.Mono.when;
 
@@ -62,5 +64,7 @@ class LobbyServiceImplTest {
         Lobby result = lobbyService.addPlayer(lobbyId, player);
 
         verify(lobbyRepository).save(lobby);
+        assertEquals(1, result.getPlayers().size());
+        assertTrue(result.getPlayers().contains(player));
     }
 }
