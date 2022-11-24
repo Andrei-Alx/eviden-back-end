@@ -26,6 +26,7 @@ public class EventFactory {
             (GameCreatedEvent) initializeBaseEvent(event, "GameCreated", "GameService");
         event.setGameId(gameId);
         event.setCompanyType(companyType);
+        event.setTitle(title);
         event.setRoundSettings(roundSettings);
         event.setLobbySettings(lobbySettings);
         return event;

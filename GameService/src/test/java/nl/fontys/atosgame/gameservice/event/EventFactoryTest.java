@@ -39,6 +39,7 @@ class EventFactoryTest {
         assertEquals(companyType, event.getCompanyType());
         assertEquals(roundSettings, event.getRoundSettings());
         assertEquals(lobbySettings, event.getLobbySettings());
+        assertEquals(title, event.getTitle());
     }
 
     @Test
