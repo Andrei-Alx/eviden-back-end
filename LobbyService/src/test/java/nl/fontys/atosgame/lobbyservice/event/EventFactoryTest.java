@@ -8,6 +8,7 @@ import nl.fontys.atosgame.lobbyservice.event.produced.LobbyCreatedEvent;
 import nl.fontys.atosgame.lobbyservice.event.produced.LobbyDeletedEvent;
 import nl.fontys.atosgame.lobbyservice.event.produced.PlayerJoinedEvent;
 import nl.fontys.atosgame.lobbyservice.model.Lobby;
+import nl.fontys.atosgame.lobbyservice.model.Player;
 import org.junit.jupiter.api.Test;
 
 class EventFactoryTest {
@@ -53,12 +54,12 @@ class EventFactoryTest {
     @Test
     void createPlayerJoinedEvent() {
         UUID lobbyid = UUID.randomUUID();
-        UUID playerid = UUID.randomUUID();
+        Player player = mock(Player.class);
         UUID gameid = UUID.randomUUID();
 
         PlayerJoinedEvent playerJoinedEvent = EventFactory.createPlayerJoinedEvent(
             lobbyid,
-            playerid,
+            player,
             gameid
         );
 
@@ -68,19 +69,19 @@ class EventFactoryTest {
         assertEquals("PlayerJoined", playerJoinedEvent.getType());
         assertEquals("LobbyService", playerJoinedEvent.getService());
         assertEquals(lobbyid, playerJoinedEvent.getLobbyId());
-        assertEquals(playerid, playerJoinedEvent.getPlayerId());
+        assertEquals(player, playerJoinedEvent.getPlayer());
         assertEquals(gameid, playerJoinedEvent.getGameId());
     }
 
     @Test
     void createPlayerQuitEvent() {
         UUID lobbyid = UUID.randomUUID();
-        UUID playerid = UUID.randomUUID();
+        Player player = mock(Player.class);
         UUID gameid = UUID.randomUUID();
 
         PlayerJoinedEvent playerJoinedEvent = EventFactory.createPlayerJoinedEvent(
             lobbyid,
-            playerid,
+            player,
             gameid
         );
 
@@ -90,7 +91,7 @@ class EventFactoryTest {
         assertEquals("PlayerJoined", playerJoinedEvent.getType());
         assertEquals("LobbyService", playerJoinedEvent.getService());
         assertEquals(lobbyid, playerJoinedEvent.getLobbyId());
-        assertEquals(playerid, playerJoinedEvent.getPlayerId());
+        assertEquals(player, playerJoinedEvent.getPlayer());
         assertEquals(gameid, playerJoinedEvent.getGameId());
     }
 }

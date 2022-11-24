@@ -60,7 +60,7 @@ class LobbyEventProducersTest {
 
         assertEquals(lobbyJoinedDto.getLobbyId(), message.getPayload().getLobbyId());
         assertEquals(lobbyJoinedDto.getGameId(), message.getPayload().getGameId());
-        assertEquals(lobbyJoinedDto.getRequestedPlayerId(), message.getPayload().getPlayerId());
+        assertEquals(lobbyJoinedDto.getRequestedPlayer(), message.getPayload().getPlayer());
         assertEquals(
             lobbyJoinedDto.getGameId(),
             message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
@@ -78,7 +78,7 @@ class LobbyEventProducersTest {
 
         assertEquals(lobbyJoinedDto.getLobbyId(), message.getPayload().getLobbyId());
         assertEquals(lobbyJoinedDto.getGameId(), message.getPayload().getGameId());
-        assertEquals(lobbyJoinedDto.getRequestedPlayerId(), message.getPayload().getPlayerId());
+        assertEquals(lobbyJoinedDto.getRequestedPlayer(), message.getPayload().getPlayer());
         assertEquals(
             lobbyJoinedDto.getGameId(),
             message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)

@@ -75,7 +75,7 @@ public class LobbyEventProducers {
         return keyValue -> {
             PlayerJoinedEvent playerJoinedEvent = EventFactory.createPlayerJoinedEvent(
                 keyValue.getLobbyId(),
-                keyValue.getRequestedPlayerId(),
+                keyValue.getRequestedPlayer(),
                 keyValue.getGameId()
             );
 

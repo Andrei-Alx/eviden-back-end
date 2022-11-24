@@ -99,7 +99,7 @@ public class LobbyServiceImpl implements LobbyService {
         //point of no return
         lobbyRepository.saveAndFlush(lobby);
 
-        LobbyJoinedDto lobbyJoinedDto = new LobbyJoinedDto(lobby.getId(), lobby.getPlayers(), player.getId(), lobby.getLobbyCode(), lobby.getGameId());
+        LobbyJoinedDto lobbyJoinedDto = new LobbyJoinedDto(lobby.getId(), lobby.getPlayers(), player, lobby.getLobbyCode(), lobby.getGameId());
         streamBridge.send("producePlayerJoined-in-0", lobbyJoinedDto);
         return lobby;
     }

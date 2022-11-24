@@ -6,6 +6,7 @@ import nl.fontys.atosgame.lobbyservice.event.produced.LobbyDeletedEvent;
 import nl.fontys.atosgame.lobbyservice.event.produced.PlayerJoinedEvent;
 import nl.fontys.atosgame.lobbyservice.event.produced.PlayerQuitEvent;
 import nl.fontys.atosgame.lobbyservice.model.Lobby;
+import nl.fontys.atosgame.lobbyservice.model.Player;
 
 /**
  * Factory class for creating events
@@ -41,7 +42,7 @@ public class EventFactory {
 
     public static PlayerJoinedEvent createPlayerJoinedEvent(
         UUID lobbyId,
-        UUID playerId,
+        Player player,
         UUID gameId
     ) {
         PlayerJoinedEvent event = new PlayerJoinedEvent();
@@ -52,7 +53,7 @@ public class EventFactory {
                 "LobbyService"
             );
         event.setLobbyId(lobbyId);
-        event.setPlayerId(playerId);
+        event.setPlayer(player);
         event.setGameId(gameId);
         return event;
     }
