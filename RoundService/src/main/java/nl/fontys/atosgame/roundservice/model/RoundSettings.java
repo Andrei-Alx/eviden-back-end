@@ -5,6 +5,7 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.fontys.atosgame.roundservice.enums.ShowResults;
 import nl.fontys.atosgame.roundservice.enums.ShuffleMethod;
 
 @Embeddable
@@ -14,7 +15,7 @@ import nl.fontys.atosgame.roundservice.enums.ShuffleMethod;
 public class RoundSettings {
 
     @JsonProperty
-    private boolean showPersonalOrGroupResults;
+    private ShowResults showPersonalOrGroupResults;
 
     @JsonProperty
     private int nrOfLikedCards;

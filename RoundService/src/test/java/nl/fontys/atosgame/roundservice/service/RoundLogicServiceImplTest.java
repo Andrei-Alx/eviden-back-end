@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
+import nl.fontys.atosgame.roundservice.enums.ShowResults;
 import nl.fontys.atosgame.roundservice.enums.ShuffleMethod;
 import nl.fontys.atosgame.roundservice.model.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +32,7 @@ class RoundLogicServiceImplTest {
             UUID.randomUUID(),
             new ArrayList<>(),
             RoundStatus.CREATED,
-            new RoundSettings(false, 4, 3, ShuffleMethod.FULLY_RANDOM, false, null)
+            new RoundSettings(ShowResults.PERSONAL, 4, 3, ShuffleMethod.FULLY_RANDOM, false, null)
         );
         List<UUID> playerIds = new ArrayList<>(
             List.of(UUID.randomUUID(), UUID.randomUUID())
