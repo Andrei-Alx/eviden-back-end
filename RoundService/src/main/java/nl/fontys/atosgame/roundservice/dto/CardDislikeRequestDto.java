@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CardDislikeRequestDto {
-
-    private UUID roundId;
     private UUID playerId;
     private UUID cardId;
+    private UUID roundId;
+    private UUID gameId;
 }

@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CardSubmitRequestDto {
-
-    private UUID roundId;
     private UUID playerId;
     private List<UUID> cardIds;
+    private UUID roundId;
+    private UUID gameId;
 }

@@ -5,12 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.UUID;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
-import nl.fontys.atosgame.roundservice.event.produced.PlayerCardsDistributed;
-import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseEndedEvent;
-import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseStartedEvent;
-import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
-import nl.fontys.atosgame.roundservice.event.produced.RoundEndedEvent;
-import nl.fontys.atosgame.roundservice.event.produced.RoundStartedEvent;
+import nl.fontys.atosgame.roundservice.event.produced.*;
 import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.model.RoundSettings;
 import org.junit.jupiter.api.Test;
@@ -139,6 +134,78 @@ class EventFactoryTest {
         assertEquals(playerId, event.getPlayerId());
         assertEquals(gameId, event.getGameId());
         assertEquals(phaseNumber, event.getPhaseNumber());
+        assertNotNull(event.getTimestamp());
+        assertNotNull(event.getId());
+    }
+
+    @Test
+    void createPlayerLikedCardEvent() {
+        UUID roundId = UUID.randomUUID();
+        UUID playerId = UUID.randomUUID();
+        UUID gameId = UUID.randomUUID();
+        UUID cardId = UUID.randomUUID();
+
+        PlayerLikedCard event = EventFactory.createPlayerLikedCardEvent(
+            roundId,
+            gameId,
+            playerId,
+            cardId
+        );
+
+        assertEquals("PlayerLikedCard", event.getType());
+        assertEquals("RoundService", event.getService());
+        assertEquals(roundId, event.getRoundId());
+        assertEquals(playerId, event.getPlayerId());
+        assertEquals(gameId, event.getGameId());
+        assertEquals(cardId, event.getCardId());
+        assertNotNull(event.getTimestamp());
+        assertNotNull(event.getId());
+    }
+
+    @Test
+    void createPlayerDislikedCardEvent() {
+        UUID roundId = UUID.randomUUID();
+        UUID playerId = UUID.randomUUID();
+        UUID gameId = UUID.randomUUID();
+        UUID cardId = UUID.randomUUID();
+
+        PlayerDislikedCard event = EventFactory.createPlayerDislikedCardEvent(
+            roundId,
+            gameId,
+            playerId,
+            cardId
+        );
+
+        assertEquals("PlayerDislikedCard", event.getType());
+        assertEquals("RoundService", event.getService());
+        assertEquals(roundId, event.getRoundId());
+        assertEquals(playerId, event.getPlayerId());
+        assertEquals(gameId, event.getGameId());
+        assertEquals(cardId, event.getCardId());
+        assertNotNull(event.getTimestamp());
+        assertNotNull(event.getId());
+    }
+
+    @Test
+    void createPlayerSelectedCardsEvent() {
+        UUID roundId = UUID.randomUUID();
+        UUID playerId = UUID.randomUUID();
+        UUID gameId = UUID.randomUUID();
+        ArrayList<UUID> cardIds = new ArrayList<>();
+
+        PlayerSelectedCards event = EventFactory.createPlayerSelectedCardsEvent(
+            roundId,
+            gameId,
+            playerId,
+            cardIds
+        );
+
+        assertEquals("PlayerSelectedCards", event.getType());
+        assertEquals("RoundService", event.getService());
+        assertEquals(roundId, event.getRoundId());
+        assertEquals(playerId, event.getPlayerId());
+        assertEquals(gameId, event.getGameId());
+        assertEquals(cardIds, event.getCardIds());
         assertNotNull(event.getTimestamp());
         assertNotNull(event.getId());
     }

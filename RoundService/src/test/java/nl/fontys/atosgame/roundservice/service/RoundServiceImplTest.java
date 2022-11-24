@@ -1,13 +1,14 @@
 package nl.fontys.atosgame.roundservice.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import nl.fontys.atosgame.roundservice.applicationevents.RoundFinishedAppEvent;
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
@@ -15,6 +16,7 @@ import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.enums.ShuffleMethod;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
+import nl.fontys.atosgame.roundservice.event.produced.RoundEndedEvent;
 import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.model.CardSet;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
@@ -24,6 +26,7 @@ import nl.fontys.atosgame.roundservice.repository.RoundRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.context.ApplicationEventPublisher;
 
 class RoundServiceImplTest {
 
@@ -32,6 +35,7 @@ class RoundServiceImplTest {
     private PlayerRoundService playerRoundService;
     private RoundLogicService roundLogicService;
     private StreamBridge streamBridge;
+    private ApplicationEventPublisher applicationEventPublisher;
     private RoundServiceImpl roundService;
 
     @BeforeEach
@@ -41,6 +45,7 @@ class RoundServiceImplTest {
         playerRoundService = mock(PlayerRoundService.class);
         roundLogicService = mock(RoundLogicService.class);
         streamBridge = mock(StreamBridge.class);
+        applicationEventPublisher = mock(ApplicationEventPublisher.class);
         roundService =
             spy(
                 new RoundServiceImpl(
@@ -48,7 +53,8 @@ class RoundServiceImplTest {
                     cardSetService,
                     streamBridge,
                     playerRoundService,
-                    roundLogicService
+                    roundLogicService,
+                    applicationEventPublisher
                 )
             );
     }
@@ -56,7 +62,6 @@ class RoundServiceImplTest {
     @Test
     void createRound() {
         RoundSettingsDto roundSettings = new RoundSettingsDto(
-            UUID.randomUUID(),
             true,
             1,
             1,
@@ -246,5 +251,86 @@ class RoundServiceImplTest {
         verify(streamBridge)
             .send("produceRoundEnded-in-0", new RoundEndedDto(gameId, result.getId()));
         verify(roundRepository).save(result);
+    }
+
+    @Test
+    void getRound() {
+        Round round = mock(Round.class);
+        when(roundRepository.findById(round.getId())).thenReturn(Optional.of(round));
+
+        Optional<Round> result = roundService.getRound(round.getId());
+
+        assertEquals(Optional.of(round), result);
+    }
+
+    @Test
+    void likeCard() {
+        UUID roundId = UUID.randomUUID();
+        UUID playerId = UUID.randomUUID();
+        UUID gameId = UUID.randomUUID();
+        UUID cardId = UUID.randomUUID();
+        PlayerRound playerRound = new PlayerRound();
+        playerRound.setPlayerId(playerId);
+        Round round = new Round(roundId, List.of(playerRound), RoundStatus.IN_PROGRESS, null);
+        doReturn(Optional.of(round)).when(roundService).getRound(roundId);
+
+        Round result = roundService.likeCard(playerId, cardId, gameId, roundId);
+
+        verify(playerRoundService).likeCard(playerRound, cardId, gameId, roundId);
+    }
+
+    @Test
+    void dislikeCard() {
+        UUID roundId = UUID.randomUUID();
+        UUID playerId = UUID.randomUUID();
+        UUID gameId = UUID.randomUUID();
+        UUID cardId = UUID.randomUUID();
+        PlayerRound playerRound = new PlayerRound();
+        playerRound.setPlayerId(playerId);
+        Round round = new Round(roundId, List.of(playerRound), RoundStatus.IN_PROGRESS, null);
+        doReturn(Optional.of(round)).when(roundService).getRound(roundId);
+
+        Round result = roundService.dislikeCard(playerId, cardId, gameId, roundId);
+
+        verify(playerRoundService).dislikeCard(playerRound, cardId, gameId, roundId);
+    }
+
+    @Test
+    void selectCards() {
+        UUID roundId = UUID.randomUUID();
+        UUID playerId = UUID.randomUUID();
+        UUID gameId = UUID.randomUUID();
+        UUID cardId = UUID.randomUUID();
+        PlayerRound playerRound = new PlayerRound();
+        playerRound.setPlayerId(playerId);
+        Round round = new Round(roundId, List.of(playerRound), RoundStatus.IN_PROGRESS, null);
+        doReturn(Optional.of(round)).when(roundService).getRound(roundId);
+
+        Round result = roundService.selectCards(playerId, List.of(cardId), gameId, roundId);
+
+        verify(playerRoundService).selectCards(playerRound, List.of(cardId), gameId, roundId);
+    }
+
+    @Test
+    void checkRoundEnd() {
+        UUID roundId = UUID.randomUUID();
+        Round round = mock(Round.class);
+        when(round.isDone()).thenReturn(true);
+        when(roundRepository.findById(roundId)).thenReturn(Optional.of(round));
+
+        roundService.checkRoundEnd(roundId);
+
+        verify(applicationEventPublisher).publishEvent(any(RoundFinishedAppEvent.class));
+    }
+
+    @Test
+    void getRoundByPlayerRound() {
+        Round round = new Round();
+        PlayerRound playerRound = new PlayerRound();
+        when(roundRepository.findByPlayerRoundsContaining(playerRound)).thenReturn(Optional.of(round));
+
+        Optional<Round> result = roundService.getRoundByPlayerRound(playerRound);
+
+        assertEquals(Optional.of(round), result);
     }
 }

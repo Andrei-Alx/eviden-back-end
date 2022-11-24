@@ -12,8 +12,8 @@ import nl.fontys.atosgame.roundservice.event.BaseEvent;
 @NoArgsConstructor
 public class PlayerSelectedCards extends BaseEvent {
 
-    private UUID gameId;
-    private UUID roundId;
     private UUID playerId;
     private List<UUID> cardIds;
+    private UUID roundId;
+    private UUID gameId;
 }

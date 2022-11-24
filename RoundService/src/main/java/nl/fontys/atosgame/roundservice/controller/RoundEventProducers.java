@@ -1,19 +1,10 @@
 package nl.fontys.atosgame.roundservice.controller;
 
 import java.util.function.Function;
-import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
-import nl.fontys.atosgame.roundservice.dto.PlayerPhaseEndedDto;
-import nl.fontys.atosgame.roundservice.dto.PlayerPhaseStartedDto;
-import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
-import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
+
+import nl.fontys.atosgame.roundservice.dto.*;
 import nl.fontys.atosgame.roundservice.event.EventFactory;
-import nl.fontys.atosgame.roundservice.event.produced.PlayerCardsDistributed;
-import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseEndedEvent;
-import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseStartedEvent;
-import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
-import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
-import nl.fontys.atosgame.roundservice.event.produced.RoundEndedEvent;
-import nl.fontys.atosgame.roundservice.event.produced.RoundStartedEvent;
+import nl.fontys.atosgame.roundservice.event.produced.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
@@ -173,10 +164,19 @@ public class RoundEventProducers {
      * output topic: player-liked-card-topic
      */
     @Bean
-    public Function<?, Message<RoundCreatedEvent>> producePlayerLikedCard() {
+    public Function<CardLikedEventDto, Message<PlayerLikedCard>> producePlayerLikedCard() {
         return keyValue -> {
-            // TODO implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerLikedCard event = EventFactory.createPlayerLikedCardEvent(
+                keyValue.getRoundId(),
+                keyValue.getGameId(),
+                keyValue.getPlayerId(),
+                keyValue.getCardId()
+            );
+
+            return MessageBuilder
+                .withPayload(event)
+                .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                .build();
         };
     }
 
@@ -187,10 +187,18 @@ public class RoundEventProducers {
      * output topic: player-disliked-card-topic
      */
     @Bean
-    public Function<?, Message<RoundCreatedEvent>> producePlayerDislikedCard() {
+    public Function<CardDislikedEventDto, Message<PlayerDislikedCard>> producePlayerDislikedCard() {
         return keyValue -> {
-            // TODO implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerDislikedCard event = EventFactory.createPlayerDislikedCardEvent(
+                keyValue.getRoundId(),
+                keyValue.getGameId(),
+                keyValue.getPlayerId(),
+                keyValue.getCardId()
+            );
+            return MessageBuilder
+                .withPayload(event)
+                .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                .build();
         };
     }
 
@@ -201,10 +209,18 @@ public class RoundEventProducers {
      * output topic: player-selected-cards-topic
      */
     @Bean
-    public Function<?, Message<RoundCreatedEvent>> producePlayerSelectedCards() {
+    public Function<CardsSelectedEventDto, Message<PlayerSelectedCards>> producePlayerSelectedCards() {
         return keyValue -> {
-            // TODO implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerSelectedCards event = EventFactory.createPlayerSelectedCardsEvent(
+                keyValue.getRoundId(),
+                keyValue.getGameId(),
+                keyValue.getPlayerId(),
+                keyValue.getCardIds()
+            );
+            return MessageBuilder
+                .withPayload(event)
+                .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                .build();
         };
     }
 

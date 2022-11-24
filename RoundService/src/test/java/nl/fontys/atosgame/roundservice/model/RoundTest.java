@@ -5,6 +5,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 
 class RoundTest {
@@ -46,5 +48,22 @@ class RoundTest {
         round.setPlayerRounds(List.of(playerRound1, playerRound2, playerRound3));
 
         assertFalse(round.isDone());
+    }
+
+    @Test
+    void getPlayerRound() {
+        UUID playerId = UUID.randomUUID();
+        PlayerRound playerRound1 = new PlayerRound();
+        playerRound1.setPlayerId(UUID.randomUUID());
+        PlayerRound playerRound2 = new PlayerRound();
+        playerRound2.setPlayerId(playerId);
+        PlayerRound playerRound3 = new PlayerRound();
+        playerRound3.setPlayerId(UUID.randomUUID());
+        Round round = new Round();
+        round.setPlayerRounds(List.of(playerRound1, playerRound2, playerRound3));
+
+        PlayerRound result = round.getPlayerRound(playerId);
+
+        assertEquals(playerRound2, result);
     }
 }

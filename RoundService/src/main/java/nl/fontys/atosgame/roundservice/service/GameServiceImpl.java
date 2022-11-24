@@ -57,10 +57,11 @@ public class GameServiceImpl implements GameService {
             UUID.randomUUID(),
             new ArrayList<>(
                 List.of(
-                    UUID.randomUUID(),
-                    UUID.randomUUID(),
-                    UUID.randomUUID(),
-                    UUID.randomUUID()
+                        UUID.randomUUID()
+//                    UUID.randomUUID(),
+//                    UUID.randomUUID(),
+//                    UUID.randomUUID(),
+//                    UUID.randomUUID()
                 )
             )
         );
@@ -153,4 +154,16 @@ public class GameServiceImpl implements GameService {
             gameRepository.save(game);
         }
     }
+
+    /**
+     * Get the game of a round
+     *
+     * @param roundId The id of the round
+     * @return An optional containing the game if found
+     */
+    @Override
+    public Optional<Game> getGameByRoundId(UUID roundId) {
+        return gameRepository.getGameByRoundsId(roundId);
+    }
+
 }

@@ -6,18 +6,9 @@ import static org.mockito.Mockito.mock;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
-import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
-import nl.fontys.atosgame.roundservice.dto.PlayerPhaseEndedDto;
-import nl.fontys.atosgame.roundservice.dto.PlayerPhaseStartedDto;
-import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
-import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
-import nl.fontys.atosgame.roundservice.event.produced.PlayerCardsDistributed;
-import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseEndedEvent;
-import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseStartedEvent;
-import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
-import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
-import nl.fontys.atosgame.roundservice.event.produced.RoundEndedEvent;
-import nl.fontys.atosgame.roundservice.event.produced.RoundStartedEvent;
+
+import nl.fontys.atosgame.roundservice.dto.*;
+import nl.fontys.atosgame.roundservice.event.produced.*;
 import nl.fontys.atosgame.roundservice.model.Round;
 import org.junit.jupiter.api.Test;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -184,6 +175,108 @@ class RoundEventProducersTest {
         );
         assertEquals(
             playerPhaseEndedDto.getGameId(),
+            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+        );
+    }
+
+    @Test
+    void producePlayerLikedCard() {
+        CardLikedEventDto playerLikedCardDto = new CardLikedEventDto(
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            UUID.randomUUID()
+        );
+        RoundEventProducers roundEventProducers = new RoundEventProducers();
+
+        Message<PlayerLikedCard> message = roundEventProducers
+            .producePlayerLikedCard()
+            .apply(playerLikedCardDto);
+
+        assertEquals("RoundService", message.getPayload().getService());
+        assertEquals("PlayerLikedCard", message.getPayload().getType());
+        assertEquals(playerLikedCardDto.getRoundId(), message.getPayload().getRoundId());
+        assertEquals(
+            playerLikedCardDto.getPlayerId(),
+            message.getPayload().getPlayerId()
+        );
+        assertEquals(playerLikedCardDto.getGameId(), message.getPayload().getGameId());
+        assertEquals(
+            playerLikedCardDto.getCardId(),
+            message.getPayload().getCardId()
+        );
+        assertEquals(
+            playerLikedCardDto.getGameId(),
+            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+        );
+    }
+
+    @Test
+    void producePlayerDislikedCard() {
+        CardDislikedEventDto playerDislikedCardDto = new CardDislikedEventDto(
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            UUID.randomUUID()
+        );
+        RoundEventProducers roundEventProducers = new RoundEventProducers();
+
+        Message<PlayerDislikedCard> message = roundEventProducers
+            .producePlayerDislikedCard()
+            .apply(playerDislikedCardDto);
+
+        assertEquals("RoundService", message.getPayload().getService());
+        assertEquals("PlayerDislikedCard", message.getPayload().getType());
+        assertEquals(
+            playerDislikedCardDto.getRoundId(),
+            message.getPayload().getRoundId()
+        );
+        assertEquals(
+            playerDislikedCardDto.getPlayerId(),
+            message.getPayload().getPlayerId()
+        );
+        assertEquals(playerDislikedCardDto.getGameId(), message.getPayload().getGameId());
+        assertEquals(
+            playerDislikedCardDto.getCardId(),
+            message.getPayload().getCardId()
+        );
+        assertEquals(
+            playerDislikedCardDto.getGameId(),
+            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+        );
+    }
+
+    @Test
+    void producePlayerSelectedCards() {
+        CardsSelectedEventDto playerSelectedCardsDto = new CardsSelectedEventDto(
+            UUID.randomUUID(),
+                List.of(UUID.randomUUID(), UUID.randomUUID()),
+            UUID.randomUUID(),
+            UUID.randomUUID()
+        );
+        RoundEventProducers roundEventProducers = new RoundEventProducers();
+
+        Message<PlayerSelectedCards> message = roundEventProducers
+            .producePlayerSelectedCards()
+            .apply(playerSelectedCardsDto);
+
+        assertEquals("RoundService", message.getPayload().getService());
+        assertEquals("PlayerSelectedCards", message.getPayload().getType());
+        assertEquals(
+            playerSelectedCardsDto.getRoundId(),
+            message.getPayload().getRoundId()
+        );
+        assertEquals(
+            playerSelectedCardsDto.getPlayerId(),
+            message.getPayload().getPlayerId()
+        );
+        assertEquals(playerSelectedCardsDto.getGameId(), message.getPayload().getGameId());
+        assertEquals(
+            playerSelectedCardsDto.getCardIds(),
+            message.getPayload().getCardIds()
+        );
+        assertEquals(
+            playerSelectedCardsDto.getGameId(),
             message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
         );
     }

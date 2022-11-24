@@ -1,17 +1,18 @@
 package nl.fontys.atosgame.roundservice.dto;
 
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CardLikeRequestDto {
-
+public class CardsSelectedEventDto {
     private UUID playerId;
-    private UUID cardId;
+    private List<UUID> cardIds;
     private UUID roundId;
     private UUID gameId;
 }

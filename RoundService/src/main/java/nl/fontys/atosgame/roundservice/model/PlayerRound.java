@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.roundservice.enums.PlayerRoundPhase;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -27,18 +29,22 @@ public class PlayerRound {
     @JsonProperty
     private UUID playerId;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JsonProperty
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Card> likedCards = new ArrayList<>();
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JsonProperty
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Card> dislikedCards = new ArrayList<>();
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JsonProperty
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Card> selectedCards = new ArrayList<>();
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(cascade = { CascadeType.PERSIST })
     private List<Card> distributedCards = new ArrayList<>();
 
@@ -123,5 +129,55 @@ public class PlayerRound {
         }
         // Check if the highest tag is picked more often than the second highest tag
         return tagCount.get(highestTagValue) > tagCount.get(secondHighestTagValue);
+    }
+
+    /**
+     * Add a card to the likedCards list.
+     * Checks if the card is in the hand of the player and if the card is not already liked.
+     * @param card
+     */
+    public void addLikedCard(Card card) {
+        if (hasCardInHand(card) && !likedCards.contains(card)) {
+            likedCards.add(card);
+        } else {
+            throw new IllegalArgumentException("Card is not in hand or already liked");
+        }
+    }
+
+    /**
+     * Add a card to the disliked list.
+     * Checks if the card is in the hand of the player and if the card is not already disliked.
+     * @param card The card to add.
+     */
+    public void addDislikedCard(Card card) {
+        if (hasCardInHand(card) && !dislikedCards.contains(card)) {
+            dislikedCards.add(card);
+        } else {
+            throw new IllegalArgumentException("Card is not in hand or already disliked");
+        }
+    }
+
+    /**
+     * Add a card to the selectedCards list.
+     * Checks if the cards are in the hand and if the player has not already picked the cards
+     * @param card The card to add.
+     */
+    public void addSelectedCards(List<Card> card) {
+        for (Card c : card) {
+            if (hasCardInHand(c) && !selectedCards.contains(c)) {
+                selectedCards.add(c);
+            } else {
+                throw new IllegalArgumentException("Card is not in hand or already selected");
+            }
+        }
+    }
+
+    /**
+     * Check if a card is in the hand of the player.
+     * @param card The card to check.
+     * @return True if the card is in the hand of the player, false otherwise.
+     */
+    private boolean hasCardInHand(Card card) {
+        return distributedCards.stream().anyMatch(c -> c.getId().equals(card.getId()));
     }
 }

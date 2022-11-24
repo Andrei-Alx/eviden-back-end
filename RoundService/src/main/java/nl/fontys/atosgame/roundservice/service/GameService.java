@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.roundservice.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
@@ -37,4 +38,11 @@ public interface GameService {
      * @param gameId The id of the game
      */
     void checkForNextRound(UUID gameId);
+
+    /**
+     * Get the game of a round
+     * @param roundId The id of the round
+     * @return An optional containing the game if found
+     */
+    Optional<Game> getGameByRoundId(UUID roundId);
 }

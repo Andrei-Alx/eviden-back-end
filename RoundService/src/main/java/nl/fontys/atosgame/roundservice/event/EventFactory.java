@@ -2,12 +2,8 @@ package nl.fontys.atosgame.roundservice.event;
 
 import java.util.List;
 import java.util.UUID;
-import nl.fontys.atosgame.roundservice.event.produced.PlayerCardsDistributed;
-import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseEndedEvent;
-import nl.fontys.atosgame.roundservice.event.produced.PlayerPhaseStartedEvent;
-import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEvent;
-import nl.fontys.atosgame.roundservice.event.produced.RoundEndedEvent;
-import nl.fontys.atosgame.roundservice.event.produced.RoundStartedEvent;
+
+import nl.fontys.atosgame.roundservice.event.produced.*;
 import nl.fontys.atosgame.roundservice.model.Round;
 
 /**
@@ -144,6 +140,90 @@ public class EventFactory {
         event.setRoundId(roundId);
         event.setGameId(gameId);
         event.setPlayerId(playerId);
+        return event;
+    }
+
+    /**
+     * Create a PlayerLikedCardEvent
+     * @param roundId The id of the round
+     * @param gameId The id of the game
+     * @param playerId The id of the player
+     * @param cardId The id of the card
+     * @return The created event
+     */
+    public static PlayerLikedCard createPlayerLikedCardEvent(
+        UUID roundId,
+        UUID gameId,
+        UUID playerId,
+        UUID cardId
+    ) {
+        PlayerLikedCard event = new PlayerLikedCard();
+        event =
+            (PlayerLikedCard) initializeBaseEvent(
+                event,
+                "PlayerLikedCard",
+                "RoundService"
+            );
+        event.setRoundId(roundId);
+        event.setGameId(gameId);
+        event.setPlayerId(playerId);
+        event.setCardId(cardId);
+        return event;
+    }
+
+    /**
+     * Create a PlayerDislikedCardEvent
+     * @param roundId The id of the round
+     * @param gameId The id of the game
+     * @param playerId The id of the player
+     * @param cardId The id of the card
+     * @return The created event
+     */
+    public static PlayerDislikedCard createPlayerDislikedCardEvent(
+        UUID roundId,
+        UUID gameId,
+        UUID playerId,
+        UUID cardId
+    ) {
+        PlayerDislikedCard event = new PlayerDislikedCard();
+        event =
+            (PlayerDislikedCard) initializeBaseEvent(
+                event,
+                "PlayerDislikedCard",
+                "RoundService"
+            );
+        event.setRoundId(roundId);
+        event.setGameId(gameId);
+        event.setPlayerId(playerId);
+        event.setCardId(cardId);
+        return event;
+    }
+
+    /**
+     * Create a PlayerSelectedCardsEvent
+     * @param roundId The id of the round
+     * @param gameId The id of the game
+     * @param playerId The id of the player
+     * @param cardIds The ids of the cards
+     * @return The created event
+     */
+    public static PlayerSelectedCards createPlayerSelectedCardsEvent(
+        UUID roundId,
+        UUID gameId,
+        UUID playerId,
+        List<UUID> cardIds
+    ) {
+        PlayerSelectedCards event = new PlayerSelectedCards();
+        event =
+            (PlayerSelectedCards) initializeBaseEvent(
+                event,
+                "PlayerSelectedCards",
+                "RoundService"
+            );
+        event.setRoundId(roundId);
+        event.setGameId(gameId);
+        event.setPlayerId(playerId);
+        event.setCardIds(cardIds);
         return event;
     }
 
