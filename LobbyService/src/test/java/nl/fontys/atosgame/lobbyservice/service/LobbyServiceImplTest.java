@@ -80,7 +80,7 @@ class LobbyServiceImplTest {
         String lobbyCode = lobbyCodeGenerator.generateLobbyCode();
         String playerName = "PlayerOne";
 
-        LobbySettings lobbySettings = new LobbySettings(UUID.randomUUID(), 8);
+        LobbySettings lobbySettings = new LobbySettings(8);
         Lobby lobby = new Lobby(UUID.randomUUID(), new ArrayList<Player>(),lobbyCode, lobbySettings, UUID.randomUUID());
         // arrange mock
         when(lobbyRepository.getByLobbyCode(lobbyCode)).thenReturn(lobby);
@@ -101,7 +101,7 @@ class LobbyServiceImplTest {
         // arrange
         UUID lobbyId = UUID.randomUUID();
         String lobbyCode = lobbyCodeGenerator.generateLobbyCode();
-        LobbySettings lobbySettings = new LobbySettings(UUID.randomUUID(), 8);
+        LobbySettings lobbySettings = new LobbySettings(8);
         String playerName = "PlayerOne";
         UUID playerId = UUID.randomUUID();
         Collection<Player> players = new ArrayList<Player>();

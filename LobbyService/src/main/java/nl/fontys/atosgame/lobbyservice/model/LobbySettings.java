@@ -13,10 +13,5 @@ import org.hibernate.annotations.Type;
 @NoArgsConstructor
 @Embeddable
 public class LobbySettings {
-
-    @Type(type = "org.hibernate.type.UUIDCharType")
-    @Column(name = "lobbysettings_id")
-    private UUID id;
-
     private int maxPlayers;
 }
