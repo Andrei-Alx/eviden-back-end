@@ -14,6 +14,7 @@ import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
+import nl.fontys.atosgame.roundservice.enums.ShowResults;
 import nl.fontys.atosgame.roundservice.enums.ShuffleMethod;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.event.produced.RoundEndedEvent;
@@ -62,7 +63,7 @@ class RoundServiceImplTest {
     @Test
     void createRound() {
         RoundSettingsDto roundSettings = new RoundSettingsDto(
-            true,
+            ShowResults.PERSONAL,
             1,
             1,
             ShuffleMethod.FULLY_RANDOM,
@@ -70,7 +71,7 @@ class RoundServiceImplTest {
             UUID.randomUUID()
         );
         RoundSettings settings = new RoundSettings(
-            roundSettings.isShowPersonalOrGroupResults(),
+            roundSettings.getShowPersonalOrGroupResults(),
             roundSettings.getNrOfLikedCards(),
             roundSettings.getNrOfSelectedCards(),
             roundSettings.getShuffleMethod(),
