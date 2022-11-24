@@ -88,7 +88,7 @@ public class LobbyServiceImpl implements LobbyService {
         Lobby lobby = lobbyRepository.getByLobbyCode(lobbyCode);
         if(lobby == null){throw new EntityNotFoundException("No lobby found for lobbycode"+ lobbyCode);}
         //check whether the lobby is already full
-        if (lobby.getPlayers().stream().count() >= lobby.getLobbySettings().getMaxPlayers()) { throw new FullLobbyException("Maximum number of players in lobby reached");
+        if (lobby.getPlayers().size() >= lobby.getLobbySettings().getMaxPlayers()) { throw new FullLobbyException("Maximum number of players in lobby reached");
         }
         //add player
         Player player = new Player();
@@ -99,7 +99,7 @@ public class LobbyServiceImpl implements LobbyService {
         //point of no return
         lobbyRepository.saveAndFlush(lobby);
 
-        LobbyJoinedDto lobbyJoinedDto = new LobbyJoinedDto(lobby.getId(), lobby.getPlayers(), player.getId(), lobby.getLobbyCode());
+        LobbyJoinedDto lobbyJoinedDto = new LobbyJoinedDto(lobby.getId(), lobby.getPlayers(), player.getId(), lobby.getLobbyCode(), lobby.getGameId());
         streamBridge.send("producePlayerJoined-in-0", lobbyJoinedDto);
         return lobby;
     }

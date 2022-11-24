@@ -4,8 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 import nl.fontys.atosgame.lobbyservice.dto.LobbyDeletedDto;
+import nl.fontys.atosgame.lobbyservice.dto.LobbyJoinedDto;
 import nl.fontys.atosgame.lobbyservice.event.produced.LobbyCreatedEvent;
 import nl.fontys.atosgame.lobbyservice.event.produced.LobbyDeletedEvent;
+import nl.fontys.atosgame.lobbyservice.event.produced.PlayerJoinedEvent;
 import nl.fontys.atosgame.lobbyservice.model.Lobby;
 import org.junit.jupiter.api.Test;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -43,6 +45,42 @@ class LobbyEventProducersTest {
         assertEquals(lobbyDeletedDto.getGameId(), message.getPayload().getGameId());
         assertEquals(
             lobbyDeletedDto.getGameId(),
+            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+        );
+    }
+
+    @Test
+    void producePlayerJoined() {
+        LobbyJoinedDto lobbyJoinedDto = mock(LobbyJoinedDto.class);
+        LobbyEventProducers lobbyEventProducers = new LobbyEventProducers();
+
+        Message<PlayerJoinedEvent> message = lobbyEventProducers
+            .producePlayerJoined()
+            .apply(lobbyJoinedDto);
+
+        assertEquals(lobbyJoinedDto.getLobbyId(), message.getPayload().getLobbyId());
+        assertEquals(lobbyJoinedDto.getGameId(), message.getPayload().getGameId());
+        assertEquals(lobbyJoinedDto.getRequestedPlayerId(), message.getPayload().getPlayerId());
+        assertEquals(
+            lobbyJoinedDto.getGameId(),
+            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+        );
+    }
+
+    @Test
+    void producePlayerQuit() {
+        LobbyJoinedDto lobbyJoinedDto = mock(LobbyJoinedDto.class);
+        LobbyEventProducers lobbyEventProducers = new LobbyEventProducers();
+
+        Message<PlayerJoinedEvent> message = lobbyEventProducers
+            .producePlayerJoined()
+            .apply(lobbyJoinedDto);
+
+        assertEquals(lobbyJoinedDto.getLobbyId(), message.getPayload().getLobbyId());
+        assertEquals(lobbyJoinedDto.getGameId(), message.getPayload().getGameId());
+        assertEquals(lobbyJoinedDto.getRequestedPlayerId(), message.getPayload().getPlayerId());
+        assertEquals(
+            lobbyJoinedDto.getGameId(),
             message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
         );
     }

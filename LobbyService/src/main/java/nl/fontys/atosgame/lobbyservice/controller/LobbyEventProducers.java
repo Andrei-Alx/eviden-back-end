@@ -3,6 +3,8 @@ package nl.fontys.atosgame.lobbyservice.controller;
 import java.util.UUID;
 import java.util.function.Function;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyDeletedDto;
+import nl.fontys.atosgame.lobbyservice.dto.LobbyJoinedDto;
+import nl.fontys.atosgame.lobbyservice.dto.LobbyQuitDto;
 import nl.fontys.atosgame.lobbyservice.event.EventFactory;
 import nl.fontys.atosgame.lobbyservice.event.produced.LobbyCreatedEvent;
 import nl.fontys.atosgame.lobbyservice.event.produced.LobbyDeletedEvent;
@@ -69,10 +71,18 @@ public class LobbyEventProducers {
      * output topic: player-joined-topic
      */
     @Bean
-    public Function<?, Message<PlayerJoinedEvent>> producePlayerJoined() {
+    public Function<LobbyJoinedDto, Message<PlayerJoinedEvent>> producePlayerJoined() {
         return keyValue -> {
-            // TODO implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerJoinedEvent playerJoinedEvent = EventFactory.createPlayerJoinedEvent(
+                keyValue.getLobbyId(),
+                keyValue.getRequestedPlayerId(),
+                keyValue.getGameId()
+            );
+
+            return MessageBuilder
+                .withPayload(playerJoinedEvent)
+                .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                .build();
         };
     }
 
@@ -83,10 +93,17 @@ public class LobbyEventProducers {
      * output topic: player-quit-topic
      */
     @Bean
-    public Function<?, Message<PlayerQuitEvent>> producePlayerQuit() {
+    public Function<LobbyQuitDto, Message<PlayerQuitEvent>> producePlayerQuit() {
         return keyValue -> {
-            // TODO implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerQuitEvent playerQuitEvent = EventFactory.createPlayerQuitEvent(
+                keyValue.getLobbyId(),
+                keyValue.getPlayerId(),
+                keyValue.getGameId()
+            );
+            return MessageBuilder
+                .withPayload(playerQuitEvent)
+                .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                .build();
         };
     }
 }

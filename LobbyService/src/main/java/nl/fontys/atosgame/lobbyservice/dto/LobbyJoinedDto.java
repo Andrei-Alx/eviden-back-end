@@ -27,4 +27,7 @@ public class LobbyJoinedDto {
 
     @JsonProperty
     private String lobbyCode;
+
+    @JsonProperty
+    private UUID gameId;
 }

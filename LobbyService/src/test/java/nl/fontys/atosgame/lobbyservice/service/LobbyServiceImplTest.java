@@ -88,7 +88,7 @@ class LobbyServiceImplTest {
 
         // act
         Lobby joinedLobby = lobbyService.joinLobby(lobbyCode,playerName);
-        LobbyJoinedDto lobbyJoinedDto = new LobbyJoinedDto(joinedLobby.getId(), joinedLobby.getPlayers(), joinedLobby.getPlayers().stream().findFirst().get().getId(), joinedLobby.getLobbyCode());
+        LobbyJoinedDto lobbyJoinedDto = new LobbyJoinedDto(joinedLobby.getId(), joinedLobby.getPlayers(), joinedLobby.getPlayers().stream().findFirst().get().getId(), joinedLobby.getLobbyCode(), joinedLobby.getGameId());
 
         //assert
         verify(lobbyRepository, times(1)).getByLobbyCode(lobbyCode);
