@@ -4,18 +4,16 @@ import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import nl.fontys.atosgame.gameappbff.controller.LobbySocketController;
 import nl.fontys.atosgame.gameappbff.model.Player;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.repository.LobbyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
 import java.util.UUID;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
+import static reactor.core.publisher.Mono.when;
 
 class LobbyServiceImplTest {
 
@@ -59,7 +57,7 @@ class LobbyServiceImplTest {
         player.setName("test");
         Lobby lobby = new Lobby();
         lobby.setId(lobbyId);
-        lobbyRepository.save(lobby);
+        doReturn(Optional.of(lobby)).when(lobbyRepository).findById(lobbyId);
 
         Lobby result = lobbyService.addPlayer(lobbyId, player);
 
