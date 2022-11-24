@@ -61,9 +61,9 @@ public class LobbyController {
         try {
              lobby = lobbyService.joinLobby(joinRequestDto.getLobbyCode(), joinRequestDto.getPlayerName());
         }
-        catch(EntityNotFoundException e){return (ResponseEntity<Lobby>) ResponseEntity.notFound();}
-        catch(FullLobbyException e){return (ResponseEntity<Lobby>) ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE);}
-        catch(Exception e){return (ResponseEntity<Lobby>) ResponseEntity.internalServerError();}
+        catch(EntityNotFoundException e){return ResponseEntity.notFound().build();}
+        catch(FullLobbyException e){return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();}
+        catch(Exception e){return ResponseEntity.internalServerError().build();}
         return ResponseEntity.ok(lobby);
     }
 
