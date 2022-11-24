@@ -4,14 +4,14 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import java.util.ArrayList;
+
 import java.util.UUID;
 
-import nl.fontys.atosgame.lobbyservice.CustomException.FullLobbyException;
+import nl.fontys.atosgame.lobbyservice.dto.ExceptionDto;
+import nl.fontys.atosgame.lobbyservice.exceptions.DuplicatePlayerException;
+import nl.fontys.atosgame.lobbyservice.exceptions.LobbyFullException;
 import nl.fontys.atosgame.lobbyservice.dto.JoinRequestDto;
 import nl.fontys.atosgame.lobbyservice.model.Lobby;
-import nl.fontys.atosgame.lobbyservice.model.LobbySettings;
-import nl.fontys.atosgame.lobbyservice.model.Player;
 import nl.fontys.atosgame.lobbyservice.service.LobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,7 +47,7 @@ public class LobbyController {
                     schema = @Schema(implementation = Lobby.class)
                 )
             ),
-            @ApiResponse(responseCode = "406", description = "Lobby is full"),
+            @ApiResponse(responseCode = "406", description = "Lobby is full or player is already in lobby", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionDto.class))),
             @ApiResponse(responseCode = "404", description = "Lobby not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error"),
         }
@@ -56,13 +56,13 @@ public class LobbyController {
      * R-7
      * this method adds a player to the lobby
      */
-    public ResponseEntity<Lobby> joinLobby(@RequestBody JoinRequestDto joinRequestDto) {
+    public ResponseEntity joinLobby(@RequestBody JoinRequestDto joinRequestDto) {
         Lobby lobby;
         try {
              lobby = lobbyService.joinLobby(joinRequestDto.getLobbyCode(), joinRequestDto.getPlayerName());
         }
         catch(EntityNotFoundException e){return ResponseEntity.notFound().build();}
-        catch(FullLobbyException e){return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();}
+        catch(LobbyFullException | DuplicatePlayerException e){return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new ExceptionDto(e.getMessage()));}
         catch(Exception e){return ResponseEntity.internalServerError().build();}
         return ResponseEntity.ok(lobby);
     }

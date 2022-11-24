@@ -8,6 +8,8 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.fontys.atosgame.lobbyservice.exceptions.DuplicatePlayerException;
+import nl.fontys.atosgame.lobbyservice.exceptions.LobbyFullException;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -35,4 +37,14 @@ public class Lobby {
 
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID gameId;
+
+    public void addPlayer(Player player) throws DuplicatePlayerException, LobbyFullException {
+        if (players.size() >= lobbySettings.getMaxPlayers()) {
+            throw new LobbyFullException("The lobby is full.");
+        }
+        if (players.stream().anyMatch(p -> p.getName().equals(player.getName()))) {
+            throw new DuplicatePlayerException("A player with this name already exists in this lobby.");
+        }
+        players.add(player);
+    }
 }

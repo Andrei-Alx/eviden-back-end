@@ -9,6 +9,8 @@ import static org.mockito.Mockito.times;
 
 import java.util.*;
 
+import nl.fontys.atosgame.lobbyservice.exceptions.DuplicatePlayerException;
+import nl.fontys.atosgame.lobbyservice.exceptions.LobbyFullException;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyDeletedDto;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyJoinedDto;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyQuitDto;
@@ -91,9 +93,44 @@ class LobbyServiceImplTest {
         LobbyJoinedDto lobbyJoinedDto = new LobbyJoinedDto(joinedLobby.getId(), joinedLobby.getPlayers(), joinedLobby.getPlayers().stream().findFirst().get(), joinedLobby.getLobbyCode(), joinedLobby.getGameId());
 
         //assert
+        assertEquals("ABCDEF", joinedLobby.getLobbyCode());
+        assertEquals(1, joinedLobby.getPlayers().size());
+        assertEquals("PlayerOne", joinedLobby.getPlayers().stream().findFirst().get().getName());
         verify(lobbyRepository, times(1)).getByLobbyCode(lobbyCode);
         verify(streamBridge)
                 .send("producePlayerJoined-in-0", lobbyJoinedDto);
+    }
+
+    @Test
+    void joinLobbyFullThrowsException() {
+        when(lobbyCodeGenerator.generateLobbyCode()).thenReturn("ABCDEF");
+        // arrange player and lobby
+        String lobbyCode = lobbyCodeGenerator.generateLobbyCode();
+        String playerName = "PlayerTwo";
+        Player player = new Player(UUID.randomUUID(), "PlayerOne");
+        LobbySettings lobbySettings = new LobbySettings(1);
+        Lobby lobby = new Lobby(UUID.randomUUID(), new ArrayList<Player>(List.of(player)),lobbyCode, lobbySettings, UUID.randomUUID());
+        // arrange mock
+        when(lobbyRepository.getByLobbyCode(lobbyCode)).thenReturn(lobby);
+
+        // act
+        assertThrows(LobbyFullException.class, () -> lobbyService.joinLobby(lobbyCode,playerName));
+    }
+
+    @Test
+    void joinLobbyAlreadyJoinedThrowsException() {
+        when(lobbyCodeGenerator.generateLobbyCode()).thenReturn("ABCDEF");
+        // arrange player and lobby
+        String lobbyCode = lobbyCodeGenerator.generateLobbyCode();
+        String playerName = "PlayerOne";
+        Player player = new Player(UUID.randomUUID(), "PlayerOne");
+        LobbySettings lobbySettings = new LobbySettings(2);
+        Lobby lobby = new Lobby(UUID.randomUUID(), new ArrayList<Player>(List.of(player)),lobbyCode, lobbySettings, UUID.randomUUID());
+        // arrange mock
+        when(lobbyRepository.getByLobbyCode(lobbyCode)).thenReturn(lobby);
+
+        // act
+        assertThrows(DuplicatePlayerException.class, () -> lobbyService.joinLobby(lobbyCode,playerName));
     }
 
     @Test

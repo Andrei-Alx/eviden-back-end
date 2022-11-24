@@ -2,8 +2,8 @@ package nl.fontys.atosgame.lobbyservice.service;
 
 import java.util.*;
 
-import kotlin.collections.UCollectionsKt;
-import nl.fontys.atosgame.lobbyservice.CustomException.FullLobbyException;
+import nl.fontys.atosgame.lobbyservice.exceptions.DuplicatePlayerException;
+import nl.fontys.atosgame.lobbyservice.exceptions.LobbyFullException;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyDeletedDto;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyJoinedDto;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyQuitDto;
@@ -83,18 +83,15 @@ public class LobbyServiceImpl implements LobbyService {
      * @throws Exception
      */
     @Override
-    public Lobby joinLobby(String lobbyCode, String playerName) throws Exception {
+    public Lobby joinLobby(String lobbyCode, String playerName) throws LobbyFullException, EntityNotFoundException, DuplicatePlayerException {
         //get lobby to edit
         Lobby lobby = lobbyRepository.getByLobbyCode(lobbyCode);
         if(lobby == null){throw new EntityNotFoundException("No lobby found for lobbycode"+ lobbyCode);}
-        //check whether the lobby is already full
-        if (lobby.getPlayers().size() >= lobby.getLobbySettings().getMaxPlayers()) { throw new FullLobbyException("Maximum number of players in lobby reached");
-        }
         //add player
         Player player = new Player();
         player.setName(playerName);
         player.setId(UUID.randomUUID());
-        lobby.getPlayers().add(player);
+        lobby.addPlayer(player);
 
         //point of no return
         lobbyRepository.saveAndFlush(lobby);
