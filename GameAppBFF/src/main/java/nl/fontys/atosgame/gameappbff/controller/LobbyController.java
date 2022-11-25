@@ -30,7 +30,7 @@ public class LobbyController {
     }
 
     /**
-     * Id: R-12
+     * Id: R-13
      * Get a lobby by id.
      */
     @GetMapping("/lobby/{id}")
