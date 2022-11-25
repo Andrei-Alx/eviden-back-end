@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.gameservice.service;
 
 import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
+import nl.fontys.atosgame.gameservice.enums.GameStatus;
 import nl.fontys.atosgame.gameservice.enums.ShowResults;
 import nl.fontys.atosgame.gameservice.enums.ShuffleMethod;
 import nl.fontys.atosgame.gameservice.model.CardSet;
@@ -59,6 +60,7 @@ class GameServiceImplTest {
         assertEquals(companyType, result.getCompanyType());
         assertNull(result.getLobby());
         assertNull(result.getRounds());
+        assertEquals(GameStatus.CREATED, result.getStatus());
         verify(gameRepository, times(1)).save(any());
         verify(streamBridge, times(1)).send("produceGameCreated-in-0", new CreateGameEventDto(result.getId(), title, companyType, roundSettings, lobbySettings));
     }
@@ -73,5 +75,18 @@ class GameServiceImplTest {
         when(cardSetService.getCardSet(any())).thenReturn(Optional.empty());
 
         assertThrows(IllegalArgumentException.class, () -> gameService.createGame("titleGame", "companyType", lobbySettings, roundSettings));
+    }
+
+    @Test
+    void startGame() {
+        Game game = new Game();
+        game.setId(UUID.randomUUID());
+        when(gameRepository.findById(any())).thenReturn(Optional.of(game));
+        when(gameRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Game result = gameService.startGame(game.getId());
+        verify(gameRepository, times(1)).save(any());
+        assertEquals(GameStatus.STARTED, result.getStatus());
+        verify(streamBridge, times(1)).send("produceGameStarted-in-0", game.getId());
     }
 }

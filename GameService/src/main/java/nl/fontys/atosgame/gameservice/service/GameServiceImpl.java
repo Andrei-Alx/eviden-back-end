@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.gameservice.service;
 
 import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
+import nl.fontys.atosgame.gameservice.enums.GameStatus;
 import nl.fontys.atosgame.gameservice.model.CardSet;
 import nl.fontys.atosgame.gameservice.model.Game;
 import nl.fontys.atosgame.gameservice.model.LobbySettings;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class GameServiceImpl implements GameService {
@@ -50,10 +52,26 @@ public class GameServiceImpl implements GameService {
         Game game = new Game();
         game.setCompanyType(companyType);
         game.setTitle(title);
+        game.setStatus(GameStatus.CREATED);
         game = gameRepository.save(game);
         // TODO Produce event
         CreateGameEventDto createGameEventDto = new CreateGameEventDto(game.getId(), title, companyType, roundSettings, lobbySettings);
         streamBridge.send("produceGameCreated-in-0", createGameEventDto);
+        return game;
+    }
+
+    /**
+     * Starts a game
+     *
+     * @param gameId The id of the game
+     * @return The started game
+     */
+    @Override
+    public Game startGame(UUID gameId) {
+        Game game = gameRepository.findById(gameId).orElseThrow(() -> new IllegalArgumentException("Game not found"));
+        game.setStatus(GameStatus.STARTED);
+        game = gameRepository.save(game);
+        streamBridge.send("produceGameStarted-in-0", game.getId());
         return game;
     }
 }

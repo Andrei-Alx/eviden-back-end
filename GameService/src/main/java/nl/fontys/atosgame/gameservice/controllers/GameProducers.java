@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.gameservice.controllers;
 
+import java.util.UUID;
 import java.util.function.Function;
 
 import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
@@ -53,10 +54,13 @@ public class GameProducers {
      * output topic: game-started-topic
      */
     @Bean
-    public Function<?, Message<GameStartedEvent>> produceGameStarted() {
+    public Function<UUID, Message<GameStartedEvent>> produceGameStarted() {
         return input -> {
-            //TODO
-            throw new UnsupportedOperationException("Not implemented yet");
+            GameStartedEvent event = EventFactory.createGameStartedEvent(input);
+
+            return MessageBuilder.withPayload(event)
+                    .setHeader(KafkaHeaders.MESSAGE_KEY, input)
+                    .build();
         };
     }
 

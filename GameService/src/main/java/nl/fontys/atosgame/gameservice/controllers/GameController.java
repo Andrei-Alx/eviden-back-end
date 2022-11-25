@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.UUID;
 
 /**
  * Rest controller for the game service
@@ -51,6 +52,33 @@ public class GameController {
     public ResponseEntity<Game> createGame(@RequestBody CreateGameDto createGameDto) {
         try {
             Game game = gameService.createGame(createGameDto.getTitle(), createGameDto.getCompanyType(), createGameDto.getLobbySettings(), createGameDto.getRoundSettings());
+            return ResponseEntity.ok(game);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
+     * Id: R-13
+     * Start a game
+     */
+    @PostMapping("/start/{id}")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "Started the game",
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Game.class)
+                )
+            ),
+            @ApiResponse(responseCode = "404", description = "Game not found"),
+        }
+    )
+    public ResponseEntity<Game> startGame(@PathVariable UUID id) {
+        try {
+            Game game = gameService.startGame(id);
             return ResponseEntity.ok(game);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();

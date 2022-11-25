@@ -5,6 +5,7 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.fontys.atosgame.gameservice.enums.GameStatus;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -24,4 +25,6 @@ public class Game {
     @OneToMany
     private List<Round> rounds;
     private String companyType;
+
+    private GameStatus status = GameStatus.CREATED;
 }
