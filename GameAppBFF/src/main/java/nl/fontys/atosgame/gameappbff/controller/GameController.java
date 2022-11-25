@@ -1,17 +1,18 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -71,5 +72,33 @@ public class GameController {
 //        games.add(game1);
 
         return ResponseEntity.ok(games);
+    }
+
+    /**
+     * Id: R-14
+     * Get game by id
+     */
+    @GetMapping("/game/{id}")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "Getting the game",
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Game.class)
+                )
+            ),
+            @ApiResponse(responseCode = "404", description = "Game not found"),
+        }
+    )
+    public ResponseEntity<Game> getGameById(@PathVariable UUID id) {
+        Optional<Game> game = gameService.getGame(id);
+
+        if (game.isPresent()) {
+            return ResponseEntity.ok(game.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

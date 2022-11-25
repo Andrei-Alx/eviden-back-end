@@ -132,4 +132,15 @@ public class GameServiceImpl implements GameService {
     public List<Game> getAllGames() {
         return gameRepository.findAll();
     }
+
+    /**
+     * Get a game from the database.
+     *
+     * @param gameId The id of the game to get.
+     * @return The game.
+     */
+    @Override
+    public Optional<Game> getGame(UUID gameId) {
+        return gameRepository.findById(gameId);
+    }
 }

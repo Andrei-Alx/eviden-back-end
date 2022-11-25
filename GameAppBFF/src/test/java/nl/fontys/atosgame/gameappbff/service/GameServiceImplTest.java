@@ -96,4 +96,16 @@ public class GameServiceImplTest {
         verify(gameRepository).save(game);
         assertEquals(round, game.getRounds().get(0));
     }
+
+    @Test
+    void getGame() {
+        UUID gameId = UUID.randomUUID();
+        Game game = new Game();
+        game.setId(gameId);
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(game));
+
+        Optional<Game> result = gameService.getGame(gameId);
+
+        assertEquals(game, result.get());
+    }
 }

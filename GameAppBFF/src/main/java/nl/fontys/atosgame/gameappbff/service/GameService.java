@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.gameappbff.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import nl.fontys.atosgame.gameappbff.model.Game;
@@ -51,4 +52,11 @@ public interface GameService {
      * @return List of games.
      */
     List<Game> getAllGames();
+
+    /**
+     * Get a game from the database.
+     * @param gameId The id of the game to get.
+     * @return The game.
+     */
+    Optional<Game> getGame(UUID gameId);
 }
