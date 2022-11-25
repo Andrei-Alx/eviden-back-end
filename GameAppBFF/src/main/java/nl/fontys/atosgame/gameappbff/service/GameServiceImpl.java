@@ -37,8 +37,8 @@ public class GameServiceImpl implements GameService {
      * @param gameId, title The game to create.
      */
     @Override
-    public Game handleGameCreated(UUID gameId, String title) {
-        Game game = new Game(gameId, title, null, "university", GameStatus.CREATED, new ArrayList<>());
+    public Game handleGameCreated(UUID gameId, String title, String companyType) {
+        Game game = new Game(gameId, title, null, companyType, GameStatus.CREATED, new ArrayList<>());
         gameRepository.save(game);
         return game;
     }

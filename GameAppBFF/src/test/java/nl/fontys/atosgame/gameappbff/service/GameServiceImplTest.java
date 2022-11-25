@@ -37,10 +37,13 @@ public class GameServiceImplTest {
         UUID gameId = UUID.randomUUID();
         when(gameRepository.save(any(Game.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        Game game = gameService.handleGameCreated(gameId, "testGame");
+        Game game = gameService.handleGameCreated(gameId, "testGame", "testCompanyType");
 
         verify(gameRepository).save(game);
         assertEquals(GameStatus.CREATED, game.getStatus());
+        assertEquals(gameId, game.getId());
+        assertEquals("testGame", game.getTitle());
+        assertEquals("testCompanyType", game.getCompanyType());
     }
 
     @Test

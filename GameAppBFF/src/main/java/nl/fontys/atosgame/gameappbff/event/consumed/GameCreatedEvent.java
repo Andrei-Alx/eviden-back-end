@@ -13,4 +13,5 @@ public class GameCreatedEvent extends BaseEvent {
 
     private UUID gameId;
     private String title;
+    private String companyType;
 }
