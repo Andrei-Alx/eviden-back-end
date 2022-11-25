@@ -3,6 +3,7 @@ package nl.fontys.atosgame.gameappbff.service;
 import nl.fontys.atosgame.gameappbff.model.Player;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -35,4 +36,11 @@ public interface LobbyService {
      * @param playerId The player to quit to the lobby.
      */
     void quitPlayer(UUID lobbyId, UUID playerId);
+
+    /**
+     * Get a lobby by id.
+     * @param lobbyId The id of the lobby.
+     * @return The lobby.
+     */
+    Optional<Lobby> getLobby(UUID lobbyId);
 }

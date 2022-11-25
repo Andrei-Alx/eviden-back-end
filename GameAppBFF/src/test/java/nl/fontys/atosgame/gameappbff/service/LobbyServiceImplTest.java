@@ -67,4 +67,17 @@ class LobbyServiceImplTest {
         assertEquals(1, result.getPlayers().size());
         assertTrue(result.getPlayers().contains(player));
     }
+
+    @Test
+    void getLobby() {
+        UUID lobbyId = UUID.randomUUID();
+        Lobby lobby = new Lobby();
+        lobby.setId(lobbyId);
+        doReturn(Optional.of(lobby)).when(lobbyRepository).findById(lobbyId);
+
+        Optional<Lobby> result = lobbyService.getLobby(lobbyId);
+
+        verify(lobbyRepository).findById(lobbyId);
+        assertEquals(Optional.of(lobby), result);
+    }
 }
