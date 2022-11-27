@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.roundservice.controller;
 
+import java.util.function.Function;
 import nl.fontys.atosgame.roundservice.event.GameCreatedEvent;
 import nl.fontys.atosgame.roundservice.event.GameStartedEvent;
 import nl.fontys.atosgame.roundservice.service.GameService;
@@ -8,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
-
-import java.util.function.Function;
 
 /**
  *  Collection of all event consumers for game events:
@@ -27,6 +26,7 @@ public class GameEventConsumers {
     }
 
     /**
+     * Id: C-15
      * function to consume a GameCreated event
      * input topic: game-created-topic
      * output topic: -
@@ -41,6 +41,7 @@ public class GameEventConsumers {
     }
 
     /**
+     * Id: C-19
      * function to consume a GameStarted event
      * input topic: game-started-topic
      * output topic: -

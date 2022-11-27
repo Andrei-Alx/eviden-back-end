@@ -1,15 +1,15 @@
 package nl.fontys.atosgame.roundservice.controller;
 
+import java.util.function.Function;
 import nl.fontys.atosgame.roundservice.event.LobbyCreatedEvent;
 import nl.fontys.atosgame.roundservice.event.PlayerJoinedEvent;
+import nl.fontys.atosgame.roundservice.event.PlayerQuitEvent;
 import nl.fontys.atosgame.roundservice.service.GameService;
 import nl.fontys.atosgame.roundservice.service.LobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
-
-import java.util.function.Function;
 
 /**
  *  Collection of all event consumers for lobby events:
@@ -25,12 +25,16 @@ public class LobbyEventConsumers {
     private GameService gameService;
     private LobbyService lobbyService;
 
-    public LobbyEventConsumers(@Autowired GameService gameService, @Autowired LobbyService lobbyService) {
+    public LobbyEventConsumers(
+        @Autowired GameService gameService,
+        @Autowired LobbyService lobbyService
+    ) {
         this.gameService = gameService;
         this.lobbyService = lobbyService;
     }
 
     /**
+     * Id: C-16
      * function to consume a LobbyCreated event
      * input topic: lobby-created-topic
      * output topic: -
@@ -46,6 +50,7 @@ public class LobbyEventConsumers {
     }
 
     /**
+     * Id: C-17
      * function to consume a PlayerJoined event
      * input topic: player-joined-topic
      * output topic: -
@@ -60,17 +65,17 @@ public class LobbyEventConsumers {
     }
 
     /**
+     * Id: C-18
      * function to consume a PlayerQuit event
      * input topic: player-quit-topic
      * output topic: -
      */
     @Bean
-    public Function<Message<PlayerJoinedEvent>, Void> handlePlayerQuit() {
+    public Function<Message<PlayerQuitEvent>, Void> handlePlayerQuit() {
         return message -> {
-            PlayerJoinedEvent event = message.getPayload();
+            PlayerQuitEvent event = message.getPayload();
             lobbyService.removePlayerFromLobby(event.getPlayerId(), event.getLobbyId());
             return null;
         };
     }
-
 }

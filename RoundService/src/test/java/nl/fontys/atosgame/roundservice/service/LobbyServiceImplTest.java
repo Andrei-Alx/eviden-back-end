@@ -1,17 +1,16 @@
 package nl.fontys.atosgame.roundservice.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+import java.util.Optional;
+import java.util.UUID;
+import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.roundservice.model.Lobby;
 import nl.fontys.atosgame.roundservice.repository.LobbyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 class LobbyServiceImplTest {
 
@@ -47,7 +46,10 @@ class LobbyServiceImplTest {
         UUID lobbyId = UUID.randomUUID();
         when(lobbyRepository.findById(lobbyId)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> lobbyService.addPlayerToLobby(playerId, lobbyId));
+        assertThrows(
+            EntityNotFoundException.class,
+            () -> lobbyService.addPlayerToLobby(playerId, lobbyId)
+        );
     }
 
     @Test
@@ -74,6 +76,9 @@ class LobbyServiceImplTest {
         UUID lobbyId = UUID.randomUUID();
         when(lobbyRepository.findById(lobbyId)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> lobbyService.removePlayerFromLobby(playerId, lobbyId));
+        assertThrows(
+            EntityNotFoundException.class,
+            () -> lobbyService.removePlayerFromLobby(playerId, lobbyId)
+        );
     }
 }

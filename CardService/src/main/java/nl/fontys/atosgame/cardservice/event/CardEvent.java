@@ -9,5 +9,6 @@ import nl.fontys.atosgame.cardservice.model.Card;
 @NoArgsConstructor
 @Data
 public class CardEvent extends BaseEvent {
+
     private Card card;
 }

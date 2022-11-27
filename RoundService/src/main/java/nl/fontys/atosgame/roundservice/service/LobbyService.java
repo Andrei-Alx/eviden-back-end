@@ -1,10 +1,9 @@
 package nl.fontys.atosgame.roundservice.service;
 
-import nl.fontys.atosgame.roundservice.model.Lobby;
-
-import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 import java.util.UUID;
+import javax.persistence.EntityNotFoundException;
+import nl.fontys.atosgame.roundservice.model.Lobby;
 
 /**
  * Service for managing lobbies.
@@ -39,5 +38,6 @@ public interface LobbyService {
      * @param lobbyId The id of the lobby
      * @return The updated lobby
      */
-    Lobby removePlayerFromLobby(UUID playerId, UUID lobbyId) throws EntityNotFoundException;
+    Lobby removePlayerFromLobby(UUID playerId, UUID lobbyId)
+        throws EntityNotFoundException;
 }

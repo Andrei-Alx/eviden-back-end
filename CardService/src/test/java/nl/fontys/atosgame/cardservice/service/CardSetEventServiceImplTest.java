@@ -1,5 +1,9 @@
 package nl.fontys.atosgame.cardservice.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+
+import java.util.UUID;
 import nl.fontys.atosgame.cardservice.event.BaseEvent;
 import nl.fontys.atosgame.cardservice.event.CardSetDeletedEvent;
 import nl.fontys.atosgame.cardservice.event.CardSetEvent;
@@ -8,12 +12,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.messaging.Message;
 
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-
 class CardSetEventServiceImplTest {
+
     private CardSetEventServiceImpl cardSetEventService;
 
     @BeforeEach
@@ -32,7 +32,6 @@ class CardSetEventServiceImplTest {
         assertInstanceOf(CardSetEvent.class, message.getPayload());
         assertEquals(cardSet, message.getPayload().getCardSet());
         assertEquals(cardSet.getId(), message.getHeaders().get("kafka_messageKey"));
-
     }
 
     @Test
@@ -49,14 +48,14 @@ class CardSetEventServiceImplTest {
 
     @Test
     void cardSetUpdated() {
-          CardSet cardSet = mock(CardSet.class);
+        CardSet cardSet = mock(CardSet.class);
 
-          Message<CardSetEvent> message = cardSetEventService.cardSetUpdated(cardSet);
+        Message<CardSetEvent> message = cardSetEventService.cardSetUpdated(cardSet);
 
-          assertEquals("CardSetUpdated", message.getPayload().getType());
-          assertEquals("CardService", message.getPayload().getService());
-          assertInstanceOf(CardSetEvent.class, message.getPayload());
-          assertEquals(cardSet, message.getPayload().getCardSet());
-          assertEquals(cardSet.getId(), message.getHeaders().get("kafka_messageKey"));
+        assertEquals("CardSetUpdated", message.getPayload().getType());
+        assertEquals("CardService", message.getPayload().getService());
+        assertInstanceOf(CardSetEvent.class, message.getPayload());
+        assertEquals(cardSet, message.getPayload().getCardSet());
+        assertEquals(cardSet.getId(), message.getHeaders().get("kafka_messageKey"));
     }
 }

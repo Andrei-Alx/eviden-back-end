@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.roundservice.controller;
 
+import java.util.function.Function;
 import nl.fontys.atosgame.roundservice.event.CardDeletedEvent;
 import nl.fontys.atosgame.roundservice.event.CardEvent;
 import nl.fontys.atosgame.roundservice.model.Card;
@@ -8,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
-
-import java.util.function.Function;
 
 /**
  * Collection of all event consumers for card events:
@@ -28,6 +27,7 @@ public class CardEventConsumers {
     }
 
     /**
+     * Id: C-20
      * function to consume a CardCreated event
      * input topic: card-created-topic
      * output topic: -
@@ -43,6 +43,7 @@ public class CardEventConsumers {
     }
 
     /**
+     * Id: C-21
      * function to consume a CardUpdated event
      * input topic: card-updated-topic
      * output topic: -
@@ -58,6 +59,7 @@ public class CardEventConsumers {
     }
 
     /**
+     * Id: C-22
      * function to consume a CardDeleted event
      * input topic: card-deleted-topic
      * output topic: -

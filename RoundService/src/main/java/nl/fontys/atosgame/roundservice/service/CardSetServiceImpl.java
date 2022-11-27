@@ -1,12 +1,11 @@
 package nl.fontys.atosgame.roundservice.service;
 
+import java.util.Optional;
+import java.util.UUID;
 import nl.fontys.atosgame.roundservice.model.CardSet;
 import nl.fontys.atosgame.roundservice.repository.CardSetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-import java.util.UUID;
 
 /**
  * Service for card set related operations
@@ -14,6 +13,7 @@ import java.util.UUID;
  */
 @Service
 public class CardSetServiceImpl implements CardSetService {
+
     private CardSetRepository cardSetRepository;
 
     public CardSetServiceImpl(@Autowired CardSetRepository cardSetRepository) {

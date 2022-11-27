@@ -9,5 +9,4 @@ public class LobbyServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(LobbyServiceApplication.class, args);
     }
-
 }
