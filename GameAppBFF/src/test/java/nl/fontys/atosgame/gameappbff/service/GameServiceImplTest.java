@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import nl.fontys.atosgame.gameappbff.enums.GameStatus;
+import nl.fontys.atosgame.gameappbff.enums.RoundStatus;
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.model.Round;
@@ -57,6 +58,7 @@ public class GameServiceImplTest {
 
         verify(gameRepository).save(game);
         assertEquals(GameStatus.STARTED, game.getStatus());
+        verify(gameSocketController).gameStarted(gameId);
     }
 
     @Test
