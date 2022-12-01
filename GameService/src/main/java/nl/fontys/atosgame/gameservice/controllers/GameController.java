@@ -62,7 +62,7 @@ public class GameController {
      * Id: R-13
      * Start a game
      */
-    @PostMapping("/start/{id}")
+    @PutMapping("/start/{id}")
     @ApiResponses(
         value = {
             @ApiResponse(

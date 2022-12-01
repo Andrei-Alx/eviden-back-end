@@ -7,6 +7,8 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
 
 @Data
@@ -33,5 +35,6 @@ public class CardSet {
         inverseJoinColumns = @JoinColumn(name = "cards_id")
     )
     @JsonProperty
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Card> cards = new java.util.ArrayList<>();
 }
