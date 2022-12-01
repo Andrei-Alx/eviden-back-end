@@ -152,4 +152,20 @@ public class GameSocketController {
         );
         return roundId;
     }
+
+
+    /**
+     * S-15
+     * Send a message to the game that the game has started
+     * @param gameId The id of the game
+     * @return The id of the game
+     */
+    public UUID gameStarted(UUID gameId) {
+        template.convertAndSend(
+                String.format("/socket/gameapp/%s/gameStarted", gameId),
+                gameId
+        );
+        return gameId;
+    }
+
 }

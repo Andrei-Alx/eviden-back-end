@@ -55,6 +55,7 @@ public class GameServiceImpl implements GameService {
             Game game1 = game.get();
             game1.setStatus(GameStatus.STARTED);
             gameRepository.save(game1);
+            gameSocketController.gameStarted(gameId);
             return game1;
         }
         else {
