@@ -7,9 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import nl.fontys.atosgame.roundservice.service.RoundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -40,9 +38,9 @@ public class CardController {
      * R-17
      * This method likes the card (phase 1) for a given playerRound reference
      */
-    public ResponseEntity likeCard(UUID playerid,UUID cardid,UUID gameid,UUID roundid){
+    public ResponseEntity likeCard(@RequestParam UUID playerId, @RequestParam UUID cardId, @RequestParam UUID gameId, @RequestParam UUID roundId){
         try {
-            roundService.likeCard(playerid, cardid, gameid, roundid);
+            roundService.likeCard(playerId, cardId, gameId, roundId);
         }
         catch (EntityNotFoundException e){return ResponseEntity.notFound().build();}
         return ResponseEntity.ok().build();
@@ -92,7 +90,7 @@ public class CardController {
      * R-19
      * This method selects the cards (phase 2) for a given playerRound reference
      */
-    public ResponseEntity selectCards(UUID playerid, UUID[] cardids, UUID gameid, UUID roundid){
+    public ResponseEntity selectCards(@RequestParam UUID playerid,@RequestParam UUID[] cardids,@RequestParam UUID gameid,@RequestParam UUID roundid){
         try {
             roundService.selectCards(playerid, List.of(cardids), gameid, roundid);
         }

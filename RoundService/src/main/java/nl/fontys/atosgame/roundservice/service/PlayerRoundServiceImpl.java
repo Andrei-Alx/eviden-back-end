@@ -12,6 +12,7 @@ import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
 import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.repository.PlayerRoundRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.ApplicationEventPublisher;
@@ -52,7 +53,7 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
      * @return The updated player round
      */
     @Override
-    public PlayerRound likeCard(PlayerRound playerRound, UUID cardId, UUID gameId, UUID roundId) {
+    public PlayerRound likeCard(@NotNull PlayerRound playerRound, UUID cardId, UUID gameId, UUID roundId) {
         Card card = this.cardService.getCard(cardId).get();
         playerRound.addLikedCard(card);
         playerRound = playerRoundRepository.save(playerRound);
