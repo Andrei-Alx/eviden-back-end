@@ -42,7 +42,7 @@ class GameServiceImplTest {
 
         assertNotNull(game.getId());
         assertEquals(gameId, game.getId());
-        assertNull(game.getLobby());
+        assertNull(game.getLobby()); //test fails here. defective test?
         assertEquals(rounds, game.getRounds());
     }
 
