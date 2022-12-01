@@ -8,6 +8,9 @@ import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.fontys.atosgame.gameappbff.enums.ShowResults;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Embeddable
 @Data
@@ -16,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class RoundSettings {
 
     @JsonProperty
-    private boolean showPersonalOrGroupResults;
+    private ShowResults showPersonalOrGroupResults;
 
     @JsonProperty
     private int nrOfLikedCards;
@@ -33,5 +36,6 @@ public class RoundSettings {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "card_set_id")
     @JsonProperty
+    @LazyCollection(LazyCollectionOption.FALSE)
     private CardSet cardSet;
 }

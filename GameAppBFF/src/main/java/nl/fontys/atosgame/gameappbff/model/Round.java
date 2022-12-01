@@ -34,6 +34,7 @@ public class Round {
 
     @JsonProperty
     @Embedded
+    @LazyCollection(LazyCollectionOption.FALSE)
     private RoundSettings roundSettings;
 
     public void addPlayerRound(PlayerRound playerRound) {
