@@ -1,9 +1,8 @@
 package nl.fontys.atosgame.gameservice.service;
 
-import nl.fontys.atosgame.gameservice.model.CardSet;
-
 import java.util.Optional;
 import java.util.UUID;
+import nl.fontys.atosgame.gameservice.model.CardSet;
 
 /**
  * Service for handling cardsets.

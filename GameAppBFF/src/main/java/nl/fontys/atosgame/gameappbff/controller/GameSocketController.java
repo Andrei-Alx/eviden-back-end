@@ -119,7 +119,6 @@ public class GameSocketController {
      * @return
      */
     public Lobby lobby(UUID gameId, Lobby lobby) {
-
         template.convertAndSend(String.format("/socket/gameapp/%s/lobby", gameId), lobby);
         return lobby;
     }
@@ -153,7 +152,6 @@ public class GameSocketController {
         return roundId;
     }
 
-
     /**
      * S-15
      * Send a message to the game that the game has started
@@ -162,10 +160,9 @@ public class GameSocketController {
      */
     public UUID gameStarted(UUID gameId) {
         template.convertAndSend(
-                String.format("/socket/gameapp/%s/gameStarted", gameId),
-                gameId
+            String.format("/socket/gameapp/%s/gameStarted", gameId),
+            gameId
         );
         return gameId;
     }
-
 }

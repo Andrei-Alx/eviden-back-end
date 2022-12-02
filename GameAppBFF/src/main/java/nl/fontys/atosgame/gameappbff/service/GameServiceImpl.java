@@ -1,10 +1,11 @@
 package nl.fontys.atosgame.gameappbff.service;
 
-import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-
+import javax.persistence.EntityNotFoundException;
+import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import nl.fontys.atosgame.gameappbff.enums.GameStatus;
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
@@ -12,9 +13,6 @@ import nl.fontys.atosgame.gameappbff.model.Round;
 import nl.fontys.atosgame.gameappbff.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
 
 /**
  * Service for handling games.
@@ -26,7 +24,10 @@ public class GameServiceImpl implements GameService {
     private GameRepository gameRepository;
     private GameSocketController gameSocketController;
 
-    public GameServiceImpl(@Autowired GameRepository gameRepository, @Autowired GameSocketController gameSocketController) {
+    public GameServiceImpl(
+        @Autowired GameRepository gameRepository,
+        @Autowired GameSocketController gameSocketController
+    ) {
         this.gameRepository = gameRepository;
         this.gameSocketController = gameSocketController;
     }
@@ -38,7 +39,14 @@ public class GameServiceImpl implements GameService {
      */
     @Override
     public Game handleGameCreated(UUID gameId, String title, String companyType) {
-        Game game = new Game(gameId, title, null, companyType, GameStatus.CREATED, new ArrayList<>());
+        Game game = new Game(
+            gameId,
+            title,
+            null,
+            companyType,
+            GameStatus.CREATED,
+            new ArrayList<>()
+        );
         gameRepository.save(game);
         return game;
     }
@@ -51,14 +59,13 @@ public class GameServiceImpl implements GameService {
     @Override
     public Game handleGameStarted(UUID gameId) {
         Optional<Game> game = gameRepository.findById(gameId);
-        if(game.isPresent()) {
+        if (game.isPresent()) {
             Game game1 = game.get();
             game1.setStatus(GameStatus.STARTED);
             gameRepository.save(game1);
             gameSocketController.gameStarted(gameId);
             return game1;
-        }
-        else {
+        } else {
             throw new EntityNotFoundException("Game not found");
         }
     }
@@ -71,13 +78,12 @@ public class GameServiceImpl implements GameService {
     @Override
     public Game handleGameEnded(UUID gameId) {
         Optional<Game> game = gameRepository.findById(gameId);
-        if(game.isPresent()) {
+        if (game.isPresent()) {
             Game game1 = game.get();
             game1.setStatus(GameStatus.ENDED);
             gameRepository.save(game1);
             return game1;
-        }
-        else {
+        } else {
             throw new EntityNotFoundException("Game not found");
         }
     }
@@ -92,13 +98,12 @@ public class GameServiceImpl implements GameService {
     @Override
     public Game addLobbyToGame(UUID gameId, Lobby lobby) {
         Optional<Game> game = gameRepository.findById(gameId);
-        if(game.isPresent()) {
+        if (game.isPresent()) {
             Game game1 = game.get();
             game1.setLobby(lobby);
             gameRepository.save(game1);
             return game1;
-        }
-        else {
+        } else {
             throw new EntityNotFoundException("Game not found");
         }
     }
@@ -113,13 +118,12 @@ public class GameServiceImpl implements GameService {
     @Override
     public Game addRoundToGame(Round round, UUID gameId) {
         Optional<Game> game = gameRepository.findById(gameId);
-        if(game.isPresent()) {
+        if (game.isPresent()) {
             Game game1 = game.get();
             game1.getRounds().add(round);
             gameRepository.save(game1);
             return game1;
-        }
-        else {
+        } else {
             throw new EntityNotFoundException("Game not found");
         }
     }

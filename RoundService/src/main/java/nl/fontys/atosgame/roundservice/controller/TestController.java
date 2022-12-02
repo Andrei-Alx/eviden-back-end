@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.roundservice.model.Game;
@@ -39,7 +38,15 @@ public class TestController {
 
     @GetMapping("/selected")
     public Round test(@RequestBody TestDto dto) {
-        List<UUID> cardIds = dto.cardIds.stream().map(UUID::fromString).collect(Collectors.toList());
-        return roundService.selectCards(UUID.fromString(dto.playerId), cardIds, UUID.fromString(dto.gameId), UUID.fromString(dto.roundId));
+        List<UUID> cardIds = dto.cardIds
+            .stream()
+            .map(UUID::fromString)
+            .collect(Collectors.toList());
+        return roundService.selectCards(
+            UUID.fromString(dto.playerId),
+            cardIds,
+            UUID.fromString(dto.gameId),
+            UUID.fromString(dto.roundId)
+        );
     }
 }

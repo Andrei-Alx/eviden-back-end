@@ -1,11 +1,11 @@
 package nl.fontys.atosgame.roundservice.applicationevents;
 
+import java.util.UUID;
 import nl.fontys.atosgame.roundservice.model.Round;
 import org.springframework.context.ApplicationEvent;
 
-import java.util.UUID;
-
 public class RoundFinishedAppEvent extends ApplicationEvent {
+
     private Round round;
 
     public RoundFinishedAppEvent(Object source, Round round) {

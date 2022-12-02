@@ -167,7 +167,9 @@ public class PlayerRound {
             if (hasCardInHand(c) && !selectedCards.contains(c)) {
                 selectedCards.add(c);
             } else {
-                throw new IllegalArgumentException("Card is not in hand or already selected");
+                throw new IllegalArgumentException(
+                    "Card is not in hand or already selected"
+                );
             }
         }
     }

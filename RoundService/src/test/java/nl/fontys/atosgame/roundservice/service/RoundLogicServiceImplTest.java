@@ -32,7 +32,14 @@ class RoundLogicServiceImplTest {
             UUID.randomUUID(),
             new ArrayList<>(),
             RoundStatus.CREATED,
-            new RoundSettings(ShowResults.PERSONAL, 4, 3, ShuffleMethod.FULLY_RANDOM, false, null)
+            new RoundSettings(
+                ShowResults.PERSONAL,
+                4,
+                3,
+                ShuffleMethod.FULLY_RANDOM,
+                false,
+                null
+            )
         );
         List<UUID> playerIds = new ArrayList<>(
             List.of(UUID.randomUUID(), UUID.randomUUID())

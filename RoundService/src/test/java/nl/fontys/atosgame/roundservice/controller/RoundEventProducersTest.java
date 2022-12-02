@@ -6,7 +6,6 @@ import static org.mockito.Mockito.mock;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
-
 import nl.fontys.atosgame.roundservice.dto.*;
 import nl.fontys.atosgame.roundservice.event.produced.*;
 import nl.fontys.atosgame.roundservice.model.Round;
@@ -201,10 +200,7 @@ class RoundEventProducersTest {
             message.getPayload().getPlayerId()
         );
         assertEquals(playerLikedCardDto.getGameId(), message.getPayload().getGameId());
-        assertEquals(
-            playerLikedCardDto.getCardId(),
-            message.getPayload().getCardId()
-        );
+        assertEquals(playerLikedCardDto.getCardId(), message.getPayload().getCardId());
         assertEquals(
             playerLikedCardDto.getGameId(),
             message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
@@ -236,10 +232,7 @@ class RoundEventProducersTest {
             message.getPayload().getPlayerId()
         );
         assertEquals(playerDislikedCardDto.getGameId(), message.getPayload().getGameId());
-        assertEquals(
-            playerDislikedCardDto.getCardId(),
-            message.getPayload().getCardId()
-        );
+        assertEquals(playerDislikedCardDto.getCardId(), message.getPayload().getCardId());
         assertEquals(
             playerDislikedCardDto.getGameId(),
             message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
@@ -250,7 +243,7 @@ class RoundEventProducersTest {
     void producePlayerSelectedCards() {
         CardsSelectedEventDto playerSelectedCardsDto = new CardsSelectedEventDto(
             UUID.randomUUID(),
-                List.of(UUID.randomUUID(), UUID.randomUUID()),
+            List.of(UUID.randomUUID(), UUID.randomUUID()),
             UUID.randomUUID(),
             UUID.randomUUID()
         );
@@ -270,7 +263,10 @@ class RoundEventProducersTest {
             playerSelectedCardsDto.getPlayerId(),
             message.getPayload().getPlayerId()
         );
-        assertEquals(playerSelectedCardsDto.getGameId(), message.getPayload().getGameId());
+        assertEquals(
+            playerSelectedCardsDto.getGameId(),
+            message.getPayload().getGameId()
+        );
         assertEquals(
             playerSelectedCardsDto.getCardIds(),
             message.getPayload().getCardIds()

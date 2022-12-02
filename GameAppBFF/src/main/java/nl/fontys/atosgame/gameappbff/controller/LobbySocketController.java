@@ -1,11 +1,10 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
+import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-
-import java.util.UUID;
 
 /**
  * Collection of lobby websockets for lobby related sockets:

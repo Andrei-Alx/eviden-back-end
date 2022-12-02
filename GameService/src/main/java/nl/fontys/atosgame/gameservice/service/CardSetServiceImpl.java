@@ -1,12 +1,11 @@
 package nl.fontys.atosgame.gameservice.service;
 
+import java.util.Optional;
+import java.util.UUID;
 import nl.fontys.atosgame.gameservice.model.CardSet;
 import nl.fontys.atosgame.gameservice.repository.CardSetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-import java.util.UUID;
 
 /**
  * Service for handling cardsets.
@@ -61,6 +60,4 @@ public class CardSetServiceImpl implements CardSetService {
     public Optional<CardSet> getCardSet(UUID cardSetId) {
         return cardSetRepository.findById(cardSetId);
     }
-
-
 }

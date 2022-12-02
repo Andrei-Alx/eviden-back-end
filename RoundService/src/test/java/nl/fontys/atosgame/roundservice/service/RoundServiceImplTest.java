@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 import nl.fontys.atosgame.roundservice.applicationevents.RoundFinishedAppEvent;
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
@@ -272,7 +271,12 @@ class RoundServiceImplTest {
         UUID cardId = UUID.randomUUID();
         PlayerRound playerRound = new PlayerRound();
         playerRound.setPlayerId(playerId);
-        Round round = new Round(roundId, List.of(playerRound), RoundStatus.IN_PROGRESS, null);
+        Round round = new Round(
+            roundId,
+            List.of(playerRound),
+            RoundStatus.IN_PROGRESS,
+            null
+        );
         doReturn(Optional.of(round)).when(roundService).getRound(roundId);
 
         Round result = roundService.likeCard(playerId, cardId, gameId, roundId);
@@ -288,7 +292,12 @@ class RoundServiceImplTest {
         UUID cardId = UUID.randomUUID();
         PlayerRound playerRound = new PlayerRound();
         playerRound.setPlayerId(playerId);
-        Round round = new Round(roundId, List.of(playerRound), RoundStatus.IN_PROGRESS, null);
+        Round round = new Round(
+            roundId,
+            List.of(playerRound),
+            RoundStatus.IN_PROGRESS,
+            null
+        );
         doReturn(Optional.of(round)).when(roundService).getRound(roundId);
 
         Round result = roundService.dislikeCard(playerId, cardId, gameId, roundId);
@@ -304,12 +313,23 @@ class RoundServiceImplTest {
         UUID cardId = UUID.randomUUID();
         PlayerRound playerRound = new PlayerRound();
         playerRound.setPlayerId(playerId);
-        Round round = new Round(roundId, List.of(playerRound), RoundStatus.IN_PROGRESS, null);
+        Round round = new Round(
+            roundId,
+            List.of(playerRound),
+            RoundStatus.IN_PROGRESS,
+            null
+        );
         doReturn(Optional.of(round)).when(roundService).getRound(roundId);
 
-        Round result = roundService.selectCards(playerId, List.of(cardId), gameId, roundId);
+        Round result = roundService.selectCards(
+            playerId,
+            List.of(cardId),
+            gameId,
+            roundId
+        );
 
-        verify(playerRoundService).selectCards(playerRound, List.of(cardId), gameId, roundId);
+        verify(playerRoundService)
+            .selectCards(playerRound, List.of(cardId), gameId, roundId);
     }
 
     @Test
@@ -328,7 +348,8 @@ class RoundServiceImplTest {
     void getRoundByPlayerRound() {
         Round round = new Round();
         PlayerRound playerRound = new PlayerRound();
-        when(roundRepository.findByPlayerRoundsContaining(playerRound)).thenReturn(Optional.of(round));
+        when(roundRepository.findByPlayerRoundsContaining(playerRound))
+            .thenReturn(Optional.of(round));
 
         Optional<Round> result = roundService.getRoundByPlayerRound(playerRound);
 

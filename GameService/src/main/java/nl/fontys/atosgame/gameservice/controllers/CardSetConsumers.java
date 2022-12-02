@@ -20,7 +20,6 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class CardSetConsumers {
 
-
     private CardSetService cardSetService;
 
     public CardSetConsumers(@Autowired CardSetService cardSetService) {

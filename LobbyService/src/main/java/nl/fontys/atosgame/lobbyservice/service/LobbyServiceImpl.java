@@ -1,12 +1,12 @@
 package nl.fontys.atosgame.lobbyservice.service;
 
 import java.util.*;
-
-import nl.fontys.atosgame.lobbyservice.exceptions.DuplicatePlayerException;
-import nl.fontys.atosgame.lobbyservice.exceptions.LobbyFullException;
+import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyDeletedDto;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyJoinedDto;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyQuitDto;
+import nl.fontys.atosgame.lobbyservice.exceptions.DuplicatePlayerException;
+import nl.fontys.atosgame.lobbyservice.exceptions.LobbyFullException;
 import nl.fontys.atosgame.lobbyservice.model.Lobby;
 import nl.fontys.atosgame.lobbyservice.model.LobbySettings;
 import nl.fontys.atosgame.lobbyservice.model.Player;
@@ -14,8 +14,6 @@ import nl.fontys.atosgame.lobbyservice.repository.LobbyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
 
 /**
  * Service for handling lobbies.
@@ -32,9 +30,9 @@ public class LobbyServiceImpl implements LobbyService {
     private final StreamBridge streamBridge;
 
     public LobbyServiceImpl(
-            @Autowired LobbyRepository lobbyRepository,
-            @Autowired LobbyCodeGenerator lobbyCodeGenerator,
-            @Autowired StreamBridge streamBridge
+        @Autowired LobbyRepository lobbyRepository,
+        @Autowired LobbyCodeGenerator lobbyCodeGenerator,
+        @Autowired StreamBridge streamBridge
     ) {
         this.lobbyRepository = lobbyRepository;
         this.lobbyCodeGenerator = lobbyCodeGenerator;
@@ -69,8 +67,8 @@ public class LobbyServiceImpl implements LobbyService {
         UUID lobbyId = lobbyRepository.getByGameId(gameId).getId();
         lobbyRepository.deleteByGameId(gameId);
         streamBridge.send(
-                "produceLobbyDeleted-in-0",
-                new LobbyDeletedDto(lobbyId, gameId)
+            "produceLobbyDeleted-in-0",
+            new LobbyDeletedDto(lobbyId, gameId)
         );
     }
 
@@ -83,10 +81,13 @@ public class LobbyServiceImpl implements LobbyService {
      * @throws Exception
      */
     @Override
-    public Lobby joinLobby(String lobbyCode, String playerName) throws LobbyFullException, EntityNotFoundException, DuplicatePlayerException {
+    public Lobby joinLobby(String lobbyCode, String playerName)
+        throws LobbyFullException, EntityNotFoundException, DuplicatePlayerException {
         //get lobby to edit
         Lobby lobby = lobbyRepository.getByLobbyCode(lobbyCode);
-        if(lobby == null){throw new EntityNotFoundException("No lobby found for lobbycode"+ lobbyCode);}
+        if (lobby == null) {
+            throw new EntityNotFoundException("No lobby found for lobbycode" + lobbyCode);
+        }
         //add player
         Player player = new Player();
         player.setName(playerName);
@@ -96,7 +97,13 @@ public class LobbyServiceImpl implements LobbyService {
         //point of no return
         lobbyRepository.saveAndFlush(lobby);
 
-        LobbyJoinedDto lobbyJoinedDto = new LobbyJoinedDto(lobby.getId(), lobby.getPlayers(), player, lobby.getLobbyCode(), lobby.getGameId());
+        LobbyJoinedDto lobbyJoinedDto = new LobbyJoinedDto(
+            lobby.getId(),
+            lobby.getPlayers(),
+            player,
+            lobby.getLobbyCode(),
+            lobby.getGameId()
+        );
         streamBridge.send("producePlayerJoined-in-0", lobbyJoinedDto);
         return lobby;
     }
@@ -108,14 +115,29 @@ public class LobbyServiceImpl implements LobbyService {
      * @param playerId
      */
     @Override
-    public void quitLobby(UUID lobbyId, UUID playerId){
+    public void quitLobby(UUID lobbyId, UUID playerId) {
         Lobby lobby = lobbyRepository.getById(lobbyId);
-        if(lobby == null){throw new EntityNotFoundException("No lobby found for lobbyId"+ lobbyId);}
-        lobby.getPlayers().remove(lobby.getPlayers().stream().filter(player -> player.getId() == playerId).findFirst().orElse(null));
+        if (lobby == null) {
+            throw new EntityNotFoundException("No lobby found for lobbyId" + lobbyId);
+        }
+        lobby
+            .getPlayers()
+            .remove(
+                lobby
+                    .getPlayers()
+                    .stream()
+                    .filter(player -> player.getId() == playerId)
+                    .findFirst()
+                    .orElse(null)
+            );
 
         lobbyRepository.saveAndFlush(lobby);
 
-        LobbyQuitDto lobbyQuitDto = new LobbyQuitDto(lobbyId, playerId, lobby.getGameId());
+        LobbyQuitDto lobbyQuitDto = new LobbyQuitDto(
+            lobbyId,
+            playerId,
+            lobby.getGameId()
+        );
         streamBridge.send("producePlayerQuit-in-0", lobbyQuitDto);
     }
 }

@@ -1,17 +1,16 @@
 package nl.fontys.atosgame.roundservice.controller;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+import java.util.List;
+import java.util.UUID;
 import nl.fontys.atosgame.roundservice.dto.CardDislikeRequestDto;
 import nl.fontys.atosgame.roundservice.dto.CardLikeRequestDto;
 import nl.fontys.atosgame.roundservice.dto.CardSubmitRequestDto;
 import nl.fontys.atosgame.roundservice.service.RoundService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import java.util.UUID;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 class CardSocketControllerTest {
 
@@ -31,10 +30,10 @@ class CardSocketControllerTest {
         UUID playerId = UUID.randomUUID();
         UUID cardId = UUID.randomUUID();
         CardLikeRequestDto cardLikeRequestDto = new CardLikeRequestDto(
-                playerId,
-                cardId,
-                roundId,
-                gameId
+            playerId,
+            cardId,
+            roundId,
+            gameId
         );
 
         cardSocketController.likeCard(cardLikeRequestDto);
@@ -49,10 +48,10 @@ class CardSocketControllerTest {
         UUID playerId = UUID.randomUUID();
         UUID cardId = UUID.randomUUID();
         CardDislikeRequestDto cardDislikeRequestDto = new CardDislikeRequestDto(
-                playerId,
-                cardId,
-                roundId,
-                gameId
+            playerId,
+            cardId,
+            roundId,
+            gameId
         );
 
         cardSocketController.dislikeCard(cardDislikeRequestDto);
@@ -67,15 +66,14 @@ class CardSocketControllerTest {
         UUID playerId = UUID.randomUUID();
         List<UUID> cardIds = mock(List.class);
         CardSubmitRequestDto cardSubmitRequestDto = new CardSubmitRequestDto(
-                playerId,
-                cardIds,
-                roundId,
-                gameId
+            playerId,
+            cardIds,
+            roundId,
+            gameId
         );
 
         cardSocketController.selectCards(cardSubmitRequestDto);
 
         verify(roundService).selectCards(playerId, cardIds, gameId, roundId);
-
     }
 }

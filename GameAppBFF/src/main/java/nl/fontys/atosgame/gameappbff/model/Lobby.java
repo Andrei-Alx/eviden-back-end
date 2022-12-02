@@ -1,7 +1,6 @@
 package nl.fontys.atosgame.gameappbff.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Collection;
 import java.util.UUID;
 import javax.persistence.ElementCollection;

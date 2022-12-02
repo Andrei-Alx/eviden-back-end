@@ -1,18 +1,18 @@
 package nl.fontys.atosgame.roundservice.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.Optional;
+import java.util.UUID;
 import nl.fontys.atosgame.roundservice.applicationevents.PlayerRoundFinishedAppEvent;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
 import nl.fontys.atosgame.roundservice.model.Round;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 class PlayerRoundFinishedHandlerTest {
+
     private RoundService roundService;
     private PlayerRoundFinishedHandler playerRoundFinishedHandler;
 
@@ -29,9 +29,12 @@ class PlayerRoundFinishedHandlerTest {
         Round round = new Round();
         UUID roundId = UUID.randomUUID();
         round.setId(roundId);
-        when(roundService.getRoundByPlayerRound(playerRound)).thenReturn(Optional.of(round));
+        when(roundService.getRoundByPlayerRound(playerRound))
+            .thenReturn(Optional.of(round));
 
-        playerRoundFinishedHandler.onApplicationEvent(new PlayerRoundFinishedAppEvent(this, playerRound));
+        playerRoundFinishedHandler.onApplicationEvent(
+            new PlayerRoundFinishedAppEvent(this, playerRound)
+        );
 
         verify(roundService).checkRoundEnd(roundId);
     }

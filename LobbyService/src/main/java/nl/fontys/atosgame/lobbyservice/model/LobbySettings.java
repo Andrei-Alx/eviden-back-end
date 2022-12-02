@@ -13,5 +13,6 @@ import org.hibernate.annotations.Type;
 @NoArgsConstructor
 @Embeddable
 public class LobbySettings {
+
     private int maxPlayers;
 }

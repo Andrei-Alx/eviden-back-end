@@ -36,7 +36,11 @@ public class GameConsumers {
     public Function<Message<GameCreatedEvent>, Void> handleGameCreated() {
         return message -> {
             GameCreatedEvent event = message.getPayload();
-            gameService.handleGameCreated(event.getGameId(), event.getTitle(), event.getCompanyType());
+            gameService.handleGameCreated(
+                event.getGameId(),
+                event.getTitle(),
+                event.getCompanyType()
+            );
             return null;
         };
     }

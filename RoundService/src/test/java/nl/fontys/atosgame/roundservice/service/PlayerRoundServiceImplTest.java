@@ -1,5 +1,11 @@
 package nl.fontys.atosgame.roundservice.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import nl.fontys.atosgame.roundservice.applicationevents.PlayerRoundFinishedAppEvent;
 import nl.fontys.atosgame.roundservice.applicationevents.RoundFinishedAppEvent;
 import nl.fontys.atosgame.roundservice.dto.CardsSelectedEventDto;
@@ -15,14 +21,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.ApplicationEventPublisher;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 class PlayerRoundServiceImplTest {
+
     private CardService cardService;
     private StreamBridge streamBridge;
     private ApplicationEventPublisher eventPublisher;
@@ -35,7 +35,15 @@ class PlayerRoundServiceImplTest {
         streamBridge = mock(StreamBridge.class);
         eventPublisher = mock(ApplicationEventPublisher.class);
         playerRoundRepository = mock(PlayerRoundRepository.class);
-        playerRoundService = spy(new PlayerRoundServiceImpl(cardService, streamBridge, eventPublisher, playerRoundRepository));
+        playerRoundService =
+            spy(
+                new PlayerRoundServiceImpl(
+                    cardService,
+                    streamBridge,
+                    eventPublisher,
+                    playerRoundRepository
+                )
+            );
     }
 
     @Test
@@ -48,14 +56,23 @@ class PlayerRoundServiceImplTest {
         card.setId(cardId);
         playerRound.setDistributedCards(List.of(card));
         when(cardService.getCard(cardId)).thenReturn(Optional.of(card));
-        when(playerRoundRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+        when(playerRoundRepository.save(any()))
+            .thenAnswer(invocation -> invocation.getArgument(0));
 
-        PlayerRound result = playerRoundService.likeCard(playerRound, cardId, gameId, roundId);
+        PlayerRound result = playerRoundService.likeCard(
+            playerRound,
+            cardId,
+            gameId,
+            roundId
+        );
 
         assertEquals(playerRound, result);
         assertTrue(playerRound.getLikedCards().contains(card));
         verify(playerRoundRepository).save(playerRound);
-        streamBridge.send("producePlayerLikedCard-in-0", new PlayerLikedCard(playerRound.getPlayerId(), gameId, roundId,cardId));
+        streamBridge.send(
+            "producePlayerLikedCard-in-0",
+            new PlayerLikedCard(playerRound.getPlayerId(), gameId, roundId, cardId)
+        );
     }
 
     @Test
@@ -68,14 +85,23 @@ class PlayerRoundServiceImplTest {
         card.setId(cardId);
         playerRound.setDistributedCards(List.of(card));
         when(cardService.getCard(cardId)).thenReturn(Optional.of(card));
-        when(playerRoundRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+        when(playerRoundRepository.save(any()))
+            .thenAnswer(invocation -> invocation.getArgument(0));
 
-        PlayerRound result = playerRoundService.dislikeCard(playerRound, cardId, gameId, roundId);
+        PlayerRound result = playerRoundService.dislikeCard(
+            playerRound,
+            cardId,
+            gameId,
+            roundId
+        );
 
         assertEquals(playerRound, result);
         assertTrue(playerRound.getDislikedCards().contains(card));
         verify(playerRoundRepository).save(playerRound);
-        streamBridge.send("producePlayerDislikedCard-in-0", new PlayerDislikedCard(gameId, roundId, playerRound.getPlayerId(), cardId));
+        streamBridge.send(
+            "producePlayerDislikedCard-in-0",
+            new PlayerDislikedCard(gameId, roundId, playerRound.getPlayerId(), cardId)
+        );
     }
 
     @Test
@@ -92,14 +118,29 @@ class PlayerRoundServiceImplTest {
         card2.setId(cardId2);
         playerRound.setDistributedCards(List.of(card1, card2));
         when(cardService.getCards(cardIds)).thenReturn(List.of(card1, card2));
-        when(playerRoundRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+        when(playerRoundRepository.save(any()))
+            .thenAnswer(invocation -> invocation.getArgument(0));
 
-        PlayerRound result = playerRoundService.selectCards(playerRound, cardIds, gameId, roundId);
+        PlayerRound result = playerRoundService.selectCards(
+            playerRound,
+            cardIds,
+            gameId,
+            roundId
+        );
 
         assertEquals(playerRound, result);
         assertTrue(playerRound.getSelectedCards().containsAll(List.of(card1, card2)));
         verify(playerRoundRepository).save(playerRound);
-        verify(streamBridge).send("producePlayerSelectedCards-in-0", new CardsSelectedEventDto(playerRound.getPlayerId(), cardIds, roundId, gameId));
+        verify(streamBridge)
+            .send(
+                "producePlayerSelectedCards-in-0",
+                new CardsSelectedEventDto(
+                    playerRound.getPlayerId(),
+                    cardIds,
+                    roundId,
+                    gameId
+                )
+            );
         verify(playerRoundService).checkIfPlayerRoundIsFinished(playerRound);
     }
 

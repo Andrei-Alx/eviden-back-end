@@ -1,10 +1,9 @@
 package nl.fontys.atosgame.gameappbff.service;
 
-import nl.fontys.atosgame.gameappbff.model.Player;
-import nl.fontys.atosgame.gameappbff.model.Lobby;
-
 import java.util.Optional;
 import java.util.UUID;
+import nl.fontys.atosgame.gameappbff.model.Lobby;
+import nl.fontys.atosgame.gameappbff.model.Player;
 
 /**
  * Service for handling lobbies.
