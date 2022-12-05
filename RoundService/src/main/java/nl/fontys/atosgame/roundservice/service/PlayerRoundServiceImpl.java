@@ -63,8 +63,8 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
 
         // check if phase has ended
         if (previousPhase != currentPhase) {
-            streamBridge.send("producePlayerPhaseEnded-in-0", new PlayerPhaseEndedDto(previousPhase.ordinal()+1, playerRound.getPlayerId(), gameId, roundId));
-            streamBridge.send("producePlayerPhaseStarted-in-0", new PlayerPhaseStartedDto(currentPhase.ordinal()+1, playerRound.getPlayerId(), gameId, roundId));
+            streamBridge.send("producePlayerPhaseEnded-in-0", new PlayerPhaseEndedDto(previousPhase.ordinal(), playerRound.getPlayerId(), gameId, roundId));
+            streamBridge.send("producePlayerPhaseStarted-in-0", new PlayerPhaseStartedDto(currentPhase.ordinal(), playerRound.getPlayerId(), gameId, roundId));
         }
 
         return playerRound;
@@ -103,7 +103,9 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
     @Override
     public PlayerRound selectCards(PlayerRound playerRound, List<UUID> cardIds, UUID gameId, UUID roundId) {
         Collection<Card> cards = this.cardService.getCards(cardIds);
+        PlayerRoundPhase previousPhase = playerRound.getPhase();
         playerRound.addSelectedCards(List.copyOf(cards));
+        PlayerRoundPhase currentPhase = playerRound.getPhase();
         playerRound = playerRoundRepository.save(playerRound);
 
         // Send event
@@ -111,6 +113,11 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
 
         // Check if round is finished
         this.checkIfPlayerRoundIsFinished(playerRound);
+
+        if (previousPhase != currentPhase) {
+            streamBridge.send("producePlayerPhaseEnded-in-0", new PlayerPhaseEndedDto(previousPhase.ordinal(), playerRound.getPlayerId(), gameId, roundId));
+            streamBridge.send("producePlayerPhaseStarted-in-0", new PlayerPhaseStartedDto(currentPhase.ordinal(), playerRound.getPlayerId(), gameId, roundId));
+        }
 
         return playerRound;
     }
