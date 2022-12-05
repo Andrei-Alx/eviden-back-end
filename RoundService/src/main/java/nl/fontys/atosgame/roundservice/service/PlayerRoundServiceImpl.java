@@ -5,9 +5,8 @@ import java.util.List;
 import java.util.UUID;
 
 import nl.fontys.atosgame.roundservice.applicationevents.PlayerRoundFinishedAppEvent;
-import nl.fontys.atosgame.roundservice.dto.CardDislikedEventDto;
-import nl.fontys.atosgame.roundservice.dto.CardLikedEventDto;
-import nl.fontys.atosgame.roundservice.dto.CardsSelectedEventDto;
+import nl.fontys.atosgame.roundservice.dto.*;
+import nl.fontys.atosgame.roundservice.enums.PlayerRoundPhase;
 import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
 import nl.fontys.atosgame.roundservice.model.Round;
@@ -55,11 +54,19 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
     @Override
     public PlayerRound likeCard(@NotNull PlayerRound playerRound, UUID cardId, UUID gameId, UUID roundId) {
         Card card = this.cardService.getCard(cardId).get();
+        PlayerRoundPhase previousPhase = playerRound.getPhase();
         playerRound.addLikedCard(card);
+        PlayerRoundPhase currentPhase = playerRound.getPhase();
         playerRound = playerRoundRepository.save(playerRound);
 
         // Send event
         streamBridge.send("producePlayerLikedCard-in-0", new CardLikedEventDto(playerRound.getPlayerId(), gameId, roundId, cardId));
+
+        // check if phase has ended
+        if (previousPhase != currentPhase) {
+            streamBridge.send("producePlayerPhaseEnded-in-0", new PlayerPhaseEndedDto(previousPhase.ordinal(), playerRound.getPlayerId(), gameId, roundId));
+            streamBridge.send("producePlayerPhaseStarted-in-0", new PlayerPhaseStartedDto(currentPhase.ordinal(), playerRound.getPlayerId(), gameId, roundId));
+        }
 
         return playerRound;
     }
@@ -97,7 +104,9 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
     @Override
     public PlayerRound selectCards(PlayerRound playerRound, List<UUID> cardIds, UUID gameId, UUID roundId) {
         Collection<Card> cards = this.cardService.getCards(cardIds);
+        PlayerRoundPhase previousPhase = playerRound.getPhase();
         playerRound.addSelectedCards(List.copyOf(cards));
+        PlayerRoundPhase currentPhase = playerRound.getPhase();
         playerRound = playerRoundRepository.save(playerRound);
 
         // Send event
@@ -105,6 +114,11 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
 
         // Check if round is finished
         this.checkIfPlayerRoundIsFinished(playerRound);
+
+        if (previousPhase != currentPhase) {
+            streamBridge.send("producePlayerPhaseEnded-in-0", new PlayerPhaseEndedDto(previousPhase.ordinal(), playerRound.getPlayerId(), gameId, roundId));
+            streamBridge.send("producePlayerPhaseStarted-in-0", new PlayerPhaseStartedDto(currentPhase.ordinal(), playerRound.getPlayerId(), gameId, roundId));
+        }
 
         return playerRound;
     }
