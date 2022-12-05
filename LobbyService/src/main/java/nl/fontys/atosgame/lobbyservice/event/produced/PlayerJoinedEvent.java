@@ -18,5 +18,6 @@ public class PlayerJoinedEvent extends BaseEvent {
 
     private Player player;
 
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID gameId;
 }

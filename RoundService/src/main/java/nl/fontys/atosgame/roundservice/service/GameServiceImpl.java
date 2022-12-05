@@ -22,16 +22,19 @@ import org.springframework.stereotype.Service;
 public class GameServiceImpl implements GameService {
 
     private RoundService roundService;
+    private LobbyService lobbyService;
 
     private GameRepository gameRepository;
     private StreamBridge streamBridge;
 
     public GameServiceImpl(
         @Autowired RoundService roundService,
+        @Autowired LobbyService lobbyService,
         @Autowired GameRepository gameRepository,
         @Autowired StreamBridge streamBridge
     ) {
         this.roundService = roundService;
+        this.lobbyService = lobbyService;
         this.gameRepository = gameRepository;
         this.streamBridge = streamBridge;
     }
@@ -52,20 +55,11 @@ public class GameServiceImpl implements GameService {
         List<Round> rounds = roundService.createRounds(gameId, roundSettings);
         game.setRounds(rounds);
 
-        // TODO: REMOVE HARDCODED LOBBY
-        Lobby lobby = new Lobby(
-            UUID.randomUUID(),
-            new ArrayList<>(
-                List.of(
-                    UUID.randomUUID()
-                    //                    UUID.randomUUID(),
-                    //                    UUID.randomUUID(),
-                    //                    UUID.randomUUID(),
-                    //                    UUID.randomUUID()
-                )
-            )
-        );
-        game.setLobby(lobby);
+        // Check if a lobby for the game has been created and add it
+        Optional<Lobby> lobby = lobbyService.getLobbyByGameId(gameId);
+        if (lobby.isPresent()) {
+            game.setLobby(lobby.get());
+        }
 
         return gameRepository.save(game);
     }

@@ -1,4 +1,4 @@
-package nl.fontys.atosgame.gameappbff.dto;
+package nl.fontys.atosgame.roundservice.dto;
 
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -9,10 +9,10 @@ import org.hibernate.annotations.Type;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LobbyResponseDto {
+public class PlayerDto {
 
     @Type(type = "org.hibernate.type.UUIDCharType")
-    private UUID lobbyId;
+    private UUID id;
 
-    private String code;
+    private String name;
 }

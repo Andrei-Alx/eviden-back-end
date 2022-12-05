@@ -5,14 +5,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.gameappbff.event.BaseEvent;
+import org.hibernate.annotations.Type;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlayerDislikedCardEvent extends BaseEvent {
 
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID playerId;
+
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID gameId;
+
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID roundId;
+
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID cardId;
 }

@@ -9,11 +9,13 @@ import java.util.Map;
 import javax.persistence.ElementCollection;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.cardservice.model.Tag;
 import nl.fontys.atosgame.cardservice.model.Translation;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CreateCardDto {
 
     @JsonProperty

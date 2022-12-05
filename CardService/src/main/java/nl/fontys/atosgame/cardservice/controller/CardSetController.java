@@ -30,6 +30,12 @@ public class CardSetController {
         this.cardSetService = cardSetService;
     }
 
+    /**
+     * Id: R-4
+     * create a new card set
+     * @param createCardSetDto
+     * @return
+     */
     @PostMapping("/create")
     @ApiResponses(
         value = {
@@ -59,6 +65,11 @@ public class CardSetController {
         }
     }
 
+    /**
+     * Id: R-5
+     * Update a card set
+     * @return
+     */
     @PutMapping("/update")
     @ApiResponses(
         value = {
@@ -86,6 +97,11 @@ public class CardSetController {
         }
     }
 
+    /**
+     * Id: R-6
+     * @param id
+     * @return
+     */
     @DeleteMapping("/delete/{id}")
     @ApiResponses(
         value = {

@@ -5,11 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.gameservice.event.BaseEvent;
+import org.hibernate.annotations.Type;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class GameStartedEvent extends BaseEvent {
 
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID gameId;
 }

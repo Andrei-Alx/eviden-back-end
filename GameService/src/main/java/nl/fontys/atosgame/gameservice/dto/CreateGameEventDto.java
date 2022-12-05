@@ -7,13 +7,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.gameservice.model.LobbySettings;
 import nl.fontys.atosgame.gameservice.model.RoundSettings;
+import org.hibernate.annotations.Type;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateGameEventDto {
 
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID gameId;
+
     private String title;
     private String companyType;
     private List<RoundSettings> roundSettings;

@@ -59,10 +59,6 @@ public class LobbyController {
             @ApiResponse(responseCode = "500", description = "Internal server error"),
         }
     )
-    /**
-     * R-7
-     * this method adds a player to the lobby
-     */
     public ResponseEntity joinLobby(@RequestBody JoinRequestDto joinRequestDto) {
         Lobby lobby;
         try {

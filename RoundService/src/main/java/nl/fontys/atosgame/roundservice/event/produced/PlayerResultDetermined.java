@@ -5,14 +5,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.roundservice.event.BaseEvent;
+import org.hibernate.annotations.Type;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlayerResultDetermined extends BaseEvent {
 
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID playerId;
+
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID gameId;
+
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID roundId;
     // TODO add result
 }
