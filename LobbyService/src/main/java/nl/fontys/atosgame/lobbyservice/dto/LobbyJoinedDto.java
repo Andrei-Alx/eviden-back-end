@@ -28,6 +28,7 @@ public class LobbyJoinedDto {
     @JsonProperty
     private String lobbyCode;
 
+    @Type(type = "org.hibernate.type.UUIDCharType")
     @JsonProperty
     private UUID gameId;
 }

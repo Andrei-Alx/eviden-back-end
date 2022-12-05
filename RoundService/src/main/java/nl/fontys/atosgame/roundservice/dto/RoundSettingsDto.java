@@ -32,5 +32,6 @@ public class RoundSettingsDto {
     private boolean showSameCardOrder;
 
     @JsonProperty
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID cardSetId;
 }
