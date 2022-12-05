@@ -30,7 +30,7 @@ public class CardController {
                                     mediaType = "application/json"
                             )
                     ),
-                    @ApiResponse(responseCode = "404", description = "Round, Player, or PlayerRound not found"),
+                    @ApiResponse(responseCode = "404", description = "Round not found"),
                     @ApiResponse(responseCode = "500", description = "Internal server error"),
             }
     )
@@ -56,7 +56,7 @@ public class CardController {
                                     mediaType = "application/json"
                             )
                     ),
-                    @ApiResponse(responseCode = "404", description = "Round, Player, or PlayerRound not found"),
+                    @ApiResponse(responseCode = "404", description = "Round not found"),
                     @ApiResponse(responseCode = "500", description = "Internal server error"),
             }
     )
@@ -77,12 +77,12 @@ public class CardController {
             value = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "select cards",
+                            description = "selected cards",
                             content = @Content(
                                     mediaType = "application/json"
                             )
                     ),
-                    @ApiResponse(responseCode = "404", description = "Round, Player, Card(s) or PlayerRound not found"),
+                    @ApiResponse(responseCode = "404", description = "Round not found"),
                     @ApiResponse(responseCode = "500", description = "Internal server error"),
             }
     )
