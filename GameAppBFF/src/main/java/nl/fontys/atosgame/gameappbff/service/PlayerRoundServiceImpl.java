@@ -90,7 +90,7 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
         // TODO: Should there be some signifier for the phase here?
 
         // Send to socket
-        gameSocketController.playerPhase(gameId, playerId, phaseNumber);
+        gameSocketController.playerPhase(gameId, phaseNumber, playerRound);
         return playerRoundRepository.save(playerRound);
     }
 
