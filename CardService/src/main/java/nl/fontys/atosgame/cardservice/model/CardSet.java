@@ -27,7 +27,7 @@ public class CardSet {
     @JsonProperty
     private String type;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
         name = "card_set_cards",
         joinColumns = @JoinColumn(name = "card_set_null"),
