@@ -64,7 +64,7 @@ public class CardController {
      * R-18
      * This method dislikes the card (phase 1) for a given playerRound reference
      */
-    public ResponseEntity dislikeCard(UUID playerid,UUID cardid,UUID gameid,UUID roundid){
+    public ResponseEntity dislikeCard(@RequestParam UUID playerid,@RequestParam UUID cardid,@RequestParam UUID gameid,@RequestParam UUID roundid){
         try {
             roundService.dislikeCard(playerid, cardid, gameid, roundid);
         }
