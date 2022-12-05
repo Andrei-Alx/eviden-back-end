@@ -231,10 +231,18 @@ public class RoundEventProducers {
      * output topic: player-result-determined-topic
      */
     @Bean
-    public Function<?, Message<RoundCreatedEvent>> producePlayerResultDetermined() {
+    public Function<PlayerResultDeterminedDto, Message<PlayerResultDeterminedEvent>> producePlayerResultDetermined() {
         return keyValue -> {
-            // TODO implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerResultDeterminedEvent event = EventFactory.createPlayerResultDeterminedEvent(
+                    keyValue.getRoundId(),
+                    keyValue.getGameId(),
+                    keyValue.getPlayerId(),
+                    keyValue.getResult()
+            );
+            return MessageBuilder
+                    .withPayload(event)
+                    .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                    .build();
         };
     }
 
@@ -245,10 +253,18 @@ public class RoundEventProducers {
      * output topic: player-result-indeterminate-topic
      */
     @Bean
-    public Function<?, Message<RoundCreatedEvent>> producePlayerResultIndeterminate() {
+    public Function<PlayerResultIndeterminedEvent, Message<PlayerResultIndeterminedEvent>> producePlayerResultIndeterminate() {
         return keyValue -> {
-            // TODO implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerResultIndeterminedEvent event = EventFactory.createPlayerResultIndeterminedEvent(
+                    keyValue.getRoundId(),
+                    keyValue.getGameId(),
+                    keyValue.getPlayerId(),
+                    keyValue.getResultStatus()
+            );
+            return MessageBuilder
+                    .withPayload(event)
+                    .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                    .build();
         };
     }
 }

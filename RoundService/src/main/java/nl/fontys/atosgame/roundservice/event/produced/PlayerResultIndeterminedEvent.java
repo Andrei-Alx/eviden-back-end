@@ -9,10 +9,10 @@ import nl.fontys.atosgame.roundservice.event.BaseEvent;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlayerResultDetermined extends BaseEvent {
+public class PlayerResultIndeterminedEvent extends BaseEvent {
 
+    private UUID roundId;
     private UUID playerId;
     private UUID gameId;
-    private UUID roundId;
-    // TODO add result
+    private String resultStatus;
 }

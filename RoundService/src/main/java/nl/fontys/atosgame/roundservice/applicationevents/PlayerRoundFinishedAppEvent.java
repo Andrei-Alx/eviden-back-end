@@ -13,7 +13,7 @@ public class PlayerRoundFinishedAppEvent extends ApplicationEvent {
         this.playerRound = playerRound;
     }
 
-    public PlayerRound getPlayerRoundId() {
+    public PlayerRound getPlayerRound() {
         return playerRound;
     }
 }

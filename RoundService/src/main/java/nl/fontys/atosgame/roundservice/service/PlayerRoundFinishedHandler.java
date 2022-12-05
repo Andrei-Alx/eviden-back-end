@@ -24,7 +24,7 @@ public class PlayerRoundFinishedHandler implements ApplicationListener<PlayerRou
     @Override
     public void onApplicationEvent(PlayerRoundFinishedAppEvent event) {
         System.out.println("Player round finished");
-        Round round = roundService.getRoundByPlayerRound(event.getPlayerRoundId()).get();
+        Round round = roundService.getRoundByPlayerRound(event.getPlayerRound()).get();
         this.roundService.checkRoundEnd(round.getId());
     }
 }
