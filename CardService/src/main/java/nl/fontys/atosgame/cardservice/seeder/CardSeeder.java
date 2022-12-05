@@ -19,6 +19,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
+@Profile("development")
 public class CardSeeder {
 
     private CardService cardService;
@@ -38,7 +39,6 @@ public class CardSeeder {
         this.cardSetService = cardSetService;
     }
 
-    @Profile("development")
     @EventListener(ApplicationReadyEvent.class)
     public void seedCards() throws IOException {
         // Read the cards from the json file
