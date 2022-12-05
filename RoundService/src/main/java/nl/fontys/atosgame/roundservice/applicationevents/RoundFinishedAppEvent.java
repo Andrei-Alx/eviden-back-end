@@ -1,8 +1,9 @@
 package nl.fontys.atosgame.roundservice.applicationevents;
 
 import nl.fontys.atosgame.roundservice.dto.PlayerResultDeterminedDto;
-import nl.fontys.atosgame.roundservice.dto.PlayerResultIndeterminedDto;
+import nl.fontys.atosgame.roundservice.dto.PlayerResultIndeterminateDto;
 import nl.fontys.atosgame.roundservice.dto.ResultDto;
+import nl.fontys.atosgame.roundservice.enums.ResultStatus;
 import nl.fontys.atosgame.roundservice.model.Round;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.ApplicationEvent;
@@ -43,13 +44,13 @@ public class RoundFinishedAppEvent extends ApplicationEvent {
             else{
                 // TODO: consume this event to start the playerround again
 
-                PlayerResultIndeterminedDto dto = new PlayerResultIndeterminedDto();
+                PlayerResultIndeterminateDto dto = new PlayerResultIndeterminateDto();
                 dto.setPlayerId(playerRound.getPlayerId());
                 dto.setRoundId(round.getId());
-                dto.setResultStatus("Result is indetermined");
+                dto.setResultStatus(ResultStatus.DETERMINED);
 
                 // Send event
-                streamBridge.send("producePlayerResultInDetermined-out-0", dto);
+                streamBridge.send("producePlayerResultInDeterminate-out-0", dto);
             }
         });
     }

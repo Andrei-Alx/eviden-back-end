@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import nl.fontys.atosgame.roundservice.dto.ResultDto;
+import nl.fontys.atosgame.roundservice.enums.ResultStatus;
 import nl.fontys.atosgame.roundservice.event.produced.*;
 import nl.fontys.atosgame.roundservice.model.Round;
 
@@ -264,15 +265,15 @@ public class EventFactory {
      * @param resultStatus The result of the player
      * @return The created event
      */
-    public static PlayerResultIndeterminedEvent createPlayerResultIndeterminedEvent(
+    public static PlayerResultIndeterminateEvent createPlayerResultIndeterminedEvent(
             UUID roundId,
             UUID gameId,
             UUID playerId,
-            String resultStatus
+            ResultStatus resultStatus
     ) {
-        PlayerResultIndeterminedEvent event = new PlayerResultIndeterminedEvent();
+        PlayerResultIndeterminateEvent event = new PlayerResultIndeterminateEvent();
         event =
-                (PlayerResultIndeterminedEvent) initializeBaseEvent(
+                (PlayerResultIndeterminateEvent) initializeBaseEvent(
                         event,
                         "PlayerResultIndetermined",
                         "RoundService"
@@ -280,7 +281,7 @@ public class EventFactory {
         event.setRoundId(roundId);
         event.setGameId(gameId);
         event.setPlayerId(playerId);
-        event.setResultStatus("result is indetermined");
+        event.setResultStatus(ResultStatus.INDETERMINED);
         return event;
     }
 

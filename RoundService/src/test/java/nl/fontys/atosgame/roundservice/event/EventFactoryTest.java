@@ -3,11 +3,16 @@ package nl.fontys.atosgame.roundservice.event;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+
+import nl.fontys.atosgame.roundservice.dto.ResultDto;
+import nl.fontys.atosgame.roundservice.enums.ResultStatus;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.event.produced.*;
 import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.model.RoundSettings;
+import nl.fontys.atosgame.roundservice.model.Tag;
 import org.junit.jupiter.api.Test;
 
 class EventFactoryTest {
@@ -206,6 +211,59 @@ class EventFactoryTest {
         assertEquals(playerId, event.getPlayerId());
         assertEquals(gameId, event.getGameId());
         assertEquals(cardIds, event.getCardIds());
+        assertNotNull(event.getTimestamp());
+        assertNotNull(event.getId());
+    }
+
+    @Test
+    void createPlayerResultDeterminedEvent(){
+        UUID roundId = UUID.randomUUID();
+        UUID playerId = UUID.randomUUID();
+        UUID gameId = UUID.randomUUID();
+        ResultDto result = new ResultDto();
+        result.setPlayerId(playerId);
+        result.setStatus(ResultStatus.DETERMINED);
+        result.setTags(List.of(new Tag("tag1", "testtag1"), new Tag("tag2", "testtag2")));
+
+        PlayerResultDeterminedEvent event = EventFactory.createPlayerResultDeterminedEvent(
+            roundId,
+            gameId,
+            playerId,
+            result
+        );
+
+        assertEquals("PlayerResultDetermined", event.getType());
+        assertEquals("RoundService", event.getService());
+        assertEquals(roundId, event.getRoundId());
+        assertEquals(playerId, event.getPlayerId());
+        assertEquals(gameId, event.getGameId());
+        assertEquals(result, event.getResult());
+        assertNotNull(event.getTimestamp());
+        assertNotNull(event.getId());
+    }
+
+    @Test
+    void createPlayerResultIndeterminateEvent(){
+        UUID roundId = UUID.randomUUID();
+        UUID playerId = UUID.randomUUID();
+        UUID gameId = UUID.randomUUID();
+        ResultDto result = new ResultDto();
+        result.setPlayerId(playerId);
+        result.setStatus(ResultStatus.INDETERMINATE);
+
+        PlayerResultIndeterminateEvent event = EventFactory.createPlayerResultIndeterminedEvent(
+            roundId,
+            gameId,
+            playerId,
+            ResultStatus.INDETERMINATE
+        );
+
+        assertEquals("PlayerResultIndeterminate", event.getType());
+        assertEquals("RoundService", event.getService());
+        assertEquals(roundId, event.getRoundId());
+        assertEquals(playerId, event.getPlayerId());
+        assertEquals(gameId, event.getGameId());
+        assertEquals(ResultStatus.INDETERMINATE, event.getResultStatus());
         assertNotNull(event.getTimestamp());
         assertNotNull(event.getId());
     }

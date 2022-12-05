@@ -253,9 +253,9 @@ public class RoundEventProducers {
      * output topic: player-result-indeterminate-topic
      */
     @Bean
-    public Function<PlayerResultIndeterminedEvent, Message<PlayerResultIndeterminedEvent>> producePlayerResultIndeterminate() {
+    public Function<PlayerResultIndeterminateEvent, Message<PlayerResultIndeterminateEvent>> producePlayerResultIndeterminate() {
         return keyValue -> {
-            PlayerResultIndeterminedEvent event = EventFactory.createPlayerResultIndeterminedEvent(
+            PlayerResultIndeterminateEvent event = EventFactory.createPlayerResultIndeterminedEvent(
                     keyValue.getRoundId(),
                     keyValue.getGameId(),
                     keyValue.getPlayerId(),
