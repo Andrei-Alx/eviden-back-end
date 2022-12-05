@@ -5,9 +5,8 @@ import java.util.List;
 import java.util.UUID;
 
 import nl.fontys.atosgame.roundservice.applicationevents.PlayerRoundFinishedAppEvent;
-import nl.fontys.atosgame.roundservice.dto.CardDislikedEventDto;
-import nl.fontys.atosgame.roundservice.dto.CardLikedEventDto;
-import nl.fontys.atosgame.roundservice.dto.CardsSelectedEventDto;
+import nl.fontys.atosgame.roundservice.dto.*;
+import nl.fontys.atosgame.roundservice.enums.PlayerRoundPhase;
 import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
 import nl.fontys.atosgame.roundservice.model.Round;
@@ -54,11 +53,19 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
     @Override
     public PlayerRound likeCard(PlayerRound playerRound, UUID cardId, UUID gameId, UUID roundId) {
         Card card = this.cardService.getCard(cardId).get();
+        PlayerRoundPhase previousPhase = playerRound.getPhase();
         playerRound.addLikedCard(card);
+        PlayerRoundPhase currentPhase = playerRound.getPhase();
         playerRound = playerRoundRepository.save(playerRound);
 
         // Send event
         streamBridge.send("producePlayerLikedCard-in-0", new CardLikedEventDto(playerRound.getPlayerId(), gameId, roundId, cardId));
+
+        // check if phase has ended
+        if (previousPhase != currentPhase) {
+            streamBridge.send("producePlayerPhaseEnded-in-0", new PlayerPhaseEndedDto(previousPhase.ordinal()+1, playerRound.getPlayerId(), gameId, roundId));
+            streamBridge.send("producePlayerPhaseStarted-in-0", new PlayerPhaseStartedDto(currentPhase.ordinal()+1, playerRound.getPlayerId(), gameId, roundId));
+        }
 
         return playerRound;
     }
