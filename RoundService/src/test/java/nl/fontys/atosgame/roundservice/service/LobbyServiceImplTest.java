@@ -81,4 +81,15 @@ class LobbyServiceImplTest {
             () -> lobbyService.removePlayerFromLobby(playerId, lobbyId)
         );
     }
+
+    @Test
+    void getLobbyByGameId() {
+        Optional<Lobby> lobbyOptional = Optional.of(new Lobby());
+        UUID gameId = UUID.randomUUID();
+        when(lobbyRepository.findByGameId(gameId)).thenReturn(lobbyOptional);
+
+        Optional<Lobby> result = lobbyService.getLobbyByGameId(gameId);
+
+        assertEquals(lobbyOptional, result);
+    }
 }
