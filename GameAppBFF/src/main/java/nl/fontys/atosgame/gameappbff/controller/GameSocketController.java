@@ -5,6 +5,7 @@ import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.dto.*;
 import nl.fontys.atosgame.gameappbff.model.Card;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
+import nl.fontys.atosgame.gameappbff.model.PlayerRound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -85,12 +86,12 @@ public class GameSocketController {
      * S-9
      * Send a message to the game that the player has changed phase
      * @param gameId The id of the game
-     * @param playerId The id of the player
+     * @param playerRound The playerRound that has changed phase
      * @param phaseNumber The phase number
      */
-    public PlayerPhaseDto playerPhase(UUID gameId, UUID playerId, int phaseNumber) {
+    public PlayerPhaseDto playerPhase(UUID gameId, int phaseNumber, PlayerRound playerRound) {
         //TODO
-        PlayerPhaseDto playerPhaseDto = new PlayerPhaseDto(playerId, phaseNumber);
+        PlayerPhaseDto playerPhaseDto = new PlayerPhaseDto(playerRound, phaseNumber);
         template.convertAndSend(
             String.format("/socket/gameapp/%s/playerPhase", gameId),
             playerPhaseDto
