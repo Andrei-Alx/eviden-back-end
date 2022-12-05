@@ -7,13 +7,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 import java.util.UUID;
 import javax.persistence.EntityNotFoundException;
+import nl.fontys.atosgame.roundservice.dto.CardLikeRequestDto;
+import nl.fontys.atosgame.roundservice.dto.CardSubmitRequestDto;
 import nl.fontys.atosgame.roundservice.service.RoundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("round")
+@RequestMapping("/api/round")
+@CrossOrigin(origins = "*")
 public class CardController {
 
     @Autowired
@@ -25,7 +28,10 @@ public class CardController {
             @ApiResponse(
                 responseCode = "200",
                 description = "Like A Card",
-                content = @Content(mediaType = "application/json")
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = CardLikeRequestDto.class)
+                )
             ),
             @ApiResponse(responseCode = "404", description = "Round not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error"),
@@ -35,27 +41,30 @@ public class CardController {
      * R-17
      * This method likes the card (phase 1) for a given playerRound reference
      */
-    public ResponseEntity likeCard(
-        @RequestParam UUID playerId,
-        @RequestParam UUID cardId,
-        @RequestParam UUID gameId,
-        @RequestParam UUID roundId
-    ) {
+    public ResponseEntity likeCard(@RequestBody CardLikeRequestDto cardLikeRequestDto) {
         try {
-            roundService.likeCard(playerId, cardId, gameId, roundId);
+            roundService.likeCard(
+                cardLikeRequestDto.getPlayerId(),
+                cardLikeRequestDto.getCardId(),
+                cardLikeRequestDto.getGameId(),
+                cardLikeRequestDto.getRoundId()
+            );
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/cardDisliked")
+    @PostMapping("/dislikeCard")
     @ApiResponses(
         value = {
             @ApiResponse(
                 responseCode = "200",
                 description = "Dislike A Card",
-                content = @Content(mediaType = "application/json")
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = CardLikeRequestDto.class)
+                )
             ),
             @ApiResponse(responseCode = "404", description = "Round not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error"),
@@ -66,26 +75,31 @@ public class CardController {
      * This method dislikes the card (phase 1) for a given playerRound reference
      */
     public ResponseEntity dislikeCard(
-        @RequestParam UUID playerid,
-        @RequestParam UUID cardid,
-        @RequestParam UUID gameid,
-        @RequestParam UUID roundid
+        @RequestBody CardLikeRequestDto cardLikeRequestDto
     ) {
         try {
-            roundService.dislikeCard(playerid, cardid, gameid, roundid);
+            roundService.dislikeCard(
+                cardLikeRequestDto.getPlayerId(),
+                cardLikeRequestDto.getCardId(),
+                cardLikeRequestDto.getGameId(),
+                cardLikeRequestDto.getRoundId()
+            );
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/cardsSelected")
+    @PostMapping("/selectCards")
     @ApiResponses(
         value = {
             @ApiResponse(
                 responseCode = "200",
                 description = "selected cards",
-                content = @Content(mediaType = "application/json")
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = CardSubmitRequestDto.class)
+                )
             ),
             @ApiResponse(responseCode = "404", description = "Round not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error"),
@@ -96,13 +110,15 @@ public class CardController {
      * This method selects the cards (phase 2) for a given playerRound reference
      */
     public ResponseEntity selectedCards(
-        @RequestParam UUID playerid,
-        @RequestParam UUID[] cardids,
-        @RequestParam UUID gameid,
-        @RequestParam UUID roundid
+        @RequestBody CardSubmitRequestDto cardSubmitRequestDto
     ) {
         try {
-            roundService.selectCards(playerid, List.of(cardids), gameid, roundid);
+            roundService.selectCards(
+                cardSubmitRequestDto.getPlayerId(),
+                cardSubmitRequestDto.getCardIds(),
+                cardSubmitRequestDto.getGameId(),
+                cardSubmitRequestDto.getRoundId()
+            );
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
