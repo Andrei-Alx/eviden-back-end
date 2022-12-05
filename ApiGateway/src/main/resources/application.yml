@@ -1,20 +1,24 @@
+httpOrHttps: http
+
 server:
   port: 8010
 spring:
+  profiles:
+    active: production
   cloud:
     gateway:
       routes:
         - id: cardService
-          uri: http://localhost:8001
+          uri: ${httpOrHttps}://localhost:8001
           predicates:
             - Path=/api/cards/**
             - Path=/api/cardsets/**
         - id: gameService
-          uri: http://localhost:8005
+          uri: ${httpOrHttps}://localhost:8005
           predicates:
               - Path=/api/game/**
         - id: lobbyService
-          uri: http://localhost:8006
+          uri: ${httpOrHttps}://localhost:8006
           predicates:
               - Path=/api/lobby/**
         - id: roundServiceWebsocket
@@ -26,6 +30,10 @@ spring:
           predicates:
               - Path=/websocket/gameappbff
         - id: adminAppBff
-          uri: http://localhost:8007
+          uri: ${httpOrHttps}://localhost:8007
           predicates:
               - Path=/api/adminappbff/**
+        - id: frontend
+          uri: ${httpOrHttps}://localhost:3001
+          predicates:
+            - Path=/**

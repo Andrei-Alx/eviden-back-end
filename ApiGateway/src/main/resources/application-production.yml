@@ -1,3 +1,5 @@
+httpOrHttps: https
+
 server:
   ssl:
     enabled: true
@@ -6,3 +8,10 @@ server:
     key-store-password: t09mQ8EZ67U1jMSd5apc
     key-alias: localhost
     key-password: t09mQ8EZ67U1jMSd5apc
+
+spring:
+  cloud:
+    gateway:
+      httpclient:
+        ssl:
+          use-insecure-trust-manager: true
