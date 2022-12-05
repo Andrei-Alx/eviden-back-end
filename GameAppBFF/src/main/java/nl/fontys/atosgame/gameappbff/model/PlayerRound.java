@@ -25,6 +25,7 @@ public class PlayerRound {
     private UUID id;
 
     @JsonProperty
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID playerId;
 
     @LazyCollection(LazyCollectionOption.FALSE)

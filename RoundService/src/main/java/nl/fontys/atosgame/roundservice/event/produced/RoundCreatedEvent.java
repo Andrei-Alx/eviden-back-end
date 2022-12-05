@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.roundservice.event.BaseEvent;
 import nl.fontys.atosgame.roundservice.model.Round;
+import org.hibernate.annotations.Type;
 
 @Data
 @AllArgsConstructor
@@ -13,5 +14,6 @@ import nl.fontys.atosgame.roundservice.model.Round;
 public class RoundCreatedEvent extends BaseEvent {
 
     private Round round;
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID gameId;
 }
