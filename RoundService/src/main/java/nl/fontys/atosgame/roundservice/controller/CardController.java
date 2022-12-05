@@ -90,7 +90,7 @@ public class CardController {
      * R-19
      * This method selects the cards (phase 2) for a given playerRound reference
      */
-    public ResponseEntity selectCards(@RequestParam UUID playerid,@RequestParam UUID[] cardids,@RequestParam UUID gameid,@RequestParam UUID roundid){
+    public ResponseEntity selectedCards(@RequestParam UUID playerid,@RequestParam UUID[] cardids,@RequestParam UUID gameid,@RequestParam UUID roundid){
         try {
             roundService.selectCards(playerid, List.of(cardids), gameid, roundid);
         }
