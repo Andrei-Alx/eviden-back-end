@@ -8,9 +8,11 @@ import java.util.UUID;
 import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.lobbyservice.dto.ExceptionDto;
 import nl.fontys.atosgame.lobbyservice.dto.JoinRequestDto;
+import nl.fontys.atosgame.lobbyservice.dto.JoinResponseDto;
 import nl.fontys.atosgame.lobbyservice.exceptions.DuplicatePlayerException;
 import nl.fontys.atosgame.lobbyservice.exceptions.LobbyFullException;
 import nl.fontys.atosgame.lobbyservice.model.Lobby;
+import nl.fontys.atosgame.lobbyservice.model.Player;
 import nl.fontys.atosgame.lobbyservice.service.LobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,7 +46,7 @@ public class LobbyController {
                 description = "Joined the lobby",
                 content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = Lobby.class)
+                    schema = @Schema(implementation = JoinResponseDto.class)
                 )
             ),
             @ApiResponse(
@@ -60,13 +62,15 @@ public class LobbyController {
         }
     )
     public ResponseEntity joinLobby(@RequestBody JoinRequestDto joinRequestDto) {
+        Player player;
         Lobby lobby;
         try {
-            lobby =
+            player =
                 lobbyService.joinLobby(
                     joinRequestDto.getLobbyCode(),
                     joinRequestDto.getPlayerName()
                 );
+            lobby = lobbyService.getByLobbyCode(joinRequestDto.getLobbyCode()).get();
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (LobbyFullException | DuplicatePlayerException e) {
@@ -76,7 +80,7 @@ public class LobbyController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
-        return ResponseEntity.ok(lobby);
+        return ResponseEntity.ok(new JoinResponseDto(lobby.getGameId(), player.getId()));
     }
 
     /**

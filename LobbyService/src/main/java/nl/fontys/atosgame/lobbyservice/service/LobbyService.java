@@ -1,8 +1,10 @@
 package nl.fontys.atosgame.lobbyservice.service;
 
+import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.lobbyservice.model.Lobby;
 import nl.fontys.atosgame.lobbyservice.model.LobbySettings;
+import nl.fontys.atosgame.lobbyservice.model.Player;
 
 /**
  * Service for handling lobbies.
@@ -26,10 +28,10 @@ public interface LobbyService {
      * This method adds the player to the lobby
      * @param lobbyCode
      * @param playerName
-     * @return
+     * @return the joined player
      * @throws Exception
      */
-    Lobby joinLobby(String lobbyCode, String playerName) throws Exception;
+    Player joinLobby(String lobbyCode, String playerName) throws Exception;
 
     /**
      * This method removes a player from the lobby
@@ -37,4 +39,11 @@ public interface LobbyService {
      * @param playerId
      */
     void quitLobby(UUID lobbyId, UUID playerId);
+
+    /**
+     * This method returns the lobby by lobbyCode
+     * @param lobbyCode The lobbyCode of the lobby
+     * @return the lobby
+     */
+    Optional<Lobby> getByLobbyCode(String lobbyCode);
 }

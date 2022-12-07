@@ -81,7 +81,7 @@ public class LobbyServiceImpl implements LobbyService {
      * @throws Exception
      */
     @Override
-    public Lobby joinLobby(String lobbyCode, String playerName)
+    public Player joinLobby(String lobbyCode, String playerName)
         throws LobbyFullException, EntityNotFoundException, DuplicatePlayerException {
         //get lobby to edit
         Lobby lobby = lobbyRepository.getByLobbyCode(lobbyCode);
@@ -105,7 +105,7 @@ public class LobbyServiceImpl implements LobbyService {
             lobby.getGameId()
         );
         streamBridge.send("producePlayerJoined-in-0", lobbyJoinedDto);
-        return lobby;
+        return player;
     }
 
     /**
@@ -139,5 +139,16 @@ public class LobbyServiceImpl implements LobbyService {
             lobby.getGameId()
         );
         streamBridge.send("producePlayerQuit-in-0", lobbyQuitDto);
+    }
+
+    /**
+     * This method returns the lobby by lobbyCode
+     *
+     * @param lobbyCode The lobbyCode of the lobby
+     * @return the lobby
+     */
+    @Override
+    public Optional<Lobby> getByLobbyCode(String lobbyCode) {
+        return Optional.ofNullable(lobbyRepository.getByLobbyCode(lobbyCode));
     }
 }

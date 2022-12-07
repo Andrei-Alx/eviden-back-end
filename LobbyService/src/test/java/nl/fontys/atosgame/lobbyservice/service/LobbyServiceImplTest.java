@@ -93,24 +93,25 @@ class LobbyServiceImplTest {
         when(lobbyRepository.getByLobbyCode(lobbyCode)).thenReturn(lobby);
 
         // act
-        Lobby joinedLobby = lobbyService.joinLobby(lobbyCode, playerName);
-        LobbyJoinedDto lobbyJoinedDto = new LobbyJoinedDto(
-            joinedLobby.getId(),
-            joinedLobby.getPlayers(),
-            joinedLobby.getPlayers().stream().findFirst().get(),
-            joinedLobby.getLobbyCode(),
-            joinedLobby.getGameId()
-        );
+        Player joinedPlayer = lobbyService.joinLobby(lobbyCode, playerName);
 
         //assert
-        assertEquals("ABCDEF", joinedLobby.getLobbyCode());
-        assertEquals(1, joinedLobby.getPlayers().size());
+        assertEquals("ABCDEF", lobby.getLobbyCode());
+        assertEquals(1, lobby.getPlayers().size());
         assertEquals(
             "PlayerOne",
-            joinedLobby.getPlayers().stream().findFirst().get().getName()
+                lobby.getPlayers().stream().findFirst().get().getName()
         );
         verify(lobbyRepository, times(1)).getByLobbyCode(lobbyCode);
-        verify(streamBridge).send("producePlayerJoined-in-0", lobbyJoinedDto);
+        verify(streamBridge).send("producePlayerJoined-in-0", new LobbyJoinedDto(
+            lobby.getId(),
+            lobby.getPlayers(),
+            joinedPlayer,
+                "ABCDEF",
+                lobby.getGameId()
+        ));
+        assertEquals(playerName, joinedPlayer.getName());
+        assertNotNull(joinedPlayer.getId());
     }
 
     @Test
@@ -194,5 +195,28 @@ class LobbyServiceImplTest {
             lobby.getGameId()
         );
         verify(streamBridge).send("producePlayerQuit-in-0", lobbyQuitDto);
+    }
+
+    @Test
+    void getByLobbyCode() {
+        // arrange
+        String lobbyCode = "ABCDEF";
+        Lobby lobby = mock(Lobby.class);
+        when(lobbyRepository.getByLobbyCode(lobbyCode)).thenReturn(lobby);
+        // act
+        Optional<Lobby> lobbyByCode = lobbyService.getByLobbyCode(lobbyCode);
+        // assert
+        assertEquals(lobby, lobbyByCode.get());
+    }
+
+    @Test
+    void getByLobbyCodeNotFound() {
+        // arrange
+        String lobbyCode = "ABCDEF";
+        when(lobbyRepository.getByLobbyCode(lobbyCode)).thenReturn(null);
+        // act
+        Optional<Lobby> lobbyByCode = lobbyService.getByLobbyCode(lobbyCode);
+        // assert
+        assertEquals(Optional.empty(), lobbyByCode);
     }
 }
