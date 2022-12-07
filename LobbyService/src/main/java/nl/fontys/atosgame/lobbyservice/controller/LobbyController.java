@@ -80,7 +80,7 @@ public class LobbyController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
-        return ResponseEntity.ok(new JoinResponseDto(lobby.getGameId(), player.getId()));
+        return ResponseEntity.ok(new JoinResponseDto(lobby.getGameId(), player));
     }
 
     /**
