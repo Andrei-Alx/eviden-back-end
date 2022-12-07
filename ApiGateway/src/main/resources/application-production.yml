@@ -1,0 +1,17 @@
+httpOrHttps: https
+
+server:
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12
+    key-store-type: PKCS12
+    key-store-password: t09mQ8EZ67U1jMSd5apc
+    key-alias: localhost
+    key-password: t09mQ8EZ67U1jMSd5apc
+
+spring:
+  cloud:
+    gateway:
+      httpclient:
+        ssl:
+          use-insecure-trust-manager: true
