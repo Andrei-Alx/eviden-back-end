@@ -38,7 +38,8 @@ class RoundLogicServiceImplTest {
                 3,
                 ShuffleMethod.FULLY_RANDOM,
                 false,
-                null
+                null,
+                    null
             )
         );
         List<UUID> playerIds = new ArrayList<>(

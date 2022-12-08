@@ -281,7 +281,8 @@ public class RoundServiceImpl implements RoundService {
             roundSettings.getNrOfSelectedCards(),
             roundSettings.getShuffleMethod(),
             roundSettings.isShowSameCardOrder(),
-            null
+            null,
+                null
         );
         // Get card set
         Optional<CardSet> cardSet = cardSetService.getCardSet(
@@ -290,13 +291,17 @@ public class RoundServiceImpl implements RoundService {
         if (cardSet.isEmpty()) {
             throw new IllegalArgumentException("Card set not found");
         }
-        // Add round settings to round
-        round.setRoundSettings(settings);
-        // Save round
-        round = roundRepository.save(round);
-        // Add card set to round settings
+
         settings.setCardSet(cardSet.get());
 
+        // Get the first card from the set and set roundsettings' importantTag to the card's TagKey
+        Optional<Card> card = cardSet.get().getCards().stream().findFirst();
+        settings.setImportantTag(card.get().getTags().stream().findFirst().get().getTagKey());
+
+        // Add round settings to round
+        round.setRoundSettings(settings);
+
+        // Save round
         round = roundRepository.save(round);
 
         // Produce round created event

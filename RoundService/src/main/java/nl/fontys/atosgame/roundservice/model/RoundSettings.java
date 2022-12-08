@@ -29,6 +29,9 @@ public class RoundSettings {
     @JsonProperty
     private boolean showSameCardOrder;
 
+    @JsonProperty
+    private String importantTag;
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "card_set_id")
     @JsonProperty
