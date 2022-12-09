@@ -100,16 +100,20 @@ class LobbyServiceImplTest {
         assertEquals(1, lobby.getPlayers().size());
         assertEquals(
             "PlayerOne",
-                lobby.getPlayers().stream().findFirst().get().getName()
+            lobby.getPlayers().stream().findFirst().get().getName()
         );
         verify(lobbyRepository, times(1)).getByLobbyCode(lobbyCode);
-        verify(streamBridge).send("producePlayerJoined-in-0", new LobbyJoinedDto(
-            lobby.getId(),
-            lobby.getPlayers(),
-            joinedPlayer,
-                "ABCDEF",
-                lobby.getGameId()
-        ));
+        verify(streamBridge)
+            .send(
+                "producePlayerJoined-in-0",
+                new LobbyJoinedDto(
+                    lobby.getId(),
+                    lobby.getPlayers(),
+                    joinedPlayer,
+                    "ABCDEF",
+                    lobby.getGameId()
+                )
+            );
         assertEquals(playerName, joinedPlayer.getName());
         assertNotNull(joinedPlayer.getId());
     }
