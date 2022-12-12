@@ -14,5 +14,4 @@ public class PlayerResultDeterminedDto {
     private UUID roundId;
     private UUID gameId;
     private ResultDto result;
-
 }
