@@ -17,6 +17,5 @@ public class PlayerResultDeterminedEvent extends BaseEvent {
     private UUID playerId;
     private UUID gameId;
     private UUID roundId;
-    private UUID gameId;
     private ResultDto result;
 }

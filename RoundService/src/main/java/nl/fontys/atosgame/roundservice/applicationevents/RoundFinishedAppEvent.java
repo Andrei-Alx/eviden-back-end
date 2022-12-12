@@ -1,10 +1,14 @@
 package nl.fontys.atosgame.roundservice.applicationevents;
 
+import nl.fontys.atosgame.roundservice.dto.PlayerResultDeterminedDto;
+import nl.fontys.atosgame.roundservice.dto.PlayerResultIndeterminateDto;
+import nl.fontys.atosgame.roundservice.dto.ResultDto;
+import nl.fontys.atosgame.roundservice.enums.ResultStatus;
 import nl.fontys.atosgame.roundservice.model.Round;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.ApplicationEvent;
 
-import java.util.UUID;
+import java.util.Map;
 
 public class RoundFinishedAppEvent extends ApplicationEvent {
 

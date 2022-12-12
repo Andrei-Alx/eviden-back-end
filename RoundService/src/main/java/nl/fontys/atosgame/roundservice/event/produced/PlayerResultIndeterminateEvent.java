@@ -18,6 +18,5 @@ public class PlayerResultIndeterminateEvent extends BaseEvent {
 
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID playerId;
-    private UUID gameId;
     private ResultStatus resultStatus;
 }
