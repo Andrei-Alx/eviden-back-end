@@ -173,7 +173,7 @@ class PlayerRoundServiceImplTest {
                     gameId
                 )
             );
-        verify(playerRoundService).checkIfPlayerRoundIsFinished(playerRound);
+        verify(playerRoundService, times(1));
     }
 
     @Test

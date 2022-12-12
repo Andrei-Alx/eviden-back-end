@@ -135,7 +135,7 @@ public class CardController {
             value = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "next round",
+                            description = "Next round",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = CardSubmitRequestDto.class)
