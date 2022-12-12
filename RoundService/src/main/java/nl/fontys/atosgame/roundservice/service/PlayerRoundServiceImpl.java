@@ -152,7 +152,7 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
         );
 
         // Check if round is finished
-        this.checkIfPlayerRoundIsFinished(playerRound);
+        // this.checkIfPlayerRoundIsFinished(playerRound); turned off so the round does not get started automatically. use cardcontroller/api/round/startnextround
 
         if (previousPhase != currentPhase) {
             streamBridge.send(

@@ -153,7 +153,7 @@ public class CardController {
             @RequestBody StartNextRoundDto startNextRoundDto
     ) {
         try {
-            roundService.startNextRound(startNextRoundDto.getGameId());
+            gameService.checkForNextRound(startNextRoundDto.getGameId());
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }

@@ -88,10 +88,4 @@ public interface RoundService {
      * @return The round
      */
     Optional<Round> getRoundByPlayerRound(PlayerRound playerRound);
-
-    /**
-     * this methods gets manually called with rest to start the next round in the game
-     * @param roundId
-     */
-    public void startNextRound(UUID roundId);
 }
