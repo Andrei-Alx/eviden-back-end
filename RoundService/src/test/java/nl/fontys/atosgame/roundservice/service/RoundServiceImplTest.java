@@ -32,6 +32,7 @@ class RoundServiceImplTest {
 
     private CardSetService cardSetService;
     private RoundRepository roundRepository;
+    private GameService gameservice;
     private PlayerRoundService playerRoundService;
     private RoundLogicService roundLogicService;
     private StreamBridge streamBridge;
@@ -42,6 +43,7 @@ class RoundServiceImplTest {
     void setUp() {
         cardSetService = mock(CardSetService.class);
         roundRepository = mock(RoundRepository.class);
+        gameservice = mock(GameService.class);
         playerRoundService = mock(PlayerRoundService.class);
         roundLogicService = mock(RoundLogicService.class);
         streamBridge = mock(StreamBridge.class);
@@ -50,6 +52,7 @@ class RoundServiceImplTest {
             spy(
                 new RoundServiceImpl(
                     roundRepository,
+                    gameservice,
                     cardSetService,
                     streamBridge,
                     playerRoundService,

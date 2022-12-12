@@ -15,6 +15,7 @@ import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.model.*;
+import nl.fontys.atosgame.roundservice.repository.GameRepository;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -30,6 +31,8 @@ public class RoundServiceImpl implements RoundService {
 
     private final RoundRepository roundRepository;
 
+    private final GameService gameService;
+
     private final CardSetService cardSetService;
 
     private final PlayerRoundService playerRoundService;
@@ -42,6 +45,7 @@ public class RoundServiceImpl implements RoundService {
 
     public RoundServiceImpl(
         @Autowired RoundRepository roundRepository,
+        @Autowired GameService gameService,
         @Autowired CardSetService cardSetService,
         @Autowired StreamBridge streamBridge,
         @Autowired PlayerRoundService playerRoundService,
@@ -49,6 +53,7 @@ public class RoundServiceImpl implements RoundService {
         @Autowired ApplicationEventPublisher eventPublisher
     ) {
         this.roundRepository = roundRepository;
+        this.gameService = gameService;
         this.cardSetService = cardSetService;
         this.playerRoundService = playerRoundService;
         this.streamBridge = streamBridge;
@@ -256,10 +261,14 @@ public class RoundServiceImpl implements RoundService {
         }
     }
 
+    @Override
+    public void startNextRound(UUID gameId){
+        gameService.checkForNextRound(gameId);
+    }
     /**
      * Get the round that contains a playerround
      *
-     * @param playerRound The the player round
+     * @param playerRound The player round
      * @return The round
      */
     @Override
