@@ -12,6 +12,7 @@ import nl.fontys.atosgame.gameappbff.dto.CardLikedDto;
 import nl.fontys.atosgame.gameappbff.dto.CardsDto;
 import nl.fontys.atosgame.gameappbff.dto.PlayerPhaseDto;
 import nl.fontys.atosgame.gameappbff.model.Card;
+import nl.fontys.atosgame.gameappbff.model.PlayerRound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -30,15 +31,22 @@ class GameSocketControllerTest {
     @Test
     void playerPhase() {
         UUID gameId = UUID.fromString("00000000-0000-0000-0000-000000000000");
-        UUID playerId = UUID.randomUUID();
+        PlayerRound playerRound = new PlayerRound(
+            UUID.fromString("00000000-0000-0000-0000-000000000000"),
+            UUID.fromString("00000000-0000-0000-0000-000000000000"),
+            new ArrayList<>(),
+            new ArrayList<>(),
+            new ArrayList<>(),
+            new ArrayList<>()
+        );
         int phaseNumber = 1;
 
-        gameSocketController.playerPhase(gameId, playerId, phaseNumber);
+        gameSocketController.playerPhase(gameId, phaseNumber, playerRound);
 
         verify(simpMessagingTemplate)
             .convertAndSend(
                 "/socket/gameapp/00000000-0000-0000-0000-000000000000/playerPhase",
-                new PlayerPhaseDto(playerId, phaseNumber)
+                new PlayerPhaseDto(playerRound, phaseNumber)
             );
     }
 

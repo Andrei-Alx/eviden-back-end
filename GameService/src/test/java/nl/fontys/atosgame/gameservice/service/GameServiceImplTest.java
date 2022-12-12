@@ -1,5 +1,13 @@
 package nl.fontys.atosgame.gameservice.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
 import nl.fontys.atosgame.gameservice.enums.GameStatus;
 import nl.fontys.atosgame.gameservice.enums.ShowResults;
@@ -12,15 +20,6 @@ import nl.fontys.atosgame.gameservice.repository.GameRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.stream.function.StreamBridge;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 class GameServiceImplTest {
 
@@ -43,17 +42,40 @@ class GameServiceImplTest {
         String companyType = "companyType";
         LobbySettings lobbySettings = new LobbySettings();
         List<RoundSettings> roundSettings = new ArrayList<>(
-                List.of(new RoundSettings(ShowResults.PERSONAL, 1, 1, ShuffleMethod.FULLY_RANDOM, false, UUID.randomUUID()),
-                        new RoundSettings(ShowResults.PERSONAL, 1, 1, ShuffleMethod.FULLY_RANDOM, false, UUID.randomUUID()))
+            List.of(
+                new RoundSettings(
+                    ShowResults.PERSONAL,
+                    1,
+                    1,
+                    ShuffleMethod.FULLY_RANDOM,
+                    false,
+                    UUID.randomUUID()
+                ),
+                new RoundSettings(
+                    ShowResults.PERSONAL,
+                    1,
+                    1,
+                    ShuffleMethod.FULLY_RANDOM,
+                    false,
+                    UUID.randomUUID()
+                )
+            )
         );
-        when(cardSetService.getCardSet(any())).thenReturn(Optional.of(mock(CardSet.class)));
-        when(gameRepository.save(any())).thenAnswer(invocation -> {
-            Game game = invocation.getArgument(0);
-            game.setId(UUID.randomUUID());
-            return game;
-        });
+        when(cardSetService.getCardSet(any()))
+            .thenReturn(Optional.of(mock(CardSet.class)));
+        when(gameRepository.save(any()))
+            .thenAnswer(invocation -> {
+                Game game = invocation.getArgument(0);
+                game.setId(UUID.randomUUID());
+                return game;
+            });
 
-        Game result = gameService.createGame("titleGame", "companyType", lobbySettings, roundSettings);
+        Game result = gameService.createGame(
+            "titleGame",
+            "companyType",
+            lobbySettings,
+            roundSettings
+        );
 
         assertNotNull(result.getId());
         assertEquals(title, result.getTitle());
@@ -62,19 +84,54 @@ class GameServiceImplTest {
         assertNull(result.getRounds());
         assertEquals(GameStatus.CREATED, result.getStatus());
         verify(gameRepository, times(1)).save(any());
-        verify(streamBridge, times(1)).send("produceGameCreated-in-0", new CreateGameEventDto(result.getId(), title, companyType, roundSettings, lobbySettings));
+        verify(streamBridge, times(1))
+            .send(
+                "produceGameCreated-in-0",
+                new CreateGameEventDto(
+                    result.getId(),
+                    title,
+                    companyType,
+                    roundSettings,
+                    lobbySettings
+                )
+            );
     }
 
     @Test
     void createGameCardSetsDoNotExist() {
         LobbySettings lobbySettings = new LobbySettings();
         List<RoundSettings> roundSettings = new ArrayList<>(
-                List.of(new RoundSettings(ShowResults.PERSONAL, 1, 1, ShuffleMethod.FULLY_RANDOM, false, UUID.randomUUID()),
-                        new RoundSettings(ShowResults.PERSONAL, 1, 1, ShuffleMethod.FULLY_RANDOM, false, UUID.randomUUID()))
+            List.of(
+                new RoundSettings(
+                    ShowResults.PERSONAL,
+                    1,
+                    1,
+                    ShuffleMethod.FULLY_RANDOM,
+                    false,
+                    UUID.randomUUID()
+                ),
+                new RoundSettings(
+                    ShowResults.PERSONAL,
+                    1,
+                    1,
+                    ShuffleMethod.FULLY_RANDOM,
+                    false,
+                    UUID.randomUUID()
+                )
+            )
         );
         when(cardSetService.getCardSet(any())).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> gameService.createGame("titleGame", "companyType", lobbySettings, roundSettings));
+        assertThrows(
+            IllegalArgumentException.class,
+            () ->
+                gameService.createGame(
+                    "titleGame",
+                    "companyType",
+                    lobbySettings,
+                    roundSettings
+                )
+        );
     }
 
     @Test
@@ -82,7 +139,8 @@ class GameServiceImplTest {
         Game game = new Game();
         game.setId(UUID.randomUUID());
         when(gameRepository.findById(any())).thenReturn(Optional.of(game));
-        when(gameRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+        when(gameRepository.save(any()))
+            .thenAnswer(invocation -> invocation.getArgument(0));
 
         Game result = gameService.startGame(game.getId());
         verify(gameRepository, times(1)).save(any());

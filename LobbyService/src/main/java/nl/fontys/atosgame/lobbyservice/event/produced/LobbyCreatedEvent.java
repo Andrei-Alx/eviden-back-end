@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.lobbyservice.event.BaseEvent;
 import nl.fontys.atosgame.lobbyservice.model.Lobby;
+import org.hibernate.annotations.Type;
 
 @Data
 @AllArgsConstructor
@@ -13,5 +14,7 @@ import nl.fontys.atosgame.lobbyservice.model.Lobby;
 public class LobbyCreatedEvent extends BaseEvent {
 
     private Lobby lobby;
+
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID gameId;
 }

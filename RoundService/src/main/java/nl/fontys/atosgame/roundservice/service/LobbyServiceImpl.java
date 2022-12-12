@@ -84,4 +84,15 @@ public class LobbyServiceImpl implements LobbyService {
             throw new EntityNotFoundException("Lobby not found");
         }
     }
+
+    /**
+     * Get the lobby of a game
+     *
+     * @param gameId The id of the game
+     * @return An optional containing the lobby if found
+     */
+    @Override
+    public Optional<Lobby> getLobbyByGameId(UUID gameId) {
+        return lobbyRepository.findByGameId(gameId);
+    }
 }

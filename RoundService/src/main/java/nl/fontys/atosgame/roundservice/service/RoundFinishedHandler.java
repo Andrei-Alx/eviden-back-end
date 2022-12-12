@@ -12,12 +12,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class RoundFinishedHandler implements ApplicationListener<RoundFinishedAppEvent> {
+
     private GameService gameService;
 
-    public RoundFinishedHandler(
-           @Autowired GameService gameService) {
+    public RoundFinishedHandler(@Autowired GameService gameService) {
         this.gameService = gameService;
     }
+
     @Override
     public void onApplicationEvent(RoundFinishedAppEvent event) {
         System.out.println("Round finished");

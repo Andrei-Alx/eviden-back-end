@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
-
 import nl.fontys.atosgame.roundservice.applicationevents.RoundFinishedAppEvent;
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
 import nl.fontys.atosgame.roundservice.dto.PlayerPhaseStartedDto;
@@ -184,7 +183,12 @@ public class RoundServiceImpl implements RoundService {
     @Override
     public Round likeCard(UUID playerId, UUID cardId, UUID gameId, UUID roundId) {
         Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
-        playerRoundService.likeCard(round.getPlayerRound(playerId), cardId, gameId, roundId);
+        playerRoundService.likeCard(
+            round.getPlayerRound(playerId),
+            cardId,
+            gameId,
+            roundId
+        );
         return round;
     }
 
@@ -201,7 +205,12 @@ public class RoundServiceImpl implements RoundService {
     @Override
     public Round dislikeCard(UUID playerId, UUID cardId, UUID gameId, UUID roundId) {
         Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
-        playerRoundService.dislikeCard(round.getPlayerRound(playerId), cardId, gameId, roundId);
+        playerRoundService.dislikeCard(
+            round.getPlayerRound(playerId),
+            cardId,
+            gameId,
+            roundId
+        );
         return round;
     }
 
@@ -216,9 +225,19 @@ public class RoundServiceImpl implements RoundService {
      * @return The updated round
      */
     @Override
-    public Round selectCards(UUID playerId, List<UUID> cardIds, UUID gameId, UUID roundId) {
+    public Round selectCards(
+        UUID playerId,
+        List<UUID> cardIds,
+        UUID gameId,
+        UUID roundId
+    ) {
         Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
-        playerRoundService.selectCards(round.getPlayerRound(playerId), cardIds, gameId, roundId);
+        playerRoundService.selectCards(
+            round.getPlayerRound(playerId),
+            cardIds,
+            gameId,
+            roundId
+        );
         return round;
     }
 
@@ -228,11 +247,14 @@ public class RoundServiceImpl implements RoundService {
      * @param roundId The id of the round
      */
     @Override
-    public void checkRoundEnd(UUID roundId) {
+    public boolean checkRoundEnd(UUID roundId) {
+        boolean roundFinished = false;
         Round round = getRound(roundId).get();
         if (round.isDone()) {
             applicationEventPublisher.publishEvent(new RoundFinishedAppEvent(this, round));
         }
+
+        return roundFinished;
     }
 
     /**
@@ -245,7 +267,6 @@ public class RoundServiceImpl implements RoundService {
     public Optional<Round> getRoundByPlayerRound(PlayerRound playerRound) {
         return roundRepository.findByPlayerRoundsContaining(playerRound);
     }
-
 
     /**
      * Create a round for a game

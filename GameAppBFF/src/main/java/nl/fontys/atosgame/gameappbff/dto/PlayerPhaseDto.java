@@ -4,12 +4,13 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.fontys.atosgame.gameappbff.model.PlayerRound;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlayerPhaseDto {
 
-    private UUID playerId;
+    private PlayerRound playerRound;
     private int phaseNumber;
 }

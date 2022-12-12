@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 import nl.fontys.atosgame.roundservice.model.Game;
 import nl.fontys.atosgame.roundservice.model.Lobby;
 import nl.fontys.atosgame.roundservice.model.Round;
@@ -19,6 +18,7 @@ import org.springframework.cloud.stream.function.StreamBridge;
 class GameServiceImplTest {
 
     private RoundService roundService;
+    private LobbyService lobbyService;
     private GameRepository gameRepository;
     private StreamBridge streamBridge;
     private GameServiceImpl gameService;
@@ -26,9 +26,11 @@ class GameServiceImplTest {
     @BeforeEach
     void setUp() {
         roundService = mock(RoundService.class);
+        lobbyService = mock(LobbyService.class);
         gameRepository = mock(GameRepository.class);
         streamBridge = mock(StreamBridge.class);
-        gameService = new GameServiceImpl(roundService, gameRepository, streamBridge);
+        gameService =
+            new GameServiceImpl(roundService, lobbyService, gameRepository, streamBridge);
     }
 
     @Test
@@ -37,12 +39,30 @@ class GameServiceImplTest {
         UUID gameId = UUID.randomUUID();
         doReturn(rounds).when(roundService).createRounds(gameId, null);
         when(gameRepository.save(any(Game.class))).thenAnswer(i -> i.getArguments()[0]);
+        Lobby lobby = mock(Lobby.class);
+        doReturn(Optional.of(lobby)).when(lobbyService).getLobbyByGameId(gameId);
 
         Game game = gameService.initializeGame(gameId, null);
 
         assertNotNull(game.getId());
         assertEquals(gameId, game.getId());
-        assertNull(game.getLobby());
+        assertEquals(lobby, game.getLobby());
+        assertEquals(rounds, game.getRounds());
+    }
+
+    @Test
+    void initializeGameWithNoLobby() {
+        List<Round> rounds = mock(List.class);
+        UUID gameId = UUID.randomUUID();
+        doReturn(rounds).when(roundService).createRounds(gameId, null);
+        when(gameRepository.save(any(Game.class))).thenAnswer(i -> i.getArguments()[0]);
+        when(lobbyService.getLobbyByGameId(gameId)).thenReturn(Optional.empty());
+
+        Game game = gameService.initializeGame(gameId, null);
+
+        assertNotNull(game.getId());
+        assertEquals(gameId, game.getId());
+        assertNull(game.getLobby()); //test fails here. defective test?
         assertEquals(rounds, game.getRounds());
     }
 

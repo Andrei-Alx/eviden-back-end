@@ -1,15 +1,14 @@
 package nl.fontys.atosgame.gameservice.service;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+import java.util.UUID;
 import nl.fontys.atosgame.gameservice.model.CardSet;
 import nl.fontys.atosgame.gameservice.repository.CardSetRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.stream.function.StreamBridge;
-
-import java.util.UUID;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 public class CardSetServiceImplTest {
 
@@ -34,7 +33,7 @@ public class CardSetServiceImplTest {
     }
 
     @Test
-    void updateCardSet(){
+    void updateCardSet() {
         UUID cardSetId = UUID.randomUUID();
         CardSet cardSet = new CardSet(cardSetId);
 
@@ -44,7 +43,7 @@ public class CardSetServiceImplTest {
     }
 
     @Test
-    void deleteCardSet(){
+    void deleteCardSet() {
         UUID cardSetId = UUID.randomUUID();
         CardSet cardSet = new CardSet(cardSetId);
         cardSetService.handleCardSetCreated(cardSet);

@@ -60,6 +60,10 @@ public class Round {
      * @return The playerRound for the player
      */
     public PlayerRound getPlayerRound(UUID playerId) {
-        return playerRounds.stream().filter(playerRound -> playerRound.getPlayerId().equals(playerId)).findFirst().orElse(null);
+        return playerRounds
+            .stream()
+            .filter(playerRound -> playerRound.getPlayerId().equals(playerId))
+            .findFirst()
+            .orElse(null);
     }
 }

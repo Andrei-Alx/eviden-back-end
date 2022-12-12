@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -23,9 +25,11 @@ public class Card {
 
     @ElementCollection
     @JsonProperty
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Tag> tags;
 
     @ElementCollection
     @JsonProperty
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Translation> translations;
 }

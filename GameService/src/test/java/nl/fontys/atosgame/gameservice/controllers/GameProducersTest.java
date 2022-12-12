@@ -1,5 +1,9 @@
 package nl.fontys.atosgame.gameservice.controllers;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.UUID;
 import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
 import nl.fontys.atosgame.gameservice.event.produced.GameCreatedEvent;
 import nl.fontys.atosgame.gameservice.event.produced.GameStartedEvent;
@@ -7,11 +11,6 @@ import nl.fontys.atosgame.gameservice.model.LobbySettings;
 import org.junit.jupiter.api.Test;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
-
-import java.util.ArrayList;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class GameProducersTest {
 
@@ -43,7 +42,9 @@ class GameProducersTest {
         UUID gameId = UUID.randomUUID();
         GameProducers gameProducers = new GameProducers();
 
-        Message<GameStartedEvent> event = gameProducers.produceGameStarted().apply(gameId);
+        Message<GameStartedEvent> event = gameProducers
+            .produceGameStarted()
+            .apply(gameId);
 
         assertEquals("GameStarted", event.getPayload().getType());
         assertEquals("GameService", event.getPayload().getService());

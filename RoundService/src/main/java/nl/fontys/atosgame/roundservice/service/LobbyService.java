@@ -40,4 +40,11 @@ public interface LobbyService {
      */
     Lobby removePlayerFromLobby(UUID playerId, UUID lobbyId)
         throws EntityNotFoundException;
+
+    /**
+     * Get the lobby of a game
+     * @param gameId The id of the game
+     * @return An optional containing the lobby if found
+     */
+    Optional<Lobby> getLobbyByGameId(UUID gameId);
 }

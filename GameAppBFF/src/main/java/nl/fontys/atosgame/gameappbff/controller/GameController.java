@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,28 +47,27 @@ public class GameController {
         }
     )
     public ResponseEntity<List<Game>> getGames() {
-
         List<Game> games = gameService.getAllGames();
 
-//        LobbyResponseDto lobby = new LobbyResponseDto(UUID.randomUUID(), "1234");
-//        GameResponseDto game = new GameResponseDto(
-//            UUID.randomUUID(),
-//            lobby,
-//            "game1",
-//            "Sports"
-//        );
-//
-//        LobbyResponseDto lobby1 = new LobbyResponseDto(UUID.randomUUID(), "5678");
-//        GameResponseDto game1 = new GameResponseDto(
-//            UUID.randomUUID(),
-//            lobby1,
-//            "game2",
-//            "Sports"
-//        );
-//
-//        List<GameResponseDto> games = new ArrayList<>();
-//        games.add(game);
-//        games.add(game1);
+        //        LobbyResponseDto lobby = new LobbyResponseDto(UUID.randomUUID(), "1234");
+        //        GameResponseDto game = new GameResponseDto(
+        //            UUID.randomUUID(),
+        //            lobby,
+        //            "game1",
+        //            "Sports"
+        //        );
+        //
+        //        LobbyResponseDto lobby1 = new LobbyResponseDto(UUID.randomUUID(), "5678");
+        //        GameResponseDto game1 = new GameResponseDto(
+        //            UUID.randomUUID(),
+        //            lobby1,
+        //            "game2",
+        //            "Sports"
+        //        );
+        //
+        //        List<GameResponseDto> games = new ArrayList<>();
+        //        games.add(game);
+        //        games.add(game1);
 
         return ResponseEntity.ok(games);
     }

@@ -1,21 +1,19 @@
 package nl.fontys.atosgame.gameappbff.service;
 
-import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
-import nl.fontys.atosgame.gameappbff.controller.LobbySocketController;
-import nl.fontys.atosgame.gameappbff.model.Player;
-
-import nl.fontys.atosgame.gameappbff.model.Lobby;
-import nl.fontys.atosgame.gameappbff.repository.LobbyRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
-import java.util.UUID;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static reactor.core.publisher.Mono.when;
+
+import java.util.Optional;
+import java.util.UUID;
+import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
+import nl.fontys.atosgame.gameappbff.controller.LobbySocketController;
+import nl.fontys.atosgame.gameappbff.model.Lobby;
+import nl.fontys.atosgame.gameappbff.model.Player;
+import nl.fontys.atosgame.gameappbff.repository.LobbyRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class LobbyServiceImplTest {
 
@@ -29,7 +27,12 @@ class LobbyServiceImplTest {
         lobbyRepository = mock(LobbyRepository.class);
         gameSocketController = mock(GameSocketController.class);
         lobbySocketController = mock(LobbySocketController.class);
-        lobbyService = new LobbyServiceImpl(lobbyRepository, gameSocketController, lobbySocketController);
+        lobbyService =
+            new LobbyServiceImpl(
+                lobbyRepository,
+                gameSocketController,
+                lobbySocketController
+            );
     }
 
     @Test

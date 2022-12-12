@@ -2,7 +2,6 @@ package nl.fontys.atosgame.gameservice.controllers;
 
 import java.util.UUID;
 import java.util.function.Function;
-
 import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
 import nl.fontys.atosgame.gameservice.event.EventFactory;
 import nl.fontys.atosgame.gameservice.event.produced.GameCreatedEvent;
@@ -40,9 +39,10 @@ public class GameProducers {
                 input.getRoundSettings(),
                 input.getLobbySettings()
             );
-            Message<GameCreatedEvent> message = MessageBuilder.withPayload(event)
-                    .setHeader(KafkaHeaders.MESSAGE_KEY, input.getGameId())
-                    .build();
+            Message<GameCreatedEvent> message = MessageBuilder
+                .withPayload(event)
+                .setHeader(KafkaHeaders.MESSAGE_KEY, input.getGameId())
+                .build();
             return message;
         };
     }
@@ -58,9 +58,10 @@ public class GameProducers {
         return input -> {
             GameStartedEvent event = EventFactory.createGameStartedEvent(input);
 
-            return MessageBuilder.withPayload(event)
-                    .setHeader(KafkaHeaders.MESSAGE_KEY, input)
-                    .build();
+            return MessageBuilder
+                .withPayload(event)
+                .setHeader(KafkaHeaders.MESSAGE_KEY, input)
+                .build();
         };
     }
 

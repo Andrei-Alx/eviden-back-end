@@ -28,7 +28,12 @@ public interface PlayerRoundService {
      * @param roundId      The round id
      * @return
      */
-    PlayerRound dislikeCard(PlayerRound playerRound, UUID cardId, UUID gameId, UUID roundId);
+    PlayerRound dislikeCard(
+        PlayerRound playerRound,
+        UUID cardId,
+        UUID gameId,
+        UUID roundId
+    );
 
     /**
      * Add cards to the selected cards of the player round
@@ -40,7 +45,12 @@ public interface PlayerRoundService {
      * @param roundId      The round id
      * @return The updated player round
      */
-    PlayerRound selectCards(PlayerRound playerRound, List<UUID> cardIds, UUID gameId, UUID roundId);
+    PlayerRound selectCards(
+        PlayerRound playerRound,
+        List<UUID> cardIds,
+        UUID gameId,
+        UUID roundId
+    );
 
     /**
      * Check if a player round is finished and sends an application event if it is

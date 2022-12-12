@@ -283,7 +283,10 @@ class PlayerRoundTest {
         playerRound.setLikedCards(new ArrayList<>());
         Card card = new Card(UUID.randomUUID(), new ArrayList<>());
 
-        assertThrows(IllegalArgumentException.class, () -> playerRound.addLikedCard(card));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> playerRound.addLikedCard(card)
+        );
     }
 
     @Test
@@ -292,7 +295,10 @@ class PlayerRoundTest {
         playerRound.setLikedCards(new ArrayList<>());
         Card card = new Card(UUID.randomUUID(), new ArrayList<>());
 
-        assertThrows(IllegalArgumentException.class, () -> playerRound.addLikedCard(card));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> playerRound.addLikedCard(card)
+        );
     }
 
     @Test
@@ -316,7 +322,10 @@ class PlayerRoundTest {
         playerRound.setDislikedCards(new ArrayList<>());
         Card card = new Card(UUID.randomUUID(), new ArrayList<>());
 
-        assertThrows(IllegalArgumentException.class, () -> playerRound.addDislikedCard(card));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> playerRound.addDislikedCard(card)
+        );
     }
 
     @Test
@@ -325,7 +334,10 @@ class PlayerRoundTest {
         playerRound.setDislikedCards(new ArrayList<>());
         Card card = new Card(UUID.randomUUID(), new ArrayList<>());
 
-        assertThrows(IllegalArgumentException.class, () -> playerRound.addDislikedCard(card));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> playerRound.addDislikedCard(card)
+        );
     }
 
     @Test
@@ -334,13 +346,8 @@ class PlayerRoundTest {
         playerRound.setSelectedCards(new ArrayList<>());
         Card card1 = new Card(UUID.randomUUID(), new ArrayList<>());
         Card card2 = new Card(UUID.randomUUID(), new ArrayList<>());
-        List<Card> cards = new ArrayList<>(List.of(
-                card1,
-                card2
-                ));
-        playerRound.setDistributedCards(
-            new ArrayList<>(List.of(card1, card2))
-        );
+        List<Card> cards = new ArrayList<>(List.of(card1, card2));
+        playerRound.setDistributedCards(new ArrayList<>(List.of(card1, card2)));
 
         playerRound.addSelectedCards(cards);
 
@@ -355,12 +362,12 @@ class PlayerRoundTest {
         playerRound.setSelectedCards(new ArrayList<>());
         Card card1 = new Card(UUID.randomUUID(), new ArrayList<>());
         Card card2 = new Card(UUID.randomUUID(), new ArrayList<>());
-        List<Card> cards = new ArrayList<>(List.of(
-                card1,
-                card2
-                ));
+        List<Card> cards = new ArrayList<>(List.of(card1, card2));
 
-        assertThrows(IllegalArgumentException.class, () -> playerRound.addSelectedCards(cards));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> playerRound.addSelectedCards(cards)
+        );
     }
 
     @Test
@@ -369,14 +376,12 @@ class PlayerRoundTest {
         playerRound.setSelectedCards(new ArrayList<>());
         Card card1 = new Card(UUID.randomUUID(), new ArrayList<>());
         Card card2 = new Card(UUID.randomUUID(), new ArrayList<>());
-        List<Card> cards = new ArrayList<>(List.of(
-                card1,
-                card2
-                ));
+        List<Card> cards = new ArrayList<>(List.of(card1, card2));
         playerRound.setSelectedCards(cards);
 
-        assertThrows(IllegalArgumentException.class, () -> playerRound.addSelectedCards(cards));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> playerRound.addSelectedCards(cards)
+        );
     }
-
-
 }

@@ -1,15 +1,14 @@
 package nl.fontys.atosgame.roundservice.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.UUID;
 import nl.fontys.atosgame.roundservice.applicationevents.RoundFinishedAppEvent;
 import nl.fontys.atosgame.roundservice.model.Game;
 import nl.fontys.atosgame.roundservice.model.Round;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class RoundFinishedHandlerTest {
 
@@ -28,7 +27,8 @@ class RoundFinishedHandlerTest {
         Game game = mock(Game.class);
         Round round = mock(Round.class);
         when(round.getId()).thenReturn(roundId);
-        when(gameService.getGameByRoundId(roundId)).thenReturn(java.util.Optional.of(game));
+        when(gameService.getGameByRoundId(roundId))
+            .thenReturn(java.util.Optional.of(game));
 
         roundFinishedHandler.onApplicationEvent(new RoundFinishedAppEvent(this, round));
 

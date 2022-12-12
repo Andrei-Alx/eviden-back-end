@@ -14,6 +14,5 @@ public class PlayerQuitEvent extends BaseEvent {
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID lobbyId;
 
-    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID playerId;
 }

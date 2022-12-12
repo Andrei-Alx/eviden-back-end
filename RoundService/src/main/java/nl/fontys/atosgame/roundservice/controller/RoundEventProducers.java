@@ -1,7 +1,6 @@
 package nl.fontys.atosgame.roundservice.controller;
 
 import java.util.function.Function;
-
 import nl.fontys.atosgame.roundservice.dto.*;
 import nl.fontys.atosgame.roundservice.event.EventFactory;
 import nl.fontys.atosgame.roundservice.event.produced.*;
@@ -231,10 +230,18 @@ public class RoundEventProducers {
      * output topic: player-result-determined-topic
      */
     @Bean
-    public Function<?, Message<RoundCreatedEvent>> producePlayerResultDetermined() {
+    public Function<PlayerResultDeterminedDto, Message<PlayerResultDeterminedEvent>> producePlayerResultDetermined() {
         return keyValue -> {
-            // TODO implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerResultDeterminedEvent event = EventFactory.createPlayerResultDeterminedEvent(
+                    keyValue.getRoundId(),
+                    keyValue.getGameId(),
+                    keyValue.getPlayerId(),
+                    keyValue.getResult()
+            );
+            return MessageBuilder
+                    .withPayload(event)
+                    .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                    .build();
         };
     }
 
@@ -245,10 +252,18 @@ public class RoundEventProducers {
      * output topic: player-result-indeterminate-topic
      */
     @Bean
-    public Function<?, Message<RoundCreatedEvent>> producePlayerResultIndeterminate() {
+    public Function<PlayerResultIndeterminateEvent, Message<PlayerResultIndeterminateEvent>> producePlayerResultIndeterminate() {
         return keyValue -> {
-            // TODO implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            PlayerResultIndeterminateEvent event = EventFactory.createPlayerResultIndeterminateEvent(
+                    keyValue.getRoundId(),
+                    keyValue.getGameId(),
+                    keyValue.getPlayerId(),
+                    keyValue.getResultStatus()
+            );
+            return MessageBuilder
+                    .withPayload(event)
+                    .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                    .build();
         };
     }
 }

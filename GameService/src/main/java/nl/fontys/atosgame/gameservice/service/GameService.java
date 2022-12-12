@@ -1,11 +1,10 @@
 package nl.fontys.atosgame.gameservice.service;
 
+import java.util.List;
+import java.util.UUID;
 import nl.fontys.atosgame.gameservice.model.Game;
 import nl.fontys.atosgame.gameservice.model.LobbySettings;
 import nl.fontys.atosgame.gameservice.model.RoundSettings;
-
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Service for managing games.
@@ -19,7 +18,12 @@ public interface GameService {
      * @param roundSettings The settings for the rounds
      * @return The created game
      */
-    Game createGame(String title, String companyType, LobbySettings lobbySettings, List<RoundSettings> roundSettings);
+    Game createGame(
+        String title,
+        String companyType,
+        LobbySettings lobbySettings,
+        List<RoundSettings> roundSettings
+    );
 
     /**
      * Starts a game

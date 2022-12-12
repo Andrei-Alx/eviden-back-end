@@ -3,15 +3,14 @@ package nl.fontys.atosgame.roundservice.service;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-
 import nl.fontys.atosgame.roundservice.applicationevents.PlayerRoundFinishedAppEvent;
-import nl.fontys.atosgame.roundservice.dto.CardDislikedEventDto;
-import nl.fontys.atosgame.roundservice.dto.CardLikedEventDto;
-import nl.fontys.atosgame.roundservice.dto.CardsSelectedEventDto;
+import nl.fontys.atosgame.roundservice.dto.*;
+import nl.fontys.atosgame.roundservice.enums.PlayerRoundPhase;
 import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
 import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.repository.PlayerRoundRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.ApplicationEventPublisher;
@@ -30,10 +29,10 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
     private PlayerRoundRepository playerRoundRepository;
 
     public PlayerRoundServiceImpl(
-            @Autowired CardService cardService,
-            @Autowired StreamBridge streamBridge,
-            @Autowired ApplicationEventPublisher eventPublisher,
-            @Autowired PlayerRoundRepository playerRoundRepository
+        @Autowired CardService cardService,
+        @Autowired StreamBridge streamBridge,
+        @Autowired ApplicationEventPublisher eventPublisher,
+        @Autowired PlayerRoundRepository playerRoundRepository
     ) {
         this.cardService = cardService;
         this.streamBridge = streamBridge;
@@ -52,13 +51,45 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
      * @return The updated player round
      */
     @Override
-    public PlayerRound likeCard(PlayerRound playerRound, UUID cardId, UUID gameId, UUID roundId) {
+    public PlayerRound likeCard(
+        PlayerRound playerRound,
+        UUID cardId,
+        UUID gameId,
+        UUID roundId
+    ) {
         Card card = this.cardService.getCard(cardId).get();
+        PlayerRoundPhase previousPhase = playerRound.getPhase();
         playerRound.addLikedCard(card);
+        PlayerRoundPhase currentPhase = playerRound.getPhase();
         playerRound = playerRoundRepository.save(playerRound);
 
         // Send event
-        streamBridge.send("producePlayerLikedCard-in-0", new CardLikedEventDto(playerRound.getPlayerId(), gameId, roundId, cardId));
+        streamBridge.send(
+            "producePlayerLikedCard-in-0",
+            new CardLikedEventDto(playerRound.getPlayerId(), gameId, roundId, cardId)
+        );
+
+        // check if phase has ended
+        if (previousPhase != currentPhase) {
+            streamBridge.send(
+                "producePlayerPhaseEnded-in-0",
+                new PlayerPhaseEndedDto(
+                    previousPhase.ordinal(),
+                    playerRound.getPlayerId(),
+                    gameId,
+                    roundId
+                )
+            );
+            streamBridge.send(
+                "producePlayerPhaseStarted-in-0",
+                new PlayerPhaseStartedDto(
+                    currentPhase.ordinal(),
+                    playerRound.getPlayerId(),
+                    gameId,
+                    roundId
+                )
+            );
+        }
 
         return playerRound;
     }
@@ -74,12 +105,20 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
      * @return
      */
     @Override
-    public PlayerRound dislikeCard(PlayerRound playerRound, UUID cardId, UUID gameId, UUID roundId) {
+    public PlayerRound dislikeCard(
+        PlayerRound playerRound,
+        UUID cardId,
+        UUID gameId,
+        UUID roundId
+    ) {
         Card card = this.cardService.getCard(cardId).get();
         playerRound.addDislikedCard(card);
         playerRound = playerRoundRepository.save(playerRound);
 
-        streamBridge.send("producePlayerDislikedCard-in-0", new CardDislikedEventDto(playerRound.getPlayerId(), gameId, roundId, cardId));
+        streamBridge.send(
+            "producePlayerDislikedCard-in-0",
+            new CardDislikedEventDto(playerRound.getPlayerId(), gameId, roundId, cardId)
+        );
         return playerRound;
     }
 
@@ -94,16 +133,47 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
      * @return The updated player round
      */
     @Override
-    public PlayerRound selectCards(PlayerRound playerRound, List<UUID> cardIds, UUID gameId, UUID roundId) {
+    public PlayerRound selectCards(
+        PlayerRound playerRound,
+        List<UUID> cardIds,
+        UUID gameId,
+        UUID roundId
+    ) {
         Collection<Card> cards = this.cardService.getCards(cardIds);
+        PlayerRoundPhase previousPhase = playerRound.getPhase();
         playerRound.addSelectedCards(List.copyOf(cards));
+        PlayerRoundPhase currentPhase = playerRound.getPhase();
         playerRound = playerRoundRepository.save(playerRound);
 
         // Send event
-        streamBridge.send("producePlayerSelectedCards-in-0", new CardsSelectedEventDto(playerRound.getPlayerId(), cardIds, roundId, gameId));
+        streamBridge.send(
+            "producePlayerSelectedCards-in-0",
+            new CardsSelectedEventDto(playerRound.getPlayerId(), cardIds, roundId, gameId)
+        );
 
         // Check if round is finished
         this.checkIfPlayerRoundIsFinished(playerRound);
+
+        if (previousPhase != currentPhase) {
+            streamBridge.send(
+                "producePlayerPhaseEnded-in-0",
+                new PlayerPhaseEndedDto(
+                    previousPhase.ordinal(),
+                    playerRound.getPlayerId(),
+                    gameId,
+                    roundId
+                )
+            );
+            streamBridge.send(
+                "producePlayerPhaseStarted-in-0",
+                new PlayerPhaseStartedDto(
+                    currentPhase.ordinal(),
+                    playerRound.getPlayerId(),
+                    gameId,
+                    roundId
+                )
+            );
+        }
 
         return playerRound;
     }
@@ -116,7 +186,9 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
     @Override
     public void checkIfPlayerRoundIsFinished(PlayerRound playerRound) {
         if (playerRound.isDone()) {
-            eventPublisher.publishEvent(new PlayerRoundFinishedAppEvent(this, playerRound));
+            eventPublisher.publishEvent(
+                new PlayerRoundFinishedAppEvent(this, playerRound)
+            );
         }
     }
 }

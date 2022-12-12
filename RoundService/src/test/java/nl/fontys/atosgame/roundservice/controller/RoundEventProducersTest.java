@@ -6,8 +6,8 @@ import static org.mockito.Mockito.mock;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
-
 import nl.fontys.atosgame.roundservice.dto.*;
+import nl.fontys.atosgame.roundservice.enums.ResultStatus;
 import nl.fontys.atosgame.roundservice.event.produced.*;
 import nl.fontys.atosgame.roundservice.model.Round;
 import org.junit.jupiter.api.Test;
@@ -201,10 +201,7 @@ class RoundEventProducersTest {
             message.getPayload().getPlayerId()
         );
         assertEquals(playerLikedCardDto.getGameId(), message.getPayload().getGameId());
-        assertEquals(
-            playerLikedCardDto.getCardId(),
-            message.getPayload().getCardId()
-        );
+        assertEquals(playerLikedCardDto.getCardId(), message.getPayload().getCardId());
         assertEquals(
             playerLikedCardDto.getGameId(),
             message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
@@ -236,10 +233,7 @@ class RoundEventProducersTest {
             message.getPayload().getPlayerId()
         );
         assertEquals(playerDislikedCardDto.getGameId(), message.getPayload().getGameId());
-        assertEquals(
-            playerDislikedCardDto.getCardId(),
-            message.getPayload().getCardId()
-        );
+        assertEquals(playerDislikedCardDto.getCardId(), message.getPayload().getCardId());
         assertEquals(
             playerDislikedCardDto.getGameId(),
             message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
@@ -250,7 +244,7 @@ class RoundEventProducersTest {
     void producePlayerSelectedCards() {
         CardsSelectedEventDto playerSelectedCardsDto = new CardsSelectedEventDto(
             UUID.randomUUID(),
-                List.of(UUID.randomUUID(), UUID.randomUUID()),
+            List.of(UUID.randomUUID(), UUID.randomUUID()),
             UUID.randomUUID(),
             UUID.randomUUID()
         );
@@ -270,7 +264,10 @@ class RoundEventProducersTest {
             playerSelectedCardsDto.getPlayerId(),
             message.getPayload().getPlayerId()
         );
-        assertEquals(playerSelectedCardsDto.getGameId(), message.getPayload().getGameId());
+        assertEquals(
+            playerSelectedCardsDto.getGameId(),
+            message.getPayload().getGameId()
+        );
         assertEquals(
             playerSelectedCardsDto.getCardIds(),
             message.getPayload().getCardIds()
@@ -279,5 +276,55 @@ class RoundEventProducersTest {
             playerSelectedCardsDto.getGameId(),
             message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
         );
+    }
+
+    @Test
+    void producePlayerResultDetermined(){
+        ResultDto result = new ResultDto();
+        result.setStatus(ResultStatus.DETERMINED);
+        PlayerResultDeterminedDto playerResultDeterminedDto = new PlayerResultDeterminedDto(
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            result
+        );
+        RoundEventProducers roundEventProducers = new RoundEventProducers();
+
+        Message<PlayerResultDeterminedEvent> message = roundEventProducers
+            .producePlayerResultDetermined()
+            .apply(playerResultDeterminedDto);
+
+        assertEquals("RoundService", message.getPayload().getService());
+        assertEquals("PlayerResultDetermined", message.getPayload().getType());
+        assertEquals(playerResultDeterminedDto.getRoundId(), message.getPayload().getRoundId());
+        assertEquals(playerResultDeterminedDto.getPlayerId(), message.getPayload().getPlayerId());
+        assertEquals(playerResultDeterminedDto.getGameId(), message.getPayload().getGameId());
+        assertEquals(playerResultDeterminedDto.getResult().getStatus(), message.getPayload().getResult().getStatus());
+        assertEquals(playerResultDeterminedDto.getGameId(), message.getHeaders().get(KafkaHeaders.MESSAGE_KEY));
+    }
+
+    @Test
+    void producePlayerResultIndeterminate(){
+        ResultDto result = new ResultDto();
+        result.setStatus(ResultStatus.INDETERMINATE);
+        PlayerResultIndeterminateEvent playerResultIndeterminateEvent = new PlayerResultIndeterminateEvent(
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            result.getStatus()
+        );
+        RoundEventProducers roundEventProducers = new RoundEventProducers();
+
+        Message<PlayerResultIndeterminateEvent> message = roundEventProducers
+            .producePlayerResultIndeterminate()
+            .apply(playerResultIndeterminateEvent);
+
+        assertEquals("RoundService", message.getPayload().getService());
+        assertEquals("PlayerResultIndeterminate", message.getPayload().getType());
+        assertEquals(playerResultIndeterminateEvent.getRoundId(), message.getPayload().getRoundId());
+        assertEquals(playerResultIndeterminateEvent.getPlayerId(), message.getPayload().getPlayerId());
+        assertEquals(playerResultIndeterminateEvent.getGameId(), message.getPayload().getGameId());
+        assertEquals(playerResultIndeterminateEvent.getResultStatus(), message.getPayload().getResultStatus());
+        assertEquals(playerResultIndeterminateEvent.getGameId(), message.getHeaders().get(KafkaHeaders.MESSAGE_KEY));
     }
 }

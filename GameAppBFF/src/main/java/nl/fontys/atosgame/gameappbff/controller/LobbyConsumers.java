@@ -1,7 +1,6 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
 import java.util.function.Function;
-
 import nl.fontys.atosgame.gameappbff.event.consumed.LobbyCreatedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.LobbyDeletedEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerJoinedEvent;

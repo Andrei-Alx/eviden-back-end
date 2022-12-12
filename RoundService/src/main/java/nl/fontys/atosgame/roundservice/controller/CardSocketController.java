@@ -17,8 +17,7 @@ public class CardSocketController {
 
     private final RoundService roundService;
 
-    public CardSocketController(
-           @Autowired RoundService roundService) {
+    public CardSocketController(@Autowired RoundService roundService) {
         this.roundService = roundService;
     }
 
@@ -29,7 +28,12 @@ public class CardSocketController {
      */
     @MessageMapping("/likeCard")
     public void likeCard(CardLikeRequestDto cardLikeRequestDto) {
-        this.roundService.likeCard(cardLikeRequestDto.getPlayerId(), cardLikeRequestDto.getCardId(), cardLikeRequestDto.getGameId(), cardLikeRequestDto.getRoundId());
+        this.roundService.likeCard(
+                cardLikeRequestDto.getPlayerId(),
+                cardLikeRequestDto.getCardId(),
+                cardLikeRequestDto.getGameId(),
+                cardLikeRequestDto.getRoundId()
+            );
     }
 
     /**
@@ -38,7 +42,12 @@ public class CardSocketController {
      */
     @MessageMapping("/dislikeCard")
     public void dislikeCard(CardDislikeRequestDto cardDislikeRequestDto) {
-        this.roundService.dislikeCard(cardDislikeRequestDto.getPlayerId(), cardDislikeRequestDto.getCardId(), cardDislikeRequestDto.getGameId(), cardDislikeRequestDto.getRoundId());
+        this.roundService.dislikeCard(
+                cardDislikeRequestDto.getPlayerId(),
+                cardDislikeRequestDto.getCardId(),
+                cardDislikeRequestDto.getGameId(),
+                cardDislikeRequestDto.getRoundId()
+            );
     }
 
     /**
@@ -47,6 +56,11 @@ public class CardSocketController {
      */
     @MessageMapping("/submitCards")
     public void selectCards(CardSubmitRequestDto cardSubmitRequestDto) {
-        this.roundService.selectCards(cardSubmitRequestDto.getPlayerId(), cardSubmitRequestDto.getCardIds(), cardSubmitRequestDto.getGameId(), cardSubmitRequestDto.getRoundId());
+        this.roundService.selectCards(
+                cardSubmitRequestDto.getPlayerId(),
+                cardSubmitRequestDto.getCardIds(),
+                cardSubmitRequestDto.getGameId(),
+                cardSubmitRequestDto.getRoundId()
+            );
     }
 }

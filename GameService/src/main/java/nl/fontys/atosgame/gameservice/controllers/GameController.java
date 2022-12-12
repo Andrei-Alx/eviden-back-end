@@ -4,16 +4,14 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-
+import java.util.UUID;
+import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.gameservice.dto.CreateGameDto;
 import nl.fontys.atosgame.gameservice.model.Game;
 import nl.fontys.atosgame.gameservice.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.EntityNotFoundException;
-import java.util.UUID;
 
 /**
  * Rest controller for the game service
@@ -26,8 +24,7 @@ public class GameController {
 
     private GameService gameService;
 
-    public GameController(
-            @Autowired GameService gameService) {
+    public GameController(@Autowired GameService gameService) {
         this.gameService = gameService;
     }
 
@@ -51,7 +48,12 @@ public class GameController {
     )
     public ResponseEntity<Game> createGame(@RequestBody CreateGameDto createGameDto) {
         try {
-            Game game = gameService.createGame(createGameDto.getTitle(), createGameDto.getCompanyType(), createGameDto.getLobbySettings(), createGameDto.getRoundSettings());
+            Game game = gameService.createGame(
+                createGameDto.getTitle(),
+                createGameDto.getCompanyType(),
+                createGameDto.getLobbySettings(),
+                createGameDto.getRoundSettings()
+            );
             return ResponseEntity.ok(game);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -62,7 +64,7 @@ public class GameController {
      * Id: R-13
      * Start a game
      */
-    @PostMapping("/start/{id}")
+    @PutMapping("/start/{id}")
     @ApiResponses(
         value = {
             @ApiResponse(

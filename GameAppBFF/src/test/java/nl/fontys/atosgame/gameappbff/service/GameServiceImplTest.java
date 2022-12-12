@@ -6,9 +6,9 @@ import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 import java.util.UUID;
-
 import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import nl.fontys.atosgame.gameappbff.enums.GameStatus;
+import nl.fontys.atosgame.gameappbff.enums.RoundStatus;
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.model.Round;
@@ -51,12 +51,24 @@ public class GameServiceImplTest {
         UUID gameId = UUID.randomUUID();
         when(gameRepository.save(any(Game.class))).thenAnswer(i -> i.getArguments()[0]);
         when(gameRepository.findById(gameId))
-            .thenReturn(Optional.of(new Game(gameId, "testGame", null, "testCompany", GameStatus.CREATED, null)));
+            .thenReturn(
+                Optional.of(
+                    new Game(
+                        gameId,
+                        "testGame",
+                        null,
+                        "testCompany",
+                        GameStatus.CREATED,
+                        null
+                    )
+                )
+            );
 
         Game game = gameService.handleGameStarted(gameId);
 
         verify(gameRepository).save(game);
         assertEquals(GameStatus.STARTED, game.getStatus());
+        verify(gameSocketController).gameStarted(gameId);
     }
 
     @Test
@@ -64,7 +76,18 @@ public class GameServiceImplTest {
         UUID gameId = UUID.randomUUID();
         when(gameRepository.save(any(Game.class))).thenAnswer(i -> i.getArguments()[0]);
         when(gameRepository.findById(gameId))
-            .thenReturn(Optional.of(new Game(gameId, "testGame", null, "testCompany", GameStatus.CREATED, null)));
+            .thenReturn(
+                Optional.of(
+                    new Game(
+                        gameId,
+                        "testGame",
+                        null,
+                        "testCompany",
+                        GameStatus.CREATED,
+                        null
+                    )
+                )
+            );
 
         Game game = gameService.handleGameEnded(gameId);
 
@@ -78,7 +101,18 @@ public class GameServiceImplTest {
         Lobby lobby = mock(Lobby.class);
         when(gameRepository.save(any(Game.class))).thenAnswer(i -> i.getArguments()[0]);
         when(gameRepository.findById(gameId))
-            .thenReturn(Optional.of(new Game(gameId, "testGame", null, "testCompany", GameStatus.CREATED, null)));
+            .thenReturn(
+                Optional.of(
+                    new Game(
+                        gameId,
+                        "testGame",
+                        null,
+                        "testCompany",
+                        GameStatus.CREATED,
+                        null
+                    )
+                )
+            );
 
         Game game = gameService.addLobbyToGame(gameId, lobby);
 

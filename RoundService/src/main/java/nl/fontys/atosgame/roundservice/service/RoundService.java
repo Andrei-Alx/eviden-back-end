@@ -80,7 +80,7 @@ public interface RoundService {
      * When a playerround is finished, check if round is finished and if so, launch application event
      * @param roundId The id of the round
      */
-    void checkRoundEnd(UUID roundId);
+    boolean checkRoundEnd(UUID roundId);
 
     /**
      * Get the round that contains a playerround

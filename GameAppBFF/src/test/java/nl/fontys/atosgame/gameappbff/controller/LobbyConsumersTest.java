@@ -33,7 +33,8 @@ class LobbyConsumersTest {
         Lobby lobby = mock(Lobby.class);
         doReturn(lobby).when(lobbyCreatedEvent).getLobby();
         UUID gameId = UUID.randomUUID();
-        when(lobbyService.createLobby(any(Lobby.class), eq(gameId))).thenAnswer(i -> i.getArguments()[0]);
+        when(lobbyService.createLobby(any(Lobby.class), eq(gameId)))
+            .thenAnswer(i -> i.getArguments()[0]);
         doReturn(gameId).when(lobbyCreatedEvent).getGameId();
 
         lobbyConsumers.handleLobbyCreated().apply(message);

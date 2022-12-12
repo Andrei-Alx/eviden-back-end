@@ -30,9 +30,14 @@ public class Lobby {
     private UUID id;
 
     @ElementCollection
+    @Type(type = "org.hibernate.type.UUIDCharType")
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonProperty
     private List<UUID> playerIds = new java.util.ArrayList<>();
+
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    @JsonProperty
+    private UUID gameId;
 
     /**
      * Add a player to the lobby
