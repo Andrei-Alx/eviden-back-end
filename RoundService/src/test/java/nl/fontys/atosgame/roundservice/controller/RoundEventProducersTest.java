@@ -324,7 +324,7 @@ class RoundEventProducersTest {
             .apply(playerResultIndeterminateEvent);
 
         assertEquals("RoundService", message.getPayload().getService());
-        assertEquals("PlayerResultIndetermined", message.getPayload().getType());
+        assertEquals("PlayerResultIndeterminate", message.getPayload().getType());
         assertEquals(playerResultIndeterminateEvent.getRoundId(), message.getPayload().getRoundId());
         assertEquals(playerResultIndeterminateEvent.getPlayerId(), message.getPayload().getPlayerId());
         assertEquals(playerResultIndeterminateEvent.getGameId(), message.getPayload().getGameId());

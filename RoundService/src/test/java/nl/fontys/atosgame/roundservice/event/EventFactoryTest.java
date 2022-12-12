@@ -251,7 +251,7 @@ class EventFactoryTest {
         result.setPlayerId(playerId);
         result.setStatus(ResultStatus.INDETERMINATE);
 
-        PlayerResultIndeterminateEvent event = EventFactory.createPlayerResultIndeterminedEvent(
+        PlayerResultIndeterminateEvent event = EventFactory.createPlayerResultIndeterminateEvent(
             roundId,
             gameId,
             playerId,

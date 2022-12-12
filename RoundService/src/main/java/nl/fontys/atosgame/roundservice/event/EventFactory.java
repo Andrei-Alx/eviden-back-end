@@ -265,7 +265,7 @@ public class EventFactory {
      * @param resultStatus The result of the player
      * @return The created event
      */
-    public static PlayerResultIndeterminateEvent createPlayerResultIndeterminedEvent(
+    public static PlayerResultIndeterminateEvent createPlayerResultIndeterminateEvent(
             UUID roundId,
             UUID gameId,
             UUID playerId,
@@ -275,13 +275,13 @@ public class EventFactory {
         event =
                 (PlayerResultIndeterminateEvent) initializeBaseEvent(
                         event,
-                        "PlayerResultIndetermined",
+                        "PlayerResultIndeterminate",
                         "RoundService"
                 );
         event.setRoundId(roundId);
         event.setGameId(gameId);
         event.setPlayerId(playerId);
-        event.setResultStatus(ResultStatus.INDETERMINED);
+        event.setResultStatus(ResultStatus.INDETERMINATE);
         return event;
     }
 

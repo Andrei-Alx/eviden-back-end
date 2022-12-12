@@ -2,5 +2,5 @@ package nl.fontys.atosgame.roundservice.enums;
 
 public enum ResultStatus {
     DETERMINED,
-    INDETERMINED
+    INDETERMINATE
 }

@@ -155,7 +155,7 @@ public class PlayerRound {
             }
         }
 
-        // get advice for the color
+        // TODO: get advice per color
         String description = "";
         if (Objects.equals(highestTagValue, "RED")){
             description = "red is a nice color";
