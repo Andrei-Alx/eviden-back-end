@@ -1,16 +1,13 @@
 package nl.fontys.atosgame.gameservice.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
 import nl.fontys.atosgame.gameservice.enums.GameStatus;
-import nl.fontys.atosgame.gameservice.model.CardSet;
 import nl.fontys.atosgame.gameservice.model.Game;
 import nl.fontys.atosgame.gameservice.model.LobbySettings;
 import nl.fontys.atosgame.gameservice.model.RoundSettings;
 import nl.fontys.atosgame.gameservice.repository.GameRepository;
-import org.apache.kafka.streams.StreamsBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
@@ -87,6 +84,23 @@ public class GameServiceImpl implements GameService {
         game.setStatus(GameStatus.STARTED);
         game = gameRepository.save(game);
         streamBridge.send("produceGameStarted-in-0", game.getId());
+        return game;
+    }
+
+    /**
+     * Ends a game
+     *
+     * @param gameId The id of the game
+     * @return The ended game
+     */
+    @Override
+    public Game endGame(UUID gameId) {
+        Game game = gameRepository
+                .findById(gameId)
+                .orElseThrow(() -> new IllegalArgumentException("Game not found"));
+        game.setStatus(GameStatus.ENDED);
+        game = gameRepository.save(game);
+        streamBridge.send("produceGameEnded-in-0", game.getId());
         return game;
     }
 }

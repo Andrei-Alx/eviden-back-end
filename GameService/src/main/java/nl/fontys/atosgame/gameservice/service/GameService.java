@@ -31,4 +31,11 @@ public interface GameService {
      * @return The started game
      */
     Game startGame(UUID gameId);
+
+    /**
+     * Ends a game
+     * @param gameId The id of the game
+     * @return The ended game
+     */
+    Game endGame(UUID gameId);
 }
