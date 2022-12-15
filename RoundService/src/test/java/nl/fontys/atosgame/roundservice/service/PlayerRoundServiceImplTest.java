@@ -8,9 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.roundservice.applicationevents.PlayerRoundFinishedAppEvent;
 import nl.fontys.atosgame.roundservice.applicationevents.RoundFinishedAppEvent;
-import nl.fontys.atosgame.roundservice.dto.CardsSelectedEventDto;
-import nl.fontys.atosgame.roundservice.dto.PlayerPhaseEndedDto;
-import nl.fontys.atosgame.roundservice.dto.PlayerPhaseStartedDto;
+import nl.fontys.atosgame.roundservice.dto.*;
 import nl.fontys.atosgame.roundservice.enums.PlayerRoundPhase;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerDislikedCard;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerLikedCard;
@@ -21,6 +19,7 @@ import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.repository.PlayerRoundRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -173,7 +172,6 @@ class PlayerRoundServiceImplTest {
                     gameId
                 )
             );
-        verify(playerRoundService, times(1));
     }
 
     @Test
@@ -211,21 +209,38 @@ class PlayerRoundServiceImplTest {
 
     @Test
     void checkIfPlayerRoundIsFinishedWhenFinished() {
+        UUID playerId = UUID.randomUUID();
         PlayerRound playerRound = mock(PlayerRound.class);
+        playerRound.setPlayerId(playerId);
         doReturn(true).when(playerRound).isDone();
 
-        playerRoundService.checkIfPlayerRoundIsFinished(playerRound);
+        UUID gameId = UUID.randomUUID();
+        UUID roundId = UUID.randomUUID();
 
-        verify(eventPublisher).publishEvent(any(PlayerRoundFinishedAppEvent.class));
+        PlayerRoundEndedDto playerRoundEndedDto = new PlayerRoundEndedDto(gameId, roundId, playerId);
+
+        //act
+        playerRoundService.playerRoundIsFinished(playerRoundEndedDto);
+
+        //assert
+        verify(streamBridge).send("producePlayerRoundEnded-in-0", playerRoundEndedDto);
     }
 
     @Test
     void checkIfPlayerRoundIsFinishedWhenNotFinished() {
         PlayerRound playerRound = mock(PlayerRound.class);
+        UUID playerId = UUID.randomUUID();
+        playerRound.setPlayerId(playerId);
         doReturn(false).when(playerRound).isDone();
 
-        playerRoundService.checkIfPlayerRoundIsFinished(playerRound);
+        UUID gameId = UUID.randomUUID();
+        UUID roundId = UUID.randomUUID();
+        RoundEndedDto rEnD = new RoundEndedDto(gameId, roundId);
 
-        verify(eventPublisher, never()).publishEvent(any());
+        PlayerRoundEndedDto playerRoundEndedDto = new PlayerRoundEndedDto(gameId, roundId, playerId);
+        //act
+        playerRoundService.playerRoundIsFinished(playerRoundEndedDto);
+        //assert
+        verify(streamBridge, never());
     }
 }
