@@ -20,4 +20,7 @@ public class CreateCardSetDto {
 
     @JsonProperty
     private Collection<UUID> cards;
+
+    @JsonProperty
+    private String importantTag;
 }

@@ -27,6 +27,9 @@ public class CardSet {
     @JsonProperty
     private String type;
 
+    @JsonProperty
+    private String importantTag;
+
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
         name = "card_set_cards",
