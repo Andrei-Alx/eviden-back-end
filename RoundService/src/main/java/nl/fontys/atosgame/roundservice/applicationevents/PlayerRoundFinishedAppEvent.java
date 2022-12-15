@@ -4,6 +4,8 @@ import java.util.UUID;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
 import org.springframework.context.ApplicationEvent;
 
+import java.util.UUID;
+
 public class PlayerRoundFinishedAppEvent extends ApplicationEvent {
 
     private PlayerRound playerRound;
@@ -13,7 +15,7 @@ public class PlayerRoundFinishedAppEvent extends ApplicationEvent {
         this.playerRound = playerRound;
     }
 
-    public PlayerRound getPlayerRoundId() {
+    public PlayerRound getPlayerRound() {
         return playerRound;
     }
 }

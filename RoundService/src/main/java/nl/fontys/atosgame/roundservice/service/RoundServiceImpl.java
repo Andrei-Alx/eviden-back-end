@@ -247,13 +247,14 @@ public class RoundServiceImpl implements RoundService {
      * @param roundId The id of the round
      */
     @Override
-    public void checkRoundEnd(UUID roundId) {
+    public boolean checkRoundEnd(UUID roundId) {
+        boolean roundFinished = false;
         Round round = getRound(roundId).get();
         if (round.isDone()) {
-            applicationEventPublisher.publishEvent(
-                new RoundFinishedAppEvent(this, round)
-            );
+            applicationEventPublisher.publishEvent(new RoundFinishedAppEvent(this, round));
         }
+
+        return roundFinished;
     }
 
     /**
