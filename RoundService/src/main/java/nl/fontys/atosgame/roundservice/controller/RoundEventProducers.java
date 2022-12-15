@@ -233,15 +233,15 @@ public class RoundEventProducers {
     public Function<PlayerResultDeterminedDto, Message<PlayerResultDeterminedEvent>> producePlayerResultDetermined() {
         return keyValue -> {
             PlayerResultDeterminedEvent event = EventFactory.createPlayerResultDeterminedEvent(
-                    keyValue.getRoundId(),
-                    keyValue.getGameId(),
-                    keyValue.getPlayerId(),
-                    keyValue.getResult()
+                keyValue.getRoundId(),
+                keyValue.getGameId(),
+                keyValue.getPlayerId(),
+                keyValue.getResult()
             );
             return MessageBuilder
-                    .withPayload(event)
-                    .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
-                    .build();
+                .withPayload(event)
+                .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                .build();
         };
     }
 
@@ -255,15 +255,15 @@ public class RoundEventProducers {
     public Function<PlayerResultIndeterminateEvent, Message<PlayerResultIndeterminateEvent>> producePlayerResultIndeterminate() {
         return keyValue -> {
             PlayerResultIndeterminateEvent event = EventFactory.createPlayerResultIndeterminateEvent(
-                    keyValue.getRoundId(),
-                    keyValue.getGameId(),
-                    keyValue.getPlayerId(),
-                    keyValue.getResultStatus()
+                keyValue.getRoundId(),
+                keyValue.getGameId(),
+                keyValue.getPlayerId(),
+                keyValue.getResultStatus()
             );
             return MessageBuilder
-                    .withPayload(event)
-                    .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
-                    .build();
+                .withPayload(event)
+                .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                .build();
         };
     }
 }

@@ -251,7 +251,9 @@ public class RoundServiceImpl implements RoundService {
         boolean roundFinished = false;
         Round round = getRound(roundId).get();
         if (round.isDone()) {
-            applicationEventPublisher.publishEvent(new RoundFinishedAppEvent(this, round));
+            applicationEventPublisher.publishEvent(
+                new RoundFinishedAppEvent(this, round)
+            );
         }
 
         return roundFinished;

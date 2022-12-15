@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.Optional;
 import java.util.UUID;
-
 import nl.fontys.atosgame.gameappbff.dto.PlayerRoundDto;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.model.PlayerRoundResult;
@@ -43,9 +42,7 @@ public class ResultController {
             @ApiResponse(
                 responseCode = "200",
                 description = "Getting a player round results ",
-                content = @Content(
-                    mediaType = "application/json"
-                )
+                content = @Content(mediaType = "application/json")
             ),
             @ApiResponse(
                 responseCode = "404",
@@ -54,7 +51,9 @@ public class ResultController {
         }
     )
     public ResponseEntity<PlayerRoundResult> getPlayerRoundResult(
-        @RequestParam UUID roundId, @RequestParam UUID playerId, @RequestParam UUID gameId
+        @RequestParam UUID roundId,
+        @RequestParam UUID playerId,
+        @RequestParam UUID gameId
     ) {
         PlayerRoundDto playerRound = new PlayerRoundDto(roundId, playerId, gameId);
         Optional<PlayerRoundResult> result = resultService.getPlayerRoundResult(
