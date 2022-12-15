@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.gameappbff.event.BaseEvent;
-import nl.fontys.atosgame.gameappbff.model.PlayerRoundResult;
+import nl.fontys.atosgame.gameappbff.model.FinalResult;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlayerResultDeterminedEvent extends BaseEvent {
+public class FinalResultEvent extends BaseEvent {
 
-    private PlayerRoundResult playerRoundResult;
+    private FinalResult finalResult;
 }
