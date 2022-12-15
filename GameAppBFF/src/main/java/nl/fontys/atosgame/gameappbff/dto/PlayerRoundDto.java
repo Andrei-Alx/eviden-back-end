@@ -15,5 +15,4 @@ public class PlayerRoundDto {
     private UUID roundId;
     private UUID playerId;
     private UUID gameId;
-    private Card[] cards;
 }

@@ -34,8 +34,7 @@ public class PlayerRoundResult {
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID gameId;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
     @JsonProperty
-    @OneToOne(cascade = { CascadeType.MERGE })
+    @OneToOne(cascade = { CascadeType.ALL })
     private Result result;
 }

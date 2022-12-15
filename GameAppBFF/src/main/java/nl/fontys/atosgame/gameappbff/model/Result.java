@@ -1,15 +1,15 @@
 package nl.fontys.atosgame.gameappbff.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.fontys.atosgame.gameappbff.enums.ResultStatus;
 import nl.fontys.atosgame.gameappbff.enums.ShowResults;
 import org.hibernate.annotations.Type;
 
@@ -34,8 +34,8 @@ public class Result {
 
     @ElementCollection(fetch = javax.persistence.FetchType.EAGER)
     @JsonProperty
-    private Collection<Tag> tags = new java.util.ArrayList<>();
+    private Collection<Tag> tags = new ArrayList<>();
 
     @JsonProperty
-    private String status;
+    private ResultStatus status;
 }

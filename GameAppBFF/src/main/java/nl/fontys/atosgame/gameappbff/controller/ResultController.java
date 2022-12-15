@@ -5,11 +5,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.Optional;
+import java.util.UUID;
+
 import nl.fontys.atosgame.gameappbff.dto.PlayerRoundDto;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.model.PlayerRoundResult;
 import nl.fontys.atosgame.gameappbff.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,15 +37,14 @@ public class ResultController {
      * Id: R-10
      * Get player round results.
      */
-    @GetMapping
+    @GetMapping("/phase3")
     @ApiResponses(
         value = {
             @ApiResponse(
                 responseCode = "200",
                 description = "Getting a player round results ",
                 content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = Lobby.class)
+                    mediaType = "application/json"
                 )
             ),
             @ApiResponse(
@@ -52,8 +54,9 @@ public class ResultController {
         }
     )
     public ResponseEntity<PlayerRoundResult> getPlayerRoundResult(
-        @RequestBody PlayerRoundDto playerRound
+        @RequestParam UUID roundId, @RequestParam UUID playerId, @RequestParam UUID gameId
     ) {
+        PlayerRoundDto playerRound = new PlayerRoundDto(roundId, playerId, gameId);
         Optional<PlayerRoundResult> result = resultService.getPlayerRoundResult(
             playerRound.getRoundId(),
             playerRound.getPlayerId()

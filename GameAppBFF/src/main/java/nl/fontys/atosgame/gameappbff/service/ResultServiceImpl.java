@@ -21,7 +21,8 @@ public class ResultServiceImpl implements ResultService {
     public ResultServiceImpl(
         @Autowired PlayerRoundResultRepository playerRoundResultRepository,
         @Autowired FinalResultRepository finalResultRepository,
-        @Autowired ResultRepository resultRepository) {
+        @Autowired ResultRepository resultRepository
+    ) {
         this.playerRoundResultRepository = playerRoundResultRepository;
         this.finalResultRepository = finalResultRepository;
         this.resultRepository = resultRepository;
@@ -45,7 +46,7 @@ public class ResultServiceImpl implements ResultService {
      */
     @Override
     public void handlePlayerResultDetermined(PlayerRoundResult playerRoundResult) {
-        resultRepository.save(playerRoundResult.getResult());
+        System.out.println(playerRoundResult.toString());
         playerRoundResultRepository.save(playerRoundResult);
     }
 
