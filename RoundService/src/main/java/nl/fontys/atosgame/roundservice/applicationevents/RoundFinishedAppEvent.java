@@ -9,6 +9,7 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.ApplicationEvent;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class RoundFinishedAppEvent extends ApplicationEvent {
 
