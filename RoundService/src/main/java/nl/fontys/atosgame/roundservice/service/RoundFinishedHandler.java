@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.roundservice.service;
 
+import java.util.Map;
 import nl.fontys.atosgame.roundservice.applicationevents.RoundFinishedAppEvent;
 import nl.fontys.atosgame.roundservice.dto.PlayerResultDeterminedDto;
 import nl.fontys.atosgame.roundservice.dto.PlayerResultIndeterminateDto;
@@ -12,8 +13,6 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
 /**
  * Handler that handles RoundFinishedAppEvents and tells the game service to check if the next round can be started
  * @author Eli
@@ -24,7 +23,10 @@ public class RoundFinishedHandler implements ApplicationListener<RoundFinishedAp
     private GameService gameService;
     private StreamBridge streamBridge;
 
-    public RoundFinishedHandler(@Autowired GameService gameService, @Autowired StreamBridge streamBridge) {
+    public RoundFinishedHandler(
+        @Autowired GameService gameService,
+        @Autowired StreamBridge streamBridge
+    ) {
         this.gameService = gameService;
         this.streamBridge = streamBridge;
     }
@@ -67,7 +69,6 @@ public class RoundFinishedHandler implements ApplicationListener<RoundFinishedAp
                     // Send event
                     streamBridge.send("producePlayerResultInDeterminate-out-0", dto);
                 }
-            }
-        );
+            });
     }
 }

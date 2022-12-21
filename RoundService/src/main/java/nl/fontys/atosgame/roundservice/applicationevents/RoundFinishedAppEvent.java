@@ -15,5 +15,4 @@ public class RoundFinishedAppEvent extends ApplicationEvent {
     public Round getRound() {
         return round;
     }
-
 }
