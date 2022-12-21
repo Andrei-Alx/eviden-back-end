@@ -279,7 +279,7 @@ class RoundEventProducersTest {
     }
 
     @Test
-    void producePlayerResultDetermined(){
+    void producePlayerResultDetermined() {
         ResultDto result = new ResultDto();
         result.setStatus(ResultStatus.DETERMINED);
         PlayerResultDeterminedDto playerResultDeterminedDto = new PlayerResultDeterminedDto(
@@ -296,15 +296,30 @@ class RoundEventProducersTest {
 
         assertEquals("RoundService", message.getPayload().getService());
         assertEquals("PlayerResultDetermined", message.getPayload().getType());
-        assertEquals(playerResultDeterminedDto.getRoundId(), message.getPayload().getRoundId());
-        assertEquals(playerResultDeterminedDto.getPlayerId(), message.getPayload().getPlayerId());
-        assertEquals(playerResultDeterminedDto.getGameId(), message.getPayload().getGameId());
-        assertEquals(playerResultDeterminedDto.getResult().getStatus(), message.getPayload().getResult().getStatus());
-        assertEquals(playerResultDeterminedDto.getGameId(), message.getHeaders().get(KafkaHeaders.MESSAGE_KEY));
+        assertEquals(
+            playerResultDeterminedDto.getRoundId(),
+            message.getPayload().getRoundId()
+        );
+        assertEquals(
+            playerResultDeterminedDto.getPlayerId(),
+            message.getPayload().getPlayerId()
+        );
+        assertEquals(
+            playerResultDeterminedDto.getGameId(),
+            message.getPayload().getGameId()
+        );
+        assertEquals(
+            playerResultDeterminedDto.getResult().getStatus(),
+            message.getPayload().getResult().getStatus()
+        );
+        assertEquals(
+            playerResultDeterminedDto.getGameId(),
+            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+        );
     }
 
     @Test
-    void producePlayerResultIndeterminate(){
+    void producePlayerResultIndeterminate() {
         ResultDto result = new ResultDto();
         result.setStatus(ResultStatus.INDETERMINATE);
         PlayerResultIndeterminateEvent playerResultIndeterminateEvent = new PlayerResultIndeterminateEvent(
@@ -321,10 +336,25 @@ class RoundEventProducersTest {
 
         assertEquals("RoundService", message.getPayload().getService());
         assertEquals("PlayerResultIndeterminate", message.getPayload().getType());
-        assertEquals(playerResultIndeterminateEvent.getRoundId(), message.getPayload().getRoundId());
-        assertEquals(playerResultIndeterminateEvent.getPlayerId(), message.getPayload().getPlayerId());
-        assertEquals(playerResultIndeterminateEvent.getGameId(), message.getPayload().getGameId());
-        assertEquals(playerResultIndeterminateEvent.getResultStatus(), message.getPayload().getResultStatus());
-        assertEquals(playerResultIndeterminateEvent.getGameId(), message.getHeaders().get(KafkaHeaders.MESSAGE_KEY));
+        assertEquals(
+            playerResultIndeterminateEvent.getRoundId(),
+            message.getPayload().getRoundId()
+        );
+        assertEquals(
+            playerResultIndeterminateEvent.getPlayerId(),
+            message.getPayload().getPlayerId()
+        );
+        assertEquals(
+            playerResultIndeterminateEvent.getGameId(),
+            message.getPayload().getGameId()
+        );
+        assertEquals(
+            playerResultIndeterminateEvent.getResultStatus(),
+            message.getPayload().getResultStatus()
+        );
+        assertEquals(
+            playerResultIndeterminateEvent.getGameId(),
+            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+        );
     }
 }
