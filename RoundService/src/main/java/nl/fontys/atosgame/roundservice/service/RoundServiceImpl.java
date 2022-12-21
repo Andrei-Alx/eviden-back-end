@@ -15,6 +15,7 @@ import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.model.*;
+import nl.fontys.atosgame.roundservice.repository.GameRepository;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -262,7 +263,7 @@ public class RoundServiceImpl implements RoundService {
     /**
      * Get the round that contains a playerround
      *
-     * @param playerRound The the player round
+     * @param playerRound The player round
      * @return The round
      */
     @Override

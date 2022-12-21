@@ -14,4 +14,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RoundRepository extends JpaRepository<Round, UUID> {
     Optional<Round> findByPlayerRoundsContaining(PlayerRound playerRound);
+
+    //Optional<Round> findRoundBy
 }

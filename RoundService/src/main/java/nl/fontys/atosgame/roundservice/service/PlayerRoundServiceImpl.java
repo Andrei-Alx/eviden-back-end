@@ -3,14 +3,12 @@ package nl.fontys.atosgame.roundservice.service;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import nl.fontys.atosgame.roundservice.applicationevents.PlayerRoundFinishedAppEvent;
+
 import nl.fontys.atosgame.roundservice.dto.*;
 import nl.fontys.atosgame.roundservice.enums.PlayerRoundPhase;
 import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
-import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.repository.PlayerRoundRepository;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.ApplicationEventPublisher;
@@ -151,8 +149,13 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
             new CardsSelectedEventDto(playerRound.getPlayerId(), cardIds, roundId, gameId)
         );
 
-        // Check if round is finished
-        this.checkIfPlayerRoundIsFinished(playerRound);
+        // Check if playerRound is finished
+        // this.checkIfPlayerRoundIsFinished(playerRound); turned off so the round does not get started automatically. use cardcontroller/api/round/startnextround
+        if(playerRound.isDone()){
+            PlayerRoundEndedDto playerRoundEndedDto = new PlayerRoundEndedDto(gameId, roundId, playerRound.getPlayerId());
+            this.playerRoundIsFinished(playerRoundEndedDto);
+        }
+
 
         if (previousPhase != currentPhase) {
             streamBridge.send(
@@ -179,16 +182,12 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
     }
 
     /**
-     * Check if a player round is finished and sends an application event if it is
-     *
-     * @param playerRound The player round to check
+     * Check if a player round is finished and sends a kafka event if it is
+     * @param playerRoundEndedDto
      */
-    @Override
-    public void checkIfPlayerRoundIsFinished(PlayerRound playerRound) {
-        if (playerRound.isDone()) {
-            eventPublisher.publishEvent(
-                new PlayerRoundFinishedAppEvent(this, playerRound)
-            );
-        }
+    public void playerRoundIsFinished(PlayerRoundEndedDto playerRoundEndedDto) {
+            streamBridge.send("producePlayerRoundEnded-in-0", playerRoundEndedDto);
+
+
     }
 }
