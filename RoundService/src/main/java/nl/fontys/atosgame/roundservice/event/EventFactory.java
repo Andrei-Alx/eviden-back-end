@@ -26,7 +26,11 @@ public class EventFactory {
         UUID gameId
     ) {
         RoundCreatedEvent event = new RoundCreatedEvent();
-        RoundCreatedEvent event1 = (RoundCreatedEvent) initializeBaseEvent(event, "RoundCreated", service);
+        RoundCreatedEvent event1 = (RoundCreatedEvent) initializeBaseEvent(
+            event,
+            "RoundCreated",
+            service
+        );
         event1.setRound(round);
         event1.setGameId(gameId);
         return event1;

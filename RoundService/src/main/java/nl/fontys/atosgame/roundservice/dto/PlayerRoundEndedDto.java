@@ -1,15 +1,15 @@
 package nl.fontys.atosgame.roundservice.dto;
 
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
-import java.util.UUID;
-
+// OBSOLETED
 public class PlayerRoundEndedDto {
-    public PlayerRoundEndedDto(UUID gameId, UUID roundId, UUID playerId) {
-    }
+
+    public PlayerRoundEndedDto(UUID gameId, UUID roundId, UUID playerId) {}
 
     @Data
     @NoArgsConstructor

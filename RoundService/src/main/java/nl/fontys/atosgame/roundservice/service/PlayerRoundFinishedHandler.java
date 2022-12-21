@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.roundservice.service;
 
 import nl.fontys.atosgame.roundservice.applicationevents.PlayerRoundFinishedAppEvent;
+import nl.fontys.atosgame.roundservice.model.Game;
 import nl.fontys.atosgame.roundservice.model.Round;
 import org.apache.catalina.core.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +18,20 @@ public class PlayerRoundFinishedHandler
     implements ApplicationListener<PlayerRoundFinishedAppEvent> {
 
     private final RoundService roundService;
+    private final GameService gameService;
 
-    public PlayerRoundFinishedHandler(@Autowired RoundService roundService) {
+    public PlayerRoundFinishedHandler(
+        @Autowired RoundService roundService,
+        @Autowired GameService gameService
+    ) {
         this.roundService = roundService;
+        this.gameService = gameService;
     }
 
     @Override
     public void onApplicationEvent(PlayerRoundFinishedAppEvent event) {
-        System.out.println("Player round finished");
         Round round = roundService.getRoundByPlayerRound(event.getPlayerRound()).get();
-        this.roundService.checkRoundEnd(round.getId());
+        Game game = gameService.getGameByRoundId(round.getId()).get();
+        this.roundService.checkRoundEnd(round.getId(), game.getId());
     }
 }
