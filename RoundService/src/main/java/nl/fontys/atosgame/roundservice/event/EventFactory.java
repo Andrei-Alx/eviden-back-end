@@ -26,10 +26,10 @@ public class EventFactory {
         UUID gameId
     ) {
         RoundCreatedEvent event = new RoundCreatedEvent();
-        event = (RoundCreatedEvent) initializeBaseEvent(event, "RoundCreated", service);
-        event.setRound(round);
-        event.setGameId(gameId);
-        return event;
+        RoundCreatedEvent event1 = (RoundCreatedEvent) initializeBaseEvent(event, "RoundCreated", service);
+        event1.setRound(round);
+        event1.setGameId(gameId);
+        return event1;
     }
 
     /**
@@ -38,7 +38,7 @@ public class EventFactory {
      * @param playerId The id of the player
      * @param gameId The id of the game
      * @param cardIds The ids of the cards
-     * @return
+     * @return PlayerCardsDistributed
      */
     public static PlayerCardsDistributed createPlayerCardsDistributedEvent(
         UUID roundId,
@@ -280,7 +280,7 @@ public class EventFactory {
         event.setRoundId(roundId);
         event.setGameId(gameId);
         event.setPlayerId(playerId);
-        event.setResultStatus(ResultStatus.INDETERMINATE);
+        event.setResultStatus(resultStatus);
         return event;
     }
 
