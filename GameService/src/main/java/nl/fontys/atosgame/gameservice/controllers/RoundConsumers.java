@@ -38,8 +38,8 @@ public class RoundConsumers {
     public Function<Message<RoundStartedEvent>, Void> handleRoundStarted() {
         return roundStartedEventMessage -> {
             RoundStartedEvent event = roundStartedEventMessage.getPayload();
-            //TODO
-            throw new UnsupportedOperationException("Not implemented yet");
+            roundService.startRound(event.getRoundId());
+            return null;
         };
     }
 
@@ -53,8 +53,8 @@ public class RoundConsumers {
     public Function<Message<RoundEndedEvent>, Void> handleRoundEnded() {
         return roundEndedEventMessage -> {
             RoundEndedEvent event = roundEndedEventMessage.getPayload();
-            //TODO
-            throw new UnsupportedOperationException("Not implemented yet");
+            roundService.endRound(event.getRoundId());
+            return null;
         };
     }
 

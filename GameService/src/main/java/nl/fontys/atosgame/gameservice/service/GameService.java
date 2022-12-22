@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 import nl.fontys.atosgame.gameservice.model.Game;
 import nl.fontys.atosgame.gameservice.model.LobbySettings;
+import nl.fontys.atosgame.gameservice.model.Round;
 import nl.fontys.atosgame.gameservice.model.RoundSettings;
 
 /**
@@ -31,4 +32,12 @@ public interface GameService {
      * @return The started game
      */
     Game startGame(UUID gameId);
+
+    /**
+     * Add a round to a game
+     * @param gameId The id of the game
+     * @param round The round
+     * @return The game with the added round
+     */
+    Game addRound(UUID gameId, Round round);
 }

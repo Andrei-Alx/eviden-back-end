@@ -12,19 +12,22 @@ public interface RoundService {
     /**
      * Start a round
      * @param roundId The id of the round
+     * @return The updated round
      */
-    void startRound(UUID roundId);
+    Round startRound(UUID roundId);
 
     /**
      * End a round
      * @param roundId The id of the round
+     * @return The updated round
      */
-    void endRound(UUID roundId);
+    Round endRound(UUID roundId);
 
     /**
      * Create a new round and add it to the game
      * @param gameId The id of the game
      * @param round The round
+     * @return The created round
      */
-    void createRound(UUID gameId, Round round);
+    Round createRound(UUID gameId, Round round);
 }

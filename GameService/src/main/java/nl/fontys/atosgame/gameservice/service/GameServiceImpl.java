@@ -5,10 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
 import nl.fontys.atosgame.gameservice.enums.GameStatus;
-import nl.fontys.atosgame.gameservice.model.CardSet;
-import nl.fontys.atosgame.gameservice.model.Game;
-import nl.fontys.atosgame.gameservice.model.LobbySettings;
-import nl.fontys.atosgame.gameservice.model.RoundSettings;
+import nl.fontys.atosgame.gameservice.model.*;
 import nl.fontys.atosgame.gameservice.repository.GameRepository;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,5 +85,25 @@ public class GameServiceImpl implements GameService {
         game = gameRepository.save(game);
         streamBridge.send("produceGameStarted-in-0", game.getId());
         return game;
+    }
+
+    /**
+     * Add a round to a game
+     *
+     * @param gameId The id of the game
+     * @param round  The round
+     * @return The game with the added round
+     */
+    @Override
+    public Game addRound(UUID gameId, Round round) {
+        Game game = gameRepository
+            .findById(gameId).get();
+        List<Round> rounds = game.getRounds();
+        if (rounds == null) {
+            rounds = new ArrayList<>();
+        }
+        rounds.add(round);
+        game.setRounds(rounds);
+        return gameRepository.save(game);
     }
 }
