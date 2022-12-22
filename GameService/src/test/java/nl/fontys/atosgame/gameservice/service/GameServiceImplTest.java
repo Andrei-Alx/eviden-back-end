@@ -159,4 +159,19 @@ class GameServiceImplTest {
         assertTrue(result.getRounds().contains(round));
         assertEquals(game.getId(), result.getId());
     }
+
+    @Test
+    void endGame() {
+        Game game = new Game();
+        game.setId(UUID.randomUUID());
+        when(gameRepository.findById(game.getId())).thenReturn(Optional.of(game));
+        when(gameRepository.save(any()))
+            .thenAnswer(invocation -> invocation.getArgument(0));
+
+        Game result = gameService.endGame(game.getId());
+
+        assertEquals(GameStatus.ENDED, result.getStatus());
+        verify(streamBridge, times(1)).send("produceGameEnded-in-0", game.getId());
+        verify(gameRepository, times(1)).save(result);
+    }
 }

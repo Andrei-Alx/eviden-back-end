@@ -1,9 +1,11 @@
 package nl.fontys.atosgame.gameservice.service;
 
+import nl.fontys.atosgame.gameservice.applicationEvents.RoundEndedAppEvent;
 import nl.fontys.atosgame.gameservice.enums.RoundStatus;
 import nl.fontys.atosgame.gameservice.model.Round;
 import nl.fontys.atosgame.gameservice.repository.RoundRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -13,11 +15,13 @@ public class RoundServiceImpl implements RoundService {
 
     private final RoundRepository roundRepository;
     private final GameService gameService;
+    private ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    public RoundServiceImpl(RoundRepository roundRepository, GameService gameService) {
+    public RoundServiceImpl(RoundRepository roundRepository, GameService gameService, ApplicationEventPublisher eventPublisher) {
         this.roundRepository = roundRepository;
         this.gameService = gameService;
+        this.eventPublisher = eventPublisher;
     }
 
     /**
@@ -41,7 +45,9 @@ public class RoundServiceImpl implements RoundService {
     public Round endRound(UUID roundId) {
         Round round = roundRepository.findById(roundId).get();
         round.setStatus(RoundStatus.FINISHED);
-        return roundRepository.save(round);
+        round = roundRepository.save(round);
+        eventPublisher.publishEvent(new RoundEndedAppEvent(this, roundId));
+        return round;
     }
 
     /**

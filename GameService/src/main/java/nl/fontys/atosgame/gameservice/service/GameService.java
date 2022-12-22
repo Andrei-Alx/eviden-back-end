@@ -34,6 +34,13 @@ public interface GameService {
     Game startGame(UUID gameId);
 
     /**
+     * Ends a game
+     * @param gameId The id of the game
+     * @return The ended game
+     */
+    Game endGame(UUID gameId);
+
+    /**
      * Add a round to a game
      * @param gameId The id of the game
      * @param round The round

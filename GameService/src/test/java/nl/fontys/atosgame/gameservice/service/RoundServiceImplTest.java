@@ -5,6 +5,7 @@ import nl.fontys.atosgame.gameservice.model.Round;
 import nl.fontys.atosgame.gameservice.repository.RoundRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -16,13 +17,15 @@ import static org.mockito.Mockito.*;
 class RoundServiceImplTest {
     private RoundRepository roundRepository;
     private GameService gameService;
+    private ApplicationEventPublisher applicationEventPublisher;
     private RoundServiceImpl roundService;
 
     @BeforeEach
     void setUp() {
         roundRepository = mock(RoundRepository.class);
         gameService = mock(GameService.class);
-        roundService = new RoundServiceImpl(roundRepository, gameService);
+        applicationEventPublisher = mock(ApplicationEventPublisher.class);
+        roundService = new RoundServiceImpl(roundRepository, gameService, applicationEventPublisher);
 
         // Set behavior of mocks
         when(roundRepository.findById(any())).thenAnswer(invocation -> {

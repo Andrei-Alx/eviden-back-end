@@ -72,10 +72,14 @@ public class GameProducers {
      * output topic: game-ended-topic
      */
     @Bean
-    public Function<?, Message<GameEndedEvent>> produceGameEnded() {
+    public Function<UUID, Message<GameEndedEvent>> produceGameEnded() {
         return input -> {
-            //TODO
-            throw new UnsupportedOperationException("Not implemented yet");
+            GameEndedEvent event = EventFactory.createGameEndedEvent(input);
+
+            return MessageBuilder
+                .withPayload(event)
+                .setHeader(KafkaHeaders.MESSAGE_KEY, input)
+                .build();
         };
     }
 }
