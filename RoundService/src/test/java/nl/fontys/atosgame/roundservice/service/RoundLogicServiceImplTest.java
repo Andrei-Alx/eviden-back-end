@@ -38,8 +38,7 @@ class RoundLogicServiceImplTest {
                 3,
                 ShuffleMethod.FULLY_RANDOM,
                 false,
-                null,
-                    null
+                null
             )
         );
         List<UUID> playerIds = new ArrayList<>(
@@ -52,8 +51,8 @@ class RoundLogicServiceImplTest {
         assertEquals(playerIds.get(0), result.getPlayerRounds().get(0).getPlayerId());
         assertEquals(playerIds.get(1), result.getPlayerRounds().get(1).getPlayerId());
         for (PlayerRound playerRound : result.getPlayerRounds()) {
-            assertEquals(4, playerRound.getNrOfLikedCards());
-            assertEquals(3, playerRound.getNrOfSelectedCards());
+            assertEquals(4, playerRound.getRoundSettings().getNrOfLikedCards());
+            assertEquals(3, playerRound.getRoundSettings().getNrOfSelectedCards());
             // TODO: Add importantTag
         }
     }
@@ -75,9 +74,7 @@ class RoundLogicServiceImplTest {
                     new ArrayList<>(),
                     new ArrayList<>(),
                     new ArrayList<>(),
-                    0,
-                    0,
-                    "test"
+                        roundSettings
                 ),
                 new PlayerRound(
                     UUID.randomUUID(),
@@ -86,9 +83,7 @@ class RoundLogicServiceImplTest {
                     new ArrayList<>(),
                     new ArrayList<>(),
                     new ArrayList<>(),
-                    0,
-                    0,
-                    "test"
+                        roundSettings
                 ),
                 new PlayerRound(
                     UUID.randomUUID(),
@@ -97,9 +92,7 @@ class RoundLogicServiceImplTest {
                     new ArrayList<>(),
                     new ArrayList<>(),
                     new ArrayList<>(),
-                    0,
-                    0,
-                    "test"
+                        roundSettings
                 )
             )
         );
@@ -139,9 +132,7 @@ class RoundLogicServiceImplTest {
                     new ArrayList<>(),
                     new ArrayList<>(),
                     new ArrayList<>(),
-                    0,
-                    0,
-                    "test"
+                        roundSettings
                 ),
                 new PlayerRound(
                     UUID.randomUUID(),
@@ -150,9 +141,7 @@ class RoundLogicServiceImplTest {
                     new ArrayList<>(),
                     new ArrayList<>(),
                     new ArrayList<>(),
-                    0,
-                    0,
-                    "test"
+                        roundSettings
                 ),
                 new PlayerRound(
                     UUID.randomUUID(),
@@ -161,9 +150,7 @@ class RoundLogicServiceImplTest {
                     new ArrayList<>(),
                     new ArrayList<>(),
                     new ArrayList<>(),
-                    0,
-                    0,
-                    "test"
+                        roundSettings
                 )
             )
         );

@@ -64,6 +64,7 @@ class RoundServiceImplTest {
         Collection<Card> cards = new ArrayList<>(List.of(new Card(UUID.randomUUID(), tags)));
         CardSet cardSet = new CardSet();
         cardSet.setCards(cards);
+        cardSet.setImportantTag("color");
 
         RoundSettingsDto roundSettings = new RoundSettingsDto(
             ShowResults.PERSONAL,
@@ -79,7 +80,6 @@ class RoundServiceImplTest {
             roundSettings.getNrOfSelectedCards(),
             roundSettings.getShuffleMethod(),
             roundSettings.isShowSameCardOrder(),
-            null,
                 null
         );
         when(cardSetService.getCardSet(roundSettings.getCardSetId()))
@@ -94,7 +94,6 @@ class RoundServiceImplTest {
                 roundSettings.getNrOfSelectedCards(),
                 roundSettings.getShuffleMethod(),
                 roundSettings.isShowSameCardOrder(),
-                "color",
                 cardSet
         );
         Round assertRound = new Round(null,new ArrayList<>(), RoundStatus.CREATED, assertSettings);
@@ -110,7 +109,7 @@ class RoundServiceImplTest {
                 "produceRoundCreated-in-0",
                 new RoundCreatedEventKeyValue(gameId, round)
             );
-        Assert.assertTrue(result.getRoundSettings().getImportantTag() == "color");
+        Assert.assertSame("color", result.getRoundSettings().getCardSet().getImportantTag());
 
     }
 
@@ -159,8 +158,6 @@ class RoundServiceImplTest {
                     null,
                     null,
                     cards,
-                    0,
-                    0,
                     null
                 ),
                 new PlayerRound(
@@ -170,8 +167,6 @@ class RoundServiceImplTest {
                     null,
                     null,
                     cards,
-                    0,
-                    0,
                     null
                 ),
                 new PlayerRound(
@@ -181,8 +176,6 @@ class RoundServiceImplTest {
                     null,
                     null,
                     cards,
-                    0,
-                    0,
                     null
                 )
             )

@@ -259,7 +259,7 @@ public class RoundServiceImpl implements RoundService {
     /**
      * Get the round that contains a playerround
      *
-     * @param playerRound The the player round
+     * @param playerRound the player round
      * @return The round
      */
     @Override
@@ -281,8 +281,7 @@ public class RoundServiceImpl implements RoundService {
             roundSettings.getNrOfSelectedCards(),
             roundSettings.getShuffleMethod(),
             roundSettings.isShowSameCardOrder(),
-            null,
-                null
+            null
         );
         // Get card set
         Optional<CardSet> cardSet = cardSetService.getCardSet(
@@ -293,10 +292,6 @@ public class RoundServiceImpl implements RoundService {
         }
 
         settings.setCardSet(cardSet.get());
-
-        // Get the first card from the set and set roundsettings' importantTag to the card's TagKey
-        Optional<Card> card = cardSet.get().getCards().stream().findFirst();
-        settings.setImportantTag(card.get().getTags().stream().findFirst().get().getTagKey());
 
         // Add round settings to round
         round.setRoundSettings(settings);
