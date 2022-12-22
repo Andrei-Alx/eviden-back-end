@@ -306,6 +306,7 @@ public class RoundServiceImpl implements RoundService {
                     dto.setRoundId(round.getId());
                     dto.setGameId(gameId);
                     dto.setResult(result);
+                    dto.setPlayerId(playerRound.getPlayerId());
 
                     // Send event
                     streamBridge.send("producePlayerResultDetermined-out-0", dto);

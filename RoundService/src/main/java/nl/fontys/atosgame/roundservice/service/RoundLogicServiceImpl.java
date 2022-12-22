@@ -39,7 +39,7 @@ public class RoundLogicServiceImpl implements RoundLogicService {
             playerRound.setNrOfSelectedCards(
                 round.getRoundSettings().getNrOfSelectedCards()
             );
-            playerRound.setImportantTag("color");
+            playerRound.setImportantTag("Color");
             round.addPlayerRound(playerRound);
         }
         return round;
