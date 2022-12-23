@@ -157,13 +157,13 @@ public class PlayerRound {
 
         // TODO: get advice per color
         String description = "";
-        if (Objects.equals(highestTagValue, "ROOD")) {
+        if (Objects.equals(highestTagValue, "Rood")) {
             description = "red is a nice color";
-        } else if (Objects.equals(highestTagValue, "BLAUW")) {
+        } else if (Objects.equals(highestTagValue, "Blauw")) {
             description = "blue is a nice color";
-        } else if (Objects.equals(highestTagValue, "GROEN")) {
+        } else if (Objects.equals(highestTagValue, "Groen")) {
             description = "green is a nice color";
-        } else if (Objects.equals(highestTagValue, "GEEL")) {
+        } else if (Objects.equals(highestTagValue, "Geel")) {
             description = "yellow is a nice color";
         } else {
             // color is white
@@ -176,7 +176,9 @@ public class PlayerRound {
         resultDto.setTags(
             List.of(
                 new Tag("Color", highestTagValue),
-                new Tag("description", description)
+                new Tag("Description", description),
+                    //example of more tags, remove when tags are gathered from the database
+                    new Tag("Description", "There could be more tags here")
             )
         );
         resultDto.setStatus(ResultStatus.DETERMINED);
