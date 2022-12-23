@@ -4,6 +4,7 @@ import java.util.function.Function;
 import javax.transaction.Transactional;
 import nl.fontys.atosgame.gameappbff.event.consumed.FinalResultEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerResultDeterminedEvent;
+import nl.fontys.atosgame.gameappbff.model.PlayerRoundResult;
 import nl.fontys.atosgame.gameappbff.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -36,7 +37,15 @@ public class ResultConsumers {
         System.out.println("handlePlayerResultDetermined");
         return message -> {
             PlayerResultDeterminedEvent event = message.getPayload();
-            resultService.handlePlayerResultDetermined(event.getPlayerRoundResult());
+            resultService.handlePlayerResultDetermined(
+                new PlayerRoundResult(
+                    event.getId(),
+                    event.getRoundId(),
+                    event.getPlayerId(),
+                    event.getGameId(),
+                    event.getResult()
+                )
+            );
             return null;
         };
     }
