@@ -45,6 +45,7 @@ public class CardSetServiceImpl implements CardSetService {
             null,
             createCardSetDto.getName(),
             createCardSetDto.getType(),
+            createCardSetDto.getImportantTag(),
             cards
         );
 
