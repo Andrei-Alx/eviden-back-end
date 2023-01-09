@@ -10,6 +10,12 @@ import nl.fontys.atosgame.gameappbff.repository.ResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service responsible for saving and returning results
+ *
+ * @author Niek
+ */
+
 @Service
 public class ResultServiceImpl implements ResultService {
 
@@ -18,6 +24,13 @@ public class ResultServiceImpl implements ResultService {
 
     private ResultRepository resultRepository;
 
+    /**
+     * Create a new ResultServiceImpl
+     *
+     * @param playerRoundResultRepository The repository for playerRoundResults
+     * @param finalResultRepository       The repository for finalResults
+     * @param resultRepository            The repository for results
+     */
     public ResultServiceImpl(
         @Autowired PlayerRoundResultRepository playerRoundResultRepository,
         @Autowired FinalResultRepository finalResultRepository,
@@ -29,7 +42,11 @@ public class ResultServiceImpl implements ResultService {
     }
 
     /**
-     * Get a player round result by round id and player id
+     * Get a playerRoundResult
+     *
+     * @param roundId The id of the round
+     * @param playerId The id of the player
+     * @return PlayerRoundResult The playerRoundResult to return
      */
     @Override
     public Optional<PlayerRoundResult> getPlayerRoundResult(UUID roundId, UUID playerId) {
@@ -41,8 +58,10 @@ public class ResultServiceImpl implements ResultService {
     }
 
     /**
-     * Handle PlayerResultDetermined event
-     * save player round result
+     * Save a playerRoundResult
+     *
+     * @param playerRoundResult The playerRoundResult to save
+     * @return The saved playerRoundResult
      */
     @Override
     public void handlePlayerResultDetermined(PlayerRoundResult playerRoundResult) {
@@ -51,13 +70,13 @@ public class ResultServiceImpl implements ResultService {
     }
 
     /**
-     * Handle FinalResultDetermined event
-     * save final result
+     * Save a finalResult
+     *
+     * @param finalResult The finalResult to save
+     * @return The saved finalResult
      */
     @Override
     public void handleFinalResultDetermined(FinalResult finalResult) {
-        // I might have to add this to prevent referential integrity errors
-        // resultRepository.save(finalResult.getResults());
         finalResultRepository.save(finalResult);
     }
 }

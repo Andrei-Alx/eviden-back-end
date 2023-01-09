@@ -177,8 +177,8 @@ public class PlayerRound {
             List.of(
                 new Tag("Color", highestTagValue),
                 new Tag("Description", description),
-                    //example of more tags, remove when tags are gathered from the database
-                    new Tag("Description", "There could be more tags here")
+                //example of more tags, remove when tags are gathered from the database
+                new Tag("Description", "There could be more tags here")
             )
         );
         resultDto.setStatus(ResultStatus.DETERMINED);
