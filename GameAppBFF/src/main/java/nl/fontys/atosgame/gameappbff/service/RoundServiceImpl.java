@@ -1,6 +1,5 @@
 package nl.fontys.atosgame.gameappbff.service;
 
-import java.awt.geom.RoundRectangle2D;
 import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.controller.GameSocketController;

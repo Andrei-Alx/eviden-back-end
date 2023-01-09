@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 
 /**
+ * ***OBSOLETE***
  * Handler that handles PlayerRoundFinishedAppEvents and tells the round service to check if the round can be finished
  * @author Eli
  */
@@ -24,7 +25,7 @@ public class PlayerRoundFinishedHandler
     @Override
     public void onApplicationEvent(PlayerRoundFinishedAppEvent event) {
         System.out.println("Player round finished");
-        Round round = roundService.getRoundByPlayerRound(event.getPlayerRoundId()).get();
+        Round round = roundService.getRoundByPlayerRound(event.getPlayerRound()).get();
         this.roundService.checkRoundEnd(round.getId());
     }
 }

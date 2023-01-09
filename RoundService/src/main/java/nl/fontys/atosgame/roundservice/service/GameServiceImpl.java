@@ -141,9 +141,11 @@ public class GameServiceImpl implements GameService {
                     game.getLobby().getPlayerIds(),
                     gameId
                 );
-            } else {
+            }
+            else{
                 // Game is done
                 // TODO: Publish event, change status?
+
             }
             gameRepository.save(game);
         }

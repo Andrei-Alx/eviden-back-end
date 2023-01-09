@@ -2,6 +2,9 @@ package nl.fontys.atosgame.roundservice.event;
 
 import java.util.List;
 import java.util.UUID;
+
+import nl.fontys.atosgame.roundservice.dto.ResultDto;
+import nl.fontys.atosgame.roundservice.enums.ResultStatus;
 import nl.fontys.atosgame.roundservice.event.produced.*;
 import nl.fontys.atosgame.roundservice.model.Round;
 
@@ -24,10 +27,10 @@ public class EventFactory {
         UUID gameId
     ) {
         RoundCreatedEvent event = new RoundCreatedEvent();
-        event = (RoundCreatedEvent) initializeBaseEvent(event, "RoundCreated", service);
-        event.setRound(round);
-        event.setGameId(gameId);
-        return event;
+        RoundCreatedEvent event1 = (RoundCreatedEvent) initializeBaseEvent(event, "RoundCreated", service);
+        event1.setRound(round);
+        event1.setGameId(gameId);
+        return event1;
     }
 
     /**
@@ -36,7 +39,7 @@ public class EventFactory {
      * @param playerId The id of the player
      * @param gameId The id of the game
      * @param cardIds The ids of the cards
-     * @return
+     * @return PlayerCardsDistributed
      */
     public static PlayerCardsDistributed createPlayerCardsDistributedEvent(
         UUID roundId,
@@ -223,6 +226,62 @@ public class EventFactory {
         event.setGameId(gameId);
         event.setPlayerId(playerId);
         event.setCardIds(cardIds);
+        return event;
+    }
+
+    /**
+     * Create a PlayerResultDeterminedEvent
+     * @param roundId The id of the round
+     * @param gameId The id of the game
+     * @param playerId The id of the player
+     * @param result The result of the player
+     * @return The created event
+     */
+    public static PlayerResultDeterminedEvent createPlayerResultDeterminedEvent(
+            UUID roundId,
+            UUID gameId,
+            UUID playerId,
+            ResultDto result
+    ) {
+        PlayerResultDeterminedEvent event = new PlayerResultDeterminedEvent();
+        event =
+                (PlayerResultDeterminedEvent) initializeBaseEvent(
+                        event,
+                        "PlayerResultDetermined",
+                        "RoundService"
+                );
+        event.setRoundId(roundId);
+        event.setGameId(gameId);
+        event.setPlayerId(playerId);
+        event.setResult(result);
+        return event;
+    }
+
+    /**
+     * Create a PlayerResultIndeterminedEvent
+     * @param roundId The id of the round
+     * @param gameId The id of the game
+     * @param playerId The id of the player
+     * @param resultStatus The result of the player
+     * @return The created event
+     */
+    public static PlayerResultIndeterminateEvent createPlayerResultIndeterminateEvent(
+            UUID roundId,
+            UUID gameId,
+            UUID playerId,
+            ResultStatus resultStatus
+    ) {
+        PlayerResultIndeterminateEvent event = new PlayerResultIndeterminateEvent();
+        event =
+                (PlayerResultIndeterminateEvent) initializeBaseEvent(
+                        event,
+                        "PlayerResultIndeterminate",
+                        "RoundService"
+                );
+        event.setRoundId(roundId);
+        event.setGameId(gameId);
+        event.setPlayerId(playerId);
+        event.setResultStatus(resultStatus);
         return event;
     }
 

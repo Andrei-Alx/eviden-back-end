@@ -15,6 +15,7 @@ import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.model.*;
+import nl.fontys.atosgame.roundservice.repository.GameRepository;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -247,19 +248,20 @@ public class RoundServiceImpl implements RoundService {
      * @param roundId The id of the round
      */
     @Override
-    public void checkRoundEnd(UUID roundId) {
+    public boolean checkRoundEnd(UUID roundId) {
+        boolean roundFinished = false;
         Round round = getRound(roundId).get();
         if (round.isDone()) {
-            applicationEventPublisher.publishEvent(
-                new RoundFinishedAppEvent(this, round)
-            );
+            applicationEventPublisher.publishEvent(new RoundFinishedAppEvent(this, round));
         }
+
+        return roundFinished;
     }
 
     /**
      * Get the round that contains a playerround
      *
-     * @param playerRound the player round
+     * @param playerRound The player round
      * @return The round
      */
     @Override
