@@ -3,10 +3,9 @@ package nl.fontys.atosgame.roundservice.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+
+import nl.fontys.atosgame.roundservice.applicationevents.RoundFinishedAppEvent;
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
@@ -15,12 +14,10 @@ import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.enums.ShowResults;
 import nl.fontys.atosgame.roundservice.enums.ShuffleMethod;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
-import nl.fontys.atosgame.roundservice.model.Card;
-import nl.fontys.atosgame.roundservice.model.CardSet;
-import nl.fontys.atosgame.roundservice.model.PlayerRound;
-import nl.fontys.atosgame.roundservice.model.Round;
-import nl.fontys.atosgame.roundservice.model.RoundSettings;
+import nl.fontys.atosgame.roundservice.event.produced.RoundEndedEvent;
+import nl.fontys.atosgame.roundservice.model.*;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -45,7 +42,7 @@ class RoundServiceImplTest {
         streamBridge = mock(StreamBridge.class);
         applicationEventPublisher = mock(ApplicationEventPublisher.class);
         roundService =
-            spy(
+                spy(
                 new RoundServiceImpl(
                     roundRepository,
                     cardSetService,
@@ -55,10 +52,20 @@ class RoundServiceImplTest {
                     applicationEventPublisher
                 )
             );
+
+
     }
 
     @Test
     void createRound() {
+        Tag tag = new Tag("color", "red");
+        Collection<Tag> tags = new ArrayList<>(List.of(tag));
+
+        Collection<Card> cards = new ArrayList<>(List.of(new Card(UUID.randomUUID(), tags)));
+        CardSet cardSet = new CardSet();
+        cardSet.setCards(cards);
+        cardSet.setImportantTag("color");
+
         RoundSettingsDto roundSettings = new RoundSettingsDto(
             ShowResults.PERSONAL,
             1,
@@ -73,22 +80,37 @@ class RoundServiceImplTest {
             roundSettings.getNrOfSelectedCards(),
             roundSettings.getShuffleMethod(),
             roundSettings.isShowSameCardOrder(),
-            null
+                null
         );
         when(cardSetService.getCardSet(roundSettings.getCardSetId()))
-            .thenReturn(Optional.of(mock(CardSet.class)));
+            .thenReturn(Optional.of(cardSet));
         Round round = new Round(null, new ArrayList<>(), RoundStatus.CREATED, settings);
         when(roundRepository.save(round)).thenReturn(round);
+
+        // assert
+        RoundSettings assertSettings = new RoundSettings(
+                roundSettings.getShowPersonalOrGroupResults(),
+                roundSettings.getNrOfLikedCards(),
+                roundSettings.getNrOfSelectedCards(),
+                roundSettings.getShuffleMethod(),
+                roundSettings.isShowSameCardOrder(),
+                cardSet
+        );
+        Round assertRound = new Round(null,new ArrayList<>(), RoundStatus.CREATED, assertSettings);
+        when(roundRepository.save(assertRound)).thenReturn(assertRound);
         UUID gameId = UUID.randomUUID();
 
-        roundService.createRound(gameId, roundSettings);
+        Round result = roundService.createRound(gameId, roundSettings);
 
+        round.setRoundSettings(assertSettings);
         verify(roundRepository).save(round);
         verify(streamBridge)
             .send(
                 "produceRoundCreated-in-0",
                 new RoundCreatedEventKeyValue(gameId, round)
             );
+        Assert.assertSame("color", result.getRoundSettings().getCardSet().getImportantTag());
+
     }
 
     @Test
@@ -136,8 +158,6 @@ class RoundServiceImplTest {
                     null,
                     null,
                     cards,
-                    0,
-                    0,
                     null
                 ),
                 new PlayerRound(
@@ -147,8 +167,6 @@ class RoundServiceImplTest {
                     null,
                     null,
                     cards,
-                    0,
-                    0,
                     null
                 ),
                 new PlayerRound(
@@ -158,8 +176,6 @@ class RoundServiceImplTest {
                     null,
                     null,
                     cards,
-                    0,
-                    0,
                     null
                 )
             )

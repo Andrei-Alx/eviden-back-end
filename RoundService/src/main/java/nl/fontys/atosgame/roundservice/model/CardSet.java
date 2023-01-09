@@ -28,4 +28,7 @@ public class CardSet {
     )
     @JsonProperty
     private Collection<Card> cards = new java.util.ArrayList<>();
+
+    @JsonProperty
+    private String importantTag;
 }

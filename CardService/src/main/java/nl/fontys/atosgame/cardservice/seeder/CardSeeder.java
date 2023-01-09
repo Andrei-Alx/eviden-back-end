@@ -56,7 +56,7 @@ public class CardSeeder {
                 .stream()
                 .map(Card::getId)
                 .collect(Collectors.toCollection(ArrayList::new))
-        );
+        ,"color");
         cardSetService.createCardSet(cardSet);
 
         // Do same for round two
@@ -73,7 +73,7 @@ public class CardSeeder {
                     .stream()
                     .map(Card::getId)
                     .collect(Collectors.toCollection(ArrayList::new))
-            );
+            , "color");
         cardSetService.createCardSet(cardSet);
     }
 }

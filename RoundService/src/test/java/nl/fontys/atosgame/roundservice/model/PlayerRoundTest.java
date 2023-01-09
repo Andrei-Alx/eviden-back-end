@@ -32,7 +32,7 @@ class PlayerRoundTest {
             )
         );
         playerRound.setSelectedCards(selectedCards);
-        playerRound.setImportantTag("color");
+        playerRound.getRoundSettings().getCardSet().setImportantTag("color");
 
         assertTrue(playerRound.hasDeterminateResult());
     }
@@ -61,7 +61,7 @@ class PlayerRoundTest {
             )
         );
         playerRound.setSelectedCards(selectedCards);
-        playerRound.setImportantTag("color");
+        playerRound.getRoundSettings().getCardSet().setImportantTag("color");
 
         assertFalse(playerRound.hasDeterminateResult());
     }
@@ -78,7 +78,7 @@ class PlayerRoundTest {
             )
         );
         playerRound.setSelectedCards(selectedCards);
-        playerRound.setImportantTag("color");
+        playerRound.getRoundSettings().getCardSet().setImportantTag("color");
 
         assertTrue(playerRound.hasDeterminateResult());
     }
@@ -88,7 +88,7 @@ class PlayerRoundTest {
         PlayerRound playerRound = new PlayerRound();
         List<Card> selectedCards = new ArrayList<>();
         playerRound.setSelectedCards(selectedCards);
-        playerRound.setImportantTag("color");
+        playerRound.getRoundSettings().getCardSet().setImportantTag("color");
 
         assertTrue(playerRound.hasDeterminateResult());
     }
@@ -110,7 +110,7 @@ class PlayerRoundTest {
             )
         );
         playerRound.setSelectedCards(selectedCards);
-        playerRound.setImportantTag("color");
+        playerRound.getRoundSettings().getCardSet().setImportantTag("color");
 
         assertTrue(playerRound.hasDeterminateResult());
     }
@@ -121,7 +121,7 @@ class PlayerRoundTest {
         playerRound.setSelectedCards(
             new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>())))
         );
-        playerRound.setNrOfSelectedCards(1);
+        playerRound.getRoundSettings().setNrOfSelectedCards(1);
         playerRound.setLikedCards(
             new ArrayList<>(
                 List.of(
@@ -130,7 +130,7 @@ class PlayerRoundTest {
                 )
             )
         );
-        playerRound.setNrOfLikedCards(2);
+        playerRound.getRoundSettings().setNrOfLikedCards(2);
         when(playerRound.hasDeterminateResult()).thenReturn(true);
 
         assertTrue(playerRound.isDone());
@@ -142,7 +142,7 @@ class PlayerRoundTest {
         playerRound.setSelectedCards(
             new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>())))
         );
-        playerRound.setNrOfSelectedCards(1);
+        playerRound.getRoundSettings().setNrOfSelectedCards(1);
         playerRound.setLikedCards(
             new ArrayList<>(
                 List.of(
@@ -151,7 +151,7 @@ class PlayerRoundTest {
                 )
             )
         );
-        playerRound.setNrOfLikedCards(2);
+        playerRound.getRoundSettings().setNrOfLikedCards(2);
         when(playerRound.hasDeterminateResult()).thenReturn(false);
 
         assertFalse(playerRound.isDone());
@@ -163,11 +163,11 @@ class PlayerRoundTest {
         playerRound.setSelectedCards(
             new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>())))
         );
-        playerRound.setNrOfSelectedCards(1);
+        playerRound.getRoundSettings().setNrOfSelectedCards(1);
         playerRound.setLikedCards(
             new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>())))
         );
-        playerRound.setNrOfLikedCards(2);
+        playerRound.getRoundSettings().setNrOfLikedCards(2);
         when(playerRound.hasDeterminateResult()).thenReturn(true);
 
         assertFalse(playerRound.isDone());
@@ -179,7 +179,7 @@ class PlayerRoundTest {
         playerRound.setSelectedCards(
             new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>())))
         );
-        playerRound.setNrOfSelectedCards(2);
+        playerRound.getRoundSettings().setNrOfSelectedCards(2);
         playerRound.setLikedCards(
             new ArrayList<>(
                 List.of(
@@ -188,7 +188,7 @@ class PlayerRoundTest {
                 )
             )
         );
-        playerRound.setNrOfLikedCards(2);
+        playerRound.getRoundSettings().setNrOfLikedCards(2);
         when(playerRound.hasDeterminateResult()).thenReturn(true);
 
         assertFalse(playerRound.isDone());
@@ -200,7 +200,7 @@ class PlayerRoundTest {
         playerRound.setLikedCards(
             new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>())))
         );
-        playerRound.setNrOfLikedCards(2);
+        playerRound.getRoundSettings().setNrOfLikedCards(2);
         playerRound.setSelectedCards(
             new ArrayList<>(
                 List.of(
@@ -210,7 +210,7 @@ class PlayerRoundTest {
                 )
             )
         );
-        playerRound.setNrOfSelectedCards(4);
+        playerRound.getRoundSettings().setNrOfSelectedCards(4);
 
         assertEquals(PlayerRoundPhase.LIKING, playerRound.getPhase());
     }
@@ -221,7 +221,7 @@ class PlayerRoundTest {
         playerRound.setLikedCards(
             new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>())))
         );
-        playerRound.setNrOfLikedCards(1);
+        playerRound.getRoundSettings().setNrOfLikedCards(1);
         playerRound.setSelectedCards(
             new ArrayList<>(
                 List.of(
@@ -230,7 +230,7 @@ class PlayerRoundTest {
                 )
             )
         );
-        playerRound.setNrOfSelectedCards(4);
+        playerRound.getRoundSettings().setNrOfSelectedCards(4);
 
         assertEquals(PlayerRoundPhase.PICKING, playerRound.getPhase());
     }
@@ -246,7 +246,7 @@ class PlayerRoundTest {
                 )
             )
         );
-        playerRound.setNrOfLikedCards(2);
+        playerRound.getRoundSettings().setNrOfLikedCards(2);
         playerRound.setSelectedCards(
             new ArrayList<>(
                 List.of(
@@ -256,7 +256,7 @@ class PlayerRoundTest {
                 )
             )
         );
-        playerRound.setNrOfSelectedCards(3);
+        playerRound.getRoundSettings().setNrOfSelectedCards(3);
         when(playerRound.hasDeterminateResult()).thenReturn(true);
 
         assertEquals(PlayerRoundPhase.RESULT, playerRound.getPhase());
