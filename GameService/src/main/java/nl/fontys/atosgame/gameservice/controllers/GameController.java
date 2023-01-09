@@ -34,7 +34,7 @@ public class GameController {
      * Create a game
      */
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('SCOPE_Gamemaster.Write')")
+    @PreAuthorize("hasAuthority('SCOPE_Gamemaster.Write') && hasAuthority('APPROLE_Role.Gamemaster.ReadWrite')")
     @ApiResponses(
         value = {
             @ApiResponse(
@@ -67,6 +67,7 @@ public class GameController {
      * Start a game
      */
     @PutMapping("/start/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_Gamemaster.Write') && hasAuthority('APPROLE_Role.Gamemaster.ReadWrite')")
     @ApiResponses(
         value = {
             @ApiResponse(
