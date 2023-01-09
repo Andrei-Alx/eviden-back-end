@@ -2,20 +2,27 @@ package nl.fontys.atosgame.roundservice.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
-import nl.fontys.atosgame.roundservice.applicationevents.RoundFinishedAppEvent;
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
 import nl.fontys.atosgame.roundservice.dto.PlayerPhaseStartedDto;
+import nl.fontys.atosgame.roundservice.dto.PlayerResultDeterminedDto;
+import nl.fontys.atosgame.roundservice.dto.PlayerResultIndeterminateDto;
+import nl.fontys.atosgame.roundservice.dto.ResultDto;
 import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
+import nl.fontys.atosgame.roundservice.enums.ResultStatus;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
-import nl.fontys.atosgame.roundservice.model.*;
-import nl.fontys.atosgame.roundservice.repository.GameRepository;
+import nl.fontys.atosgame.roundservice.model.Card;
+import nl.fontys.atosgame.roundservice.model.CardSet;
+import nl.fontys.atosgame.roundservice.model.PlayerRound;
+import nl.fontys.atosgame.roundservice.model.Round;
+import nl.fontys.atosgame.roundservice.model.RoundSettings;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -155,6 +162,9 @@ public class RoundServiceImpl implements RoundService {
         round.setStatus(RoundStatus.FINISHED);
         streamBridge.send("produceRoundEnded-in-0", new RoundEndedDto(gameId, roundId));
 
+        // Publish results
+        this.publishResults(roundId, gameId);
+
         // Save to db
         round = roundRepository.save(round);
         return round;
@@ -246,16 +256,17 @@ public class RoundServiceImpl implements RoundService {
      * When a playerround is finished, check if round is finished and if so, launch application event
      *
      * @param roundId The id of the round
+     * @param gameId The id of the game
      */
     @Override
-    public boolean checkRoundEnd(UUID roundId) {
-        boolean roundFinished = false;
+    public boolean checkRoundEnd(UUID roundId, UUID gameId) {
         Round round = getRound(roundId).get();
         if (round.isDone()) {
-            applicationEventPublisher.publishEvent(new RoundFinishedAppEvent(this, round));
+            this.endRound(roundId, gameId);
+            return true;
         }
 
-        return roundFinished;
+        return false;
     }
 
     /**
@@ -267,6 +278,52 @@ public class RoundServiceImpl implements RoundService {
     @Override
     public Optional<Round> getRoundByPlayerRound(PlayerRound playerRound) {
         return roundRepository.findByPlayerRoundsContaining(playerRound);
+    }
+
+    /**
+     * Publish the results of a round
+     *
+     * @param roundId The id of the round
+     * @param gameId  The id of the game
+     */
+    @Override
+    public void publishResults(UUID roundId, UUID gameId) {
+        Optional<Round> roundOptional = getRound(roundId);
+        if (roundOptional.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+        Round round = roundOptional.get();
+        round
+            .getPlayerRounds()
+            .forEach(playerRound -> {
+                if (playerRound.hasDeterminateResult()) {
+                    // playerround calculate results and produce in event
+                    Map<String, Integer> tempResults = playerRound.calculateResultForAllColors();
+
+                    ResultDto result = playerRound.getResult(tempResults);
+
+                    PlayerResultDeterminedDto dto = new PlayerResultDeterminedDto();
+                    dto.setRoundId(round.getId());
+                    dto.setGameId(gameId);
+                    dto.setResult(result);
+                    dto.setPlayerId(playerRound.getPlayerId());
+
+                    // Send event
+                    streamBridge.send("producePlayerResultDetermined-out-0", dto);
+                } else {
+                    // TODO: This won't work. By definition, this method is only called when a round has ended.
+                    // So, that means every playerround has a determinate result.
+                    // Instead, we should probably remove this event entirely.
+
+                    PlayerResultIndeterminateDto dto = new PlayerResultIndeterminateDto();
+                    dto.setPlayerId(playerRound.getPlayerId());
+                    dto.setRoundId(round.getId());
+                    dto.setResultStatus(ResultStatus.DETERMINED);
+
+                    // Send event
+                    streamBridge.send("producePlayerResultInDeterminate-out-0", dto);
+                }
+            });
     }
 
     /**

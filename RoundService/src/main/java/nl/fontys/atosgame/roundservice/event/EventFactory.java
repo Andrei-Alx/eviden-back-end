@@ -2,7 +2,6 @@ package nl.fontys.atosgame.roundservice.event;
 
 import java.util.List;
 import java.util.UUID;
-
 import nl.fontys.atosgame.roundservice.dto.ResultDto;
 import nl.fontys.atosgame.roundservice.enums.ResultStatus;
 import nl.fontys.atosgame.roundservice.event.produced.*;
@@ -27,7 +26,11 @@ public class EventFactory {
         UUID gameId
     ) {
         RoundCreatedEvent event = new RoundCreatedEvent();
-        RoundCreatedEvent event1 = (RoundCreatedEvent) initializeBaseEvent(event, "RoundCreated", service);
+        RoundCreatedEvent event1 = (RoundCreatedEvent) initializeBaseEvent(
+            event,
+            "RoundCreated",
+            service
+        );
         event1.setRound(round);
         event1.setGameId(gameId);
         return event1;
@@ -238,18 +241,18 @@ public class EventFactory {
      * @return The created event
      */
     public static PlayerResultDeterminedEvent createPlayerResultDeterminedEvent(
-            UUID roundId,
-            UUID gameId,
-            UUID playerId,
-            ResultDto result
+        UUID roundId,
+        UUID gameId,
+        UUID playerId,
+        ResultDto result
     ) {
         PlayerResultDeterminedEvent event = new PlayerResultDeterminedEvent();
         event =
-                (PlayerResultDeterminedEvent) initializeBaseEvent(
-                        event,
-                        "PlayerResultDetermined",
-                        "RoundService"
-                );
+            (PlayerResultDeterminedEvent) initializeBaseEvent(
+                event,
+                "PlayerResultDetermined",
+                "RoundService"
+            );
         event.setRoundId(roundId);
         event.setGameId(gameId);
         event.setPlayerId(playerId);
@@ -266,18 +269,18 @@ public class EventFactory {
      * @return The created event
      */
     public static PlayerResultIndeterminateEvent createPlayerResultIndeterminateEvent(
-            UUID roundId,
-            UUID gameId,
-            UUID playerId,
-            ResultStatus resultStatus
+        UUID roundId,
+        UUID gameId,
+        UUID playerId,
+        ResultStatus resultStatus
     ) {
         PlayerResultIndeterminateEvent event = new PlayerResultIndeterminateEvent();
         event =
-                (PlayerResultIndeterminateEvent) initializeBaseEvent(
-                        event,
-                        "PlayerResultIndeterminate",
-                        "RoundService"
-                );
+            (PlayerResultIndeterminateEvent) initializeBaseEvent(
+                event,
+                "PlayerResultIndeterminate",
+                "RoundService"
+            );
         event.setRoundId(roundId);
         event.setGameId(gameId);
         event.setPlayerId(playerId);

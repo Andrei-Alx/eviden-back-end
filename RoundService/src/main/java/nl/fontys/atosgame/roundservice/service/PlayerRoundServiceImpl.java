@@ -3,7 +3,7 @@ package nl.fontys.atosgame.roundservice.service;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-
+import nl.fontys.atosgame.roundservice.applicationevents.PlayerRoundFinishedAppEvent;
 import nl.fontys.atosgame.roundservice.dto.*;
 import nl.fontys.atosgame.roundservice.enums.PlayerRoundPhase;
 import nl.fontys.atosgame.roundservice.model.Card;
@@ -150,12 +150,9 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
         );
 
         // Check if playerRound is finished
-        // this.checkIfPlayerRoundIsFinished(playerRound); turned off so the round does not get started automatically. use cardcontroller/api/round/startnextround
-        if(playerRound.isDone()){
-            PlayerRoundEndedDto playerRoundEndedDto = new PlayerRoundEndedDto(gameId, roundId, playerRound.getPlayerId());
-            this.playerRoundIsFinished(playerRoundEndedDto);
+        if (playerRound.isDone()) {
+            this.endPlayerRound(playerRound);
         }
-
 
         if (previousPhase != currentPhase) {
             streamBridge.send(
@@ -182,12 +179,10 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
     }
 
     /**
-     * Check if a player round is finished and sends a kafka event if it is
-     * @param playerRoundEndedDto
+     * Check if a player round is finished and sends an application event if it is
+     * @param playerRound The player round to check
      */
-    public void playerRoundIsFinished(PlayerRoundEndedDto playerRoundEndedDto) {
-            streamBridge.send("producePlayerRoundEnded-in-0", playerRoundEndedDto);
-
-
+    public void endPlayerRound(PlayerRound playerRound) {
+        eventPublisher.publishEvent(new PlayerRoundFinishedAppEvent(this, playerRound));
     }
 }

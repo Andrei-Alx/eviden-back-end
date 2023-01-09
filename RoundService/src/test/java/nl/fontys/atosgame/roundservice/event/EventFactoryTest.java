@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import nl.fontys.atosgame.roundservice.dto.ResultDto;
 import nl.fontys.atosgame.roundservice.enums.ResultStatus;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
@@ -216,7 +215,7 @@ class EventFactoryTest {
     }
 
     @Test
-    void createPlayerResultDeterminedEvent(){
+    void createPlayerResultDeterminedEvent() {
         UUID roundId = UUID.randomUUID();
         UUID playerId = UUID.randomUUID();
         UUID gameId = UUID.randomUUID();
@@ -243,7 +242,7 @@ class EventFactoryTest {
     }
 
     @Test
-    void createPlayerResultIndeterminateEvent(){
+    void createPlayerResultIndeterminateEvent() {
         UUID roundId = UUID.randomUUID();
         UUID playerId = UUID.randomUUID();
         UUID gameId = UUID.randomUUID();

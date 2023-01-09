@@ -132,25 +132,25 @@ public class CardController {
 
     @PostMapping("/startnextround")
     @ApiResponses(
-            value = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Next round",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = CardSubmitRequestDto.class)
-                            )
-                    ),
-                    @ApiResponse(responseCode = "404", description = "Game not found"),
-                    @ApiResponse(responseCode = "500", description = "Internal server error"),
-            }
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "Next round",
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = CardSubmitRequestDto.class)
+                )
+            ),
+            @ApiResponse(responseCode = "404", description = "Game not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error"),
+        }
     )
     /**
      * R-22
      * This method starts the next round manually
      */
     public ResponseEntity startNextRound(
-            @RequestBody StartNextRoundDto startNextRoundDto
+        @RequestBody StartNextRoundDto startNextRoundDto
     ) {
         try {
             gameService.checkForNextRound(startNextRoundDto.getGameId());

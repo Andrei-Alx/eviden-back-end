@@ -1,14 +1,13 @@
 package nl.fontys.atosgame.roundservice.dto;
 
+import java.util.Collection;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.roundservice.enums.ResultStatus;
 import nl.fontys.atosgame.roundservice.enums.ShowResults;
 import nl.fontys.atosgame.roundservice.model.Tag;
-
-import java.util.Collection;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
