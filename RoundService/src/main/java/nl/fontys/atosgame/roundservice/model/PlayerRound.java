@@ -48,9 +48,7 @@ public class PlayerRound {
     @ManyToMany(cascade = { CascadeType.PERSIST })
     private List<Card> distributedCards = new ArrayList<>();
 
-    private int nrOfLikedCards;
-    private int nrOfSelectedCards;
-    private String importantTag;
+    private RoundSettings roundSettings;
 
     /**
      * Check if a playerRound is done.
@@ -59,8 +57,8 @@ public class PlayerRound {
      */
     public boolean isDone() {
         return (
-            likedCards.size() == nrOfLikedCards &&
-            selectedCards.size() == nrOfSelectedCards &&
+            likedCards.size() == roundSettings.getNrOfLikedCards() &&
+            selectedCards.size() == roundSettings.getNrOfSelectedCards() &&
             this.hasDeterminateResult()
         );
     }
@@ -70,9 +68,9 @@ public class PlayerRound {
      * @return The current phase of the playerRound.
      */
     public PlayerRoundPhase getPhase() {
-        if (likedCards.size() < nrOfLikedCards) {
+        if (likedCards.size() < roundSettings.getNrOfLikedCards()) {
             return PlayerRoundPhase.LIKING;
-        } else if (selectedCards.size() < nrOfSelectedCards) {
+        } else if (selectedCards.size() < roundSettings.getNrOfSelectedCards()) {
             return PlayerRoundPhase.PICKING;
         } else {
             return PlayerRoundPhase.RESULT;
@@ -88,7 +86,7 @@ public class PlayerRound {
         Map<String, Integer> tagCount = new HashMap<>();
         for (Card card : selectedCards) {
             for (Tag tag : card.getTags()) {
-                if (tag.getTagKey().equals(importantTag)) {
+                if (tag.getTagKey().equals(roundSettings.getCardSet().getImportantTag())) {
                     tagCount.put(
                         tag.getTagValue(),
                         tagCount.getOrDefault(tag.getTagValue(), 0) + 1

@@ -349,13 +349,13 @@ public class RoundServiceImpl implements RoundService {
         if (cardSet.isEmpty()) {
             throw new IllegalArgumentException("Card set not found");
         }
-        // Add round settings to round
-        round.setRoundSettings(settings);
-        // Save round
-        round = roundRepository.save(round);
-        // Add card set to round settings
+
         settings.setCardSet(cardSet.get());
 
+        // Add round settings to round
+        round.setRoundSettings(settings);
+
+        // Save round
         round = roundRepository.save(round);
 
         // Produce round created event
