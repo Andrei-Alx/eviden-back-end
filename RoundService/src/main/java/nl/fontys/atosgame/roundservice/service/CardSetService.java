@@ -2,6 +2,8 @@ package nl.fontys.atosgame.roundservice.service;
 
 import java.util.Optional;
 import java.util.UUID;
+
+import nl.fontys.atosgame.roundservice.enums.CardSetType;
 import nl.fontys.atosgame.roundservice.model.CardSet;
 
 public interface CardSetService {
@@ -29,4 +31,11 @@ public interface CardSetService {
      * @return The card set
      */
     Optional<CardSet> getCardSet(UUID uuid);
+
+    /**
+     * Get a card set by CardSetType
+     * @return the card set
+     */
+    CardSet getCardSetByTypeAndImportantTag(CardSetType type, String importantTag);
+    
 }
