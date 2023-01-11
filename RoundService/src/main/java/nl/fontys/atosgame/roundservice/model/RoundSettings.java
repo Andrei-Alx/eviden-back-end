@@ -29,7 +29,7 @@ public class RoundSettings {
     @JsonProperty
     private boolean showSameCardOrder;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "card_set_id")
     @JsonProperty
     private CardSet cardSet;

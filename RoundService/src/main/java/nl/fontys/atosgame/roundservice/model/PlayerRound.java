@@ -48,6 +48,7 @@ public class PlayerRound {
     @ManyToMany(cascade = { CascadeType.PERSIST })
     private List<Card> distributedCards = new ArrayList<>();
 
+    @Embedded
     private RoundSettings roundSettings;
 
     /**
