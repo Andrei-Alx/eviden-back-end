@@ -32,7 +32,11 @@ class CardSetServiceImplTest {
 
     @Test
     void createCardSetWithValidCardSet() {
-        CreateCardSetDto createCardSetDto = new CreateCardSetDto(CardSetType.GAME, null, "color");
+        CreateCardSetDto createCardSetDto = new CreateCardSetDto(
+            CardSetType.GAME,
+            null,
+            "color"
+        );
         Collection<Card> cards = mock(Collection.class);
         doReturn(cards).when(cardService).getCardsByIds(createCardSetDto.getCards());
         CardSet cardSet = new CardSet(
@@ -60,7 +64,7 @@ class CardSetServiceImplTest {
 
     @Test
     void updateCardSet() {
-        CardSet cardSet = new CardSet(UUID.randomUUID(), CardSetType.GAME, "color",null);
+        CardSet cardSet = new CardSet(UUID.randomUUID(), CardSetType.GAME, "color", null);
         doReturn(cardSet).when(cardSetRepository).save(any());
 
         CardSet result = cardSetService.updateCardSet(cardSet);

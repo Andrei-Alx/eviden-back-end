@@ -32,6 +32,15 @@ public class CardSeeder {
     @Value("classpath:data/cards/roundTwo.json")
     private Resource roundTwo;
 
+    @Value("classpath:data/cards/roundThree.json")
+    private Resource roundThree;
+
+    @Value("classpath:data/cards/roundOneAdvice.json")
+    private Resource roundOneAdvice;
+
+    @Value("classpath:data/cards/roundThreeAdvice.json")
+    private Resource roundThreeAdvice;
+
     public CardSeeder(
         @Autowired CardService cardService,
         @Autowired CardSetService cardSetService
@@ -51,12 +60,13 @@ public class CardSeeder {
         }
         // Create the card set
         CreateCardSetDto cardSet = new CreateCardSetDto(
-                CardSetType.GAME,
+            CardSetType.GAME,
             createdCards
                 .stream()
                 .map(Card::getId)
-                .collect(Collectors.toCollection(ArrayList::new))
-        ,"RoundOneCards");
+                .collect(Collectors.toCollection(ArrayList::new)),
+            "RoundOneCards"
+        );
         cardSetService.createCardSet(cardSet);
 
         // Do same for round two
@@ -71,8 +81,61 @@ public class CardSeeder {
                 createdCards
                     .stream()
                     .map(Card::getId)
-                    .collect(Collectors.toCollection(ArrayList::new))
-            , "RoundTwoCards");
+                    .collect(Collectors.toCollection(ArrayList::new)),
+                "RoundTwoCards"
+            );
+        cardSetService.createCardSet(cardSet);
+
+        // Do same for round three
+        cards = CardJsonReader.readCards(roundThree.getFile());
+        createdCards = new ArrayList<>();
+        for (CreateCardDto card : cards) {
+            createdCards.add(cardService.createCard(card));
+        }
+        cardSet =
+                new CreateCardSetDto(
+                        CardSetType.GAME,
+                        createdCards
+                                .stream()
+                                .map(Card::getId)
+                                .collect(Collectors.toCollection(ArrayList::new)),
+                        "RoundThreeCards"
+                );
+        cardSetService.createCardSet(cardSet);
+
+
+        // Do same for the round one results
+        cards = CardJsonReader.readCards(roundOneAdvice.getFile());
+        createdCards = new ArrayList<>();
+        for (CreateCardDto card : cards) {
+            createdCards.add(cardService.createCard(card));
+        }
+        cardSet =
+            new CreateCardSetDto(
+                CardSetType.ADVICE,
+                createdCards
+                    .stream()
+                    .map(Card::getId)
+                    .collect(Collectors.toCollection(ArrayList::new)),
+                "RoundOneAdviceCards"
+            );
+        cardSetService.createCardSet(cardSet);
+
+        // Do same for the round three results
+        cards = CardJsonReader.readCards(roundThreeAdvice.getFile());
+        createdCards = new ArrayList<>();
+        for (CreateCardDto card : cards) {
+            createdCards.add(cardService.createCard(card));
+        }
+        cardSet =
+                new CreateCardSetDto(
+                        CardSetType.ADVICE,
+                        createdCards
+                                .stream()
+                                .map(Card::getId)
+                                .collect(Collectors.toCollection(ArrayList::new)),
+                        "RoundThreeAdviceCards"
+                );
         cardSetService.createCardSet(cardSet);
     }
 }

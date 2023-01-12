@@ -61,7 +61,7 @@ public class PlayerRound {
         return (
             likedCards.size() == roundSettings.getNrOfLikedCards() &&
             selectedCards.size() == roundSettings.getNrOfSelectedCards()
-                //&& this.hasDeterminateResult()
+            //&& this.hasDeterminateResult()
         );
     }
 
@@ -88,7 +88,9 @@ public class PlayerRound {
         Map<String, Integer> tagCount = new HashMap<>();
         for (Card card : selectedCards) {
             for (Tag tag : card.getTags()) {
-                if (tag.getTagKey().equals(roundSettings.getCardSet().getImportantTag())) {
+                if (
+                    tag.getTagKey().equals(roundSettings.getCardSet().getImportantTag())
+                ) {
                     tagCount.put(
                         tag.getTagValue(),
                         tagCount.getOrDefault(tag.getTagValue(), 0) + 1
@@ -147,19 +149,20 @@ public class PlayerRound {
         String highestTagValue = null;
         for (String tagValue : tagCount.keySet()) {
             if (
-                highestTagValue == null || tagCount.get(tagValue) > tagCount.get(highestTagValue)
+                highestTagValue == null ||
+                tagCount.get(tagValue) > tagCount.get(highestTagValue)
             ) {
                 highestTagValue = tagValue;
             }
         }
         // get key from tag(s) with the highest count
         List<String> tagKeys = new ArrayList<>();
-        for (String tagValue : tagCount.keySet()){
-            if (tagCount.get(tagValue).equals(tagCount.get(highestTagValue))){
+        for (String tagValue : tagCount.keySet()) {
+            if (tagCount.get(tagValue).equals(tagCount.get(highestTagValue))) {
                 tagKeys.add(tagValue);
             }
         }
-        
+
         return tagKeys;
     }
 
