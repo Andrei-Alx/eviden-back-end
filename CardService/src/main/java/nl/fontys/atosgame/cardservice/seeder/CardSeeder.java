@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
 import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
+import nl.fontys.atosgame.cardservice.enums.CardSetType;
 import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.service.CardService;
 import nl.fontys.atosgame.cardservice.service.CardSetService;
@@ -50,13 +51,12 @@ public class CardSeeder {
         }
         // Create the card set
         CreateCardSetDto cardSet = new CreateCardSetDto(
-            "RoundOneCards",
-            "",
+                CardSetType.GAME,
             createdCards
                 .stream()
                 .map(Card::getId)
                 .collect(Collectors.toCollection(ArrayList::new))
-        ,"color");
+        ,"RoundOneCards");
         cardSetService.createCardSet(cardSet);
 
         // Do same for round two
@@ -67,13 +67,12 @@ public class CardSeeder {
         }
         cardSet =
             new CreateCardSetDto(
-                "RoundTwoCards",
-                "",
+                CardSetType.GAME,
                 createdCards
                     .stream()
                     .map(Card::getId)
                     .collect(Collectors.toCollection(ArrayList::new))
-            , "color");
+            , "RoundTwoCards");
         cardSetService.createCardSet(cardSet);
     }
 }

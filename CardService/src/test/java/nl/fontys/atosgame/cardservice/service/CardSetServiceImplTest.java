@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import java.util.Collection;
 import java.util.UUID;
 import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
+import nl.fontys.atosgame.cardservice.enums.CardSetType;
 import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.model.CardSet;
 import nl.fontys.atosgame.cardservice.repository.CardSetRepository;
@@ -31,12 +32,11 @@ class CardSetServiceImplTest {
 
     @Test
     void createCardSetWithValidCardSet() {
-        CreateCardSetDto createCardSetDto = new CreateCardSetDto("name", "type", null, "color");
+        CreateCardSetDto createCardSetDto = new CreateCardSetDto(CardSetType.GAME, null, "color");
         Collection<Card> cards = mock(Collection.class);
         doReturn(cards).when(cardService).getCardsByIds(createCardSetDto.getCards());
         CardSet cardSet = new CardSet(
             UUID.randomUUID(),
-            createCardSetDto.getName(),
             createCardSetDto.getType(),
             "color",
             cards
@@ -60,7 +60,7 @@ class CardSetServiceImplTest {
 
     @Test
     void updateCardSet() {
-        CardSet cardSet = new CardSet(UUID.randomUUID(), "name", "type", "color",null);
+        CardSet cardSet = new CardSet(UUID.randomUUID(), CardSetType.GAME, "color",null);
         doReturn(cardSet).when(cardSetRepository).save(any());
 
         CardSet result = cardSetService.updateCardSet(cardSet);

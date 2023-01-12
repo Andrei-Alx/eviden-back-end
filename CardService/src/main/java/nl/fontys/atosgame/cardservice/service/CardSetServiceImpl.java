@@ -43,7 +43,6 @@ public class CardSetServiceImpl implements CardSetService {
         Collection<Card> cards = cardService.getCardsByIds(createCardSetDto.getCards());
         CardSet cardSet = new CardSet(
             null,
-            createCardSetDto.getName(),
             createCardSetDto.getType(),
             createCardSetDto.getImportantTag(),
             cards

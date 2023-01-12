@@ -7,6 +7,7 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.fontys.atosgame.roundservice.enums.CardSetType;
 import org.hibernate.annotations.Type;
 
 @Data
@@ -31,4 +32,8 @@ public class CardSet {
 
     @JsonProperty
     private String importantTag;
+
+    @JsonProperty
+    @Enumerated(EnumType.STRING)
+    private CardSetType type;
 }

@@ -23,7 +23,7 @@ public class CardSet {
     private UUID id;
 
     @JsonProperty
-    private String name;
+    private String importantTag;
 
     @JsonProperty
     private String type;
