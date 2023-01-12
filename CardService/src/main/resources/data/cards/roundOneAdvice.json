@@ -1,0 +1,20 @@
+[
+  {
+    "tags": [
+      {
+        "tagKey": "Color",
+        "tagValue": "Groen"
+      }
+    ],
+    "translations": [
+      {
+        "language": "nl",
+        "text": "Advies"
+      },
+      {
+        "language": "en",
+        "text": "Advice"
+      }
+    ]
+  }
+  ]
