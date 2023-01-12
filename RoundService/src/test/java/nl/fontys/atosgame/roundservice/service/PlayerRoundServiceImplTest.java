@@ -12,6 +12,7 @@ import nl.fontys.atosgame.roundservice.event.produced.PlayerDislikedCard;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerLikedCard;
 import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
+import nl.fontys.atosgame.roundservice.model.RoundSettings;
 import nl.fontys.atosgame.roundservice.repository.PlayerRoundRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,6 +56,9 @@ class PlayerRoundServiceImplTest {
         when(cardService.getCard(cardId)).thenReturn(Optional.of(card));
         when(playerRoundRepository.save(any()))
             .thenAnswer(invocation -> invocation.getArgument(0));
+        RoundSettings roundSettings = new RoundSettings();
+        roundSettings.setNrOfLikedCards(1);
+        playerRound.setRoundSettings(roundSettings);
 
         PlayerRound result = playerRoundService.likeCard(
             playerRound,
@@ -146,6 +150,10 @@ class PlayerRoundServiceImplTest {
         when(cardService.getCards(cardIds)).thenReturn(List.of(card1, card2));
         when(playerRoundRepository.save(any()))
             .thenAnswer(invocation -> invocation.getArgument(0));
+        RoundSettings roundSettings = new RoundSettings();
+        roundSettings.setNrOfLikedCards(2);
+        roundSettings.setNrOfSelectedCards(2);
+        playerRound.setRoundSettings(roundSettings);
 
         PlayerRound result = playerRoundService.selectCards(
             playerRound,
