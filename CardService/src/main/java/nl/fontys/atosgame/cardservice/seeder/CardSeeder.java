@@ -60,13 +60,12 @@ public class CardSeeder {
         }
         // Create the card set
         CreateCardSetDto cardSet = new CreateCardSetDto(
-            CardSetType.GAME,
+                CardSetType.GAME,
             createdCards
                 .stream()
                 .map(Card::getId)
-                .collect(Collectors.toCollection(ArrayList::new)),
-            "RoundOneCards"
-        );
+                .collect(Collectors.toCollection(ArrayList::new))
+        ,"RoundOneCards");
         cardSetService.createCardSet(cardSet);
 
         // Do same for round two
