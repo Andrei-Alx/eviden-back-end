@@ -1,0 +1,164 @@
+[
+  {
+    "tags": [
+      {
+        "tagKey": "Model",
+        "tagValue": "Diversification"
+      }
+    ],
+    "translations": [
+      {
+        "language": "nl",
+        "text": "provide economies of scale in infrastructure without limiting independence"
+      },
+      {
+        "language": "en",
+        "text": "provide economies of scale in infrastructure without limiting independence"
+      }
+    ]
+  },
+  {
+    "tags": [
+      {
+        "tagKey": "Model",
+        "tagValue": "Diversification"
+      }
+    ],
+    "translations": [
+      {
+        "language": "nl",
+        "text": "Shared services on infrastructure e.g. workplace standardisation, data centers, "
+      },
+      {
+        "language": "en",
+        "text": "Shared services on infrastructure e.g. workplace standardisation, data centers, "
+      }
+    ]
+  },
+  {
+    "tags": [
+      {
+        "tagKey": "Model",
+        "tagValue": "Replication"
+      }
+    ],
+    "translations": [
+      {
+        "language": "nl",
+        "text": "provide standard infrastructure and application components for global efficiencies"
+      },
+      {
+        "language": "en",
+        "text": "provide standard infrastructure and application components for global efficiencies"
+      }
+    ]
+  },
+  {
+    "tags": [
+      {
+        "tagKey": "Model",
+        "tagValue": "Replication"
+      }
+    ],
+    "translations": [
+      {
+        "language": "nl",
+        "text": "Install one application for the same processen"
+      },
+      {
+        "language": "en",
+        "text": "Install one application for the same processen"
+      }
+    ]
+  },
+  {
+    "tags": [
+      {
+        "tagKey": "Model",
+        "tagValue": "Coordination"
+      }
+    ],
+    "translations": [
+      {
+        "language": "nl",
+        "text": "Access to shared data, through standard technology interfaces, eg. enterprise service bus"
+      },
+      {
+        "language": "en",
+        "text": "Access to shared data, through standard technology interfaces, eg. enterprise service bus"
+      }
+    ]
+  },
+  {
+    "tags": [
+      {
+        "tagKey": "Model",
+        "tagValue": "Coordination"
+      }
+    ],
+    "translations": [
+      {
+        "language": "nl",
+        "text": "Integrated view of customer data"
+      },
+      {
+        "language": "en",
+        "text": "Integrated view of customer data"
+      }
+    ]
+  },
+  {
+    "tags": [
+      {
+        "tagKey": "Model",
+        "tagValue": "Coordination"
+      }
+    ],
+    "translations": [
+      {
+        "language": "nl",
+        "text": "centralize data stores"
+      },
+      {
+        "language": "en",
+        "text": "centralize data stores"
+      }
+    ]
+  },
+  {
+    "tags": [
+      {
+        "tagKey": "Model",
+        "tagValue": "Unification"
+      }
+    ],
+    "translations": [
+      {
+        "language": "nl",
+        "text": "enterprise systems reinforcing standard processes and providing global data access"
+      },
+      {
+        "language": "en",
+        "text": "enterprise systems reinforcing standard processes and providing global data access"
+      }
+    ]
+  },
+  {
+    "tags": [
+      {
+        "tagKey": "Model",
+        "tagValue": "Unification"
+      }
+    ],
+    "translations": [
+      {
+        "language": "nl",
+        "text": "Centralize the proces an data design"
+      },
+      {
+        "language": "en",
+        "text": "Centralize the proces an data design"
+      }
+    ]
+  }
+]
