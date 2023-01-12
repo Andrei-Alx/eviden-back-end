@@ -6,6 +6,10 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.fontys.atosgame.cardservice.enums.CardSetType;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Data
 @AllArgsConstructor
@@ -16,7 +20,8 @@ public class CreateCardSetDto {
     private String name;
 
     @JsonProperty
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private CardSetType type;
 
     @JsonProperty
     private Collection<UUID> cards;

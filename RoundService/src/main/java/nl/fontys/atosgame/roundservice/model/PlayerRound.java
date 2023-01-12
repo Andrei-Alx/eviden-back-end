@@ -87,7 +87,9 @@ public class PlayerRound {
         Map<String, Integer> tagCount = new HashMap<>();
         for (Card card : selectedCards) {
             for (Tag tag : card.getTags()) {
-                if (tag.getTagKey().equals(roundSettings.getCardSet().getImportantTag())) {
+                if (
+                    tag.getTagKey().equals(roundSettings.getCardSet().getImportantTag())
+                ) {
                     tagCount.put(
                         tag.getTagValue(),
                         tagCount.getOrDefault(tag.getTagValue(), 0) + 1
