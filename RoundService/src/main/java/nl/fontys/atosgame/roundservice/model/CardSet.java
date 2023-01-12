@@ -7,7 +7,8 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nl.fontys.atosgame.roundservice.enums.CardSetType;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
 
 @Data
@@ -21,6 +22,10 @@ public class CardSet {
     @JsonProperty
     private UUID id;
 
+
+    @JsonProperty
+    private String name;
+
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(
         name = "card_set_cards",
@@ -28,12 +33,11 @@ public class CardSet {
         inverseJoinColumns = @JoinColumn(name = "cards_id")
     )
     @JsonProperty
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Card> cards = new java.util.ArrayList<>();
 
     @JsonProperty
-    private String importantTag;
-
-    @JsonProperty
-    @Enumerated(EnumType.STRING)
-    private CardSetType type;
+    @ElementCollection()
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private Collection<Tag> tags;
 }

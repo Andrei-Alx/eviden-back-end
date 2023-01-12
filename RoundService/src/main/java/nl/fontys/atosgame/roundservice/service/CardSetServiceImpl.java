@@ -1,10 +1,9 @@
 package nl.fontys.atosgame.roundservice.service;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
-import nl.fontys.atosgame.roundservice.enums.CardSetType;
 import nl.fontys.atosgame.roundservice.model.CardSet;
+import nl.fontys.atosgame.roundservice.model.Tag;
 import nl.fontys.atosgame.roundservice.repository.CardSetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,7 +64,16 @@ public class CardSetServiceImpl implements CardSetService {
      * Get a card set by CardSetType
      * @return the card set
      */
-    public CardSet getCardSetByTypeAndImportantTag(CardSetType type, String importantTag) {
-        return cardSetRepository.findByTypeAndImportantTag(type, importantTag);
+    public CardSet getCardSetByTags(Set<Tag> tags) {
+        return cardSetRepository.findCardSetByTagsIn(tags);
+    }
+
+
+    /**
+     * Get all card sets
+     */
+
+    public List<CardSet> getAllCardSets() {
+        return cardSetRepository.findAll();
     }
 }

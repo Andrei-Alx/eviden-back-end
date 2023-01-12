@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import nl.fontys.atosgame.roundservice.enums.PlayerRoundPhase;
+import nl.fontys.atosgame.roundservice.enums.TagType;
 import org.junit.jupiter.api.Test;
 
 class PlayerRoundTest {
@@ -401,9 +402,9 @@ class PlayerRoundTest {
         Card cardRed1 = new Card();
         Card cardRed2 = new Card();
         List<Tag> tagsBlue = new ArrayList<>();
-        tagsBlue.add(new Tag("Color", "Blauw"));
+        tagsBlue.add(new Tag(TagType.COLOR, "Blauw"));
         List<Tag> tagsRed = new ArrayList<>();
-        tagsRed.add(new Tag("Color", "Rood"));
+        tagsRed.add(new Tag(TagType.COLOR, "Rood"));
         cardBlue.setTags(tagsBlue);
         cardRed1.setTags(tagsRed);
         cardRed2.setTags(tagsRed);
@@ -433,9 +434,9 @@ class PlayerRoundTest {
         Card cardRed1 = new Card();
         Card cardRed2 = new Card();
         List<Tag> tagsBlue = new ArrayList<>();
-        tagsBlue.add(new Tag("Color", "Blauw"));
+        tagsBlue.add(new Tag(TagType.COLOR, "Blauw"));
         List<Tag> tagsRed = new ArrayList<>();
-        tagsRed.add(new Tag("Color", "Rood"));
+        tagsRed.add(new Tag(TagType.COLOR, "Rood"));
         cardBlue1.setTags(tagsBlue);
         cardBlue2.setTags(tagsBlue);
         cardRed1.setTags(tagsRed);
@@ -467,9 +468,9 @@ class PlayerRoundTest {
         Card cardBlue2 = new Card();
         Card cardRed1 = new Card();
         List<Tag> tagsBlue = new ArrayList<>();
-        tagsBlue.add(new Tag("Color", "Blauw"));
+        tagsBlue.add(new Tag(TagType.COLOR, "Blauw"));
         List<Tag> tagsRed = new ArrayList<>();
-        tagsRed.add(new Tag("Color", "Rood"));
+        tagsRed.add(new Tag(TagType.COLOR, "Rood"));
         cardBlue1.setTags(tagsBlue);
         cardBlue2.setTags(tagsBlue);
         cardRed1.setTags(tagsRed);

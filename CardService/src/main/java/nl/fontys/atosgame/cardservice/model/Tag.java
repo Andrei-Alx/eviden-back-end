@@ -2,11 +2,11 @@ package nl.fontys.atosgame.cardservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.fontys.atosgame.cardservice.enums.TagType;
 
 @Data
 @AllArgsConstructor
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class Tag {
 
     @JsonProperty
-    private String tagKey;
+    private TagType tagKey;
 
     @JsonProperty
     private String tagValue;

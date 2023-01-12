@@ -8,8 +8,10 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
+
 import nl.fontys.atosgame.gameappbff.model.Card;
 import nl.fontys.atosgame.gameappbff.model.CardSet;
+import nl.fontys.atosgame.gameappbff.model.Tag;
 import nl.fontys.atosgame.gameappbff.repository.CardSetRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,9 +34,9 @@ class CardSetServiceImplTest {
     void createCardSet() {
         UUID cardSetId = UUID.randomUUID();
         String name = "testCardSet";
-        String type = "testType";
         Collection<Card> cards = new ArrayList<>();
-        CardSet cardSet = new CardSet(cardSetId, name, type, cards);
+        Collection<Tag> tags = new ArrayList<>();
+        CardSet cardSet = new CardSet(cardSetId, name, cards, tags);
 
         cardSetService.handleCardSetCreated(cardSet);
 
@@ -47,7 +49,8 @@ class CardSetServiceImplTest {
         String name = "testCardSet";
         String type = "testType";
         Collection<Card> cards = new ArrayList<>();
-        CardSet cardSet = new CardSet(cardSetId, name, type, cards);
+        Collection<Tag> tags = new ArrayList<>();
+        CardSet cardSet = new CardSet(cardSetId, name, cards, tags);
 
         cardSetService.handleCardSetUpdated(cardSet);
 
@@ -60,7 +63,8 @@ class CardSetServiceImplTest {
         String name = "testCardSet";
         String type = "testType";
         Collection<Card> cards = new ArrayList<>();
-        CardSet cardSet = new CardSet(cardSetId, name, type, cards);
+        Collection<Tag> tags = new ArrayList<>();
+        CardSet cardSet = new CardSet(cardSetId, name, cards, tags);
         cardSetService.handleCardSetCreated(cardSet);
 
         cardSetService.handleCardSetDeleted(cardSetId);

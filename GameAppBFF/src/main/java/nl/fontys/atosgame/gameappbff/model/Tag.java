@@ -5,6 +5,7 @@ import javax.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.fontys.atosgame.gameappbff.enums.TagType;
 
 @Data
 @AllArgsConstructor
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class Tag {
 
     @JsonProperty
-    private String tagKey;
+    private TagType tagKey;
 
     @JsonProperty
     private String tagValue;

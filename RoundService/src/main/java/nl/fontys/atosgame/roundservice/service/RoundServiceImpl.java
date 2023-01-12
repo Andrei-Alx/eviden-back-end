@@ -11,10 +11,9 @@ import nl.fontys.atosgame.roundservice.dto.ResultDto;
 import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
-import nl.fontys.atosgame.roundservice.enums.CardSetType;
-import nl.fontys.atosgame.roundservice.enums.ResultStatus;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.enums.ShowResults;
+import nl.fontys.atosgame.roundservice.enums.TagType;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.model.*;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
@@ -304,12 +303,40 @@ public class RoundServiceImpl implements RoundService {
 
 
                     // get the importantTag
-                    String importantTag = playerRound.getRoundSettings().getCardSet().getImportantTag();
+                    String importantTagValue = playerRound.getRoundSettings().getCardSet().getTags().stream().filter(tag -> tag.getTagKey() == TagType.IMPORTANT_TAG).findFirst().get().getTagValue();
+                    Tag importantTag = new Tag(TagType.IMPORTANT_TAG, importantTagValue);
 
-                    CardSet cardSet = cardSetService.getCardSetByTypeAndImportantTag(CardSetType.ADVICE, importantTag);
+                    // Type is advice
+                    Tag adviceTag = new Tag(TagType.TYPE, "advice");
+
+                    // group or personal
+                    String groupOrPersonalTagValue = playerRound.getRoundSettings().getCardSet().getTags().stream().filter(tag -> tag.getTagKey() == TagType.GROUP_OR_PERSONAL).findFirst().get().getTagValue();
+                    Tag groupOrPersonalTag = new Tag(TagType.GROUP_OR_PERSONAL, groupOrPersonalTagValue);
+
+                    List<Tag> tags = new ArrayList<>();
+                    tags.add(importantTag);
+                    tags.add(adviceTag);
+                    tags.add(groupOrPersonalTag);
+
+
+                    // get all cardSets
+                    List<CardSet> cardSet = cardSetService.getAllCardSets();
+
+                    // get the cardSet that matches the tags
+                    CardSet cardSetToUse = cardSet.stream().filter(cardSet1 -> cardSet1.getTags().containsAll(tags)).findFirst().get();
 
                     // advice cards that match the result cards
-                    List<Card> adviceCards = cardSet.getCards().stream().filter(card -> card.getTags().stream().map(Tag::getTagValue).collect(Collectors.toList()).containsAll(result)).collect(Collectors.toList());
+                    List<Card> allAdviceCards = new ArrayList<>(cardSetToUse.getCards());
+                    List<Card> adviceCards = allAdviceCards
+                            .stream()
+                            .filter(card ->
+                                    card.getTags()
+                                            .stream()
+                                            .anyMatch(tag ->
+                                                    result.stream()
+                                                            .anyMatch(tag.getTagValue()::equals)
+                                            )
+                            ).collect(Collectors.toList());
 
                     // roundSettings showResult
                     ShowResults showResults = playerRound.getRoundSettings().getShowPersonalOrGroupResults();
@@ -321,7 +348,8 @@ public class RoundServiceImpl implements RoundService {
                             playerRound.getPlayerId(),
                             showResults,
                             result,
-                            selectedCards, adviceCards
+                            selectedCards,
+                            adviceCards
                     );
 
 

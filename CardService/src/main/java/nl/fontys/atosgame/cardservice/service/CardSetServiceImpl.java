@@ -2,9 +2,11 @@ package nl.fontys.atosgame.cardservice.service;
 
 import java.util.Collection;
 import java.util.UUID;
+
 import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
 import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.model.CardSet;
+import nl.fontys.atosgame.cardservice.model.Tag;
 import nl.fontys.atosgame.cardservice.repository.CardSetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
  * Service that handles all card set requests
  * calls the repository to store the card set in the database
  * and sends a message to the event bus
+ *
  * @author Eli
  */
 @Service
@@ -24,9 +27,9 @@ public class CardSetServiceImpl implements CardSetService {
     private StreamBridge streamBridge;
 
     public CardSetServiceImpl(
-        @Autowired CardSetRepository cardSetRepository,
-        @Autowired CardService cardService,
-        @Autowired StreamBridge streamBridge
+            @Autowired CardSetRepository cardSetRepository,
+            @Autowired CardService cardService,
+            @Autowired StreamBridge streamBridge
     ) {
         this.cardSetRepository = cardSetRepository;
         this.cardService = cardService;
@@ -35,6 +38,7 @@ public class CardSetServiceImpl implements CardSetService {
 
     /**
      * Creates a card set and sends a message to the event bus
+     *
      * @param createCardSetDto the card set to create
      * @return the created card set
      */
@@ -42,10 +46,10 @@ public class CardSetServiceImpl implements CardSetService {
     public CardSet createCardSet(CreateCardSetDto createCardSetDto) {
         Collection<Card> cards = cardService.getCardsByIds(createCardSetDto.getCards());
         CardSet cardSet = new CardSet(
-            null,
-            createCardSetDto.getType(),
-            createCardSetDto.getImportantTag(),
-            cards
+                null,
+                createCardSetDto.getName(),
+                cards,
+                createCardSetDto.getTags()
         );
 
         cardSet = cardSetRepository.save(cardSet);
@@ -55,6 +59,7 @@ public class CardSetServiceImpl implements CardSetService {
 
     /**
      * Deletes a card set and sends a message to the event bus
+     *
      * @param id the id of the card set to delete
      */
     @Override
@@ -65,6 +70,7 @@ public class CardSetServiceImpl implements CardSetService {
 
     /**
      * Updates a card set and sends a message to the event bus
+     *
      * @param cardSet the card set to update
      * @return the updated card set
      */
