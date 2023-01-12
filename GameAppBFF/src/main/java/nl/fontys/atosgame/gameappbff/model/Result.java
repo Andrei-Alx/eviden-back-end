@@ -36,16 +36,16 @@ public class Result {
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
     @JsonProperty
-    private List<String> results = new java.util.ArrayList<>();
+    private List<String> result = new java.util.ArrayList<>();
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ElementCollection
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JsonProperty
     @Type(type = "org.hibernate.type.ListType")
     private List<Card> chosenCards = new ArrayList<>();
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ElementCollection
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JsonProperty
     @Type(type = "org.hibernate.type.ListType")
     private List<Card> adviceCards = new ArrayList<>();
