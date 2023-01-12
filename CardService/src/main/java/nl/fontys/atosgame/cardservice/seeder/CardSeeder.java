@@ -29,8 +29,13 @@ public class CardSeeder {
     @Value("classpath:data/cards/roundOne.json")
     private Resource roundOne;
 
+    @Value("classpath:data/cards/roundOneAdvice.json")
+    private Resource roundOneAdvice;
+
     @Value("classpath:data/cards/roundTwo.json")
     private Resource roundTwo;
+
+
 
     public CardSeeder(
         @Autowired CardService cardService,
@@ -57,6 +62,22 @@ public class CardSeeder {
                 .map(Card::getId)
                 .collect(Collectors.toCollection(ArrayList::new))
         ,"RoundOneCards");
+        cardSetService.createCardSet(cardSet);
+
+        // Card set for round one advice cards
+        cards = CardJsonReader.readCards(roundOneAdvice.getFile());
+        createdCards = new ArrayList<>();
+        for (CreateCardDto card : cards) {
+            createdCards.add(cardService.createCard(card));
+        }
+        cardSet =
+                new CreateCardSetDto(
+                        CardSetType.ADVICE,
+                        createdCards
+                                .stream()
+                                .map(Card::getId)
+                                .collect(Collectors.toCollection(ArrayList::new))
+                        , "RoundOneCards");
         cardSetService.createCardSet(cardSet);
 
         // Do same for round two
