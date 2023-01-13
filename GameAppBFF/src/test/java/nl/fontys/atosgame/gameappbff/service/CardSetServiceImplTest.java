@@ -8,7 +8,6 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
-
 import nl.fontys.atosgame.gameappbff.model.Card;
 import nl.fontys.atosgame.gameappbff.model.CardSet;
 import nl.fontys.atosgame.gameappbff.model.Tag;

@@ -64,7 +64,7 @@ public class ResultServiceImpl implements ResultService {
      * @param roundId The id of the round
      * @return all playerRoundResults of a round
      */
-    public Optional<List<PlayerRoundResult>> getPlayerRoundResults(UUID roundId){
+    public Optional<List<PlayerRoundResult>> getPlayerRoundResults(UUID roundId) {
         return playerRoundResultRepository.findAllByRoundId(roundId);
     }
 

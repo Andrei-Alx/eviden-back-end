@@ -1,7 +1,6 @@
 package nl.fontys.atosgame.roundservice.service;
 
 import java.util.*;
-
 import nl.fontys.atosgame.roundservice.model.CardSet;
 import nl.fontys.atosgame.roundservice.model.Tag;
 import nl.fontys.atosgame.roundservice.repository.CardSetRepository;
@@ -59,7 +58,6 @@ public class CardSetServiceImpl implements CardSetService {
         return cardSetRepository.findById(uuid);
     }
 
-
     /**
      * Get a card set by CardSetType
      * @return the card set
@@ -67,7 +65,6 @@ public class CardSetServiceImpl implements CardSetService {
     public CardSet getCardSetByTags(Set<Tag> tags) {
         return cardSetRepository.findCardSetByTagsIn(tags);
     }
-
 
     /**
      * Get all card sets

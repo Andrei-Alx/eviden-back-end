@@ -3,12 +3,10 @@ package nl.fontys.atosgame.gameappbff.controller;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 import nl.fontys.atosgame.gameappbff.dto.PlayerDto;
 import nl.fontys.atosgame.gameappbff.dto.ResultCardDto;
 import nl.fontys.atosgame.gameappbff.dto.ResultDto;
@@ -36,8 +34,10 @@ public class ResultController {
 
     private final GameService gameService;
 
-
-    private ResultController(@Autowired ResultService resultService, @Autowired GameService gameService) {
+    private ResultController(
+        @Autowired ResultService resultService,
+        @Autowired GameService gameService
+    ) {
         this.resultService = resultService;
         this.gameService = gameService;
     }
@@ -50,30 +50,43 @@ public class ResultController {
      */
     @GetMapping("/phase3")
     @ApiResponses(
-            value = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Getting a player round results ",
-                            content = @Content(mediaType = "application/json")
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Player round results not found"
-                    ),
-            }
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "Getting a player round results ",
+                content = @Content(mediaType = "application/json")
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "Player round results not found"
+            ),
+        }
     )
     public ResponseEntity<List<ResultDto>> getPlayerRoundResult(
-            @RequestParam UUID roundId,
-            @RequestParam UUID gameId
+        @RequestParam UUID roundId,
+        @RequestParam UUID gameId
     ) {
-        Optional<List<PlayerRoundResult>> playerResults = resultService.getPlayerRoundResults(roundId);
+        Optional<List<PlayerRoundResult>> playerResults = resultService.getPlayerRoundResults(
+            roundId
+        );
 
         // get player
-        List<Player> players = new ArrayList<>(gameService.getGame(gameId).get().getLobby().getPlayers());
+        List<Player> players = new ArrayList<>(
+            gameService.getGame(gameId).get().getLobby().getPlayers()
+        );
         List<ResultDto> results = new ArrayList<>();
-        for (PlayerRoundResult playerRoundResult: playerResults.get()) {
+        for (PlayerRoundResult playerRoundResult : playerResults.get()) {
             // get player from players list with playerRoundResult playerId
-            PlayerDto playerDto = new PlayerDto(players.stream().filter(player -> player.getId().equals(playerRoundResult.getPlayerId())).findFirst().get().getName());
+            PlayerDto playerDto = new PlayerDto(
+                players
+                    .stream()
+                    .filter(player ->
+                        player.getId().equals(playerRoundResult.getPlayerId())
+                    )
+                    .findFirst()
+                    .get()
+                    .getName()
+            );
 
             // get the showResults
             ShowResults showResults = playerRoundResult.getResult().getType();
@@ -85,22 +98,46 @@ public class ResultController {
             List<Card> chosenCards = playerRoundResult.getResult().getChosenCards();
             // convert to ResultCardDto
             List<ResultCardDto> chosenCardsDto = new ArrayList<>();
-            for (Card card: chosenCards) {
-                for (Translation translation: card.getTranslations()) {
-                    chosenCardsDto.add(new ResultCardDto(card.getTags().stream().findFirst().get().getTagValue(), translation.getText(), translation.getLanguage()));
+            for (Card card : chosenCards) {
+                for (Translation translation : card.getTranslations()) {
+                    chosenCardsDto.add(
+                        new ResultCardDto(
+                            card.getTags().stream().findFirst().get().getTagValue(),
+                            translation.getText(),
+                            translation.getLanguage()
+                        )
+                    );
                 }
             }
 
             // get the advice cards
             List<Card> adviceCards = playerRoundResult.getResult().getAdviceCards();
             List<ResultCardDto> adviceCardsDto = new ArrayList<>();
-            for (Card card: adviceCards) {
-                for (Translation translation: card.getTranslations()) {
-                    adviceCardsDto.add(new ResultCardDto(card.getTags().stream().findFirst().get().getTagValue(), translation.getText(), translation.getLanguage()));
+            for (Card card : adviceCards) {
+                for (Translation translation : card.getTranslations()) {
+                    adviceCardsDto.add(
+                        new ResultCardDto(
+                            card.getTags().stream().findFirst().get().getTagValue(),
+                            translation.getText(),
+                            translation.getLanguage()
+                        )
+                    );
                 }
             }
 
-            results.add(Optional.of(new ResultDto(playerDto, showResults, playerRoundResults, chosenCardsDto, adviceCardsDto)).get());
+            results.add(
+                Optional
+                    .of(
+                        new ResultDto(
+                            playerDto,
+                            showResults,
+                            playerRoundResults,
+                            chosenCardsDto,
+                            adviceCardsDto
+                        )
+                    )
+                    .get()
+            );
         }
 
         return ResponseEntity.ok(results);

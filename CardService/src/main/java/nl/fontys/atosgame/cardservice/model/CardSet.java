@@ -37,7 +37,7 @@ public class CardSet {
     private Collection<Card> cards = new java.util.ArrayList<>();
 
     @JsonProperty
-    @ElementCollection()
+    @ElementCollection
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Tag> tags;
 }

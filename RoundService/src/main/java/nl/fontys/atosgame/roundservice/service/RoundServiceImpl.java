@@ -3,7 +3,6 @@ package nl.fontys.atosgame.roundservice.service;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
-
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
 import nl.fontys.atosgame.roundservice.dto.PlayerPhaseStartedDto;
 import nl.fontys.atosgame.roundservice.dto.PlayerResultDeterminedDto;
@@ -43,12 +42,12 @@ public class RoundServiceImpl implements RoundService {
     private StreamBridge streamBridge;
 
     public RoundServiceImpl(
-            @Autowired RoundRepository roundRepository,
-            @Autowired CardSetService cardSetService,
-            @Autowired StreamBridge streamBridge,
-            @Autowired PlayerRoundService playerRoundService,
-            @Autowired RoundLogicService roundLogicService,
-            @Autowired ApplicationEventPublisher eventPublisher
+        @Autowired RoundRepository roundRepository,
+        @Autowired CardSetService cardSetService,
+        @Autowired StreamBridge streamBridge,
+        @Autowired PlayerRoundService playerRoundService,
+        @Autowired RoundLogicService roundLogicService,
+        @Autowired ApplicationEventPublisher eventPublisher
     ) {
         this.roundRepository = roundRepository;
         this.cardSetService = cardSetService;
@@ -109,31 +108,31 @@ public class RoundServiceImpl implements RoundService {
 
         // Send round started event
         streamBridge.send(
-                "produceRoundStarted-in-0",
-                new RoundStartedDto(gameId, roundId)
+            "produceRoundStarted-in-0",
+            new RoundStartedDto(gameId, roundId)
         );
 
         // TODO: send distributed cards events with P-19 (and add to unit test)
         for (PlayerRound playerRound : round.getPlayerRounds()) {
             streamBridge.send(
-                    "producePlayerCardsDistributed-in-0",
-                    new CardsDistributedDto(
-                            roundId,
-                            playerRound
-                                    .getDistributedCards()
-                                    .stream()
-                                    .map(Card::getId)
-                                    .collect(Collectors.toList()),
-                            playerRound.getPlayerId(),
-                            gameId
-                    )
+                "producePlayerCardsDistributed-in-0",
+                new CardsDistributedDto(
+                    roundId,
+                    playerRound
+                        .getDistributedCards()
+                        .stream()
+                        .map(Card::getId)
+                        .collect(Collectors.toList()),
+                    playerRound.getPlayerId(),
+                    gameId
+                )
             );
         }
 
         for (PlayerRound playerRound : round.getPlayerRounds()) {
             streamBridge.send(
-                    "producePlayerPhaseStarted-in-0",
-                    new PlayerPhaseStartedDto(0, playerRound.getPlayerId(), gameId, roundId)
+                "producePlayerPhaseStarted-in-0",
+                new PlayerPhaseStartedDto(0, playerRound.getPlayerId(), gameId, roundId)
             );
         }
 
@@ -151,8 +150,8 @@ public class RoundServiceImpl implements RoundService {
     public Round endRound(UUID roundId, UUID gameId) {
         // Get the round
         Round round = roundRepository
-                .findById(roundId)
-                .orElseThrow(EntityNotFoundException::new);
+            .findById(roundId)
+            .orElseThrow(EntityNotFoundException::new);
 
         // Change the status of the round to Finished and send event
         round.setStatus(RoundStatus.FINISHED);
@@ -191,10 +190,10 @@ public class RoundServiceImpl implements RoundService {
     public Round likeCard(UUID playerId, UUID cardId, UUID gameId, UUID roundId) {
         Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
         playerRoundService.likeCard(
-                round.getPlayerRound(playerId),
-                cardId,
-                gameId,
-                roundId
+            round.getPlayerRound(playerId),
+            cardId,
+            gameId,
+            roundId
         );
         return round;
     }
@@ -213,10 +212,10 @@ public class RoundServiceImpl implements RoundService {
     public Round dislikeCard(UUID playerId, UUID cardId, UUID gameId, UUID roundId) {
         Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
         playerRoundService.dislikeCard(
-                round.getPlayerRound(playerId),
-                cardId,
-                gameId,
-                roundId
+            round.getPlayerRound(playerId),
+            cardId,
+            gameId,
+            roundId
         );
         return round;
     }
@@ -233,17 +232,17 @@ public class RoundServiceImpl implements RoundService {
      */
     @Override
     public Round selectCards(
-            UUID playerId,
-            List<UUID> cardIds,
-            UUID gameId,
-            UUID roundId
+        UUID playerId,
+        List<UUID> cardIds,
+        UUID gameId,
+        UUID roundId
     ) {
         Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
         playerRoundService.selectCards(
-                round.getPlayerRound(playerId),
-                cardIds,
-                gameId,
-                roundId
+            round.getPlayerRound(playerId),
+            cardIds,
+            gameId,
+            roundId
         );
         return round;
     }
@@ -290,79 +289,101 @@ public class RoundServiceImpl implements RoundService {
         }
         Round round = roundOptional.get();
         round
-                .getPlayerRounds()
-                .forEach(playerRound -> {
-                    // playerRound calculate results and produce in event
+            .getPlayerRounds()
+            .forEach(playerRound -> {
+                // playerRound calculate results and produce in event
 
-                    // calculate the amount a card type (color or operation model) is picked
-                    Map<String, Integer> tempResults = playerRound.determineCardsChosenPerType();
+                // calculate the amount a card type (color or operation model) is picked
+                Map<String, Integer> tempResults = playerRound.determineCardsChosenPerType();
 
-                    // get back a list of results when *undetermined*
-                    // get back a single result when *determined*
-                    List<String> result = playerRound.getTopResultCardTypes(tempResults);
+                // get back a list of results when *undetermined*
+                // get back a single result when *determined*
+                List<String> result = playerRound.getTopResultCardTypes(tempResults);
 
+                // get the importantTag
+                String importantTagValue = playerRound
+                    .getRoundSettings()
+                    .getCardSet()
+                    .getTags()
+                    .stream()
+                    .filter(tag -> tag.getTagKey() == TagType.IMPORTANT_TAG)
+                    .findFirst()
+                    .get()
+                    .getTagValue();
+                Tag importantTag = new Tag(TagType.IMPORTANT_TAG, importantTagValue);
 
-                    // get the importantTag
-                    String importantTagValue = playerRound.getRoundSettings().getCardSet().getTags().stream().filter(tag -> tag.getTagKey() == TagType.IMPORTANT_TAG).findFirst().get().getTagValue();
-                    Tag importantTag = new Tag(TagType.IMPORTANT_TAG, importantTagValue);
+                // Type is advice
+                Tag adviceTag = new Tag(TagType.TYPE, "advice");
 
-                    // Type is advice
-                    Tag adviceTag = new Tag(TagType.TYPE, "advice");
+                // group or personal
+                String groupOrPersonalTagValue = playerRound
+                    .getRoundSettings()
+                    .getCardSet()
+                    .getTags()
+                    .stream()
+                    .filter(tag -> tag.getTagKey() == TagType.GROUP_OR_PERSONAL)
+                    .findFirst()
+                    .get()
+                    .getTagValue();
+                Tag groupOrPersonalTag = new Tag(
+                    TagType.GROUP_OR_PERSONAL,
+                    groupOrPersonalTagValue
+                );
 
-                    // group or personal
-                    String groupOrPersonalTagValue = playerRound.getRoundSettings().getCardSet().getTags().stream().filter(tag -> tag.getTagKey() == TagType.GROUP_OR_PERSONAL).findFirst().get().getTagValue();
-                    Tag groupOrPersonalTag = new Tag(TagType.GROUP_OR_PERSONAL, groupOrPersonalTagValue);
+                List<Tag> tags = new ArrayList<>();
+                tags.add(importantTag);
+                tags.add(adviceTag);
+                tags.add(groupOrPersonalTag);
 
-                    List<Tag> tags = new ArrayList<>();
-                    tags.add(importantTag);
-                    tags.add(adviceTag);
-                    tags.add(groupOrPersonalTag);
+                // get all cardSets
+                List<CardSet> cardSet = cardSetService.getAllCardSets();
 
+                // get the cardSet that matches the tags
+                CardSet cardSetToUse = cardSet
+                    .stream()
+                    .filter(cardSet1 -> cardSet1.getTags().containsAll(tags))
+                    .findFirst()
+                    .get();
 
-                    // get all cardSets
-                    List<CardSet> cardSet = cardSetService.getAllCardSets();
-
-                    // get the cardSet that matches the tags
-                    CardSet cardSetToUse = cardSet.stream().filter(cardSet1 -> cardSet1.getTags().containsAll(tags)).findFirst().get();
-
-                    // advice cards that match the result cards
-                    List<Card> allAdviceCards = new ArrayList<>(cardSetToUse.getCards());
-                    List<Card> adviceCards = allAdviceCards
+                // advice cards that match the result cards
+                List<Card> allAdviceCards = new ArrayList<>(cardSetToUse.getCards());
+                List<Card> adviceCards = allAdviceCards
+                    .stream()
+                    .filter(card ->
+                        card
+                            .getTags()
                             .stream()
-                            .filter(card ->
-                                    card.getTags()
-                                            .stream()
-                                            .anyMatch(tag ->
-                                                    result.stream()
-                                                            .anyMatch(tag.getTagValue()::equals)
-                                            )
-                            ).collect(Collectors.toList());
+                            .anyMatch(tag ->
+                                result.stream().anyMatch(tag.getTagValue()::equals)
+                            )
+                    )
+                    .collect(Collectors.toList());
 
-                    // roundSettings showResult
-                    ShowResults showResults = playerRound.getRoundSettings().getShowPersonalOrGroupResults();
+                // roundSettings showResult
+                ShowResults showResults = playerRound
+                    .getRoundSettings()
+                    .getShowPersonalOrGroupResults();
 
-                    // playerRound selectedCards
-                    List<Card> selectedCards = playerRound.getSelectedCards();
+                // playerRound selectedCards
+                List<Card> selectedCards = playerRound.getSelectedCards();
 
-                    ResultDto resultDto = new ResultDto(
-                            playerRound.getPlayerId(),
-                            showResults,
-                            result,
-                            selectedCards,
-                            adviceCards
-                    );
+                ResultDto resultDto = new ResultDto(
+                    playerRound.getPlayerId(),
+                    showResults,
+                    result,
+                    selectedCards,
+                    adviceCards
+                );
 
-
-                    PlayerResultDeterminedDto dto = new PlayerResultDeterminedDto();
-                    dto.setGameId(gameId);
-                    dto.setRoundId(roundId);
-                    dto.setPlayerId(playerRound.getPlayerId());
-                    dto.setResult(resultDto);
-                    // Send event
-                    streamBridge.send("producePlayerResultDetermined-out-0", dto);
-                });
+                PlayerResultDeterminedDto dto = new PlayerResultDeterminedDto();
+                dto.setGameId(gameId);
+                dto.setRoundId(roundId);
+                dto.setPlayerId(playerRound.getPlayerId());
+                dto.setResult(resultDto);
+                // Send event
+                streamBridge.send("producePlayerResultDetermined-out-0", dto);
+            });
     }
-
 
     /**
      * Create a round for a game
@@ -374,16 +395,16 @@ public class RoundServiceImpl implements RoundService {
         Round round = new Round(null, new ArrayList<>(), RoundStatus.CREATED, null);
         // Create round settings
         RoundSettings settings = new RoundSettings(
-                roundSettings.getShowPersonalOrGroupResults(),
-                roundSettings.getNrOfLikedCards(),
-                roundSettings.getNrOfSelectedCards(),
-                roundSettings.getShuffleMethod(),
-                roundSettings.isShowSameCardOrder(),
-                null
+            roundSettings.getShowPersonalOrGroupResults(),
+            roundSettings.getNrOfLikedCards(),
+            roundSettings.getNrOfSelectedCards(),
+            roundSettings.getShuffleMethod(),
+            roundSettings.isShowSameCardOrder(),
+            null
         );
         // Get card set
         Optional<CardSet> cardSet = cardSetService.getCardSet(
-                roundSettings.getCardSetId()
+            roundSettings.getCardSetId()
         );
         if (cardSet.isEmpty()) {
             throw new IllegalArgumentException("Card set not found");
@@ -399,8 +420,8 @@ public class RoundServiceImpl implements RoundService {
 
         // Produce round created event
         streamBridge.send(
-                "produceRoundCreated-in-0",
-                new RoundCreatedEventKeyValue(gameId, round)
+            "produceRoundCreated-in-0",
+            new RoundCreatedEventKeyValue(gameId, round)
         );
         return round;
     }

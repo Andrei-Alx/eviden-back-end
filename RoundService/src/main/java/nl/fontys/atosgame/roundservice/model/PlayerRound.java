@@ -57,7 +57,7 @@ public class PlayerRound {
         return (
             likedCards.size() == roundSettings.getNrOfLikedCards() &&
             selectedCards.size() == roundSettings.getNrOfSelectedCards()
-                //&& this.hasDeterminateResult()
+            //&& this.hasDeterminateResult()
         );
     }
 
@@ -85,7 +85,10 @@ public class PlayerRound {
         for (Card card : selectedCards) {
             for (Tag tag : card.getTags()) {
                 if (cardsChosenPerTag.containsKey(tag.getTagValue())) {
-                    cardsChosenPerTag.put(tag.getTagValue(), cardsChosenPerTag.get(tag.getTagValue()) + 1);
+                    cardsChosenPerTag.put(
+                        tag.getTagValue(),
+                        cardsChosenPerTag.get(tag.getTagValue()) + 1
+                    );
                 } else {
                     cardsChosenPerTag.put(tag.getTagValue(), 1);
                 }
@@ -101,60 +104,61 @@ public class PlayerRound {
      * that has been picked most often.
      * @return True if the playerRound has a determinate result, false otherwise.
      */
-//    public boolean hasDeterminateResult() {
-//        Map<String, Integer> tagCount = determineCardsChosenPerType();
-//
-//        // Check if there is a single tag that is picked more often than the others
-//        if (tagCount.isEmpty()) {
-//            return true;
-//        }
-//        if (tagCount.size() == 1) {
-//            return true;
-//        }
-//        // Get two tags with the highest count
-//        String highestTagValue = null;
-//        for (String tagValue : tagCount.keySet()) {
-//            if (
-//                highestTagValue == null ||
-//                tagCount.get(tagValue) > tagCount.get(highestTagValue)
-//            ) {
-//                highestTagValue = tagValue;
-//            }
-//        }
-//        String secondHighestTagValue = null;
-//        for (String tagValue : tagCount.keySet()) {
-//            if (
-//                (
-//                    secondHighestTagValue == null ||
-//                    tagCount.get(tagValue) > tagCount.get(secondHighestTagValue)
-//                ) &&
-//                !tagValue.equals(highestTagValue)
-//            ) {
-//                secondHighestTagValue = tagValue;
-//            }
-//        }
-//        // Check if the highest tag is picked more often than the second highest tag
-//        return tagCount.get(highestTagValue) > tagCount.get(secondHighestTagValue);
-//    }
+    //    public boolean hasDeterminateResult() {
+    //        Map<String, Integer> tagCount = determineCardsChosenPerType();
+    //
+    //        // Check if there is a single tag that is picked more often than the others
+    //        if (tagCount.isEmpty()) {
+    //            return true;
+    //        }
+    //        if (tagCount.size() == 1) {
+    //            return true;
+    //        }
+    //        // Get two tags with the highest count
+    //        String highestTagValue = null;
+    //        for (String tagValue : tagCount.keySet()) {
+    //            if (
+    //                highestTagValue == null ||
+    //                tagCount.get(tagValue) > tagCount.get(highestTagValue)
+    //            ) {
+    //                highestTagValue = tagValue;
+    //            }
+    //        }
+    //        String secondHighestTagValue = null;
+    //        for (String tagValue : tagCount.keySet()) {
+    //            if (
+    //                (
+    //                    secondHighestTagValue == null ||
+    //                    tagCount.get(tagValue) > tagCount.get(secondHighestTagValue)
+    //                ) &&
+    //                !tagValue.equals(highestTagValue)
+    //            ) {
+    //                secondHighestTagValue = tagValue;
+    //            }
+    //        }
+    //        // Check if the highest tag is picked more often than the second highest tag
+    //        return tagCount.get(highestTagValue) > tagCount.get(secondHighestTagValue);
+    //    }
 
     public List<String> getTopResultCardTypes(Map<String, Integer> tagCount) {
         // get tag with the highest count
         String highestTagValue = null;
         for (String tagValue : tagCount.keySet()) {
             if (
-                highestTagValue == null || tagCount.get(tagValue) > tagCount.get(highestTagValue)
+                highestTagValue == null ||
+                tagCount.get(tagValue) > tagCount.get(highestTagValue)
             ) {
                 highestTagValue = tagValue;
             }
         }
         // get key from tag(s) with the highest count
         List<String> tagKeys = new ArrayList<>();
-        for (String tagValue : tagCount.keySet()){
-            if (tagCount.get(tagValue).equals(tagCount.get(highestTagValue))){
+        for (String tagValue : tagCount.keySet()) {
+            if (tagCount.get(tagValue).equals(tagCount.get(highestTagValue))) {
                 tagKeys.add(tagValue);
             }
         }
-        
+
         return tagKeys;
     }
 

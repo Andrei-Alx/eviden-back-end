@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
 import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
 import nl.fontys.atosgame.cardservice.enums.TagType;
@@ -36,10 +35,18 @@ public class CardSeeder {
     @Value("classpath:data/cards/roundTwo.json")
     private Resource roundTwo;
 
+    @Value("classpath:data/cards/roundOneAdvice.json")
+    private Resource roundTwoAdvice;
+
+    @Value("classpath:data/cards/roundThree.json")
+    private Resource roundThree;
+
+    @Value("classpath:data/cards/roundThreeAdvice.json")
+    private Resource roundThreeAdvice;
 
     public CardSeeder(
-            @Autowired CardService cardService,
-            @Autowired CardSetService cardSetService
+        @Autowired CardService cardService,
+        @Autowired CardSetService cardSetService
     ) {
         this.cardService = cardService;
         this.cardSetService = cardSetService;
@@ -76,15 +83,14 @@ public class CardSeeder {
 
         // Create the card set
         CreateCardSetDto cardSet = new CreateCardSetDto(
-                "roundOneCards",
-                tags1,
-                createdCards
-                        .stream()
-                        .map(Card::getId)
-                        .collect(Collectors.toCollection(ArrayList::new))
+            "roundOneCards",
+            tags1,
+            createdCards
+                .stream()
+                .map(Card::getId)
+                .collect(Collectors.toCollection(ArrayList::new))
         );
         cardSetService.createCardSet(cardSet);
-
 
         // create tags
         List<Tag> tags1Advice = new ArrayList<>();
@@ -112,14 +118,14 @@ public class CardSeeder {
             createdCards.add(cardService.createCard(card));
         }
         cardSet =
-                new CreateCardSetDto(
-                        "roundOneCardsAdvice",
-                        tags1Advice,
-                        createdCards
-                                .stream()
-                                .map(Card::getId)
-                                .collect(Collectors.toCollection(ArrayList::new))
-                );
+            new CreateCardSetDto(
+                "roundOneCardsAdvice",
+                tags1Advice,
+                createdCards
+                    .stream()
+                    .map(Card::getId)
+                    .collect(Collectors.toCollection(ArrayList::new))
+            );
         cardSetService.createCardSet(cardSet);
 
         // create tags
@@ -131,7 +137,7 @@ public class CardSeeder {
         // group or personal tag
         Tag tag8 = new Tag();
         tag8.setTagKey(TagType.GROUP_OR_PERSONAL);
-        tag8.setTagValue("personal");
+        tag8.setTagValue("group");
         // important tag
         Tag tag9 = new Tag();
         tag9.setTagKey(TagType.IMPORTANT_TAG);
@@ -148,9 +154,118 @@ public class CardSeeder {
             createdCards.add(cardService.createCard(card));
         }
         cardSet =
+            new CreateCardSetDto(
+                "roundTwoCards",
+                tags2,
+                createdCards
+                    .stream()
+                    .map(Card::getId)
+                    .collect(Collectors.toCollection(ArrayList::new))
+            );
+        cardSetService.createCardSet(cardSet);
+
+        // create tags
+        List<Tag> tags3 = new ArrayList<>();
+        Tag tag10 = new Tag();
+        // type tag
+        tag10.setTagKey(TagType.TYPE);
+        tag10.setTagValue("advice");
+        // group or personal tag
+        Tag tag11 = new Tag();
+        tag11.setTagKey(TagType.GROUP_OR_PERSONAL);
+        tag11.setTagValue("group");
+        // important tag
+        Tag tag12 = new Tag();
+        tag12.setTagKey(TagType.IMPORTANT_TAG);
+        tag12.setTagValue("color");
+
+        tags3.add(tag10);
+        tags3.add(tag11);
+        tags3.add(tag12);
+
+        // Do same for round two advice cards
+        cards = CardJsonReader.readCards(roundTwoAdvice.getFile());
+        createdCards = new ArrayList<>();
+        for (CreateCardDto card : cards) {
+            createdCards.add(cardService.createCard(card));
+        }
+        cardSet =
                 new CreateCardSetDto(
-                        "roundTwoCards",
-                        tags2,
+                        "roundTwoCardsAdvice",
+                        tags3,
+                        createdCards
+                                .stream()
+                                .map(Card::getId)
+                                .collect(Collectors.toCollection(ArrayList::new))
+                );
+        cardSetService.createCardSet(cardSet);
+
+
+        // create tags
+        List<Tag> tags4 = new ArrayList<>();
+        Tag tag14 = new Tag();
+        // type tag
+        tag14.setTagKey(TagType.TYPE);
+        tag14.setTagValue("game");
+        // group or personal tag
+        Tag tag15 = new Tag();
+        tag15.setTagKey(TagType.GROUP_OR_PERSONAL);
+        tag15.setTagValue("group");
+        // important tag
+        Tag tag16 = new Tag();
+        tag16.setTagKey(TagType.IMPORTANT_TAG);
+        tag16.setTagValue("operatingModel");
+
+        tags4.add(tag14);
+        tags4.add(tag15);
+        tags4.add(tag16);
+
+        // Do same for round three cards
+        cards = CardJsonReader.readCards(roundThree.getFile());
+        createdCards = new ArrayList<>();
+        for (CreateCardDto card : cards) {
+            createdCards.add(cardService.createCard(card));
+        }
+        cardSet =
+                new CreateCardSetDto(
+                        "roundThreeCards",
+                        tags4,
+                        createdCards
+                                .stream()
+                                .map(Card::getId)
+                                .collect(Collectors.toCollection(ArrayList::new))
+                );
+        cardSetService.createCardSet(cardSet);
+
+        // create tags
+        List<Tag> tags5 = new ArrayList<>();
+        Tag tag17 = new Tag();
+        // type tag
+        tag17.setTagKey(TagType.TYPE);
+        tag17.setTagValue("advice");
+        // group or personal tag
+        Tag tag18 = new Tag();
+        tag18.setTagKey(TagType.GROUP_OR_PERSONAL);
+        tag18.setTagValue("group");
+        // important tag
+        Tag tag19 = new Tag();
+        tag19.setTagKey(TagType.IMPORTANT_TAG);
+        tag19.setTagValue("operatingModel");
+
+        tags5.add(tag17);
+        tags5.add(tag18);
+        tags5.add(tag19);
+
+        // Do same for round three advice cards
+        cards = CardJsonReader.readCards(roundThreeAdvice.getFile());
+        createdCards = new ArrayList<>();
+        for (CreateCardDto card : cards) {
+            createdCards.add(cardService.createCard(card));
+        }
+        cardSet =
+                new CreateCardSetDto(
+                        "roundThreeCardsAdvice",
+                        tags5,
                         createdCards
                                 .stream()
                                 .map(Card::getId)
