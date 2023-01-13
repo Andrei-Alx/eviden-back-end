@@ -5,6 +5,7 @@ import java.util.UUID;
 import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
 import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.model.CardSet;
+import nl.fontys.atosgame.cardservice.model.Tag;
 import nl.fontys.atosgame.cardservice.repository.CardSetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
  * Service that handles all card set requests
  * calls the repository to store the card set in the database
  * and sends a message to the event bus
+ *
  * @author Eli
  */
 @Service
@@ -35,6 +37,7 @@ public class CardSetServiceImpl implements CardSetService {
 
     /**
      * Creates a card set and sends a message to the event bus
+     *
      * @param createCardSetDto the card set to create
      * @return the created card set
      */
@@ -44,9 +47,8 @@ public class CardSetServiceImpl implements CardSetService {
         CardSet cardSet = new CardSet(
             null,
             createCardSetDto.getName(),
-            createCardSetDto.getType(),
-            createCardSetDto.getImportantTag(),
-            cards
+            cards,
+            createCardSetDto.getTags()
         );
 
         cardSet = cardSetRepository.save(cardSet);
@@ -56,6 +58,7 @@ public class CardSetServiceImpl implements CardSetService {
 
     /**
      * Deletes a card set and sends a message to the event bus
+     *
      * @param id the id of the card set to delete
      */
     @Override
@@ -66,6 +69,7 @@ public class CardSetServiceImpl implements CardSetService {
 
     /**
      * Updates a card set and sends a message to the event bus
+     *
      * @param cardSet the card set to update
      * @return the updated card set
      */

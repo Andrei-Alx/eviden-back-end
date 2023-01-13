@@ -26,10 +26,6 @@ public class CardSet {
     @JsonProperty
     private String name;
 
-    @JsonProperty
-    @Enumerated(EnumType.STRING)
-    private CardSetType type;
-
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
         name = "card_set_cards",
@@ -39,4 +35,8 @@ public class CardSet {
     @JsonProperty
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Card> cards = new java.util.ArrayList<>();
+
+    @JsonProperty
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Collection<Tag> tags;
 }

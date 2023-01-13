@@ -3,11 +3,14 @@ package nl.fontys.atosgame.cardservice.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
 import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.model.CardSet;
+import nl.fontys.atosgame.cardservice.model.Tag;
 import nl.fontys.atosgame.cardservice.repository.CardSetRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,21 +34,15 @@ class CardSetServiceImplTest {
 
     @Test
     void createCardSetWithValidCardSet() {
+        List<Tag> tags = new ArrayList<>();
         CreateCardSetDto createCardSetDto = new CreateCardSetDto(
-            "name",
-            "type",
-            null,
-            "color"
+            "RoundOneCards",
+            tags,
+            null
         );
         Collection<Card> cards = mock(Collection.class);
         doReturn(cards).when(cardService).getCardsByIds(createCardSetDto.getCards());
-        CardSet cardSet = new CardSet(
-            UUID.randomUUID(),
-            createCardSetDto.getName(),
-            createCardSetDto.getType(),
-            "color",
-            cards
-        );
+        CardSet cardSet = new CardSet(UUID.randomUUID(), "RoundOneCards", cards, tags);
         doReturn(cardSet).when(cardSetRepository).save(any());
 
         CardSet result = cardSetService.createCardSet(createCardSetDto);
@@ -65,7 +62,7 @@ class CardSetServiceImplTest {
 
     @Test
     void updateCardSet() {
-        CardSet cardSet = new CardSet(UUID.randomUUID(), "name", "type", "color", null);
+        CardSet cardSet = new CardSet(UUID.randomUUID(), "RoundOneCards", null, null);
         doReturn(cardSet).when(cardSetRepository).save(any());
 
         CardSet result = cardSetService.updateCardSet(cardSet);

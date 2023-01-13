@@ -11,6 +11,7 @@ import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.enums.ShowResults;
 import nl.fontys.atosgame.roundservice.enums.ShuffleMethod;
+import nl.fontys.atosgame.roundservice.enums.TagType;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.event.produced.RoundEndedEvent;
 import nl.fontys.atosgame.roundservice.model.*;
@@ -54,15 +55,18 @@ class RoundServiceImplTest {
 
     @Test
     void createRound() {
-        Tag tag = new Tag("color", "red");
-        Collection<Tag> tags = new ArrayList<>(List.of(tag));
+        Tag tagColor = new Tag(TagType.COLOR, "red");
+        Tag tagImportantTag = new Tag(TagType.IMPORTANT_TAG, "color");
+
+        Collection<Tag> cardTags = new ArrayList<>(List.of(tagColor));
+        Collection<Tag> cardSetTags = new ArrayList<>(List.of(tagImportantTag));
 
         Collection<Card> cards = new ArrayList<>(
-            List.of(new Card(UUID.randomUUID(), tags))
+            List.of(new Card(UUID.randomUUID(), cardTags))
         );
         CardSet cardSet = new CardSet();
         cardSet.setCards(cards);
-        cardSet.setImportantTag("color");
+        cardSet.setTags(cardSetTags);
 
         RoundSettingsDto roundSettings = new RoundSettingsDto(
             ShowResults.PERSONAL,
@@ -114,7 +118,15 @@ class RoundServiceImplTest {
             );
         Assert.assertSame(
             "color",
-            result.getRoundSettings().getCardSet().getImportantTag()
+            result
+                .getRoundSettings()
+                .getCardSet()
+                .getTags()
+                .stream()
+                .filter(tag -> tag.getTagKey() == TagType.IMPORTANT_TAG)
+                .findFirst()
+                .get()
+                .getTagKey()
         );
     }
 

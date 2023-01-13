@@ -6,10 +6,7 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nl.fontys.atosgame.roundservice.dto.ResultDto;
 import nl.fontys.atosgame.roundservice.enums.PlayerRoundPhase;
-import nl.fontys.atosgame.roundservice.enums.ResultStatus;
-import nl.fontys.atosgame.roundservice.enums.ShowResults;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
@@ -59,8 +56,8 @@ public class PlayerRound {
     public boolean isDone() {
         return (
             likedCards.size() == roundSettings.getNrOfLikedCards() &&
-            selectedCards.size() == roundSettings.getNrOfSelectedCards() &&
-            this.hasDeterminateResult()
+            selectedCards.size() == roundSettings.getNrOfSelectedCards()
+            //&& this.hasDeterminateResult()
         );
     }
 
@@ -82,23 +79,23 @@ public class PlayerRound {
      * Get the results per color of the playerRound.
      * @return The results per color of the playerRound.
      */
-    public Map<String, Integer> calculateResultForAllColors() {
+    public Map<String, Integer> determineCardsChosenPerType() {
         // Count how often each tag is picked
-        Map<String, Integer> tagCount = new HashMap<>();
+        Map<String, Integer> cardsChosenPerTag = new HashMap<>();
         for (Card card : selectedCards) {
             for (Tag tag : card.getTags()) {
-                if (
-                    tag.getTagKey().equals(roundSettings.getCardSet().getImportantTag())
-                ) {
-                    tagCount.put(
+                if (cardsChosenPerTag.containsKey(tag.getTagValue())) {
+                    cardsChosenPerTag.put(
                         tag.getTagValue(),
-                        tagCount.getOrDefault(tag.getTagValue(), 0) + 1
+                        cardsChosenPerTag.get(tag.getTagValue()) + 1
                     );
+                } else {
+                    cardsChosenPerTag.put(tag.getTagValue(), 1);
                 }
             }
         }
 
-        return tagCount;
+        return cardsChosenPerTag;
     }
 
     /**
@@ -107,17 +104,44 @@ public class PlayerRound {
      * that has been picked most often.
      * @return True if the playerRound has a determinate result, false otherwise.
      */
-    public boolean hasDeterminateResult() {
-        Map<String, Integer> tagCount = calculateResultForAllColors();
+    //    public boolean hasDeterminateResult() {
+    //        Map<String, Integer> tagCount = determineCardsChosenPerType();
+    //
+    //        // Check if there is a single tag that is picked more often than the others
+    //        if (tagCount.isEmpty()) {
+    //            return true;
+    //        }
+    //        if (tagCount.size() == 1) {
+    //            return true;
+    //        }
+    //        // Get two tags with the highest count
+    //        String highestTagValue = null;
+    //        for (String tagValue : tagCount.keySet()) {
+    //            if (
+    //                highestTagValue == null ||
+    //                tagCount.get(tagValue) > tagCount.get(highestTagValue)
+    //            ) {
+    //                highestTagValue = tagValue;
+    //            }
+    //        }
+    //        String secondHighestTagValue = null;
+    //        for (String tagValue : tagCount.keySet()) {
+    //            if (
+    //                (
+    //                    secondHighestTagValue == null ||
+    //                    tagCount.get(tagValue) > tagCount.get(secondHighestTagValue)
+    //                ) &&
+    //                !tagValue.equals(highestTagValue)
+    //            ) {
+    //                secondHighestTagValue = tagValue;
+    //            }
+    //        }
+    //        // Check if the highest tag is picked more often than the second highest tag
+    //        return tagCount.get(highestTagValue) > tagCount.get(secondHighestTagValue);
+    //    }
 
-        // Check if there is a single tag that is picked more often than the others
-        if (tagCount.isEmpty()) {
-            return true;
-        }
-        if (tagCount.size() == 1) {
-            return true;
-        }
-        // Get two tags with the highest count
+    public List<String> getTopResultCardTypes(Map<String, Integer> tagCount) {
+        // get tag with the highest count
         String highestTagValue = null;
         for (String tagValue : tagCount.keySet()) {
             if (
@@ -127,64 +151,15 @@ public class PlayerRound {
                 highestTagValue = tagValue;
             }
         }
-        String secondHighestTagValue = null;
+        // get key from tag(s) with the highest count
+        List<String> tagKeys = new ArrayList<>();
         for (String tagValue : tagCount.keySet()) {
-            if (
-                (
-                    secondHighestTagValue == null ||
-                    tagCount.get(tagValue) > tagCount.get(secondHighestTagValue)
-                ) &&
-                !tagValue.equals(highestTagValue)
-            ) {
-                secondHighestTagValue = tagValue;
-            }
-        }
-        // Check if the highest tag is picked more often than the second highest tag
-        return tagCount.get(highestTagValue) > tagCount.get(secondHighestTagValue);
-    }
-
-    public ResultDto getResult(Map<String, Integer> tagCount) {
-        Map<String, Integer> tagCount1 = tagCount;
-        // get tag with the highest count
-        String highestTagValue = null;
-        for (String tagValue : tagCount1.keySet()) {
-            if (
-                highestTagValue == null ||
-                tagCount1.get(tagValue) > tagCount1.get(highestTagValue)
-            ) {
-                highestTagValue = tagValue;
+            if (tagCount.get(tagValue).equals(tagCount.get(highestTagValue))) {
+                tagKeys.add(tagValue);
             }
         }
 
-        // TODO: get advice per color
-        String description = "";
-        if (Objects.equals(highestTagValue, "Rood")) {
-            description = "red is a nice color";
-        } else if (Objects.equals(highestTagValue, "Blauw")) {
-            description = "blue is a nice color";
-        } else if (Objects.equals(highestTagValue, "Groen")) {
-            description = "green is a nice color";
-        } else if (Objects.equals(highestTagValue, "Geel")) {
-            description = "yellow is a nice color";
-        } else {
-            // color is white
-            description = "white is a nice color";
-        }
-
-        ResultDto resultDto = new ResultDto();
-        resultDto.setPlayerId(playerId);
-        resultDto.setType(ShowResults.PERSONAL);
-        resultDto.setTags(
-            List.of(
-                new Tag("Color", highestTagValue),
-                new Tag("Description", description),
-                //example of more tags, remove when tags are gathered from the database
-                new Tag("Description", "There could be more tags here")
-            )
-        );
-        resultDto.setStatus(ResultStatus.DETERMINED);
-
-        return resultDto;
+        return tagKeys;
     }
 
     /**
