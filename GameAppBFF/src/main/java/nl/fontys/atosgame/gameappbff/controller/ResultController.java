@@ -1,24 +1,30 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import nl.fontys.atosgame.gameappbff.dto.PlayerRoundDto;
-import nl.fontys.atosgame.gameappbff.model.Lobby;
-import nl.fontys.atosgame.gameappbff.model.PlayerRoundResult;
+
+import nl.fontys.atosgame.gameappbff.dto.PlayerDto;
+import nl.fontys.atosgame.gameappbff.dto.ResultCardDto;
+import nl.fontys.atosgame.gameappbff.dto.ResultDto;
+import nl.fontys.atosgame.gameappbff.enums.ShowResults;
+import nl.fontys.atosgame.gameappbff.model.*;
+import nl.fontys.atosgame.gameappbff.service.GameService;
+import nl.fontys.atosgame.gameappbff.service.LobbyService;
 import nl.fontys.atosgame.gameappbff.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * Rest controller for the results.
  *
- * @author Niek
+ * @author Niek and Kevin
  */
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -26,42 +32,77 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/results")
 public class ResultController {
 
-    private ResultService resultService;
+    private final ResultService resultService;
 
-    private ResultController(@Autowired ResultService resultService) {
+    private final GameService gameService;
+
+
+    private ResultController(@Autowired ResultService resultService, @Autowired GameService gameService) {
         this.resultService = resultService;
+        this.gameService = gameService;
     }
 
     /**
      * Id: R-10
      * Get player round results.
+     *
+     * @return
      */
     @GetMapping("/phase3")
     @ApiResponses(
-        value = {
-            @ApiResponse(
-                responseCode = "200",
-                description = "Getting a player round results ",
-                content = @Content(mediaType = "application/json")
-            ),
-            @ApiResponse(
-                responseCode = "404",
-                description = "Player round results not found"
-            ),
-        }
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Getting a player round results ",
+                            content = @Content(mediaType = "application/json")
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Player round results not found"
+                    ),
+            }
     )
-    public ResponseEntity<PlayerRoundResult> getPlayerRoundResult(
-        @RequestParam UUID roundId,
-        @RequestParam UUID playerId,
-        @RequestParam UUID gameId
+    public ResponseEntity<List<ResultDto>> getPlayerRoundResult(
+            @RequestParam UUID roundId,
+            @RequestParam UUID gameId
     ) {
-        PlayerRoundDto playerRound = new PlayerRoundDto(roundId, playerId, gameId);
-        Optional<PlayerRoundResult> result = resultService.getPlayerRoundResult(
-            playerRound.getRoundId(),
-            playerRound.getPlayerId()
-        );
-        return result
-            .map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.notFound().build());
+        Optional<List<PlayerRoundResult>> playerResults = resultService.getPlayerRoundResults(roundId);
+
+        // get player
+        List<Player> players = new ArrayList<>(gameService.getGame(gameId).get().getLobby().getPlayers());
+        List<ResultDto> results = new ArrayList<>();
+        for (PlayerRoundResult playerRoundResult: playerResults.get()) {
+            // get player from players list with playerRoundResult playerId
+            PlayerDto playerDto = new PlayerDto(players.stream().filter(player -> player.getId().equals(playerRoundResult.getPlayerId())).findFirst().get().getName());
+
+            // get the showResults
+            ShowResults showResults = playerRoundResult.getResult().getType();
+
+            // get the results
+            List<String> playerRoundResults = playerRoundResult.getResult().getResult();
+
+            // get the chosen cards
+            List<Card> chosenCards = playerRoundResult.getResult().getChosenCards();
+            // convert to ResultCardDto
+            List<ResultCardDto> chosenCardsDto = new ArrayList<>();
+            for (Card card: chosenCards) {
+                for (Translation translation: card.getTranslations()) {
+                    chosenCardsDto.add(new ResultCardDto(card.getTags().stream().findFirst().get().getTagValue(), translation.getText(), translation.getLanguage()));
+                }
+            }
+
+            // get the advice cards
+            List<Card> adviceCards = playerRoundResult.getResult().getAdviceCards();
+            List<ResultCardDto> adviceCardsDto = new ArrayList<>();
+            for (Card card: adviceCards) {
+                for (Translation translation: card.getTranslations()) {
+                    adviceCardsDto.add(new ResultCardDto(card.getTags().stream().findFirst().get().getTagValue(), translation.getText(), translation.getLanguage()));
+                }
+            }
+
+            results.add(Optional.of(new ResultDto(playerDto, showResults, playerRoundResults, chosenCardsDto, adviceCardsDto)).get());
+        }
+
+        return ResponseEntity.ok(results);
     }
 }

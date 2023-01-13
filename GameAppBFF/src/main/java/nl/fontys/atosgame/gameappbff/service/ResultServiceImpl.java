@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.gameappbff.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.model.FinalResult;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 /**
  * Service responsible for saving and returning results
  *
- * @author Niek
+ * @author Niek and Kevin
  */
 
 @Service
@@ -55,6 +56,16 @@ public class ResultServiceImpl implements ResultService {
             playerId
         );
         return playerRoundResult;
+    }
+
+    /**
+     * Get all playerRoundResults
+     *
+     * @param roundId The id of the round
+     * @return all playerRoundResults of a round
+     */
+    public Optional<List<PlayerRoundResult>> getPlayerRoundResults(UUID roundId){
+        return playerRoundResultRepository.findAllByRoundId(roundId);
     }
 
     /**
