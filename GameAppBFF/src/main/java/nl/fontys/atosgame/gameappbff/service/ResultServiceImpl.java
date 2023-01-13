@@ -1,10 +1,12 @@
 package nl.fontys.atosgame.gameappbff.service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import nl.fontys.atosgame.gameappbff.enums.ShowResults;
 import nl.fontys.atosgame.gameappbff.model.FinalResult;
 import nl.fontys.atosgame.gameappbff.model.PlayerRoundResult;
+import nl.fontys.atosgame.gameappbff.model.Result;
 import nl.fontys.atosgame.gameappbff.repository.FinalResultRepository;
 import nl.fontys.atosgame.gameappbff.repository.PlayerRoundResultRepository;
 import nl.fontys.atosgame.gameappbff.repository.ResultRepository;
@@ -56,6 +58,63 @@ public class ResultServiceImpl implements ResultService {
             playerId
         );
         return playerRoundResult;
+    }
+
+    /**
+     * Get the final results of a game
+     * @param gameId The id of the game
+     * @return List<PlayerRoundResult> The list of playerRoundResults to return
+     */
+    @Override
+    public Optional<List<PlayerRoundResult>> getFinalResults(UUID gameId) {
+        Optional<List<PlayerRoundResult>> finalResults = playerRoundResultRepository.findAllByGameId(gameId);
+
+        // final results round two
+        // get the Results of the playerRoundResults where showResults is group
+        List<Result> resultsRoundTwo = finalResults.get().stream()
+            .filter(playerRoundResult -> playerRoundResult.getResult().getType() == ShowResults.GROUP)
+            .map(PlayerRoundResult::getResult)
+            .collect(Collectors.toList());
+
+        Map<String, Double> finalResultsRoundTwo = new HashMap<>();
+        for (Result result : resultsRoundTwo) {
+            int size = result.getResult().size();
+            for (int i = 0; i < size; i++) {
+                String key = result.getResult().get(i);
+                if (finalResultsRoundTwo.containsKey(key)) {
+                    finalResultsRoundTwo.put(key, finalResultsRoundTwo.get(key) + 1.0/size);
+                } else {
+                    finalResultsRoundTwo.put(key, 1.0/size);
+                }
+            }
+        }
+        // get top resultCardTypes
+        List<String> finalResultsRoundTwoList = getTopResultCardTypes(finalResultsRoundTwo);
+
+
+
+        return finalResults;
+    }
+
+    public List<String> getTopResultCardTypes(Map<String, Double> tagCount) {
+        // get tag with the highest count
+        String highestTagValue = null;
+        for (String tagValue : tagCount.keySet()) {
+            if (
+                    highestTagValue == null || tagCount.get(tagValue) > tagCount.get(highestTagValue)
+            ) {
+                highestTagValue = tagValue;
+            }
+        }
+        // get key from tag(s) with the highest count
+        List<String> tagKeys = new ArrayList<>();
+        for (String tagValue : tagCount.keySet()){
+            if (tagCount.get(tagValue).equals(tagCount.get(highestTagValue))){
+                tagKeys.add(tagValue);
+            }
+        }
+
+        return tagKeys;
     }
 
     /**

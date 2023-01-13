@@ -12,4 +12,5 @@ public interface PlayerRoundResultRepository
     extends JpaRepository<PlayerRoundResult, UUID> {
     Optional<PlayerRoundResult> findByRoundIdAndPlayerId(UUID roundId, UUID playerId);
     Optional<List<PlayerRoundResult>> findAllByRoundId(UUID roundId);
+    Optional<List<PlayerRoundResult>> findAllByGameId(UUID gameId);
 }

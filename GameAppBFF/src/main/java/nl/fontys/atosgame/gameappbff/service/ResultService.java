@@ -26,4 +26,8 @@ public interface ResultService {
      * Handle FinalResultDetermined event
      */
     void handleFinalResultDetermined(FinalResult finalResult);
+
+
+
+    Optional<List<PlayerRoundResult>> getFinalResults(UUID gameId);
 }
