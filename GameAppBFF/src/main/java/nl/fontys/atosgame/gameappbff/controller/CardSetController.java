@@ -7,8 +7,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.ArrayList;
 import java.util.Optional;
 import nl.fontys.atosgame.gameappbff.enums.CardSetType;
+import nl.fontys.atosgame.gameappbff.enums.TagType;
 import nl.fontys.atosgame.gameappbff.model.CardSet;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
+import nl.fontys.atosgame.gameappbff.model.Tag;
 import nl.fontys.atosgame.gameappbff.service.CardSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -45,9 +47,10 @@ public class CardSetController {
         }
     )
     public ResponseEntity<ArrayList<CardSet>> getCardSetsByType(
-        @PathVariable CardSetType type
+        @PathVariable String type
     ) {
-        Optional<ArrayList<CardSet>> cardsets = cardSetService.getCardSetsByType(type);
+        Tag typeTag = new Tag(TagType.TYPE, type);
+        Optional<ArrayList<CardSet>> cardsets = cardSetService.getCardSetsByType(typeTag);
         return cardsets
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());

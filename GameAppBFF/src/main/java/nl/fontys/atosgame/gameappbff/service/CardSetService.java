@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.enums.CardSetType;
 import nl.fontys.atosgame.gameappbff.model.CardSet;
+import nl.fontys.atosgame.gameappbff.model.Tag;
 
 /**
  * Service for handling cardsets.
@@ -34,5 +35,5 @@ public interface CardSetService {
      * @param cardSetType The type of the card to get.
      * @return A list of cardSets.
      */
-    Optional<ArrayList<CardSet>> getCardSetsByType(CardSetType cardSetType);
+    Optional<ArrayList<CardSet>> getCardSetsByType(Tag typeTag);
 }

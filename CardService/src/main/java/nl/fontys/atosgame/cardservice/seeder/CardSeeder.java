@@ -190,16 +190,15 @@ public class CardSeeder {
             createdCards.add(cardService.createCard(card));
         }
         cardSet =
-                new CreateCardSetDto(
-                        "roundTwoCardsAdvice",
-                        tags3,
-                        createdCards
-                                .stream()
-                                .map(Card::getId)
-                                .collect(Collectors.toCollection(ArrayList::new))
-                );
+            new CreateCardSetDto(
+                "roundTwoCardsAdvice",
+                tags3,
+                createdCards
+                    .stream()
+                    .map(Card::getId)
+                    .collect(Collectors.toCollection(ArrayList::new))
+            );
         cardSetService.createCardSet(cardSet);
-
 
         // create tags
         List<Tag> tags4 = new ArrayList<>();
@@ -227,14 +226,14 @@ public class CardSeeder {
             createdCards.add(cardService.createCard(card));
         }
         cardSet =
-                new CreateCardSetDto(
-                        "roundThreeCards",
-                        tags4,
-                        createdCards
-                                .stream()
-                                .map(Card::getId)
-                                .collect(Collectors.toCollection(ArrayList::new))
-                );
+            new CreateCardSetDto(
+                "roundThreeCards",
+                tags4,
+                createdCards
+                    .stream()
+                    .map(Card::getId)
+                    .collect(Collectors.toCollection(ArrayList::new))
+            );
         cardSetService.createCardSet(cardSet);
 
         // create tags
@@ -263,14 +262,14 @@ public class CardSeeder {
             createdCards.add(cardService.createCard(card));
         }
         cardSet =
-                new CreateCardSetDto(
-                        "roundThreeCardsAdvice",
-                        tags5,
-                        createdCards
-                                .stream()
-                                .map(Card::getId)
-                                .collect(Collectors.toCollection(ArrayList::new))
-                );
+            new CreateCardSetDto(
+                "roundThreeCardsAdvice",
+                tags5,
+                createdCards
+                    .stream()
+                    .map(Card::getId)
+                    .collect(Collectors.toCollection(ArrayList::new))
+            );
         cardSetService.createCardSet(cardSet);
     }
 }
