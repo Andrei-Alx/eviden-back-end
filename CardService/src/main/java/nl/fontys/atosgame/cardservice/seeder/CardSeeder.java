@@ -52,7 +52,7 @@ public class CardSeeder {
         // Create the card set
         CreateCardSetDto cardSet = new CreateCardSetDto(
             "RoundOneCards",
-                CardSetType.GAME,
+            CardSetType.GAME,
             createdCards
                 .stream()
                 .map(Card::getId)
@@ -70,7 +70,7 @@ public class CardSeeder {
         cardSet =
             new CreateCardSetDto(
                 "RoundTwoCards",
-                    CardSetType.GAME,
+                CardSetType.GAME,
                 createdCards
                     .stream()
                     .map(Card::getId)
