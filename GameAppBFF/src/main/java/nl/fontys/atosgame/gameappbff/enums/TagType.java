@@ -5,5 +5,5 @@ public enum TagType {
     IMPORTANT_TAG,
     COLOR,
     OPERATING_MODEL,
-    GROUP_OR_PERSONAL
+    GROUP_OR_PERSONAL,
 }

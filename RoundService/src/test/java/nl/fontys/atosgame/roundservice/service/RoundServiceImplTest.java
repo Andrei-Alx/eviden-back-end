@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.*;
-
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
@@ -42,7 +41,7 @@ class RoundServiceImplTest {
         streamBridge = mock(StreamBridge.class);
         applicationEventPublisher = mock(ApplicationEventPublisher.class);
         roundService =
-                spy(
+            spy(
                 new RoundServiceImpl(
                     roundRepository,
                     cardSetService,
@@ -52,8 +51,6 @@ class RoundServiceImplTest {
                     applicationEventPublisher
                 )
             );
-
-
     }
 
     @Test
@@ -64,7 +61,9 @@ class RoundServiceImplTest {
         Collection<Tag> cardTags = new ArrayList<>(List.of(tagColor));
         Collection<Tag> cardSetTags = new ArrayList<>(List.of(tagImportantTag));
 
-        Collection<Card> cards = new ArrayList<>(List.of(new Card(UUID.randomUUID(), cardTags)));
+        Collection<Card> cards = new ArrayList<>(
+            List.of(new Card(UUID.randomUUID(), cardTags))
+        );
         CardSet cardSet = new CardSet();
         cardSet.setCards(cards);
         cardSet.setTags(cardSetTags);
@@ -83,7 +82,7 @@ class RoundServiceImplTest {
             roundSettings.getNrOfSelectedCards(),
             roundSettings.getShuffleMethod(),
             roundSettings.isShowSameCardOrder(),
-                null
+            null
         );
         when(cardSetService.getCardSet(roundSettings.getCardSetId()))
             .thenReturn(Optional.of(cardSet));
@@ -92,14 +91,19 @@ class RoundServiceImplTest {
 
         // assert
         RoundSettings assertSettings = new RoundSettings(
-                roundSettings.getShowPersonalOrGroupResults(),
-                roundSettings.getNrOfLikedCards(),
-                roundSettings.getNrOfSelectedCards(),
-                roundSettings.getShuffleMethod(),
-                roundSettings.isShowSameCardOrder(),
-                cardSet
+            roundSettings.getShowPersonalOrGroupResults(),
+            roundSettings.getNrOfLikedCards(),
+            roundSettings.getNrOfSelectedCards(),
+            roundSettings.getShuffleMethod(),
+            roundSettings.isShowSameCardOrder(),
+            cardSet
         );
-        Round assertRound = new Round(null,new ArrayList<>(), RoundStatus.CREATED, assertSettings);
+        Round assertRound = new Round(
+            null,
+            new ArrayList<>(),
+            RoundStatus.CREATED,
+            assertSettings
+        );
         when(roundRepository.save(assertRound)).thenReturn(assertRound);
         UUID gameId = UUID.randomUUID();
 
@@ -112,8 +116,18 @@ class RoundServiceImplTest {
                 "produceRoundCreated-in-0",
                 new RoundCreatedEventKeyValue(gameId, round)
             );
-        Assert.assertSame("color", result.getRoundSettings().getCardSet().getTags().stream().filter(tag -> tag.getTagKey() == TagType.IMPORTANT_TAG).findFirst().get().getTagKey());
-
+        Assert.assertSame(
+            "color",
+            result
+                .getRoundSettings()
+                .getCardSet()
+                .getTags()
+                .stream()
+                .filter(tag -> tag.getTagKey() == TagType.IMPORTANT_TAG)
+                .findFirst()
+                .get()
+                .getTagKey()
+        );
     }
 
     @Test
@@ -154,33 +168,9 @@ class RoundServiceImplTest {
         );
         List<PlayerRound> playerRounds = new ArrayList<>(
             List.of(
-                new PlayerRound(
-                    null,
-                    playerIds.get(0),
-                    null,
-                    null,
-                    null,
-                    cards,
-                    null
-                ),
-                new PlayerRound(
-                    null,
-                    playerIds.get(1),
-                    null,
-                    null,
-                    null,
-                    cards,
-                    null
-                ),
-                new PlayerRound(
-                    null,
-                    playerIds.get(2),
-                    null,
-                    null,
-                    null,
-                    cards,
-                    null
-                )
+                new PlayerRound(null, playerIds.get(0), null, null, null, cards, null),
+                new PlayerRound(null, playerIds.get(1), null, null, null, cards, null),
+                new PlayerRound(null, playerIds.get(2), null, null, null, cards, null)
             )
         );
         List<UUID> cardIds = new ArrayList<>(

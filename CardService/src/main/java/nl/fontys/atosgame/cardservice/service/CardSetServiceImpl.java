@@ -2,7 +2,6 @@ package nl.fontys.atosgame.cardservice.service;
 
 import java.util.Collection;
 import java.util.UUID;
-
 import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
 import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.model.CardSet;
@@ -27,9 +26,9 @@ public class CardSetServiceImpl implements CardSetService {
     private StreamBridge streamBridge;
 
     public CardSetServiceImpl(
-            @Autowired CardSetRepository cardSetRepository,
-            @Autowired CardService cardService,
-            @Autowired StreamBridge streamBridge
+        @Autowired CardSetRepository cardSetRepository,
+        @Autowired CardService cardService,
+        @Autowired StreamBridge streamBridge
     ) {
         this.cardSetRepository = cardSetRepository;
         this.cardService = cardService;
@@ -46,10 +45,10 @@ public class CardSetServiceImpl implements CardSetService {
     public CardSet createCardSet(CreateCardSetDto createCardSetDto) {
         Collection<Card> cards = cardService.getCardsByIds(createCardSetDto.getCards());
         CardSet cardSet = new CardSet(
-                null,
-                createCardSetDto.getName(),
-                cards,
-                createCardSetDto.getTags()
+            null,
+            createCardSetDto.getName(),
+            cards,
+            createCardSetDto.getTags()
         );
 
         cardSet = cardSetRepository.save(cardSet);
