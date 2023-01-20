@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
+import nl.fontys.atosgame.cardservice.enums.TagType;
 import nl.fontys.atosgame.cardservice.model.Tag;
 import nl.fontys.atosgame.cardservice.model.Translation;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ class CardJsonReaderTest {
         List<CreateCardDto> cards = new ArrayList<CreateCardDto>(
             List.of(
                 new CreateCardDto(
-                    new ArrayList<>(List.of(new Tag("testKey", "testValue"))),
+                    new ArrayList<>(List.of(new Tag(TagType.TYPE, "testValue"))),
                     new ArrayList<>(List.of(new Translation("testLanguage", "testText")))
                 )
             )

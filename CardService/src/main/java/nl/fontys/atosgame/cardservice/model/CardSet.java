@@ -7,6 +7,8 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
 
 @Data
@@ -24,12 +26,6 @@ public class CardSet {
     @JsonProperty
     private String name;
 
-    @JsonProperty
-    private String type;
-
-    @JsonProperty
-    private String importantTag;
-
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
         name = "card_set_cards",
@@ -37,5 +33,11 @@ public class CardSet {
         inverseJoinColumns = @JoinColumn(name = "cards_id")
     )
     @JsonProperty
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Card> cards = new java.util.ArrayList<>();
+
+    @JsonProperty
+    @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private Collection<Tag> tags;
 }

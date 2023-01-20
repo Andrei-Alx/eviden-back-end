@@ -1,28 +1,20 @@
 package nl.fontys.atosgame.roundservice.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
 import nl.fontys.atosgame.roundservice.dto.PlayerPhaseStartedDto;
 import nl.fontys.atosgame.roundservice.dto.PlayerResultDeterminedDto;
-import nl.fontys.atosgame.roundservice.dto.PlayerResultIndeterminateDto;
 import nl.fontys.atosgame.roundservice.dto.ResultDto;
 import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
-import nl.fontys.atosgame.roundservice.enums.ResultStatus;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
+import nl.fontys.atosgame.roundservice.enums.ShowResults;
+import nl.fontys.atosgame.roundservice.enums.TagType;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
-import nl.fontys.atosgame.roundservice.model.Card;
-import nl.fontys.atosgame.roundservice.model.CardSet;
-import nl.fontys.atosgame.roundservice.model.PlayerRound;
-import nl.fontys.atosgame.roundservice.model.Round;
-import nl.fontys.atosgame.roundservice.model.RoundSettings;
+import nl.fontys.atosgame.roundservice.model.*;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -31,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * Service for round related operations
+ *
  * @author Eli
  */
 @Service
@@ -66,7 +59,8 @@ public class RoundServiceImpl implements RoundService {
 
     /**
      * Create rounds for a game
-     * @param gameId The id of the game
+     *
+     * @param gameId        The id of the game
      * @param roundSettings The settings for the rounds
      * @return
      */
@@ -85,9 +79,10 @@ public class RoundServiceImpl implements RoundService {
      * Start a round
      * Changes the status of the round to InProgress
      * Distributes the cards to the players
-     * @param roundId The id of the round
+     *
+     * @param roundId   The id of the round
      * @param playerIds the ids of the players to start the round for
-     * @param gameId The id of the game
+     * @param gameId    The id of the game
      * @return The updated round
      */
     @Override
@@ -256,7 +251,7 @@ public class RoundServiceImpl implements RoundService {
      * When a playerround is finished, check if round is finished and if so, launch application event
      *
      * @param roundId The id of the round
-     * @param gameId The id of the game
+     * @param gameId  The id of the game
      */
     @Override
     public boolean checkRoundEnd(UUID roundId, UUID gameId) {
@@ -296,39 +291,104 @@ public class RoundServiceImpl implements RoundService {
         round
             .getPlayerRounds()
             .forEach(playerRound -> {
-                if (playerRound.hasDeterminateResult()) {
-                    // playerround calculate results and produce in event
-                    Map<String, Integer> tempResults = playerRound.calculateResultForAllColors();
+                // playerRound calculate results and produce in event
 
-                    ResultDto result = playerRound.getResult(tempResults);
+                // calculate the amount a card type (color or operation model) is picked
+                Map<String, Integer> tempResults = playerRound.determineCardsChosenPerType();
 
-                    PlayerResultDeterminedDto dto = new PlayerResultDeterminedDto();
-                    dto.setRoundId(round.getId());
-                    dto.setGameId(gameId);
-                    dto.setResult(result);
-                    dto.setPlayerId(playerRound.getPlayerId());
+                // get back a list of results when *undetermined*
+                // get back a single result when *determined*
+                List<String> result = playerRound.getTopResultCardTypes(tempResults);
 
-                    // Send event
-                    streamBridge.send("producePlayerResultDetermined-out-0", dto);
-                } else {
-                    // TODO: This won't work. By definition, this method is only called when a round has ended.
-                    // So, that means every playerround has a determinate result.
-                    // Instead, we should probably remove this event entirely.
+                // get the importantTag
+                String importantTagValue = playerRound
+                    .getRoundSettings()
+                    .getCardSet()
+                    .getTags()
+                    .stream()
+                    .filter(tag -> tag.getTagKey() == TagType.IMPORTANT_TAG)
+                    .findFirst()
+                    .get()
+                    .getTagValue();
+                Tag importantTag = new Tag(TagType.IMPORTANT_TAG, importantTagValue);
 
-                    PlayerResultIndeterminateDto dto = new PlayerResultIndeterminateDto();
-                    dto.setPlayerId(playerRound.getPlayerId());
-                    dto.setRoundId(round.getId());
-                    dto.setResultStatus(ResultStatus.DETERMINED);
+                // Type is advice
+                Tag adviceTag = new Tag(TagType.TYPE, "advice");
 
-                    // Send event
-                    streamBridge.send("producePlayerResultInDeterminate-out-0", dto);
-                }
+                // group or personal
+                String groupOrPersonalTagValue = playerRound
+                    .getRoundSettings()
+                    .getCardSet()
+                    .getTags()
+                    .stream()
+                    .filter(tag -> tag.getTagKey() == TagType.GROUP_OR_PERSONAL)
+                    .findFirst()
+                    .get()
+                    .getTagValue();
+                Tag groupOrPersonalTag = new Tag(
+                    TagType.GROUP_OR_PERSONAL,
+                    groupOrPersonalTagValue
+                );
+
+                List<Tag> tags = new ArrayList<>();
+                tags.add(importantTag);
+                tags.add(adviceTag);
+                tags.add(groupOrPersonalTag);
+
+                // get all cardSets
+                List<CardSet> cardSet = cardSetService.getAllCardSets();
+
+                // get the cardSet that matches the tags
+                CardSet cardSetToUse = cardSet
+                    .stream()
+                    .filter(cardSet1 -> cardSet1.getTags().containsAll(tags))
+                    .findFirst()
+                    .get();
+
+                // advice cards that match the result cards
+                List<Card> allAdviceCards = new ArrayList<>(cardSetToUse.getCards());
+                List<Card> adviceCards = allAdviceCards
+                    .stream()
+                    .filter(card ->
+                        card
+                            .getTags()
+                            .stream()
+                            .anyMatch(tag ->
+                                result.stream().anyMatch(tag.getTagValue()::equals)
+                            )
+                    )
+                    .collect(Collectors.toList());
+
+                // roundSettings showResult
+                ShowResults showResults = playerRound
+                    .getRoundSettings()
+                    .getShowPersonalOrGroupResults();
+
+                // playerRound selectedCards
+                List<Card> selectedCards = playerRound.getSelectedCards();
+
+                ResultDto resultDto = new ResultDto(
+                    playerRound.getPlayerId(),
+                    showResults,
+                    result,
+                    selectedCards,
+                    adviceCards
+                );
+
+                PlayerResultDeterminedDto dto = new PlayerResultDeterminedDto();
+                dto.setGameId(gameId);
+                dto.setRoundId(roundId);
+                dto.setPlayerId(playerRound.getPlayerId());
+                dto.setResult(resultDto);
+                // Send event
+                streamBridge.send("producePlayerResultDetermined-out-0", dto);
             });
     }
 
     /**
      * Create a round for a game
-     * @param gameId The id of the game
+     *
+     * @param gameId        The id of the game
      * @param roundSettings The settings for the round
      */
     public Round createRound(UUID gameId, RoundSettingsDto roundSettings) {

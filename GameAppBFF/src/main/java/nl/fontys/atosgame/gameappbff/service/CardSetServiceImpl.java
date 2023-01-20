@@ -1,7 +1,11 @@
 package nl.fontys.atosgame.gameappbff.service;
 
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.UUID;
+import nl.fontys.atosgame.gameappbff.enums.CardSetType;
 import nl.fontys.atosgame.gameappbff.model.CardSet;
+import nl.fontys.atosgame.gameappbff.model.Tag;
 import nl.fontys.atosgame.gameappbff.repository.CardSetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,5 +51,16 @@ public class CardSetServiceImpl implements CardSetService {
     @Override
     public void handleCardSetDeleted(UUID cardSetId) {
         cardSetRepository.deleteById(cardSetId);
+    }
+
+    /**
+     * Get cardsets from the database by type.
+     *
+     * @param cardSetType The type of the cardSet to get.
+     * @return A list of cardsets.
+     */
+    @Override
+    public Optional<ArrayList<CardSet>> getCardSetsByType(Tag typeTag) {
+        return cardSetRepository.findCardSetsByTagsContains(typeTag);
     }
 }

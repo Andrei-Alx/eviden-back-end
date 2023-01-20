@@ -1,8 +1,8 @@
 package nl.fontys.atosgame.roundservice.service;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import nl.fontys.atosgame.roundservice.model.CardSet;
+import nl.fontys.atosgame.roundservice.model.Tag;
 
 public interface CardSetService {
     /**
@@ -29,4 +29,16 @@ public interface CardSetService {
      * @return The card set
      */
     Optional<CardSet> getCardSet(UUID uuid);
+
+    /**
+     * Get a card set by CardSetType
+     * @return the card set
+     */
+    CardSet getCardSetByTags(Set<Tag> tags);
+
+    /**
+     * Get all card sets
+     * @return The card sets
+     */
+    List<CardSet> getAllCardSets();
 }
