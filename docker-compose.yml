@@ -1,0 +1,51 @@
+version: "3.7"
+
+services:
+  admin-app-bff:
+    build: ./AdminAppBFF
+    container_name: admin-app-bff
+    image: admin-app-bff
+    ports:
+      - 8007:8007
+
+  api-gateway:
+    build: ./ApiGateway
+    container_name: api-gateway
+    image: api-gateway
+    ports:
+      - 8010:8010
+
+  card-service:
+    build: ./CardService
+    container_name: card-service
+    image: card-service
+    ports:
+      - 8001:8001
+
+  game-app-bff:
+    build: ./GameAppBFF
+    container_name: game-app-bff
+    image: game-app-bff
+    ports:
+      - 8004:8004
+
+  game-service:
+    build: ./GameService
+    container_name: game-service
+    image: game-service
+    ports:
+      - 8005:8005
+
+  lobby-service:
+    build: ./LobbyService
+    container_name: lobby-service
+    image: lobby-service
+    ports:
+      - 8006:8006
+
+  round-service:
+    build: ./RoundService
+    container_name: round-service
+    image: round-service
+    ports:
+      - 8002:8002
