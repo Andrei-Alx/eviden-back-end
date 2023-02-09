@@ -12,10 +12,7 @@ import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
 import nl.fontys.atosgame.gameservice.enums.GameStatus;
 import nl.fontys.atosgame.gameservice.enums.ShowResults;
 import nl.fontys.atosgame.gameservice.enums.ShuffleMethod;
-import nl.fontys.atosgame.gameservice.model.CardSet;
-import nl.fontys.atosgame.gameservice.model.Game;
-import nl.fontys.atosgame.gameservice.model.LobbySettings;
-import nl.fontys.atosgame.gameservice.model.RoundSettings;
+import nl.fontys.atosgame.gameservice.model.*;
 import nl.fontys.atosgame.gameservice.repository.GameRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -146,5 +143,35 @@ class GameServiceImplTest {
         verify(gameRepository, times(1)).save(any());
         assertEquals(GameStatus.STARTED, result.getStatus());
         verify(streamBridge, times(1)).send("produceGameStarted-in-0", game.getId());
+    }
+
+    @Test
+    void addRound() {
+        Game game = new Game();
+        game.setId(UUID.randomUUID());
+        when(gameRepository.findById(game.getId())).thenReturn(Optional.of(game));
+        when(gameRepository.save(any()))
+            .thenAnswer(invocation -> invocation.getArgument(0));
+        Round round = new Round();
+
+        Game result = gameService.addRound(game.getId(), round);
+
+        assertTrue(result.getRounds().contains(round));
+        assertEquals(game.getId(), result.getId());
+    }
+
+    @Test
+    void endGame() {
+        Game game = new Game();
+        game.setId(UUID.randomUUID());
+        when(gameRepository.findById(game.getId())).thenReturn(Optional.of(game));
+        when(gameRepository.save(any()))
+            .thenAnswer(invocation -> invocation.getArgument(0));
+
+        Game result = gameService.endGame(game.getId());
+
+        assertEquals(GameStatus.ENDED, result.getStatus());
+        verify(streamBridge, times(1)).send("produceGameEnded-in-0", game.getId());
+        verify(gameRepository, times(1)).save(result);
     }
 }

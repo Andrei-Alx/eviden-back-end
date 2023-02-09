@@ -5,6 +5,8 @@ import java.util.function.Function;
 import nl.fontys.atosgame.gameservice.event.consumed.RoundCreatedEvent;
 import nl.fontys.atosgame.gameservice.event.consumed.RoundEndedEvent;
 import nl.fontys.atosgame.gameservice.event.consumed.RoundStartedEvent;
+import nl.fontys.atosgame.gameservice.service.RoundService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,13 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class RoundConsumers {
 
+    private RoundService roundService;
+
+    @Autowired
+    public RoundConsumers(RoundService roundService) {
+        this.roundService = roundService;
+    }
+
     /**
      * Id: C-3
      * Consumer for RoundStartedEvent
@@ -29,8 +38,8 @@ public class RoundConsumers {
     public Function<Message<RoundStartedEvent>, Void> handleRoundStarted() {
         return roundStartedEventMessage -> {
             RoundStartedEvent event = roundStartedEventMessage.getPayload();
-            //TODO
-            throw new UnsupportedOperationException("Not implemented yet");
+            roundService.startRound(event.getRoundId());
+            return null;
         };
     }
 
@@ -44,8 +53,8 @@ public class RoundConsumers {
     public Function<Message<RoundEndedEvent>, Void> handleRoundEnded() {
         return roundEndedEventMessage -> {
             RoundEndedEvent event = roundEndedEventMessage.getPayload();
-            //TODO
-            throw new UnsupportedOperationException("Not implemented yet");
+            roundService.endRound(event.getRoundId());
+            return null;
         };
     }
 
@@ -59,8 +68,8 @@ public class RoundConsumers {
     public Function<Message<RoundCreatedEvent>, Void> handleRoundCreated() {
         return roundCreatedEventMessage -> {
             RoundCreatedEvent event = roundCreatedEventMessage.getPayload();
-            //TODO
-            throw new UnsupportedOperationException("Not implemented yet");
+            roundService.createRound(event.getGameId(), event.getRound());
+            return null;
         };
     }
 }

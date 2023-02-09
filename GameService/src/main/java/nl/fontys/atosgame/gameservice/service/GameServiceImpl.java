@@ -3,20 +3,20 @@ package nl.fontys.atosgame.gameservice.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import nl.fontys.atosgame.gameservice.applicationEvents.RoundEndedAppEvent;
 import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
 import nl.fontys.atosgame.gameservice.enums.GameStatus;
-import nl.fontys.atosgame.gameservice.model.CardSet;
-import nl.fontys.atosgame.gameservice.model.Game;
-import nl.fontys.atosgame.gameservice.model.LobbySettings;
-import nl.fontys.atosgame.gameservice.model.RoundSettings;
+import nl.fontys.atosgame.gameservice.model.*;
 import nl.fontys.atosgame.gameservice.repository.GameRepository;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GameServiceImpl implements GameService {
+public class GameServiceImpl implements GameService, ApplicationListener<RoundEndedAppEvent> {
 
     private final GameRepository gameRepository;
 
@@ -88,5 +88,49 @@ public class GameServiceImpl implements GameService {
         game = gameRepository.save(game);
         streamBridge.send("produceGameStarted-in-0", game.getId());
         return game;
+    }
+
+    /**
+     * Ends a game
+     *
+     * @param gameId The id of the game
+     * @return The ended game
+     */
+    @Override
+    public Game endGame(UUID gameId) {
+        Game game = gameRepository
+            .findById(gameId).get();
+        game.setStatus(GameStatus.ENDED);
+        game = gameRepository.save(game);
+        streamBridge.send("produceGameEnded-in-0", game.getId());
+        return game;
+    }
+
+    /**
+     * Add a round to a game
+     *
+     * @param gameId The id of the game
+     * @param round  The round
+     * @return The game with the added round
+     */
+    @Override
+    public Game addRound(UUID gameId, Round round) {
+        Game game = gameRepository
+            .findById(gameId).get();
+        List<Round> rounds = game.getRounds();
+        if (rounds == null) {
+            rounds = new ArrayList<>();
+        }
+        rounds.add(round);
+        game.setRounds(rounds);
+        return gameRepository.save(game);
+    }
+
+    @Override
+    public void onApplicationEvent(RoundEndedAppEvent event) {
+        Game game = gameRepository.findByRoundsId(event.getRoundId()).get();
+        if (game.isDone()) {
+            endGame(game.getId());
+        }
     }
 }
