@@ -78,7 +78,8 @@ class GameServiceImplTest {
         assertEquals(title, result.getTitle());
         assertEquals(companyType, result.getCompanyType());
         assertNull(result.getLobby());
-        assertNull(result.getRounds());
+//        assertNull(result.getRounds());
+        assertEquals(0, result.getRounds().size());
         assertEquals(GameStatus.CREATED, result.getStatus());
         verify(gameRepository, times(1)).save(any());
         verify(streamBridge, times(1))
