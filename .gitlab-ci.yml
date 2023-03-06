@@ -152,7 +152,7 @@ build-api-gateway:       # This job runs in the build stage, which runs first.
   script:
     - echo "Running Build"
     - cd ApiGateway
-    - sudo ./mvnw install -DskipTests
+    - ./mvnw install -DskipTests
     - echo "Build complete."
 
 
