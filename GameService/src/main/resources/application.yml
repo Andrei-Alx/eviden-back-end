@@ -1,4 +1,4 @@
-# For security, change later to production only
+## For security, change later to production only
 spring:
   cloud:
     azure:
