@@ -68,7 +68,7 @@ sonarqube-check-game-service:
       - .sonar/cache
   script: 
     - cd GameService
-    - ./mvnw verify sonar:sonar -Pcoverage
+    - ./mvnw verify sonar:sonar -Dsonar.projectKey=s6-rb_spring-23_ehv-s-a-rb04-group3-atos_kafka-prototype_AYbqyOwOLv0Ak-LJB0Ka
   allow_failure: true
   only:
     - develop
