@@ -27,6 +27,11 @@
         <!--Prettier settings-->
         <plugin.prettier.goal>write</plugin.prettier.goal>
 
+
+		<!-- SonarQube Authentication -->
+		<sonar.host.url>http://localhost:9000</sonar.host.url>
+		<sonar.login>${settings.servers.sonar.username}</sonar.login>
+		<sonar.password>${settings.servers.sonar.password}</sonar.password>
     </properties>
     <dependencies>
         <dependency>
@@ -113,6 +118,14 @@
             <groupId>com.azure.spring</groupId>
             <artifactId>spring-cloud-azure-starter-active-directory</artifactId>
         </dependency>
+		
+		<!-- SONARQUBE MAVEN PLUGIN -->
+		<dependency>
+			<groupId>org.sonarsource.scanner.maven</groupId>
+			<artifactId>sonar-maven-plugin</artifactId>
+			<version>3.9.1.2184</version>
+		</dependency>
+		
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -194,6 +207,14 @@
                     </execution>
                 </executions>
             </plugin>
+			
+			<!-- SONAR MAVEN PLUGIN-->
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.9.1.2184</version>
+			</plugin>
+			
         </plugins>
     </build>
 
