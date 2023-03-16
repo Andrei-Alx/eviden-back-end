@@ -30,8 +30,11 @@
 
 		<!-- SonarQube Authentication -->
 		<sonar.host.url>http://localhost:9000</sonar.host.url>
-		<sonar.login>${settings.servers.sonar.username}</sonar.login>
-		<sonar.password>${settings.servers.sonar.password}</sonar.password>
+		<!-- <sonar.login>${settings.servers.sonar.username}</sonar.login> -->
+		<!-- <sonar.password>${settings.servers.sonar.password}</sonar.password> -->
+		<sonar.login>admin</sonar.login>
+		<sonar.password>admin1</sonar.password>
+		
     </properties>
     <dependencies>
         <dependency>
