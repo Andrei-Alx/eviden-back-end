@@ -33,7 +33,7 @@ sonarqube-check-card-service:
       - .sonar/cache
   script: 
     - cd CardService
-    - ./mvnw verify sonar:sonar -Pcoverage
+    - ./mvnw verify sonar:sonar
   allow_failure: true
   only:
     - develop
@@ -68,9 +68,7 @@ sonarqube-check-game-service:
       - .sonar/cache
   script: 
     - cd GameService
-    - ./mvnw verify sonar:sonar 
-    # -Dsonar.projectKey=s6-rb_spring-23_ehv-s-a-rb04-group3-atos_kafka-prototype_AYbrNdDS1of5T9vMw7RM 
-    # -Dsonar.projectKey=s6-rb_spring-23_ehv-s-a-rb04-group3-atos_kafka-prototype_AYbrNdDS1of5T9vMw7RM
+    - ./mvnw verify sonar:sonar
   allow_failure: true
   only:
     - develop
@@ -105,7 +103,7 @@ sonarqube-check-lobby-service:
       - .sonar/cache
   script: 
     - cd LobbyService
-    - ./mvnw verify sonar:sonar -Pcoverage
+    - ./mvnw verify sonar:sonar
   allow_failure: true
   only:
     - develop
@@ -142,7 +140,7 @@ sonarqube-check-round-service:
       - .sonar/cache
   script: 
     - cd RoundService
-    - ./mvnw verify sonar:sonar -Pcoverage
+    - ./mvnw verify sonar:sonar
   allow_failure: true
   only:
     - develop
@@ -187,7 +185,7 @@ sonarqube-check-adminbff:
       - .sonar/cache
   script: 
     - cd AdminAppBFF
-    - ./mvnw verify sonar:sonar -Pcoverage
+    - ./mvnw verify sonar:sonar
   allow_failure: true
   only:
     - develop
@@ -222,7 +220,7 @@ sonarqube-check-gamebff:
       - .sonar/cache
   script: 
     - cd GameAppBFF
-    - ./mvnw verify sonar:sonar -Pcoverage
+    - ./mvnw verify sonar:sonar
   allow_failure: true
   only:
     - develop
