@@ -16,6 +16,12 @@
     <properties>
         <java.version>11</java.version>
         <spring-cloud.version>2021.0.5</spring-cloud.version>
+
+        <!-- SonarQube Authentication -->
+		<sonar.host.url>http://localhost:9000</sonar.host.url>
+		<sonar.login>sqa_376722bd4e1b384884443fab7ecfc4a884615abf</sonar.login>
+
+
     </properties>
     <dependencies>
         <dependency>
@@ -28,6 +34,14 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- SONARQUBE MAVEN PLUGIN -->
+		<dependency>
+			<groupId>org.sonarsource.scanner.maven</groupId>
+			<artifactId>sonar-maven-plugin</artifactId>
+			<version>3.9.1.2184</version>
+		</dependency>
+
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -47,6 +61,14 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <!-- SONAR MAVEN PLUGIN-->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.9.1.2184</version>
+            </plugin>
+
         </plugins>
     </build>
 

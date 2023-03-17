@@ -24,6 +24,11 @@
 
         <!--Prettier settings-->
         <plugin.prettier.goal>write</plugin.prettier.goal>
+
+        <!-- SonarQube Authentication -->
+		<sonar.host.url>http://localhost:9000</sonar.host.url>
+		<sonar.login>sqa_376722bd4e1b384884443fab7ecfc4a884615abf</sonar.login>
+
     </properties>
     <dependencies>
         <dependency>
@@ -114,6 +119,13 @@
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>0.8.6</version>
         </dependency>
+        <!-- SONARQUBE MAVEN PLUGIN -->
+		<dependency>
+			<groupId>org.sonarsource.scanner.maven</groupId>
+			<artifactId>sonar-maven-plugin</artifactId>
+			<version>3.9.1.2184</version>
+		</dependency>
+
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -188,6 +200,13 @@
                     </execution>
                 </executions>
             </plugin>
+        <!-- SONAR MAVEN PLUGIN-->
+		<plugin>
+			<groupId>org.sonarsource.scanner.maven</groupId>
+			<artifactId>sonar-maven-plugin</artifactId>
+			<version>3.9.1.2184</version>
+		</plugin>
+
         </plugins>
     </build>
 
