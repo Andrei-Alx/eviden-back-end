@@ -44,10 +44,10 @@ deploy-card-service:
   services:
     - docker:dind
   before_script:
-    - docker login -u '$DOCKER_HUB_USERNAME' --password '$DOCKER_HUB_PASSWORD' $CI_REGISTRY
+    - docker login -u "$DOCKER_HUB_USERNAME" --password "$DOCKER_HUB_PASSWORD" $CI_REGISTRY
   script:
-    - cd CardService; docker build -t '$USERNAME'/atos-card-service .
-    - cd CardService; docker push '$USERNAME'/atos-card-service
+    - cd CardService; docker build -t "$USERNAME"/atos-card-service .
+    - cd CardService; docker push "$USERNAME"/atos-card-service
 
 # Tests for Game service
 build-game-service: # This job runs in the build stage, which runs first.
