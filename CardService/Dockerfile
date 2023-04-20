@@ -9,7 +9,7 @@ RUN mvn package -Dmaven.test.skip
 # For Java 11, 
 FROM adoptopenjdk/openjdk11:alpine-jre
 
-ARG JAR_FILE=CardServiceApplication.jar
+ARG JAR_FILE=CardService-0.0.1-SNAPSHOT.jar
 
 WORKDIR /opt/app
 
