@@ -94,7 +94,7 @@ deploy-game-service:
   script:
     - cd GameService
     - docker build --pull -t "$CI_REG_IMG_GAME_SERVICE" .
-    - docker push "$CI_REG_IMG_CARD_SERVICE"
+    - docker push "$CI_REG_IMG_GAME_SERVICE"
 
 # Tests for Lobby service
 build-lobby-service: # This job runs in the build stage, which runs first.
