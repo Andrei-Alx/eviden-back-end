@@ -1,11 +1,11 @@
-stages:          # List of stages for jobs, and their order of execution
+stages: # List of stages for jobs, and their order of execution
   - build
   - test
   - QC
-
+  - deploy
 
 # Tests for Card service
-build-card-service:       # This job runs in the build stage, which runs first.
+build-card-service: # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Running Build"
@@ -13,8 +13,8 @@ build-card-service:       # This job runs in the build stage, which runs first.
     - ./mvnw install -DskipTests
     - echo "Build complete."
 
-unit-test-card-service:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+unit-test-card-service: # This job runs in the test stage.
+  stage: test # It only starts when the job in the build stage completes successfully.
   script:
     - echo "Running unit tests."
     - cd CardService
@@ -25,22 +25,32 @@ sonarqube-check-card-service:
   stage: QC
   image: maven:3.8.6-jdk-11
   variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
+  script:
     - cd CardService
     - ./mvnw verify sonar:sonar
   allow_failure: true
   only:
     - develop
 
+deploy-card-service:
+  stage: deploy
+  image: ubuntu-latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u '$DOCKER_HUB_USERNAME' -p '$DOCKER_HUB_PASSWORD' $CI_REGISTRY
+  script:
+    - cd CardService; docker build -t '$USERNAME'/atos-card-service .
+    - cd CardService; docker push '$USERNAME'/atos-card-service
 
 # Tests for Game service
-build-game-service:       # This job runs in the build stage, which runs first.
+build-game-service: # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Running Build"
@@ -48,8 +58,8 @@ build-game-service:       # This job runs in the build stage, which runs first.
     - ./mvnw install -DskipTests
     - echo "Build complete."
 
-unit-test-game-service:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+unit-test-game-service: # This job runs in the test stage.
+  stage: test # It only starts when the job in the build stage completes successfully.
   script:
     - echo "Running unit tests."
     - cd GameService
@@ -60,22 +70,21 @@ sonarqube-check-game-service:
   stage: QC
   image: maven:3.8.6-jdk-11
   variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
+  script:
     - cd GameService
     - ./mvnw verify sonar:sonar
   allow_failure: true
   only:
     - develop
 
-
 # Tests for Lobby service
-build-lobby-service:       # This job runs in the build stage, which runs first.
+build-lobby-service: # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Running Build"
@@ -83,8 +92,8 @@ build-lobby-service:       # This job runs in the build stage, which runs first.
     - ./mvnw install -DskipTests
     - echo "Build complete."
 
-unit-test-lobby-service:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+unit-test-lobby-service: # This job runs in the test stage.
+  stage: test # It only starts when the job in the build stage completes successfully.
   script:
     - echo "Running unit tests."
     - cd LobbyService
@@ -95,22 +104,21 @@ sonarqube-check-lobby-service:
   stage: QC
   image: maven:3.8.6-jdk-11
   variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
+  script:
     - cd LobbyService
     - ./mvnw verify sonar:sonar
   allow_failure: true
   only:
     - develop
 
-
 # Tests for Round service
-build-round-service:       # This job runs in the build stage, which runs first.
+build-round-service: # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Running Build"
@@ -119,8 +127,8 @@ build-round-service:       # This job runs in the build stage, which runs first.
     - echo "Build complete."
   allow_failure: true
 
-unit-test-round-service:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+unit-test-round-service: # This job runs in the test stage.
+  stage: test # It only starts when the job in the build stage completes successfully.
   script:
     - echo "Running unit tests."
     - cd RoundService
@@ -132,22 +140,21 @@ sonarqube-check-round-service:
   stage: QC
   image: maven:3.8.6-jdk-11
   variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
+  script:
     - cd RoundService
     - ./mvnw verify sonar:sonar
   allow_failure: true
   only:
     - develop
 
-
 # Tests for Round service
-build-api-gateway:       # This job runs in the build stage, which runs first.
+build-api-gateway: # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Running Build"
@@ -155,9 +162,8 @@ build-api-gateway:       # This job runs in the build stage, which runs first.
     - ./mvnw install -DskipTests
     - echo "Build complete."
 
-
 # Tests for AdminBFF
-build-adminbff:       # This job runs in the build stage, which runs first.
+build-adminbff: # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Running Build"
@@ -165,8 +171,8 @@ build-adminbff:       # This job runs in the build stage, which runs first.
     - ./mvnw install -DskipTests
     - echo "Build complete."
 
-unit-test-adminbff:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+unit-test-adminbff: # This job runs in the test stage.
+  stage: test # It only starts when the job in the build stage completes successfully.
   script:
     - echo "Running unit tests."
     - cd AdminAppBFF
@@ -177,22 +183,21 @@ sonarqube-check-adminbff:
   stage: QC
   image: maven:3.8.6-jdk-11
   variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
+  script:
     - cd AdminAppBFF
     - ./mvnw verify sonar:sonar
   allow_failure: true
   only:
     - develop
 
-
 # Tests for GameBFF
-build-gamebff:       # This job runs in the build stage, which runs first.
+build-gamebff: # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Running Build"
@@ -200,8 +205,8 @@ build-gamebff:       # This job runs in the build stage, which runs first.
     - ./mvnw install -DskipTests
     - echo "Build complete."
 
-unit-test-gamebff:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+unit-test-gamebff: # This job runs in the test stage.
+  stage: test # It only starts when the job in the build stage completes successfully.
   script:
     - echo "Running unit tests."
     - cd GameAppBFF
@@ -212,13 +217,13 @@ sonarqube-check-gamebff:
   stage: QC
   image: maven:3.8.6-jdk-11
   variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
+  script:
     - cd GameAppBFF
     - ./mvnw verify sonar:sonar
   allow_failure: true
