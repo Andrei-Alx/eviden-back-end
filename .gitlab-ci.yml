@@ -47,8 +47,8 @@ deploy-card-service:
     - docker login -u "$DOCKER_HUB_USERNAME" --password "$DOCKER_HUB_PASSWORD" $CI_REGISTRY
   script:
     - cd CardService
-    - docker build -t "$USERNAME"/atos-card-service .
-    - docker push "$USERNAME"/atos-card-service
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" .
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
 
 # Tests for Game service
 build-game-service: # This job runs in the build stage, which runs first.
