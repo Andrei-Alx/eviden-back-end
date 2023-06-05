@@ -1,15 +1,20 @@
-version: '2'
+version: '3'
 services:
   zookeeper:
+    container_name: zookeeper
     image: confluentinc/cp-zookeeper:latest
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - 22181:2181
+    restart: unless-stopped
+    networks:
+      - atos_network
   
   kafka:
     image: confluentinc/cp-kafka:latest
+    container_name: kafka
     depends_on:
       - zookeeper
     ports:
@@ -22,13 +27,18 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     restart: unless-stopped
+    networks:
+      - atos_network
       
   kpow:
     image: factorhouse/kpow-ce
+    container_name: kpow
     ports:
       - 3000:3000
-  mysqlCard:
+      
+  card-service-db:
     image: mysql:latest
+    container_name: card-service-db
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
@@ -38,9 +48,13 @@ services:
       MYSQL_PASSWORD: mypassword
     ports:
       - 3307:3306
-
-  mysqlRound:
+    restart: unless-stopped
+    networks:
+      - atos_network
+    
+  round-service-db:
     image: mysql:latest
+    container_name: round-service-db
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
@@ -50,9 +64,13 @@ services:
       MYSQL_PASSWORD: mypassword
     ports:
       - 3308:3306
+    restart: unless-stopped
+    networks:
+      - atos_network
 
-  mysqlLobby:
+  lobby-service-db:
     image: mysql:latest
+    container_name: lobby-service-db
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
@@ -62,9 +80,13 @@ services:
       MYSQL_PASSWORD: mypassword
     ports:
       - 3309:3306
+    restart: unless-stopped
+    networks:
+      - atos_network
 
-  mysqlGameApp:
+  gameappbff-db:
     image: mysql:latest
+    container_name: gameappbff-db
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
@@ -74,9 +96,13 @@ services:
       MYSQL_PASSWORD: mypassword
     ports:
       - 3310:3306
+    restart: unless-stopped
+    networks:
+      - atos_network
 
-  mysqlAdmin:
+  adminappbff-db:
     image: mysql:latest
+    container_name: adminappbff-db
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
@@ -86,9 +112,13 @@ services:
       MYSQL_PASSWORD: mypassword
     ports:
       - 3311:3306
+    restart: unless-stopped
+    networks:
+      - atos_network
 
-  mysqlGameService:
+  game-service-db:
     image: mysql:latest
+    container_name: game-service-db
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
@@ -98,9 +128,87 @@ services:
       MYSQL_PASSWORD: mypassword
     ports:
       - 3312:3306
+    restart: unless-stopped
+    networks:
+      - atos_network
 
   adminer:
-    image: adminer
+    image: adminer:latest
+    container_name: adminer
     ports:
       - 8080:8080
-    restart: always
+    restart: unless-stopped
+    networks:
+      - atos_network
+           
+  game-app:
+    image: petarparpov/atos-game-app:latest
+    container_name: game-app
+    restart: unless-stopped
+    ports:
+      - 3001:80
+    depends_on: atos-card-service
+    networks:
+      - atos_network
+      
+  card-service:
+    image: petarparpov/atos-card-service:latest
+    container_name: card-service
+    restart: unless-stopped
+    depends_on: 
+      - atos-gameappbff
+      - atos-adminappbff
+      - atos-round-service
+      - atos-lobby-service
+      - atos-game-service
+    networks:
+      - atos_network
+    
+  gameappbff:
+    image: petarparpov/atos-gameappbff:latest
+    container_name: gameappbff
+    restart: unless-stopped
+    networks:
+      - atos_network
+      
+  adminappbff:
+    image: petarparpov/atos-adminappbff:latest
+    container_name: adminappbff
+    restart: unless-stopped
+    networks:
+      - atos_network
+
+  round-service:
+    image: petarparpov/atos-round-service:latest
+    container_name: round-service
+    restart: unless-stopped
+    depends_on:
+      - kafka
+      - round-service-db
+    networks:
+      - atos_network
+    
+  lobby-service:
+    image: petarparpov/atos-lobby-service:latest
+    container_name: lobby-service
+    restart: unless-stopped
+    depends_on:
+      - kafka
+      - lobby-service-db
+    networks:
+      - atos_network
+    
+  game-service:
+    image: petarparpov/atos-game-service:latest
+    container_name: game-service
+    restart: unless-stopped
+    depends_on:
+      - kafka
+      - game-service-db
+    networks:
+      - atos_network
+          
+    
+networks:
+  atos_network:
+    driver: bridge
