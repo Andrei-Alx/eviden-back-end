@@ -11,6 +11,8 @@ FROM adoptopenjdk/openjdk11:alpine-jre
 
 ARG JAR_FILE=CardService-0.0.1-SNAPSHOT.jar
 
+ADD src/main/resources/data/cards /opt/app/data/cards
+
 WORKDIR /opt/app
 
 # Copy the spring-boot-api-tutorial.jar from the maven stage to the /opt/app directory of the current stage.
