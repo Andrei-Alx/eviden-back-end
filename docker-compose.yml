@@ -203,6 +203,8 @@ services:
   card-service:
     image: petarparpov/atos-card-service:latest
     container_name: card-service
+    ports:
+      - 8001:8001
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://card-service-db/card_db?useSSL=false
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
