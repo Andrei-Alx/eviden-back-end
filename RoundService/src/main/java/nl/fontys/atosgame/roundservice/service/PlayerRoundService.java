@@ -2,8 +2,8 @@ package nl.fontys.atosgame.roundservice.service;
 
 import java.util.List;
 import java.util.UUID;
+import nl.fontys.atosgame.roundservice.dto.PlayerRoundEndedDto;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
-import org.springframework.stereotype.Service;
 
 public interface PlayerRoundService {
     /**
@@ -56,5 +56,5 @@ public interface PlayerRoundService {
      * Check if a player round is finished and sends an application event if it is
      * @param playerRound The player round to check
      */
-    void checkIfPlayerRoundIsFinished(PlayerRound playerRound);
+    void endPlayerRound(PlayerRound playerRound);
 }

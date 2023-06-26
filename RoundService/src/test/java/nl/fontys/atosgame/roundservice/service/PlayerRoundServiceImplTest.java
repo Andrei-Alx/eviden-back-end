@@ -6,18 +6,13 @@ import static org.mockito.Mockito.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import nl.fontys.atosgame.roundservice.applicationevents.PlayerRoundFinishedAppEvent;
-import nl.fontys.atosgame.roundservice.applicationevents.RoundFinishedAppEvent;
-import nl.fontys.atosgame.roundservice.dto.CardsSelectedEventDto;
-import nl.fontys.atosgame.roundservice.dto.PlayerPhaseEndedDto;
-import nl.fontys.atosgame.roundservice.dto.PlayerPhaseStartedDto;
+import nl.fontys.atosgame.roundservice.dto.*;
 import nl.fontys.atosgame.roundservice.enums.PlayerRoundPhase;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerDislikedCard;
 import nl.fontys.atosgame.roundservice.event.produced.PlayerLikedCard;
-import nl.fontys.atosgame.roundservice.event.produced.PlayerSelectedCards;
 import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
-import nl.fontys.atosgame.roundservice.model.Round;
+import nl.fontys.atosgame.roundservice.model.RoundSettings;
 import nl.fontys.atosgame.roundservice.repository.PlayerRoundRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,6 +56,9 @@ class PlayerRoundServiceImplTest {
         when(cardService.getCard(cardId)).thenReturn(Optional.of(card));
         when(playerRoundRepository.save(any()))
             .thenAnswer(invocation -> invocation.getArgument(0));
+        RoundSettings roundSettings = new RoundSettings();
+        roundSettings.setNrOfLikedCards(1);
+        playerRound.setRoundSettings(roundSettings);
 
         PlayerRound result = playerRoundService.likeCard(
             playerRound,
@@ -152,6 +150,10 @@ class PlayerRoundServiceImplTest {
         when(cardService.getCards(cardIds)).thenReturn(List.of(card1, card2));
         when(playerRoundRepository.save(any()))
             .thenAnswer(invocation -> invocation.getArgument(0));
+        RoundSettings roundSettings = new RoundSettings();
+        roundSettings.setNrOfLikedCards(2);
+        roundSettings.setNrOfSelectedCards(2);
+        playerRound.setRoundSettings(roundSettings);
 
         PlayerRound result = playerRoundService.selectCards(
             playerRound,
@@ -173,7 +175,6 @@ class PlayerRoundServiceImplTest {
                     gameId
                 )
             );
-        verify(playerRoundService).checkIfPlayerRoundIsFinished(playerRound);
     }
 
     @Test
@@ -207,25 +208,5 @@ class PlayerRoundServiceImplTest {
                 "producePlayerPhaseStarted-in-0",
                 new PlayerPhaseStartedDto(2, playerRound.getPlayerId(), gameId, roundId)
             );
-    }
-
-    @Test
-    void checkIfPlayerRoundIsFinishedWhenFinished() {
-        PlayerRound playerRound = mock(PlayerRound.class);
-        doReturn(true).when(playerRound).isDone();
-
-        playerRoundService.checkIfPlayerRoundIsFinished(playerRound);
-
-        verify(eventPublisher).publishEvent(any(PlayerRoundFinishedAppEvent.class));
-    }
-
-    @Test
-    void checkIfPlayerRoundIsFinishedWhenNotFinished() {
-        PlayerRound playerRound = mock(PlayerRound.class);
-        doReturn(false).when(playerRound).isDone();
-
-        playerRoundService.checkIfPlayerRoundIsFinished(playerRound);
-
-        verify(eventPublisher, never()).publishEvent(any());
     }
 }

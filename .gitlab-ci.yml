@@ -1,23 +1,23 @@
-stages:          # List of stages for jobs, and their order of execution
+stages: # List of stages for jobs, and their order of execution
   - build
   - test
   - QC
-
+  - deploy
 
 # Tests for Card service
-build-card-service:       # This job runs in the build stage, which runs first.
+build-card-service: # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Running Build"
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\CardService
+    - cd CardService
     - ./mvnw install -DskipTests
     - echo "Build complete."
 
-unit-test-card-service:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+unit-test-card-service: # This job runs in the test stage.
+  stage: test # It only starts when the job in the build stage completes successfully.
   script:
     - echo "Running unit tests."
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\CardService
+    - cd CardService
     - ./mvnw test
     - echo "Tests complete."
 
@@ -25,34 +25,45 @@ sonarqube-check-card-service:
   stage: QC
   image: maven:3.8.6-jdk-11
   variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\CardService
-    - ./mvnw verify sonar:sonar -Pcoverage
+  script:
+    - cd CardService
+    - ./mvnw verify sonar:sonar
   allow_failure: true
   only:
     - develop
 
+deploy-card-service:
+  stage: deploy
+  image: ubuntu-latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$DOCKER_HUB_USERNAME" --password "$DOCKER_HUB_PASSWORD" $CI_REGISTRY
+  script:
+    - cd CardService
+    - docker build --pull -t "$CI_REG_IMG_CARD_SERVICE" .
+    - docker push "$CI_REG_IMG_CARD_SERVICE"
 
 # Tests for Game service
-build-game-service:       # This job runs in the build stage, which runs first.
+build-game-service: # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Running Build"
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\GameService
+    - cd GameService
     - ./mvnw install -DskipTests
     - echo "Build complete."
 
-unit-test-game-service:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+unit-test-game-service: # This job runs in the test stage.
+  stage: test # It only starts when the job in the build stage completes successfully.
   script:
     - echo "Running unit tests."
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\GameService
+    - cd GameService
     - ./mvnw test
     - echo "Tests complete."
 
@@ -60,34 +71,45 @@ sonarqube-check-game-service:
   stage: QC
   image: maven:3.8.6-jdk-11
   variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\GameService
-    - ./mvnw verify sonar:sonar -Pcoverage
+  script:
+    - cd GameService
+    - ./mvnw verify sonar:sonar
   allow_failure: true
   only:
     - develop
 
+deploy-game-service:
+  stage: deploy
+  image: ubuntu-latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$DOCKER_HUB_USERNAME" --password "$DOCKER_HUB_PASSWORD" $CI_REGISTRY
+  script:
+    - cd GameService
+    - docker build --pull -t "$CI_REG_IMG_GAME_SERVICE" .
+    - docker push "$CI_REG_IMG_GAME_SERVICE"
 
 # Tests for Lobby service
-build-lobby-service:       # This job runs in the build stage, which runs first.
+build-lobby-service: # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Running Build"
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\LobbyService
+    - cd LobbyService
     - ./mvnw install -DskipTests
     - echo "Build complete."
 
-unit-test-lobby-service:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+unit-test-lobby-service: # This job runs in the test stage.
+  stage: test # It only starts when the job in the build stage completes successfully.
   script:
     - echo "Running unit tests."
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\LobbyService
+    - cd LobbyService
     - ./mvnw test
     - echo "Tests complete."
 
@@ -95,35 +117,46 @@ sonarqube-check-lobby-service:
   stage: QC
   image: maven:3.8.6-jdk-11
   variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\LobbyService
-    - ./mvnw verify sonar:sonar -Pcoverage
+  script:
+    - cd LobbyService
+    - ./mvnw verify sonar:sonar
   allow_failure: true
   only:
     - develop
 
+deploy-lobby-service:
+  stage: deploy
+  image: ubuntu-latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$DOCKER_HUB_USERNAME" --password "$DOCKER_HUB_PASSWORD" $CI_REGISTRY
+  script:
+    - cd LobbyService
+    - docker build --pull -t "$CI_REG_IMG_LOBBY_SERVICE" .
+    - docker push "$CI_REG_IMG_LOBBY_SERVICE"
 
 # Tests for Round service
-build-round-service:       # This job runs in the build stage, which runs first.
+build-round-service: # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Running Build"
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\RoundService
+    - cd RoundService
     - ./mvnw install -DskipTests
     - echo "Build complete."
   allow_failure: true
 
-unit-test-round-service:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+unit-test-round-service: # This job runs in the test stage.
+  stage: test # It only starts when the job in the build stage completes successfully.
   script:
     - echo "Running unit tests."
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\RoundService
+    - cd RoundService
     - ./mvnw test
     - echo "Tests complete."
   allow_failure: true
@@ -132,44 +165,54 @@ sonarqube-check-round-service:
   stage: QC
   image: maven:3.8.6-jdk-11
   variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\RoundService
-    - ./mvnw verify sonar:sonar -Pcoverage
+  script:
+    - cd RoundService
+    - ./mvnw verify sonar:sonar
   allow_failure: true
   only:
     - develop
 
-
-# Tests for Round service
-build-api-gateway:       # This job runs in the build stage, which runs first.
-  stage: build
+deploy-round-service:
+  stage: deploy
+  image: ubuntu-latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$DOCKER_HUB_USERNAME" --password "$DOCKER_HUB_PASSWORD" $CI_REGISTRY
   script:
-    - echo "Running Build"
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\ApiGateway
-    - ./mvnw install -DskipTests
-    - echo "Build complete."
+    - cd RoundService
+    - docker build --pull -t "$CI_REG_IMG_ROUND_SERVICE" .
+    - docker push "$CI_REG_IMG_ROUND_SERVICE"
 
+## Tests for Round service
+#build-api-gateway: # This job runs in the build stage, which runs first.
+#  stage: build
+#  script:
+#    - echo "Running Build"
+#    - cd ApiGateway
+#    - ./mvnw install -DskipTests
+#    - echo "Build complete."
 
 # Tests for AdminBFF
-build-adminbff:       # This job runs in the build stage, which runs first.
+build-adminbff: # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Running Build"
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\AdminAppBFF
+    - cd AdminAppBFF
     - ./mvnw install -DskipTests
     - echo "Build complete."
 
-unit-test-adminbff:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+unit-test-adminbff: # This job runs in the test stage.
+  stage: test # It only starts when the job in the build stage completes successfully.
   script:
     - echo "Running unit tests."
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\AdminAppBFF
+    - cd AdminAppBFF
     - ./mvnw test
     - echo "Tests complete."
 
@@ -177,34 +220,45 @@ sonarqube-check-adminbff:
   stage: QC
   image: maven:3.8.6-jdk-11
   variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\AdminAppBFF
-    - ./mvnw verify sonar:sonar -Pcoverage
+  script:
+    - cd AdminAppBFF
+    - ./mvnw verify sonar:sonar
   allow_failure: true
   only:
     - develop
 
+deploy-adminbff-service:
+  stage: deploy
+  image: ubuntu-latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$DOCKER_HUB_USERNAME" --password "$DOCKER_HUB_PASSWORD" $CI_REGISTRY
+  script:
+    - cd AdminAppBFF
+    - docker build --pull -t "$CI_REG_IMG_ADMINAPPBFF" .
+    - docker push "$CI_REG_IMG_ADMINAPPBFF"
 
 # Tests for GameBFF
-build-gamebff:       # This job runs in the build stage, which runs first.
+build-gamebff: # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Running Build"
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\GameAppBFF
+    - cd GameAppBFF
     - ./mvnw install -DskipTests
     - echo "Build complete."
 
-unit-test-gamebff:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+unit-test-gamebff: # This job runs in the test stage.
+  stage: test # It only starts when the job in the build stage completes successfully.
   script:
     - echo "Running unit tests."
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\GameAppBFF
+    - cd GameAppBFF
     - ./mvnw test
     - echo "Tests complete."
 
@@ -212,15 +266,27 @@ sonarqube-check-gamebff:
   stage: QC
   image: maven:3.8.6-jdk-11
   variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
-    - cd C:\Users\schee\Documents\GitkrakenCode\Atos\kafka-prototype\GameAppBFF
-    - ./mvnw verify sonar:sonar -Pcoverage
+  script:
+    - cd GameAppBFF
+    - ./mvnw verify sonar:sonar
   allow_failure: true
   only:
     - develop
+
+deploy-gamebff-service:
+  stage: deploy
+  image: ubuntu-latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$DOCKER_HUB_USERNAME" --password "$DOCKER_HUB_PASSWORD" $CI_REGISTRY
+  script:
+    - cd GameAppBFF
+    - docker build --pull -t "$CI_REG_IMG_GAMEAPPBFF" .
+    - docker push "$CI_REG_IMG_GAMEAPPBFF"

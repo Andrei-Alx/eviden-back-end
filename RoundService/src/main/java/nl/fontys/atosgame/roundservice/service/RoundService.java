@@ -79,8 +79,9 @@ public interface RoundService {
     /**
      * When a playerround is finished, check if round is finished and if so, launch application event
      * @param roundId The id of the round
+     * @param gameId The id of the game
      */
-    boolean checkRoundEnd(UUID roundId);
+    boolean checkRoundEnd(UUID roundId, UUID gameId);
 
     /**
      * Get the round that contains a playerround
@@ -88,4 +89,11 @@ public interface RoundService {
      * @return The round
      */
     Optional<Round> getRoundByPlayerRound(PlayerRound playerRound);
+
+    /**
+     * Publish the results of a round
+     * @param roundId The id of the round
+     * @param gameId The id of the game
+     */
+    void publishResults(UUID roundId, UUID gameId);
 }

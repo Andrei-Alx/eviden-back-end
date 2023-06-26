@@ -7,6 +7,7 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.fontys.atosgame.gameappbff.enums.CardSetType;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
@@ -25,9 +26,6 @@ public class CardSet {
     @JsonProperty
     private String name;
 
-    @JsonProperty
-    private String type;
-
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
         name = "card_set_cards",
@@ -37,4 +35,8 @@ public class CardSet {
     @JsonProperty
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Card> cards = new java.util.ArrayList<>();
+
+    @JsonProperty
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Collection<Tag> tags;
 }

@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
+import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.model.Game;
 import nl.fontys.atosgame.roundservice.model.Lobby;
 import nl.fontys.atosgame.roundservice.model.Round;
@@ -118,36 +119,44 @@ public class GameServiceImpl implements GameService {
             .findById(gameId)
             .orElseThrow(EntityNotFoundException::new);
 
-        // Get current round
-        Optional<Round> currentRound = game.getCurrentRound();
-        // If there is no current round, the game is done
-        if (currentRound.isEmpty()) {
+        // Get all rounds in the game
+        List<Round> rounds = game.getRounds();
+        // get the latest round with status FINISHED
+        Round latestFinishedRound = null;
+        Round possibleNextRound = null;
+        for (Round round : rounds) {
+            if (round.getStatus() == RoundStatus.FINISHED) {
+                latestFinishedRound = round;
+            }
+        }
+
+        for (Round round : rounds){
+            if (round.getStatus() == RoundStatus.CREATED){
+                possibleNextRound = round;
+                break;
+            }
+        }
+
+        // If there is no next round, the game is done
+        if (possibleNextRound == null) {
             throw new IllegalStateException(
                 "Game is already done, but checkForNextRound was called. This means the game appears to be done, but some logic still happened."
             );
         }
 
         // If the current round is done, start the next round
-        Round round = currentRound.get();
-        if (round.isDone()) {
-            // End the current round
-            roundService.endRound(round.getId(), gameId);
+
             // Check if there is a next round
-            Optional<Round> nextRound = game.getNextRound();
-            if (nextRound.isPresent()) {
+
                 // Start the next round
                 roundService.startRound(
-                    nextRound.get().getId(),
+                    possibleNextRound.getId(),
                     game.getLobby().getPlayerIds(),
                     gameId
                 );
-            } else {
-                // Game is done
-                // TODO: Publish event, change status?
-            }
+
             gameRepository.save(game);
         }
-    }
 
     /**
      * Get the game of a round

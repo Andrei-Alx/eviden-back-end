@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.roundservice.applicationevents.PlayerRoundFinishedAppEvent;
+import nl.fontys.atosgame.roundservice.model.Game;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
 import nl.fontys.atosgame.roundservice.model.Round;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,12 +15,15 @@ import org.junit.jupiter.api.Test;
 class PlayerRoundFinishedHandlerTest {
 
     private RoundService roundService;
+    private GameService gameService;
     private PlayerRoundFinishedHandler playerRoundFinishedHandler;
 
     @BeforeEach
     void setUp() {
         roundService = mock(RoundService.class);
-        playerRoundFinishedHandler = new PlayerRoundFinishedHandler(roundService);
+        gameService = mock(GameService.class);
+        playerRoundFinishedHandler =
+            new PlayerRoundFinishedHandler(roundService, gameService);
     }
 
     @Test
@@ -31,11 +35,15 @@ class PlayerRoundFinishedHandlerTest {
         round.setId(roundId);
         when(roundService.getRoundByPlayerRound(playerRound))
             .thenReturn(Optional.of(round));
+        UUID gameId = UUID.randomUUID();
+        Game game = new Game();
+        game.setId(gameId);
+        when(gameService.getGameByRoundId(roundId)).thenReturn(Optional.of(game));
 
         playerRoundFinishedHandler.onApplicationEvent(
             new PlayerRoundFinishedAppEvent(this, playerRound)
         );
 
-        verify(roundService).checkRoundEnd(roundId);
+        verify(roundService).checkRoundEnd(roundId, gameId);
     }
 }

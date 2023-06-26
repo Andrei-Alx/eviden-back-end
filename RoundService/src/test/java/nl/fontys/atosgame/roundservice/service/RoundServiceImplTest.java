@@ -3,11 +3,7 @@ package nl.fontys.atosgame.roundservice.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import nl.fontys.atosgame.roundservice.applicationevents.RoundFinishedAppEvent;
+import java.util.*;
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
@@ -15,14 +11,12 @@ import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.enums.ShowResults;
 import nl.fontys.atosgame.roundservice.enums.ShuffleMethod;
+import nl.fontys.atosgame.roundservice.enums.TagType;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.event.produced.RoundEndedEvent;
-import nl.fontys.atosgame.roundservice.model.Card;
-import nl.fontys.atosgame.roundservice.model.CardSet;
-import nl.fontys.atosgame.roundservice.model.PlayerRound;
-import nl.fontys.atosgame.roundservice.model.Round;
-import nl.fontys.atosgame.roundservice.model.RoundSettings;
+import nl.fontys.atosgame.roundservice.model.*;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -61,6 +55,19 @@ class RoundServiceImplTest {
 
     @Test
     void createRound() {
+        Tag tagColor = new Tag(TagType.COLOR, "red");
+        Tag tagImportantTag = new Tag(TagType.IMPORTANT_TAG, "color");
+
+        Collection<Tag> cardTags = new ArrayList<>(List.of(tagColor));
+        Collection<Tag> cardSetTags = new ArrayList<>(List.of(tagImportantTag));
+
+        Collection<Card> cards = new ArrayList<>(
+            List.of(new Card(UUID.randomUUID(), cardTags))
+        );
+        CardSet cardSet = new CardSet();
+        cardSet.setCards(cards);
+        cardSet.setTags(cardSetTags);
+
         RoundSettingsDto roundSettings = new RoundSettingsDto(
             ShowResults.PERSONAL,
             1,
@@ -78,19 +85,49 @@ class RoundServiceImplTest {
             null
         );
         when(cardSetService.getCardSet(roundSettings.getCardSetId()))
-            .thenReturn(Optional.of(mock(CardSet.class)));
+            .thenReturn(Optional.of(cardSet));
         Round round = new Round(null, new ArrayList<>(), RoundStatus.CREATED, settings);
         when(roundRepository.save(round)).thenReturn(round);
+
+        // assert
+        RoundSettings assertSettings = new RoundSettings(
+            roundSettings.getShowPersonalOrGroupResults(),
+            roundSettings.getNrOfLikedCards(),
+            roundSettings.getNrOfSelectedCards(),
+            roundSettings.getShuffleMethod(),
+            roundSettings.isShowSameCardOrder(),
+            cardSet
+        );
+        Round assertRound = new Round(
+            null,
+            new ArrayList<>(),
+            RoundStatus.CREATED,
+            assertSettings
+        );
+        when(roundRepository.save(assertRound)).thenReturn(assertRound);
         UUID gameId = UUID.randomUUID();
 
-        roundService.createRound(gameId, roundSettings);
+        Round result = roundService.createRound(gameId, roundSettings);
 
+        round.setRoundSettings(assertSettings);
         verify(roundRepository).save(round);
         verify(streamBridge)
             .send(
                 "produceRoundCreated-in-0",
                 new RoundCreatedEventKeyValue(gameId, round)
             );
+        Assert.assertSame(
+            "color",
+            result
+                .getRoundSettings()
+                .getCardSet()
+                .getTags()
+                .stream()
+                .filter(tag -> tag.getTagKey() == TagType.IMPORTANT_TAG)
+                .findFirst()
+                .get()
+                .getTagKey()
+        );
     }
 
     @Test
@@ -131,39 +168,9 @@ class RoundServiceImplTest {
         );
         List<PlayerRound> playerRounds = new ArrayList<>(
             List.of(
-                new PlayerRound(
-                    null,
-                    playerIds.get(0),
-                    null,
-                    null,
-                    null,
-                    cards,
-                    0,
-                    0,
-                    null
-                ),
-                new PlayerRound(
-                    null,
-                    playerIds.get(1),
-                    null,
-                    null,
-                    null,
-                    cards,
-                    0,
-                    0,
-                    null
-                ),
-                new PlayerRound(
-                    null,
-                    playerIds.get(2),
-                    null,
-                    null,
-                    null,
-                    cards,
-                    0,
-                    0,
-                    null
-                )
+                new PlayerRound(null, playerIds.get(0), null, null, null, cards, null),
+                new PlayerRound(null, playerIds.get(1), null, null, null, cards, null),
+                new PlayerRound(null, playerIds.get(2), null, null, null, cards, null)
             )
         );
         List<UUID> cardIds = new ArrayList<>(
@@ -242,6 +249,7 @@ class RoundServiceImplTest {
         // Set behavior of repository
         when(roundRepository.findById(round.getId())).thenReturn(Optional.of(round));
         when(roundRepository.save(round)).thenReturn(round);
+        doNothing().when(roundService).publishResults(any(), any());
 
         // Act
         Round result = roundService.endRound(round.getId(), gameId);
@@ -251,6 +259,7 @@ class RoundServiceImplTest {
         verify(streamBridge)
             .send("produceRoundEnded-in-0", new RoundEndedDto(gameId, result.getId()));
         verify(roundRepository).save(result);
+        verify(roundService).publishResults(round.getId(), gameId);
     }
 
     @Test
@@ -330,18 +339,6 @@ class RoundServiceImplTest {
 
         verify(playerRoundService)
             .selectCards(playerRound, List.of(cardId), gameId, roundId);
-    }
-
-    @Test
-    void checkRoundEnd() {
-        UUID roundId = UUID.randomUUID();
-        Round round = mock(Round.class);
-        when(round.isDone()).thenReturn(true);
-        when(roundRepository.findById(roundId)).thenReturn(Optional.of(round));
-
-        roundService.checkRoundEnd(roundId);
-
-        verify(applicationEventPublisher).publishEvent(any(RoundFinishedAppEvent.class));
     }
 
     @Test

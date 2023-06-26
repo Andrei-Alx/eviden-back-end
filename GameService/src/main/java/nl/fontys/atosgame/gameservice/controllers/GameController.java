@@ -11,6 +11,7 @@ import nl.fontys.atosgame.gameservice.model.Game;
 import nl.fontys.atosgame.gameservice.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -33,6 +34,7 @@ public class GameController {
      * Create a game
      */
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('SCOPE_Gamemaster.Write') && hasAuthority('APPROLE_Role.Gamemaster.ReadWrite')")
     @ApiResponses(
         value = {
             @ApiResponse(
@@ -65,6 +67,7 @@ public class GameController {
      * Start a game
      */
     @PutMapping("/start/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_Gamemaster.Write') && hasAuthority('APPROLE_Role.Gamemaster.ReadWrite')")
     @ApiResponses(
         value = {
             @ApiResponse(
@@ -81,6 +84,33 @@ public class GameController {
     public ResponseEntity<Game> startGame(@PathVariable UUID id) {
         try {
             Game game = gameService.startGame(id);
+            return ResponseEntity.ok(game);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
+     * Id: R-?
+     * End a game
+     */
+    @PutMapping("/end/{id}")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Ended the game",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Game.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "404", description = "Game not found"),
+            }
+    )
+    public ResponseEntity<Game> endGame(@PathVariable UUID id) {
+        try {
+            Game game = gameService.endGame(id);
             return ResponseEntity.ok(game);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();

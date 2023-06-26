@@ -1,18 +1,18 @@
 package nl.fontys.atosgame.roundservice.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
-import nl.fontys.atosgame.roundservice.applicationevents.RoundFinishedAppEvent;
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
 import nl.fontys.atosgame.roundservice.dto.PlayerPhaseStartedDto;
+import nl.fontys.atosgame.roundservice.dto.PlayerResultDeterminedDto;
+import nl.fontys.atosgame.roundservice.dto.ResultDto;
 import nl.fontys.atosgame.roundservice.dto.RoundEndedDto;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.dto.RoundStartedDto;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
+import nl.fontys.atosgame.roundservice.enums.ShowResults;
+import nl.fontys.atosgame.roundservice.enums.TagType;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.model.*;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * Service for round related operations
+ *
  * @author Eli
  */
 @Service
@@ -58,7 +59,8 @@ public class RoundServiceImpl implements RoundService {
 
     /**
      * Create rounds for a game
-     * @param gameId The id of the game
+     *
+     * @param gameId        The id of the game
      * @param roundSettings The settings for the rounds
      * @return
      */
@@ -77,9 +79,10 @@ public class RoundServiceImpl implements RoundService {
      * Start a round
      * Changes the status of the round to InProgress
      * Distributes the cards to the players
-     * @param roundId The id of the round
+     *
+     * @param roundId   The id of the round
      * @param playerIds the ids of the players to start the round for
-     * @param gameId The id of the game
+     * @param gameId    The id of the game
      * @return The updated round
      */
     @Override
@@ -153,6 +156,9 @@ public class RoundServiceImpl implements RoundService {
         // Change the status of the round to Finished and send event
         round.setStatus(RoundStatus.FINISHED);
         streamBridge.send("produceRoundEnded-in-0", new RoundEndedDto(gameId, roundId));
+
+        // Publish results
+        this.publishResults(roundId, gameId);
 
         // Save to db
         round = roundRepository.save(round);
@@ -245,22 +251,23 @@ public class RoundServiceImpl implements RoundService {
      * When a playerround is finished, check if round is finished and if so, launch application event
      *
      * @param roundId The id of the round
+     * @param gameId  The id of the game
      */
     @Override
-    public boolean checkRoundEnd(UUID roundId) {
-        boolean roundFinished = false;
+    public boolean checkRoundEnd(UUID roundId, UUID gameId) {
         Round round = getRound(roundId).get();
         if (round.isDone()) {
-            applicationEventPublisher.publishEvent(new RoundFinishedAppEvent(this, round));
+            this.endRound(roundId, gameId);
+            return true;
         }
 
-        return roundFinished;
+        return false;
     }
 
     /**
      * Get the round that contains a playerround
      *
-     * @param playerRound The the player round
+     * @param playerRound The player round
      * @return The round
      */
     @Override
@@ -269,8 +276,119 @@ public class RoundServiceImpl implements RoundService {
     }
 
     /**
+     * Publish the results of a round
+     *
+     * @param roundId The id of the round
+     * @param gameId  The id of the game
+     */
+    @Override
+    public void publishResults(UUID roundId, UUID gameId) {
+        Optional<Round> roundOptional = getRound(roundId);
+        if (roundOptional.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+        Round round = roundOptional.get();
+        round
+            .getPlayerRounds()
+            .forEach(playerRound -> {
+                // playerRound calculate results and produce in event
+
+                // calculate the amount a card type (color or operation model) is picked
+                Map<String, Integer> tempResults = playerRound.determineCardsChosenPerType();
+
+                // get back a list of results when *undetermined*
+                // get back a single result when *determined*
+                List<String> result = playerRound.getTopResultCardTypes(tempResults);
+
+                // get the importantTag
+                String importantTagValue = playerRound
+                    .getRoundSettings()
+                    .getCardSet()
+                    .getTags()
+                    .stream()
+                    .filter(tag -> tag.getTagKey() == TagType.IMPORTANT_TAG)
+                    .findFirst()
+                    .get()
+                    .getTagValue();
+                Tag importantTag = new Tag(TagType.IMPORTANT_TAG, importantTagValue);
+
+                // Type is advice
+                Tag adviceTag = new Tag(TagType.TYPE, "advice");
+
+                // group or personal
+                String groupOrPersonalTagValue = playerRound
+                    .getRoundSettings()
+                    .getCardSet()
+                    .getTags()
+                    .stream()
+                    .filter(tag -> tag.getTagKey() == TagType.GROUP_OR_PERSONAL)
+                    .findFirst()
+                    .get()
+                    .getTagValue();
+                Tag groupOrPersonalTag = new Tag(
+                    TagType.GROUP_OR_PERSONAL,
+                    groupOrPersonalTagValue
+                );
+
+                List<Tag> tags = new ArrayList<>();
+                tags.add(importantTag);
+                tags.add(adviceTag);
+                tags.add(groupOrPersonalTag);
+
+                // get all cardSets
+                List<CardSet> cardSet = cardSetService.getAllCardSets();
+
+                // get the cardSet that matches the tags
+                CardSet cardSetToUse = cardSet
+                    .stream()
+                    .filter(cardSet1 -> cardSet1.getTags().containsAll(tags))
+                    .findFirst()
+                    .get();
+
+                // advice cards that match the result cards
+                List<Card> allAdviceCards = new ArrayList<>(cardSetToUse.getCards());
+                List<Card> adviceCards = allAdviceCards
+                    .stream()
+                    .filter(card ->
+                        card
+                            .getTags()
+                            .stream()
+                            .anyMatch(tag ->
+                                result.stream().anyMatch(tag.getTagValue()::equals)
+                            )
+                    )
+                    .collect(Collectors.toList());
+
+                // roundSettings showResult
+                ShowResults showResults = playerRound
+                    .getRoundSettings()
+                    .getShowPersonalOrGroupResults();
+
+                // playerRound selectedCards
+                List<Card> selectedCards = playerRound.getSelectedCards();
+
+                ResultDto resultDto = new ResultDto(
+                    playerRound.getPlayerId(),
+                    showResults,
+                    result,
+                    selectedCards,
+                    adviceCards
+                );
+
+                PlayerResultDeterminedDto dto = new PlayerResultDeterminedDto();
+                dto.setGameId(gameId);
+                dto.setRoundId(roundId);
+                dto.setPlayerId(playerRound.getPlayerId());
+                dto.setResult(resultDto);
+                // Send event
+                streamBridge.send("producePlayerResultDetermined-out-0", dto);
+            });
+    }
+
+    /**
      * Create a round for a game
-     * @param gameId The id of the game
+     *
+     * @param gameId        The id of the game
      * @param roundSettings The settings for the round
      */
     public Round createRound(UUID gameId, RoundSettingsDto roundSettings) {
@@ -291,13 +409,13 @@ public class RoundServiceImpl implements RoundService {
         if (cardSet.isEmpty()) {
             throw new IllegalArgumentException("Card set not found");
         }
-        // Add round settings to round
-        round.setRoundSettings(settings);
-        // Save round
-        round = roundRepository.save(round);
-        // Add card set to round settings
+
         settings.setCardSet(cardSet.get());
 
+        // Add round settings to round
+        round.setRoundSettings(settings);
+
+        // Save round
         round = roundRepository.save(round);
 
         // Produce round created event

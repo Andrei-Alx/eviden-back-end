@@ -9,6 +9,8 @@ import java.util.UUID;
 import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.roundservice.dto.CardLikeRequestDto;
 import nl.fontys.atosgame.roundservice.dto.CardSubmitRequestDto;
+import nl.fontys.atosgame.roundservice.dto.StartNextRoundDto;
+import nl.fontys.atosgame.roundservice.service.GameService;
 import nl.fontys.atosgame.roundservice.service.RoundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,9 @@ public class CardController {
 
     @Autowired
     private RoundService roundService;
+
+    @Autowired
+    private GameService gameService;
 
     @PostMapping("/likeCard")
     @ApiResponses(
@@ -119,6 +124,36 @@ public class CardController {
                 cardSubmitRequestDto.getGameId(),
                 cardSubmitRequestDto.getRoundId()
             );
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/startnextround")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "Next round",
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = CardSubmitRequestDto.class)
+                )
+            ),
+            @ApiResponse(responseCode = "404", description = "Game not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error"),
+        }
+    )
+    /**
+     * R-22
+     * This method starts the next round manually
+     */
+    public ResponseEntity startNextRound(
+        @RequestBody StartNextRoundDto startNextRoundDto
+    ) {
+        try {
+            gameService.checkForNextRound(startNextRoundDto.getGameId());
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }

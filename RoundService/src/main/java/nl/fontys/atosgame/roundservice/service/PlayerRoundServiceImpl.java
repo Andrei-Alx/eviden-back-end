@@ -8,9 +8,7 @@ import nl.fontys.atosgame.roundservice.dto.*;
 import nl.fontys.atosgame.roundservice.enums.PlayerRoundPhase;
 import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
-import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.repository.PlayerRoundRepository;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.ApplicationEventPublisher;
@@ -151,8 +149,10 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
             new CardsSelectedEventDto(playerRound.getPlayerId(), cardIds, roundId, gameId)
         );
 
-        // Check if round is finished
-        this.checkIfPlayerRoundIsFinished(playerRound);
+        // Check if playerRound is finished
+        if (playerRound.isDone()) {
+            this.endPlayerRound(playerRound);
+        }
 
         if (previousPhase != currentPhase) {
             streamBridge.send(
@@ -180,15 +180,9 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
 
     /**
      * Check if a player round is finished and sends an application event if it is
-     *
      * @param playerRound The player round to check
      */
-    @Override
-    public void checkIfPlayerRoundIsFinished(PlayerRound playerRound) {
-        if (playerRound.isDone()) {
-            eventPublisher.publishEvent(
-                new PlayerRoundFinishedAppEvent(this, playerRound)
-            );
-        }
+    public void endPlayerRound(PlayerRound playerRound) {
+        eventPublisher.publishEvent(new PlayerRoundFinishedAppEvent(this, playerRound));
     }
 }

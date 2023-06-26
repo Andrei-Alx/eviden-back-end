@@ -200,7 +200,6 @@ public class RoundConsumers {
             return null;
         };
     }
-
     /*@Bean
     public Function<Message<PlayerResultDeterminedEvent>, Void> handlePlayerResultDetermined(){
         return message -> {

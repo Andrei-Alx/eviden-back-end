@@ -1,0 +1,11 @@
+## For security, change later to production only
+spring:
+  cloud:
+    azure:
+      active-directory:
+        enabled: true
+        credential:
+          client-id: api://03968d1b-91c4-4425-933d-34b2482298ab
+        profile:
+          tenant-id: 8a7e5b3d-bd94-4c6e-a439-a21a9f47c657
+        app-id-uri: api://03968d1b-91c4-4425-933d-34b2482298ab
