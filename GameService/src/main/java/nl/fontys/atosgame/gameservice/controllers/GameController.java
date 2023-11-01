@@ -35,7 +35,6 @@ public class GameController {
      */
     @PostMapping("/create")
     @CrossOrigin(origins = "*")
-    /**@PreAuthorize("hasAuthority('SCOPE_Gamemaster.Write') && hasAuthority('APPROLE_Role.Gamemaster.ReadWrite')")
     @ApiResponses(
             value = {
                     @ApiResponse(
@@ -48,7 +47,7 @@ public class GameController {
                     ),
                     @ApiResponse(responseCode = "404", description = "Cardset not found"),
             }
-    )**/
+    )
     public ResponseEntity<Game> createGame(@RequestBody CreateGameDto createGameDto) {
         try {
             Game game = gameService.createGame(
@@ -68,7 +67,6 @@ public class GameController {
      * Start a game
      */
     @PutMapping("/start/{id}")
-   /** @PreAuthorize("hasAuthority('SCOPE_Gamemaster.Write') && hasAuthority('APPROLE_Role.Gamemaster.ReadWrite')")
     @ApiResponses(
             value = {
                     @ApiResponse(
@@ -81,7 +79,7 @@ public class GameController {
                     ),
                     @ApiResponse(responseCode = "404", description = "Game not found"),
             }
-    )**/
+    )
     public ResponseEntity<Game> startGame(@PathVariable UUID id) {
         try {
             Game game = gameService.startGame(id);
