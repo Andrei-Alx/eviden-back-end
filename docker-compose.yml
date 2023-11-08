@@ -128,26 +128,6 @@ services:
     networks:
       - atos_network
 
-  adminappbff-db:
-    image: mysql:latest
-    container_name: adminappbff-db
-    command: --default-authentication-plugin=mysql_native_password
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: adminappbff_db
-      MYSQL_USER: myuser
-      MYSQL_PASSWORD: mypassword
-    ports:
-      - 3311:3306
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 45s
-        max_attempts: 3
-        window: 180s
-    networks:
-      - atos_network
-
   game-service-db:
     image: mysql:latest
     container_name: game-service-db
@@ -234,25 +214,6 @@ services:
       - 8004:8004
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://gameappbff-db/gameappbff_db?useSSL=false
-      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - SPRING_DATASOURCE_USERNAME=myuser
-      - SPRING_DATASOURCE_PASSWORD=mypassword
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 45s
-        max_attempts: 3
-        window: 180s
-    networks:
-      - atos_network
-      
-  adminappbff:
-    image: petarparpov/atos-adminappbff:latest
-    container_name: adminappbff
-    ports:
-      - 8007:8007
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://adminappbff-db:3306/adminappbff_db?useSSL=false
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=mypassword

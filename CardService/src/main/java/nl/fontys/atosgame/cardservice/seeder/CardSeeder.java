@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.cardservice.seeder;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +20,9 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -58,7 +61,11 @@ public class CardSeeder {
     @EventListener(ApplicationReadyEvent.class)
     public void seedCards() throws IOException {
         // Read the cards from the json file
-        List<CreateCardDto> cards = CardJsonReader.readCards(roundOne.getInputStream());
+        ResourceLoader resourceLoader = new DefaultResourceLoader();
+        Resource resource = resourceLoader.getResource("classpath:data/cards/roundOne.json");
+        InputStream inputStream = resource.getInputStream();
+
+        List<CreateCardDto> cards = CardJsonReader.readCards(inputStream);
         List<Card> createdCards = new ArrayList<>();
         // Create the cards
         for (CreateCardDto card : cards) {
@@ -114,8 +121,12 @@ public class CardSeeder {
         tags1Advice.add(tag5);
         tags1Advice.add(tag6);
 
+
+
+        Resource resourceAdviceRoundOne = resourceLoader.getResource("classpath:data/cards/roundOneAdvice.json");
+        InputStream inputStreamAdviceRoundOne = resource.getInputStream();
         // Card set for round one advice cards
-        cards = CardJsonReader.readCards(roundOneAdvice.getInputStream());
+        cards = CardJsonReader.readCards(inputStreamAdviceRoundOne);
         createdCards = new ArrayList<>();
         for (CreateCardDto card : cards) {
             createdCards.add(cardService.createCard(card));
@@ -151,7 +162,9 @@ public class CardSeeder {
         tags2.add(tag9);
 
         // Do same for round two
-        cards = CardJsonReader.readCards(roundTwo.getInputStream());
+        Resource resourceRoundTwo = resourceLoader.getResource("classpath:data/cards/roundTwo.json");
+        InputStream inputStreamRoundTwo = resource.getInputStream();
+        cards = CardJsonReader.readCards(inputStreamRoundTwo);
         createdCards = new ArrayList<>();
         for (CreateCardDto card : cards) {
             createdCards.add(cardService.createCard(card));
@@ -187,7 +200,11 @@ public class CardSeeder {
         tags3.add(tag12);
 
         // Do same for round two advice cards
-        cards = CardJsonReader.readCards(roundTwoAdvice.getInputStream());
+        Resource resourceRoundTwoAdvice = resourceLoader.getResource("classpath:data/cards/roundTwoAdvice.json");
+        InputStream inputStreamRoundTwoAdvice = resource.getInputStream();
+
+
+        cards = CardJsonReader.readCards(inputStreamRoundTwoAdvice);
         createdCards = new ArrayList<>();
         for (CreateCardDto card : cards) {
             createdCards.add(cardService.createCard(card));
@@ -222,8 +239,12 @@ public class CardSeeder {
         tags4.add(tag15);
         tags4.add(tag16);
 
+
+
         // Do same for round three cards
-        cards = CardJsonReader.readCards(roundThree.getInputStream());
+        Resource resourceRoundThree = resourceLoader.getResource("classpath:data/cards/roundThree.json");
+        InputStream inputStreamRoundThree = resource.getInputStream();
+        cards = CardJsonReader.readCards(inputStreamRoundThree);
         createdCards = new ArrayList<>();
         for (CreateCardDto card : cards) {
             createdCards.add(cardService.createCard(card));
@@ -259,7 +280,9 @@ public class CardSeeder {
         tags5.add(tag19);
 
         // Do same for round three advice cards
-        cards = CardJsonReader.readCards(roundThreeAdvice.getInputStream());
+        Resource resourceRoundThreeAdvice = resourceLoader.getResource("classpath:data/cards/roundThreeAdvice.json");
+        InputStream inputStreamRoundThreeAdvice = resource.getInputStream();
+        cards = CardJsonReader.readCards(inputStreamRoundThreeAdvice);
         createdCards = new ArrayList<>();
         for (CreateCardDto card : cards) {
             createdCards.add(cardService.createCard(card));

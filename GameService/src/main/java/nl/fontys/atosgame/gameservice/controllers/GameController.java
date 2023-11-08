@@ -11,7 +11,6 @@ import nl.fontys.atosgame.gameservice.model.Game;
 import nl.fontys.atosgame.gameservice.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,13 +19,13 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/game")
-@CrossOrigin(origins = "*")
 public class GameController {
 
     private GameService gameService;
 
     public GameController(@Autowired GameService gameService) {
         this.gameService = gameService;
+        System.out.println("CorsFilter is being applied.");
     }
 
     /**
@@ -34,27 +33,13 @@ public class GameController {
      * Create a game
      */
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('SCOPE_Gamemaster.Write') && hasAuthority('APPROLE_Role.Gamemaster.ReadWrite')")
-    @ApiResponses(
-        value = {
-            @ApiResponse(
-                responseCode = "200",
-                description = "Created the game",
-                content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = Game.class)
-                )
-            ),
-            @ApiResponse(responseCode = "404", description = "Cardset not found"),
-        }
-    )
     public ResponseEntity<Game> createGame(@RequestBody CreateGameDto createGameDto) {
         try {
             Game game = gameService.createGame(
-                createGameDto.getTitle(),
-                createGameDto.getCompanyType(),
-                createGameDto.getLobbySettings(),
-                createGameDto.getRoundSettings()
+                    createGameDto.getTitle(),
+                    createGameDto.getCompanyType(),
+                    createGameDto.getLobbySettings(),
+                    createGameDto.getRoundSettings()
             );
             return ResponseEntity.ok(game);
         } catch (EntityNotFoundException e) {
@@ -67,19 +52,18 @@ public class GameController {
      * Start a game
      */
     @PutMapping("/start/{id}")
-    @PreAuthorize("hasAuthority('SCOPE_Gamemaster.Write') && hasAuthority('APPROLE_Role.Gamemaster.ReadWrite')")
     @ApiResponses(
-        value = {
-            @ApiResponse(
-                responseCode = "200",
-                description = "Started the game",
-                content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = Game.class)
-                )
-            ),
-            @ApiResponse(responseCode = "404", description = "Game not found"),
-        }
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Started the game",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Game.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "404", description = "Game not found"),
+            }
     )
     public ResponseEntity<Game> startGame(@PathVariable UUID id) {
         try {

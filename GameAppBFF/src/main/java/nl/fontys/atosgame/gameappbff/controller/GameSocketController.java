@@ -94,7 +94,6 @@ public class GameSocketController {
         int phaseNumber,
         PlayerRound playerRound
     ) {
-        //TODO
         PlayerPhaseDto playerPhaseDto = new PlayerPhaseDto(playerRound, phaseNumber);
         template.convertAndSend(
             String.format("/socket/gameapp/%s/playerPhase", gameId),
