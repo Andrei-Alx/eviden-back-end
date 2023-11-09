@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.UUID;
 import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.gameservice.dto.CreateGameDto;
+import nl.fontys.atosgame.gameservice.exceptions.EmptyStringException;
 import nl.fontys.atosgame.gameservice.model.Game;
 import nl.fontys.atosgame.gameservice.service.GameService;
 import org.slf4j.Logger;
@@ -47,7 +48,7 @@ public class GameController {
                     createGameDto.getRoundSettings()
             );
             return ResponseEntity.ok(game);
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException | EmptyStringException e) {
             return ResponseEntity.notFound().build();
         }
     }
