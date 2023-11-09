@@ -11,6 +11,8 @@ import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.model.Round;
 import nl.fontys.atosgame.gameappbff.repository.GameRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class GameServiceImpl implements GameService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameServiceImpl.class);
     private GameRepository gameRepository;
     private GameSocketController gameSocketController;
 
@@ -47,6 +50,7 @@ public class GameServiceImpl implements GameService {
             GameStatus.CREATED,
             new ArrayList<>()
         );
+        LOGGER.info(String.format("Game created event recieved in gameappbff => %s", game));
         gameRepository.save(game);
         return game;
     }

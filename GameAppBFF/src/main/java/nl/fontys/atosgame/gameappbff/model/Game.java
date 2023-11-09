@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,10 +33,9 @@ public class Game {
     private String companyType;
 
     private GameStatus status;
-
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = javax.persistence.CascadeType.ALL)
-    private List<Round> rounds = new ArrayList<>();
+    public List<Round> rounds = new ArrayList<>();
 
     public void addRound(Round round) {
         rounds.add(round);

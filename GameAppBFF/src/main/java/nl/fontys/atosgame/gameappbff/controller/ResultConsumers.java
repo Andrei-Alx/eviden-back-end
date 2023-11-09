@@ -6,6 +6,8 @@ import nl.fontys.atosgame.gameappbff.event.consumed.FinalResultEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerResultDeterminedEvent;
 import nl.fontys.atosgame.gameappbff.model.PlayerRoundResult;
 import nl.fontys.atosgame.gameappbff.service.ResultService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
@@ -21,7 +23,7 @@ import org.springframework.stereotype.Controller;
 public class ResultConsumers {
 
     private ResultService resultService;
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResultConsumers.class);
     private ResultConsumers(@Autowired ResultService resultService) {
         this.resultService = resultService;
     }
@@ -36,6 +38,7 @@ public class ResultConsumers {
     public Function<Message<PlayerResultDeterminedEvent>, Void> handlePlayerResultDetermined() {
         System.out.println("handlePlayerResultDetermined");
         return message -> {
+            LOGGER.info(String.format("result determined => %s", message));
             PlayerResultDeterminedEvent event = message.getPayload();
             resultService.handlePlayerResultDetermined(
                 new PlayerRoundResult(

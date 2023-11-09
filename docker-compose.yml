@@ -33,7 +33,7 @@ services:
         window: 180s
     networks:
       - atos_network
-      
+
   kpow:
     image: factorhouse/kpow-ce
     container_name: kpow
@@ -330,7 +330,17 @@ services:
         window: 180s
     networks:
       - atos_network
-      
+
+  kafka-manager:
+    container_name: kafkaManagerContainerAtos
+    image: hlebalbau/kafka-manager:stable
+    ports:
+      - "9000:9000"
+    environment:
+      ZK_HOSTS: "zookeeper:2181"
+    networks:
+      - atos_network
+
   sonarqube:
     image: sonarqube:latest
     ports:

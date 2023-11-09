@@ -9,6 +9,8 @@ import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.gameservice.dto.CreateGameDto;
 import nl.fontys.atosgame.gameservice.model.Game;
 import nl.fontys.atosgame.gameservice.service.GameService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class GameController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameController.class);
     private GameService gameService;
 
     public GameController(@Autowired GameService gameService) {
@@ -50,6 +53,8 @@ public class GameController {
             }
     )**/
     public ResponseEntity<Game> createGame(@RequestBody CreateGameDto createGameDto) {
+
+        LOGGER.info(String.format("given deto when creating a game => %s", createGameDto));
         try {
             Game game = gameService.createGame(
                 createGameDto.getTitle(),

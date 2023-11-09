@@ -10,6 +10,8 @@ import nl.fontys.atosgame.gameappbff.model.Result;
 import nl.fontys.atosgame.gameappbff.repository.FinalResultRepository;
 import nl.fontys.atosgame.gameappbff.repository.PlayerRoundResultRepository;
 import nl.fontys.atosgame.gameappbff.repository.ResultRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ResultServiceImpl implements ResultService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResultServiceImpl.class);
     private PlayerRoundResultRepository playerRoundResultRepository;
     private FinalResultRepository finalResultRepository;
 
@@ -136,6 +139,7 @@ public class ResultServiceImpl implements ResultService {
     @Override
     public void handlePlayerResultDetermined(PlayerRoundResult playerRoundResult) {
         System.out.println(playerRoundResult.toString());
+        LOGGER.info(String.format("saving results from round to database event => %s", playerRoundResult));
         playerRoundResultRepository.save(playerRoundResult);
     }
 

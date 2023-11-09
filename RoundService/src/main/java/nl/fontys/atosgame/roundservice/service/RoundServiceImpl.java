@@ -68,6 +68,21 @@ public class RoundServiceImpl implements RoundService {
     public List<Round> createRounds(UUID gameId, List<RoundSettingsDto> roundSettings) {
         List<Round> rounds = new ArrayList<>();
 
+        ShowResults targetShowResults = ShowResults.PERSONAL;
+
+
+        RoundSettingsDto foundDto = null;
+        Iterator<RoundSettingsDto> iterator = roundSettings.iterator();
+        while (iterator.hasNext()) {
+            RoundSettingsDto dto = iterator.next();
+            if (dto.getShowPersonalOrGroupResults() == targetShowResults)
+            {
+                foundDto = dto;
+                iterator.remove();
+                rounds.add(createRound(gameId, foundDto));
+                break;
+            }
+        }
         for (RoundSettingsDto roundSetting : roundSettings) {
             rounds.add(createRound(gameId, roundSetting));
         }

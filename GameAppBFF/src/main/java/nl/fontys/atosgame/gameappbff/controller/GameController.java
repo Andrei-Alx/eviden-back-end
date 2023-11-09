@@ -4,11 +4,15 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
+import java.util.*;
+
+import nl.fontys.atosgame.gameappbff.enums.ShowResults;
 import nl.fontys.atosgame.gameappbff.model.Game;
+import nl.fontys.atosgame.gameappbff.model.Round;
 import nl.fontys.atosgame.gameappbff.service.GameService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/gameappbff")
 public class GameController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameController.class);
     private GameService gameService;
 
     private GameController(@Autowired GameService gameService) {
@@ -92,7 +97,37 @@ public class GameController {
     )
     public ResponseEntity<Game> getGameById(@PathVariable UUID id) {
         Optional<Game> game = gameService.getGame(id);
+        List<Round> recievedRounds = new ArrayList<>();
 
+        /*for (Round round : game.get().getRounds())
+        {
+            if(round.getRoundSettings().getShowPersonalOrGroupResults() == ShowResults.PERSONAL)
+            {
+                recievedRounds.add(round);
+                break;
+            }
+        }*/
+
+        for (Round round : game.get().getRounds()) {
+            if (round.getRoundSettings().getShowPersonalOrGroupResults() == ShowResults.PERSONAL) {
+                int indexOfFirstRound = 0;
+
+                // Find the index of the first round with the same ShowResults
+                for (int i = 0; i < game.get().getRounds().size(); i++) {
+                    if (game.get().getRounds().get(i).getRoundSettings().getShowPersonalOrGroupResults() == ShowResults.PERSONAL) {
+                        indexOfFirstRound = i;
+                        break;
+                    }
+                }
+
+                // Swap the current round with the first round
+                Collections.swap(game.get().getRounds(), indexOfFirstRound, 0);
+                break;
+            }
+        }
+
+
+        LOGGER.info(String.format("game get event in game service => %s", game));
         if (game.isPresent()) {
             return ResponseEntity.ok(game.get());
         } else {
