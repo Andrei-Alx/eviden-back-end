@@ -10,6 +10,7 @@ import nl.fontys.atosgame.lobbyservice.dto.ExceptionDto;
 import nl.fontys.atosgame.lobbyservice.dto.JoinRequestDto;
 import nl.fontys.atosgame.lobbyservice.dto.JoinResponseDto;
 import nl.fontys.atosgame.lobbyservice.exceptions.DuplicatePlayerException;
+import nl.fontys.atosgame.lobbyservice.exceptions.EmptyPlayerNameException;
 import nl.fontys.atosgame.lobbyservice.exceptions.LobbyFullException;
 import nl.fontys.atosgame.lobbyservice.model.Lobby;
 import nl.fontys.atosgame.lobbyservice.model.Player;
@@ -73,7 +74,7 @@ public class LobbyController {
             lobby = lobbyService.getByLobbyCode(joinRequestDto.getLobbyCode()).get();
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
-        } catch (LobbyFullException | DuplicatePlayerException e) {
+        } catch (LobbyFullException | DuplicatePlayerException |EmptyPlayerNameException e) {
             return ResponseEntity
                 .status(HttpStatus.NOT_ACCEPTABLE)
                 .body(new ExceptionDto(e.getMessage()));
