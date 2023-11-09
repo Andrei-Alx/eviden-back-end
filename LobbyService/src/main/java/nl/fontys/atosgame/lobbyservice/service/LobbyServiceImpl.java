@@ -6,6 +6,7 @@ import nl.fontys.atosgame.lobbyservice.dto.LobbyDeletedDto;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyJoinedDto;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyQuitDto;
 import nl.fontys.atosgame.lobbyservice.exceptions.DuplicatePlayerException;
+import nl.fontys.atosgame.lobbyservice.exceptions.EmptyPlayerNameException;
 import nl.fontys.atosgame.lobbyservice.exceptions.LobbyFullException;
 import nl.fontys.atosgame.lobbyservice.model.Lobby;
 import nl.fontys.atosgame.lobbyservice.model.LobbySettings;
@@ -82,12 +83,18 @@ public class LobbyServiceImpl implements LobbyService {
      */
     @Override
     public Player joinLobby(String lobbyCode, String playerName)
-        throws LobbyFullException, EntityNotFoundException, DuplicatePlayerException {
+        throws LobbyFullException, EntityNotFoundException, DuplicatePlayerException, EmptyPlayerNameException {
+        // Check if Null or empty.
+        if (playerName == null || playerName.trim().isEmpty()) {
+            throw new EmptyPlayerNameException("playerName is empty for the lobby: " + lobbyCode);
+        }
+
         //get lobby to edit
         Lobby lobby = lobbyRepository.getByLobbyCode(lobbyCode);
         if (lobby == null) {
             throw new EntityNotFoundException("No lobby found for lobbycode" + lobbyCode);
         }
+
         //add player
         Player player = new Player();
         player.setName(playerName);

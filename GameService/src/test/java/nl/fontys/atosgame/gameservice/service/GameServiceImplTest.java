@@ -12,6 +12,7 @@ import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
 import nl.fontys.atosgame.gameservice.enums.GameStatus;
 import nl.fontys.atosgame.gameservice.enums.ShowResults;
 import nl.fontys.atosgame.gameservice.enums.ShuffleMethod;
+import nl.fontys.atosgame.gameservice.exceptions.EmptyStringException;
 import nl.fontys.atosgame.gameservice.model.*;
 import nl.fontys.atosgame.gameservice.repository.GameRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +35,7 @@ class GameServiceImplTest {
     }
 
     @Test
-    void createGameCardSetsExist() {
+    void createGameCardSetsExist() throws EmptyStringException {
         String title = "titleGame";
         String companyType = "companyType";
         LobbySettings lobbySettings = new LobbySettings();
