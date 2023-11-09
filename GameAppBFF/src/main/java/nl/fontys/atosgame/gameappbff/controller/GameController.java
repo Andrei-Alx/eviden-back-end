@@ -74,16 +74,6 @@ public class GameController {
     )
     public ResponseEntity<Game> getGameById(@PathVariable UUID id) {
         Optional<Game> game = gameService.getGame(id);
-        List<Round> recievedRounds = new ArrayList<>();
-
-        /*for (Round round : game.get().getRounds())
-        {
-            if(round.getRoundSettings().getShowPersonalOrGroupResults() == ShowResults.PERSONAL)
-            {
-                recievedRounds.add(round);
-                break;
-            }
-        }*/
 
         for (Round round : game.get().getRounds()) {
             if (round.getRoundSettings().getShowPersonalOrGroupResults() == ShowResults.PERSONAL) {
@@ -96,7 +86,6 @@ public class GameController {
                         break;
                     }
                 }
-
                 // Swap the current round with the first round
                 Collections.swap(game.get().getRounds(), indexOfFirstRound, 0);
                 break;
