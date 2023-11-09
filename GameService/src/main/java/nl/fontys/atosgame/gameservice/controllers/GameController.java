@@ -4,11 +4,15 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+import java.util.Collections;
 import java.util.UUID;
 import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.gameservice.dto.CreateGameDto;
+import nl.fontys.atosgame.gameservice.enums.ShowResults;
 import nl.fontys.atosgame.gameservice.exceptions.EmptyStringException;
 import nl.fontys.atosgame.gameservice.model.Game;
+import nl.fontys.atosgame.gameservice.model.Round;
 import nl.fontys.atosgame.gameservice.service.GameService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,6 +78,23 @@ public class GameController {
     public ResponseEntity<Game> startGame(@PathVariable UUID id) {
         try {
             Game game = gameService.startGame(id);
+            for (Round round : game.getRounds()) {
+                if (round.getRoundSettings().getShowPersonalOrGroupResults() == ShowResults.PERSONAL) {
+                    int indexOfFirstRound = 0;
+
+                    // Find the index of the first round with the same ShowResults
+                    for (int i = 0; i < game.getRounds().size(); i++) {
+                        if (game.getRounds().get(i).getRoundSettings().getShowPersonalOrGroupResults() == ShowResults.PERSONAL) {
+                            indexOfFirstRound = i;
+                            break;
+                        }
+                    }
+                    // Swap the current round with the first round
+                    Collections.swap(game.getRounds(), indexOfFirstRound, 0);
+                    break;
+                }
+            }
+            LOGGER.info(String.format("starting game event gameservice => %s", game));
             return ResponseEntity.ok(game);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
