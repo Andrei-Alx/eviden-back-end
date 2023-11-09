@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/game")
-@CrossOrigin(origins = "*")
 public class GameController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameController.class);
@@ -30,6 +28,7 @@ public class GameController {
 
     public GameController(@Autowired GameService gameService) {
         this.gameService = gameService;
+        System.out.println("CorsFilter is being applied.");
     }
 
     /**
@@ -37,30 +36,15 @@ public class GameController {
      * Create a game
      */
     @PostMapping("/create")
-    @CrossOrigin(origins = "*")
-    /**@PreAuthorize("hasAuthority('SCOPE_Gamemaster.Write') && hasAuthority('APPROLE_Role.Gamemaster.ReadWrite')")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Created the game",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = Game.class)
-                            )
-                    ),
-                    @ApiResponse(responseCode = "404", description = "Cardset not found"),
-            }
-    )**/
     public ResponseEntity<Game> createGame(@RequestBody CreateGameDto createGameDto) {
 
         LOGGER.info(String.format("given deto when creating a game => %s", createGameDto));
         try {
             Game game = gameService.createGame(
-                createGameDto.getTitle(),
-                createGameDto.getCompanyType(),
-                createGameDto.getLobbySettings(),
-                createGameDto.getRoundSettings()
+                    createGameDto.getTitle(),
+                    createGameDto.getCompanyType(),
+                    createGameDto.getLobbySettings(),
+                    createGameDto.getRoundSettings()
             );
             return ResponseEntity.ok(game);
         } catch (EntityNotFoundException e) {
@@ -73,7 +57,6 @@ public class GameController {
      * Start a game
      */
     @PutMapping("/start/{id}")
-   /** @PreAuthorize("hasAuthority('SCOPE_Gamemaster.Write') && hasAuthority('APPROLE_Role.Gamemaster.ReadWrite')")
     @ApiResponses(
             value = {
                     @ApiResponse(
@@ -86,7 +69,7 @@ public class GameController {
                     ),
                     @ApiResponse(responseCode = "404", description = "Game not found"),
             }
-    )**/
+    )
     public ResponseEntity<Game> startGame(@PathVariable UUID id) {
         try {
             Game game = gameService.startGame(id);

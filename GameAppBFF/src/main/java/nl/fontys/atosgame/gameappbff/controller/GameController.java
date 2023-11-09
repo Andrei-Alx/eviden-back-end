@@ -44,8 +44,6 @@ public class GameController {
                 description = "Getting all the games",
                 content = @Content(
                     mediaType = "application/json"
-                    //                                    ,
-                    //                                    schema = @Schema(implementation = GameResponseDto.class)
                 )
             ),
             @ApiResponse(responseCode = "404", description = "Games not found"),
@@ -53,27 +51,6 @@ public class GameController {
     )
     public ResponseEntity<List<Game>> getGames() {
         List<Game> games = gameService.getAllGames();
-
-        //        LobbyResponseDto lobby = new LobbyResponseDto(UUID.randomUUID(), "1234");
-        //        GameResponseDto game = new GameResponseDto(
-        //            UUID.randomUUID(),
-        //            lobby,
-        //            "game1",
-        //            "Sports"
-        //        );
-        //
-        //        LobbyResponseDto lobby1 = new LobbyResponseDto(UUID.randomUUID(), "5678");
-        //        GameResponseDto game1 = new GameResponseDto(
-        //            UUID.randomUUID(),
-        //            lobby1,
-        //            "game2",
-        //            "Sports"
-        //        );
-        //
-        //        List<GameResponseDto> games = new ArrayList<>();
-        //        games.add(game);
-        //        games.add(game1);
-
         return ResponseEntity.ok(games);
     }
 
