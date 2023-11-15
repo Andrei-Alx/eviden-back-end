@@ -105,25 +105,20 @@ public class CardSeeder {
     {
         List<String> dutchCards = new ArrayList<>();
         List<String> englishCards = new ArrayList<>();
-
-        Collections.sort(cards, new Comparator<CreateCardDto>() {
-            @Override
-            public int compare(CreateCardDto o1, CreateCardDto o2) {
-
-                return new ArrayList<>(o2.getTranslations()).get(0).getText().compareTo(new ArrayList<>(o1.getTranslations()).get(0).getText());
-            }
-        });
+        List<String> tags = new ArrayList<>();
 
         for(CreateCardDto card : cards)
         {
-            dutchCards.add((new ArrayList<>(card.getTranslations()).get(0).getText()));
-            englishCards.add((new ArrayList<>(card.getTranslations()).get(1).getText()));
+            dutchCards.add(new ArrayList<>(card.getTranslations()).get(0).getText());
+            englishCards.add(new ArrayList<>(card.getTranslations()).get(1).getText());
+            tags.add(new ArrayList<>(card.getTags()).get(0).getTagValue());
         }
 
         Collections.sort(dutchCards);
         Collections.sort(englishCards);
+        Collections.sort(tags);
 
-        if(dutchCards.hashCode() + englishCards.hashCode() == CreateChecksum(setName))
+        if(dutchCards.hashCode() + englishCards.hashCode() + tags.hashCode() == CreateChecksum(setName))
         {
             return true;
         }
@@ -155,6 +150,7 @@ public class CardSeeder {
 
         List<String> dutchCards = new ArrayList<>();
         List<String> englishCards = new ArrayList<>();
+        List<String> tags = new ArrayList<>();
 
         for(CardSet set : oldCards)
         {
@@ -168,12 +164,14 @@ public class CardSeeder {
         {
             dutchCards.add((new ArrayList<>(card.getTranslations()).get(0).getText()));
             englishCards.add((new ArrayList<>(card.getTranslations()).get(1).getText()));
+            tags.add(new ArrayList<>(card.getTags()).get(0).getTagValue());
         }
 
         Collections.sort(dutchCards);
         Collections.sort(englishCards);
+        Collections.sort(tags);
 
-        return dutchCards.hashCode() + englishCards.hashCode();
+        return dutchCards.hashCode() + englishCards.hashCode() + tags.hashCode();
     }
 
     public List<Tag> AddTags(String value1, String value2, String value3)
