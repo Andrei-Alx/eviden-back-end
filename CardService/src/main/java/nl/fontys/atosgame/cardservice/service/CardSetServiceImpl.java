@@ -1,6 +1,7 @@
 package nl.fontys.atosgame.cardservice.service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
 import nl.fontys.atosgame.cardservice.model.Card;
@@ -10,6 +11,8 @@ import nl.fontys.atosgame.cardservice.repository.CardSetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
 
 /**
  * Service that handles all card set requests
@@ -78,5 +81,10 @@ public class CardSetServiceImpl implements CardSetService {
         CardSet updatedCardSet = cardSetRepository.save(cardSet);
         streamBridge.send("cardSetUpdated-in-0", updatedCardSet);
         return updatedCardSet;
+    }
+
+    @Override
+    public List<CardSet> getAll() throws EntityNotFoundException {
+        return cardSetRepository.findAll();
     }
 }
