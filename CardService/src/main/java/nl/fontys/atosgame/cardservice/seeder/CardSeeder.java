@@ -2,9 +2,7 @@ package nl.fontys.atosgame.cardservice.seeder;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import nl.fontys.atosgame.cardservice.CardServiceApplication;
@@ -35,26 +33,9 @@ public class CardSeeder {
 
     private CardService cardService;
     private CardSetService cardSetService;
-
-    @Value("classpath:data/cards/roundOne.json")
-    private ClassPathResource roundOne;
-
-    @Value("classpath:data/cards/roundOneAdvice.json")
-    private ClassPathResource roundOneAdvice;
-
-    @Value("classpath:data/cards/roundTwo.json")
-    private ClassPathResource roundTwo;
-
-    @Value("classpath:data/cards/roundOneAdvice.json")
-    private ClassPathResource roundTwoAdvice;
-
-    @Value("classpath:data/cards/roundThree.json")
-    private ClassPathResource roundThree;
-
-    @Value("classpath:data/cards/roundThreeAdvice.json")
-    private ClassPathResource roundThreeAdvice;
-
     private List<CardSet> oldCards;
+    ResourceLoader resourceLoader = new DefaultResourceLoader();
+    List<Tag> tags;
 
     public CardSeeder(
         @Autowired CardService cardService,
@@ -64,10 +45,6 @@ public class CardSeeder {
         this.cardSetService = cardSetService;
         oldCards = new ArrayList<>(cardSetService.getAll());
     }
-
-    ResourceLoader resourceLoader = new DefaultResourceLoader();
-
-    List<Tag> tags;
 
     @EventListener(ApplicationReadyEvent.class)
     public void seedCards() throws IOException {
@@ -90,35 +67,18 @@ public class CardSeeder {
         AddCards("classpath:data/cards/roundThreeAdvice.json", "roundThreeCardsAdvice", tags);
     }
 
-    public int CreateChecksum(String setName)
-    {
-        List<Card> cardSetOld = new ArrayList<>();
-        List<CreateCardDto> cardSetOldDto = new ArrayList<>();
-        for(CardSet set : oldCards)
-        {
-            if(Objects.equals(set.getName(), setName))
-            {
-                cardSetOld = new ArrayList<>(set.getCards());
-            }
-        }
-
-        for(Card card : cardSetOld)
-        {
-            cardSetOldDto.add(new CreateCardDto(card.getTags(), card.getTranslations()));
-        }
-
-        return cardSetOldDto.hashCode();
-    }
-
     public void AddCards(String classpath, String setName, List<Tag> tags) throws IOException
     {
         Resource resource = resourceLoader.getResource(classpath);
         InputStream inputStream = resource.getInputStream();
         List<CreateCardDto> cards = CardJsonReader.readCards(inputStream);
 
-        if(cards.hashCode() == CreateChecksum(setName))
+        if(!oldCards.isEmpty())
         {
-            return;
+            if(ChecksumCheck(setName, cards))
+            {
+                return;
+            }
         }
 
         List<Card> createdCards = new ArrayList<>();
@@ -139,6 +99,81 @@ public class CardSeeder {
         cardSetService.createCardSet(cardSet);
 
         tags.clear();
+    }
+
+    public boolean ChecksumCheck(String setName, List<CreateCardDto> cards)
+    {
+        List<String> dutchCards = new ArrayList<>();
+        List<String> englishCards = new ArrayList<>();
+
+        Collections.sort(cards, new Comparator<CreateCardDto>() {
+            @Override
+            public int compare(CreateCardDto o1, CreateCardDto o2) {
+
+                return new ArrayList<>(o2.getTranslations()).get(0).getText().compareTo(new ArrayList<>(o1.getTranslations()).get(0).getText());
+            }
+        });
+
+        for(CreateCardDto card : cards)
+        {
+            dutchCards.add((new ArrayList<>(card.getTranslations()).get(0).getText()));
+            englishCards.add((new ArrayList<>(card.getTranslations()).get(1).getText()));
+        }
+
+        Collections.sort(dutchCards);
+        Collections.sort(englishCards);
+
+        if(dutchCards.hashCode() + englishCards.hashCode() == CreateChecksum(setName))
+        {
+            return true;
+        }
+
+        CardSet currentSet = new CardSet();
+        List<UUID> ids = new ArrayList<>();
+        for(CardSet set : oldCards)
+        {
+            if(Objects.equals(set.getName(), setName))
+            {
+                currentSet = set;
+            }
+        }
+
+        for(Card card : currentSet.getCards())
+        {
+            ids.add(card.getId());
+        }
+
+        cardSetService.deleteCardSet(currentSet.getId());
+        cardService.deleteCards(ids);
+
+        return false;
+    }
+
+    public int CreateChecksum(String setName)
+    {
+        List<Card> cardSetOld = new ArrayList<>();
+
+        List<String> dutchCards = new ArrayList<>();
+        List<String> englishCards = new ArrayList<>();
+
+        for(CardSet set : oldCards)
+        {
+            if(Objects.equals(set.getName(), setName))
+            {
+                cardSetOld = new ArrayList<>(set.getCards());
+            }
+        }
+
+        for(Card card : cardSetOld)
+        {
+            dutchCards.add((new ArrayList<>(card.getTranslations()).get(0).getText()));
+            englishCards.add((new ArrayList<>(card.getTranslations()).get(1).getText()));
+        }
+
+        Collections.sort(dutchCards);
+        Collections.sort(englishCards);
+
+        return dutchCards.hashCode() + englishCards.hashCode();
     }
 
     public List<Tag> AddTags(String value1, String value2, String value3)

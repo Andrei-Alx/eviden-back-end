@@ -75,4 +75,9 @@ public class CardServiceImpl implements CardService {
     public Collection<Card> getCardsByIds(Collection<UUID> ids) {
         return cardRepository.findAllById(ids);
     }
+
+    @Override
+    public void deleteCards(Collection<UUID> ids) {
+        cardRepository.deleteAllById(ids);
+    }
 }
