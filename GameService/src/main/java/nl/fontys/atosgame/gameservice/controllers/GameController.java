@@ -33,7 +33,6 @@ public class GameController {
 
     public GameController(@Autowired GameService gameService) {
         this.gameService = gameService;
-        System.out.println("CorsFilter is being applied.");
     }
 
     /**
