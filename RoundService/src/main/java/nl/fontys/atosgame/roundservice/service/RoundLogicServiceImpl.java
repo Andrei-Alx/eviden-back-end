@@ -5,6 +5,8 @@ import java.util.UUID;
 import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
 import nl.fontys.atosgame.roundservice.model.Round;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoundLogicServiceImpl implements RoundLogicService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RoundLogicServiceImpl.class);
     private CardShuffler cardShuffler;
 
     public RoundLogicServiceImpl(@Autowired CardShuffler cardShuffler) {
@@ -32,6 +35,7 @@ public class RoundLogicServiceImpl implements RoundLogicService {
      */
     @Override
     public Round initializeRound(Round round, List<UUID> playerIds) {
+        LOGGER.info(String.format("initialize round event (RoundLogicServiceImpl class) => %s", round));
         for (UUID playerId : playerIds) {
             PlayerRound playerRound = new PlayerRound();
             playerRound.setPlayerId(playerId);

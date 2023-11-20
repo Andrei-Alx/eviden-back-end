@@ -193,7 +193,6 @@ services:
       - SPRING_RESOURCES_STATIC_LOCATIONS=classpath:/data.cards/
     depends_on: 
       - gameappbff
-      - adminappbff
       - round-service
       - lobby-service
       - game-service

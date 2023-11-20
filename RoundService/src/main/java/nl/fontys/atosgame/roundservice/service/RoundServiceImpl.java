@@ -16,6 +16,8 @@ import nl.fontys.atosgame.roundservice.enums.TagType;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.model.*;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.ApplicationEventPublisher;
@@ -29,6 +31,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoundServiceImpl implements RoundService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RoundServiceImpl.class);
     private final RoundRepository roundRepository;
 
     private final CardSetService cardSetService;
@@ -204,6 +207,7 @@ public class RoundServiceImpl implements RoundService {
     @Override
     public Round likeCard(UUID playerId, UUID cardId, UUID gameId, UUID roundId) {
         Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
+        LOGGER.info(String.format("Round service liking card => %s", round));
         playerRoundService.likeCard(
             round.getPlayerRound(playerId),
             cardId,
