@@ -4,6 +4,8 @@ import java.util.function.Function;
 import nl.fontys.atosgame.roundservice.dto.*;
 import nl.fontys.atosgame.roundservice.event.EventFactory;
 import nl.fontys.atosgame.roundservice.event.produced.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
@@ -28,6 +30,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class RoundEventProducers {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RoundEventProducers.class);
     /**
      * Id: P-25
      * function to produce a RoundCreated event
@@ -232,6 +235,8 @@ public class RoundEventProducers {
     @Bean
     public Function<PlayerResultDeterminedDto, Message<PlayerResultDeterminedEvent>> producePlayerResultDetermined() {
         return keyValue -> {
+            LOGGER.info(String.format("Producing PlayerResultDeterminedEvent for gameId: %s, playerid: %s, result: %s",
+                    keyValue.getGameId(), keyValue.getPlayerId(), keyValue.getResult()));
             PlayerResultDeterminedEvent event = EventFactory.createPlayerResultDeterminedEvent(
                 keyValue.getRoundId(),
                 keyValue.getGameId(),
