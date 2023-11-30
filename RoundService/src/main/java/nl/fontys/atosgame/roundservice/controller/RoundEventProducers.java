@@ -234,7 +234,6 @@ public class RoundEventProducers {
      */
     @Bean
     public Function<PlayerResultDeterminedDto, Message<PlayerResultDeterminedEvent>> producePlayerResultDetermined() {
-        LOGGER.info("MAAK HET EVENT AAN VERDOMME PLAYERRESULTDETERMINED EVENT");
         return keyValue -> {
             LOGGER.info(String.format("Producing PlayerResultDeterminedEvent for gameId: %s, playerId: %s, result: %s",
                     keyValue.getGameId(), keyValue.getPlayerId(), keyValue.getResult()));
@@ -259,7 +258,6 @@ public class RoundEventProducers {
      */
     @Bean
     public Function<PlayerResultIndeterminateEvent, Message<PlayerResultIndeterminateEvent>> producePlayerResultIndeterminate() {
-        LOGGER.info("MAAK HET EVENT AAN VERDOMME PLAYERRESULTINDETERMINATEEVENT");
         return keyValue -> {
             PlayerResultIndeterminateEvent event = EventFactory.createPlayerResultIndeterminateEvent(
                 keyValue.getRoundId(),
