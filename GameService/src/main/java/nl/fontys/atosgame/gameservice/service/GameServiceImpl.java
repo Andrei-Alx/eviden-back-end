@@ -50,6 +50,7 @@ public class GameServiceImpl implements GameService, ApplicationListener<RoundEn
         List<RoundSettings> roundSettings
     ) throws EmptyStringException
     {
+        List<CardSet> sets = cardSetService.getAllCardSets();
         // Check if all cardsets exist
         for (RoundSettings roundSetting : roundSettings) {
             cardSetService

@@ -44,7 +44,7 @@ public class CardSetServiceImpl implements CardSetService {
      */
     @Override
     public void updateCardSet(CardSet cardSet) {
-        cardSetRepository.save(cardSet);
+        cardSetRepository.saveAndFlush(cardSet);
     }
 
     /**
