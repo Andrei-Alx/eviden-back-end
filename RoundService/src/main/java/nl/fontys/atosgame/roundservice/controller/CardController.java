@@ -12,6 +12,8 @@ import nl.fontys.atosgame.roundservice.dto.CardSubmitRequestDto;
 import nl.fontys.atosgame.roundservice.dto.StartNextRoundDto;
 import nl.fontys.atosgame.roundservice.service.GameService;
 import nl.fontys.atosgame.roundservice.service.RoundService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class CardController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CardController.class);
     @Autowired
     private RoundService roundService;
 
@@ -117,6 +120,8 @@ public class CardController {
     public ResponseEntity selectedCards(
         @RequestBody CardSubmitRequestDto cardSubmitRequestDto
     ) {
+
+        LOGGER.info(String.format(" CardSubmitRequestDto (CardController.java) => %s", cardSubmitRequestDto));
         try {
             roundService.selectCards(
                 cardSubmitRequestDto.getPlayerId(),
@@ -124,6 +129,10 @@ public class CardController {
                 cardSubmitRequestDto.getGameId(),
                 cardSubmitRequestDto.getRoundId()
             );
+
+            LOGGER.info("calling  publish result function (CardController");
+            LOGGER.info(cardSubmitRequestDto.toString());
+            roundService.publishResults(cardSubmitRequestDto.getRoundId(), cardSubmitRequestDto.getGameId(), cardSubmitRequestDto.getPlayerId());
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }

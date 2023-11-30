@@ -15,6 +15,8 @@ import nl.fontys.atosgame.gameappbff.model.*;
 import nl.fontys.atosgame.gameappbff.service.GameService;
 import nl.fontys.atosgame.gameappbff.service.LobbyService;
 import nl.fontys.atosgame.gameappbff.service.ResultService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/results")
 public class ResultController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResultController.class);
     private final ResultService resultService;
 
     private final GameService gameService;
@@ -66,6 +69,7 @@ public class ResultController {
         @RequestParam UUID roundId,
         @RequestParam UUID gameId
     ) {
+        LOGGER.info(String.format("get player round results get request (result controller) => %s", roundId));
         Optional<List<PlayerRoundResult>> playerResults = resultService.getPlayerRoundResults(
             roundId
         );

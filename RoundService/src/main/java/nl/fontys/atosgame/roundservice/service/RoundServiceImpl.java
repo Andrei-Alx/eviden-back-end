@@ -176,7 +176,7 @@ public class RoundServiceImpl implements RoundService {
         streamBridge.send("produceRoundEnded-in-0", new RoundEndedDto(gameId, roundId));
 
         // Publish results
-        this.publishResults(roundId, gameId);
+        //this.publishResults(roundId, gameId);
 
         // Save to db
         round = roundRepository.save(round);
@@ -263,6 +263,7 @@ public class RoundServiceImpl implements RoundService {
             gameId,
             roundId
         );
+
         return round;
     }
 
@@ -301,7 +302,8 @@ public class RoundServiceImpl implements RoundService {
      * @param gameId  The id of the game
      */
     @Override
-    public void publishResults(UUID roundId, UUID gameId) {
+    public void publishResults(UUID roundId, UUID gameId, UUID playerId) {
+
         Optional<Round> roundOptional = getRound(roundId);
         if (roundOptional.isEmpty()) {
             throw new EntityNotFoundException();
@@ -310,97 +312,109 @@ public class RoundServiceImpl implements RoundService {
         round
             .getPlayerRounds()
             .forEach(playerRound -> {
-                // playerRound calculate results and produce in event
+                if(playerRound.isDone()) {
+                    // playerRound calculate results and produce in event
 
-                // calculate the amount a card type (color or operation model) is picked
-                Map<String, Integer> tempResults = playerRound.determineCardsChosenPerType();
+                    // calculate the amount a card type (color or operation model) is picked
+                    Map<String, Integer> tempResults = playerRound.determineCardsChosenPerType();
 
-                // get back a list of results when *undetermined*
-                // get back a single result when *determined*
-                List<String> result = playerRound.getTopResultCardTypes(tempResults);
+                    // get back a list of results when *undetermined*
+                    // get back a single result when *determined*
+                    List<String> result = playerRound.getTopResultCardTypes(tempResults);
 
-                // get the importantTag
-                String importantTagValue = playerRound
-                    .getRoundSettings()
-                    .getCardSet()
-                    .getTags()
-                    .stream()
-                    .filter(tag -> tag.getTagKey() == TagType.IMPORTANT_TAG)
-                    .findFirst()
-                    .get()
-                    .getTagValue();
-                Tag importantTag = new Tag(TagType.IMPORTANT_TAG, importantTagValue);
-
-                // Type is advice
-                Tag adviceTag = new Tag(TagType.TYPE, "advice");
-
-                // group or personal
-                String groupOrPersonalTagValue = playerRound
-                    .getRoundSettings()
-                    .getCardSet()
-                    .getTags()
-                    .stream()
-                    .filter(tag -> tag.getTagKey() == TagType.GROUP_OR_PERSONAL)
-                    .findFirst()
-                    .get()
-                    .getTagValue();
-                Tag groupOrPersonalTag = new Tag(
-                    TagType.GROUP_OR_PERSONAL,
-                    groupOrPersonalTagValue
-                );
-
-                List<Tag> tags = new ArrayList<>();
-                tags.add(importantTag);
-                tags.add(adviceTag);
-                tags.add(groupOrPersonalTag);
-
-                // get all cardSets
-                List<CardSet> cardSet = cardSetService.getAllCardSets();
-
-                // get the cardSet that matches the tags
-                CardSet cardSetToUse = cardSet
-                    .stream()
-                    .filter(cardSet1 -> cardSet1.getTags().containsAll(tags))
-                    .findFirst()
-                    .get();
-
-                // advice cards that match the result cards
-                List<Card> allAdviceCards = new ArrayList<>(cardSetToUse.getCards());
-                List<Card> adviceCards = allAdviceCards
-                    .stream()
-                    .filter(card ->
-                        card
+                    // get the importantTag
+                    String importantTagValue = playerRound
+                            .getRoundSettings()
+                            .getCardSet()
                             .getTags()
                             .stream()
-                            .anyMatch(tag ->
-                                result.stream().anyMatch(tag.getTagValue()::equals)
+                            .filter(tag -> tag.getTagKey() == TagType.IMPORTANT_TAG)
+                            .findFirst()
+                            .get()
+                            .getTagValue();
+                    Tag importantTag = new Tag(TagType.IMPORTANT_TAG, importantTagValue);
+
+                    // Type is advice
+                    Tag adviceTag = new Tag(TagType.TYPE, "advice");
+
+                    // group or personal
+                    String groupOrPersonalTagValue = playerRound
+                            .getRoundSettings()
+                            .getCardSet()
+                            .getTags()
+                            .stream()
+                            .filter(tag -> tag.getTagKey() == TagType.GROUP_OR_PERSONAL)
+                            .findFirst()
+                            .get()
+                            .getTagValue();
+                    Tag groupOrPersonalTag = new Tag(
+                            TagType.GROUP_OR_PERSONAL,
+                            groupOrPersonalTagValue
+                    );
+
+                    List<Tag> tags = new ArrayList<>();
+                    tags.add(importantTag);
+                    tags.add(adviceTag);
+                    tags.add(groupOrPersonalTag);
+
+                    // get all cardSets
+                    List<CardSet> cardSet = cardSetService.getAllCardSets();
+
+                    // get the cardSet that matches the tags
+                    CardSet cardSetToUse = cardSet
+                            .stream()
+                            .filter(cardSet1 -> cardSet1.getTags().containsAll(tags))
+                            .findFirst()
+                            .get();
+
+                    // advice cards that match the result cards
+                    List<Card> allAdviceCards = new ArrayList<>(cardSetToUse.getCards());
+                    List<Card> adviceCards = allAdviceCards
+                            .stream()
+                            .filter(card ->
+                                    card
+                                            .getTags()
+                                            .stream()
+                                            .anyMatch(tag ->
+                                                    result.stream().anyMatch(tag.getTagValue()::equals)
+                                            )
                             )
-                    )
-                    .collect(Collectors.toList());
+                            .collect(Collectors.toList());
 
-                // roundSettings showResult
-                ShowResults showResults = playerRound
-                    .getRoundSettings()
-                    .getShowPersonalOrGroupResults();
+                    // roundSettings showResult
+                    ShowResults showResults = playerRound
+                            .getRoundSettings()
+                            .getShowPersonalOrGroupResults();
 
-                // playerRound selectedCards
-                List<Card> selectedCards = playerRound.getSelectedCards();
+                    // playerRound selectedCards
+                    List<Card> selectedCards = playerRound.getSelectedCards();
 
-                ResultDto resultDto = new ResultDto(
-                    playerRound.getPlayerId(),
-                    showResults,
-                    result,
-                    selectedCards,
-                    adviceCards
-                );
+                    ResultDto resultDto = new ResultDto(
+                            playerRound.getPlayerId(),
+                            showResults,
+                            result,
+                            selectedCards,
+                            adviceCards
+                    );
 
-                PlayerResultDeterminedDto dto = new PlayerResultDeterminedDto();
-                dto.setGameId(gameId);
-                dto.setRoundId(roundId);
-                dto.setPlayerId(playerRound.getPlayerId());
-                dto.setResult(resultDto);
-                // Send event
-                streamBridge.send("producePlayerResultDetermined-out-0", dto);
+                    PlayerResultDeterminedDto dto = new PlayerResultDeterminedDto();
+                    dto.setGameId(gameId);
+                    dto.setRoundId(roundId);
+                    dto.setPlayerId(playerRound.getPlayerId());
+                    dto.setResult(resultDto);
+
+                    LOGGER.info(playerId.toString());
+                    LOGGER.info(playerRound.getPlayerId().toString());
+
+                    if(Objects.equals(playerId.toString(), playerRound.getPlayerId().toString()))
+                    {
+                        // Send event
+                        LOGGER.info("PUBLISHING RESULTS IN FILE ROUNDSERVICEIMPL");
+                        streamBridge.send("producePlayerResultDetermined-out-0", dto);
+                    }
+
+                }
+
             });
     }
 
