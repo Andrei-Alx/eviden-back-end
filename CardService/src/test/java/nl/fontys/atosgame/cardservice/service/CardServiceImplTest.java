@@ -24,7 +24,7 @@ class CardServiceImplTest {
     void setUp() {
         cardRepository = mock(CardRepository.class);
         streamBridge = mock(StreamBridge.class);
-        cardService = new CardServiceImpl(cardRepository, streamBridge);
+        cardService = new CardServiceImpl(cardRepository);
     }
 
     @Test

@@ -2,6 +2,8 @@ package nl.fontys.atosgame.gameservice.event;
 
 import java.util.List;
 import java.util.UUID;
+
+import nl.fontys.atosgame.gameservice.event.produced.CardSetRequestEvent;
 import nl.fontys.atosgame.gameservice.event.produced.GameCreatedEvent;
 import nl.fontys.atosgame.gameservice.event.produced.GameEndedEvent;
 import nl.fontys.atosgame.gameservice.event.produced.GameStartedEvent;
@@ -13,6 +15,13 @@ import nl.fontys.atosgame.gameservice.model.RoundSettings;
  * @author Eli
  */
 public class EventFactory {
+
+    public static CardSetRequestEvent cardsRequestEvent() {
+        CardSetRequestEvent event = new CardSetRequestEvent();
+        event =
+                (CardSetRequestEvent) initializeBaseEvent(event, "CardSetRequest", "GameService");
+        return event;
+    }
 
     public static GameCreatedEvent createGameCreatedEvent(
         UUID gameId,

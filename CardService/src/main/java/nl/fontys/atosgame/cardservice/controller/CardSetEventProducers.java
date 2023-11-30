@@ -1,11 +1,9 @@
 package nl.fontys.atosgame.cardservice.controller;
 
-import java.util.UUID;
+import java.util.List;
 import java.util.function.Function;
-import nl.fontys.atosgame.cardservice.event.BaseEvent;
-import nl.fontys.atosgame.cardservice.event.CardSetDeletedEvent;
-import nl.fontys.atosgame.cardservice.event.CardSetEvent;
-import nl.fontys.atosgame.cardservice.model.CardSet;
+
+import nl.fontys.atosgame.cardservice.event.produced.CardSetEvent;
 import nl.fontys.atosgame.cardservice.service.CardSetEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,41 +27,16 @@ public class CardSetEventProducers {
     }
 
     /**
-     * Id: P-4
-     * function to produce a CardSetCreated event
+     * Id: P-1
+     * function to produce a CardSetEvent event
      * input topic: -
-     * output topic: card-set-created-topic
+     * output topic: card-set-topic
      */
     @Bean
-    public Function<CardSet, Message<CardSetEvent>> cardSetCreated() {
+    public Function<CardSetEvent, Message<CardSetEvent>> produceCardSet() {
         return input -> {
-            return cardSetEventService.cardSetCreated(input);
-        };
-    }
-
-    /**
-     * Id: P-5
-     * function to produce a CardSetUpdated event
-     * input topic: -
-     * output topic: card-set-updated-topic
-     */
-    @Bean
-    public Function<CardSet, Message<CardSetEvent>> cardSetUpdated() {
-        return input -> {
-            return cardSetEventService.cardSetUpdated(input);
-        };
-    }
-
-    /**
-     * Id: P-6
-     * function to produce a CardSetDeleted event
-     * input topic: -
-     * output topic: card-set-deleted-topic
-     */
-    @Bean
-    public Function<UUID, Message<CardSetDeletedEvent>> cardSetDeleted() {
-        return input -> {
-            return cardSetEventService.cardSetDeleted(input);
+            cardSetEventService.produceCardSet(input);
+            return null;
         };
     }
 }

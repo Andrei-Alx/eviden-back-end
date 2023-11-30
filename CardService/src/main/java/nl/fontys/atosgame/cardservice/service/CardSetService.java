@@ -14,4 +14,6 @@ public interface CardSetService {
     CardSet updateCardSet(CardSet cardSet) throws EntityNotFoundException;
 
     List<CardSet> getAll() throws EntityNotFoundException;
+
+    void produceCardSet() throws EntityNotFoundException;
 }

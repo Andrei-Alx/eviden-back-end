@@ -13,6 +13,13 @@ import nl.fontys.atosgame.roundservice.model.Round;
  */
 public class EventFactory {
 
+    public static CardSetRequestEvent cardsRequestEvent() {
+        CardSetRequestEvent event = new CardSetRequestEvent();
+        event =
+                (CardSetRequestEvent) initializeBaseEvent(event, "CardSetRequest", "RoundService");
+        return event;
+    }
+
     /**
      * Create a RoundCreatedEvent
      * @param service The service that created the event

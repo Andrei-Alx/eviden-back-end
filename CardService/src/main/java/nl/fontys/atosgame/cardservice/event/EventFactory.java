@@ -1,7 +1,8 @@
 package nl.fontys.atosgame.cardservice.event;
 
-import java.util.UUID;
-import nl.fontys.atosgame.cardservice.model.Card;
+import java.util.List;
+
+import nl.fontys.atosgame.cardservice.event.produced.CardSetEvent;
 import nl.fontys.atosgame.cardservice.model.CardSet;
 
 /**
@@ -9,53 +10,11 @@ import nl.fontys.atosgame.cardservice.model.CardSet;
  * @author Eli
  */
 public class EventFactory {
-
-    public static CardEvent createCardCreatedEvent(String service, Card card) {
-        CardEvent event = new CardEvent();
-        event = (CardEvent) initializeBaseEvent(event, "CardCreated", service);
-        event.setCard(card);
-        return event;
-    }
-
-    public static CardEvent createCardUpdatedEvent(String service, Card card) {
-        CardEvent event = new CardEvent();
-        event = (CardEvent) initializeBaseEvent(event, "CardUpdated", service);
-        event.setCard(card);
-        return event;
-    }
-
-    public static CardDeletedEvent createCardDeletedEvent(String service, UUID id) {
-        CardDeletedEvent event = new CardDeletedEvent();
-        event = (CardDeletedEvent) initializeBaseEvent(event, "CardDeleted", service);
-        event.setCardId(id);
-        return event;
-    }
-
-    public static CardSetEvent createCardSetCreatedEvent(
-        String service,
-        CardSet cardSet
-    ) {
+    public static CardSetEvent createCardSetEvent(String service, List<CardSet> currentCards) {
         CardSetEvent event = new CardSetEvent();
-        event = (CardSetEvent) initializeBaseEvent(event, "CardSetCreated", service);
-        event.setCardSet(cardSet);
-        return event;
-    }
-
-    public static CardSetEvent createCardSetUpdatedEvent(
-        String service,
-        CardSet cardSet
-    ) {
-        CardSetEvent event = new CardSetEvent();
-        event = (CardSetEvent) initializeBaseEvent(event, "CardSetUpdated", service);
-        event.setCardSet(cardSet);
-        return event;
-    }
-
-    public static CardSetDeletedEvent createCardSetDeletedEvent(String service, UUID id) {
-        CardSetDeletedEvent event = new CardSetDeletedEvent();
         event =
-            (CardSetDeletedEvent) initializeBaseEvent(event, "CardSetDeleted", service);
-        event.setCardSetId(id);
+                (CardSetEvent) initializeBaseEvent(event, "CardSet", service);
+        event.setCardSets(currentCards);
         return event;
     }
 

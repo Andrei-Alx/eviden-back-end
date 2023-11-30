@@ -20,14 +20,14 @@ public class CardSetServiceImplTest {
     void setUp() {
         cardSetRepository = mock(CardSetRepository.class);
         streamBridge = mock(StreamBridge.class);
-        cardSetService = new CardSetServiceImpl(cardSetRepository);
+        cardSetService = new CardSetServiceImpl(cardSetRepository, streamBridge);
     }
 
     @Test
     void createCardSet() {
         UUID cardSetId = UUID.randomUUID();
         CardSet cardSet = new CardSet(cardSetId);
-        cardSetService.handleCardSetCreated(cardSet);
+        cardSetService.createCardSet(cardSet);
 
         verify(cardSetRepository).save(cardSet);
     }
@@ -37,7 +37,7 @@ public class CardSetServiceImplTest {
         UUID cardSetId = UUID.randomUUID();
         CardSet cardSet = new CardSet(cardSetId);
 
-        cardSetService.handleCardSetUpdated(cardSet);
+        cardSetService.updateCardSet(cardSet);
 
         verify(cardSetRepository).save(cardSet);
     }
@@ -46,9 +46,9 @@ public class CardSetServiceImplTest {
     void deleteCardSet() {
         UUID cardSetId = UUID.randomUUID();
         CardSet cardSet = new CardSet(cardSetId);
-        cardSetService.handleCardSetCreated(cardSet);
+        cardSetService.createCardSet(cardSet);
 
-        cardSetService.handleCardSetDeleted(cardSetId);
+        cardSetService.deleteCardSet(cardSetId);
 
         verify(cardSetRepository).deleteById(cardSetId);
     }
@@ -57,7 +57,7 @@ public class CardSetServiceImplTest {
     void getCardSet() {
         UUID cardSetId = UUID.randomUUID();
         CardSet cardSet = new CardSet(cardSetId);
-        cardSetService.handleCardSetCreated(cardSet);
+        cardSetService.createCardSet(cardSet);
 
         cardSetService.getCardSet(cardSetId);
 

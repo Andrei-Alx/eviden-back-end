@@ -26,7 +26,7 @@ class CardSetServiceImplTest {
     void setUp() {
         cardSetRepository = mock(CardSetRepository.class);
         streamBridge = mock(StreamBridge.class);
-        cardSetService = new CardSetServiceImpl(cardSetRepository);
+        cardSetService = new CardSetServiceImpl(cardSetRepository, streamBridge);
     }
 
     @Test
@@ -37,7 +37,7 @@ class CardSetServiceImplTest {
         Collection<Tag> tags = new ArrayList<>();
         CardSet cardSet = new CardSet(cardSetId, name, cards, tags);
 
-        cardSetService.handleCardSetCreated(cardSet);
+        cardSetService.createCardSet(cardSet);
 
         verify(cardSetRepository).save(cardSet);
     }
@@ -51,7 +51,7 @@ class CardSetServiceImplTest {
         Collection<Tag> tags = new ArrayList<>();
         CardSet cardSet = new CardSet(cardSetId, name, cards, tags);
 
-        cardSetService.handleCardSetUpdated(cardSet);
+        cardSetService.updateCardSet(cardSet);
 
         verify(cardSetRepository).save(cardSet);
     }
@@ -64,9 +64,9 @@ class CardSetServiceImplTest {
         Collection<Card> cards = new ArrayList<>();
         Collection<Tag> tags = new ArrayList<>();
         CardSet cardSet = new CardSet(cardSetId, name, cards, tags);
-        cardSetService.handleCardSetCreated(cardSet);
+        cardSetService.createCardSet(cardSet);
 
-        cardSetService.handleCardSetDeleted(cardSetId);
+        cardSetService.deleteCardSet(cardSetId);
 
         verify(cardSetRepository).deleteById(cardSetId);
     }

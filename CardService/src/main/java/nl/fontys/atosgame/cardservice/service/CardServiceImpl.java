@@ -20,14 +20,11 @@ import org.springframework.stereotype.Service;
 public class CardServiceImpl implements CardService {
 
     private CardRepository cardRepository;
-    private StreamBridge streamBridge;
 
     public CardServiceImpl(
-        @Autowired CardRepository cardRepository,
-        @Autowired StreamBridge streamBridge
+        @Autowired CardRepository cardRepository
     ) {
         this.cardRepository = cardRepository;
-        this.streamBridge = streamBridge;
     }
 
     /**
@@ -40,7 +37,6 @@ public class CardServiceImpl implements CardService {
         Card card = cardRepository.save(
             new Card(null, createCardDto.getTags(), createCardDto.getTranslations())
         );
-        streamBridge.send("cardCreated-in-0", card);
         return card;
     }
 
@@ -52,7 +48,6 @@ public class CardServiceImpl implements CardService {
     @Override
     public Card updateCard(Card card) {
         Card updatedCard = cardRepository.save(card);
-        streamBridge.send("cardUpdated-in-0", updatedCard);
         return updatedCard;
     }
 
@@ -63,7 +58,6 @@ public class CardServiceImpl implements CardService {
     @Override
     public void deleteCard(UUID id) {
         cardRepository.deleteById(id);
-        streamBridge.send("cardDeleted-in-0", id);
     }
 
     /**
