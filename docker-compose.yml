@@ -47,7 +47,7 @@ services:
         window: 180s
     networks:
       - atos_network
-      
+
   card-service-db:
     image: mysql:latest
     container_name: card-service-db
@@ -67,7 +67,7 @@ services:
         window: 180s
     networks:
       - atos_network
-    
+
   round-service-db:
     image: mysql:latest
     container_name: round-service-db
@@ -163,59 +163,21 @@ services:
         window: 180s
     networks:
       - atos_network
-           
+
   game-app:
-    image: petarparpov/atos-game-app:latest
+    image: fhictdev/eviden-game_app-fe:latest
     container_name: game-app
     ports:
       - 80:80
-    depends_on: 
-      - card-service
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 45s
-        max_attempts: 3
-        window: 180s
-    networks:
-      - atos_network
-      
-  card-service:
-    image: petarparpov/atos-card-service:latest
-    container_name: card-service
-    ports:
-      - 8001:8001
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://card-service-db/card_db?useSSL=false
-      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
-      - SPRING_RESOURCES_STATIC_LOCATIONS=classpath:/data.cards/
-    depends_on: 
-      - gameappbff
-      - round-service
-      - lobby-service
-      - game-service
-      - card-service-db
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 45s
-        max_attempts: 3
-        window: 180s
-    networks:
-      - atos_network
-    
-  gameappbff:
-    image: petarparpov/atos-gameappbff:latest
-    container_name: gameappbff
-    ports:
-      - 8004:8004
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://gameappbff-db/gameappbff_db?useSSL=false
-      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - SPRING_DATASOURCE_USERNAME=myuser
-      - SPRING_DATASOURCE_PASSWORD=mypassword
+        - PORT=3001
+        - HTTPS=false
+        - REACT_APP_SERVER_HOST_IP="0.0.0.0"
+    depends_on:
+      - zookeeper
+      - kafka
+      - kpow
+    restart: no
     deploy:
       restart_policy:
         condition: on-failure
@@ -225,8 +187,58 @@ services:
     networks:
       - atos_network
 
+
+  card-service:
+    image: fhictdev/eviden-card-svc:csr-v1
+    container_name: card-service
+    ports:
+      - 8001:8001
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://card-service-db/card_db?useSSL=false
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_RESOURCES_STATIC_LOCATIONS=classpath:/data.cards/
+    depends_on:
+      - card-service-db
+    restart: no
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 45s
+        max_attempts: 3
+        window: 180s
+    networks:
+      - atos_network
+
+  gameappbff:
+    image: fhictdev/eviden-game-app-bff:csr-v1
+    container_name: gameappbff
+    ports:
+      - 8004:8004
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://gameappbff-db/gameappbff_db?useSSL=false
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SPRING_DATASOURCE_USERNAME=myuser
+      - SPRING_DATASOURCE_PASSWORD=mypassword
+    restart: no
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 45s
+        max_attempts: 3
+        window: 180s
+    depends_on:
+      - round-service
+      - lobby-service
+      - game-service
+      - gameappbff-db
+
+    networks:
+      - atos_network
+
   round-service:
-    image: petarparpov/atos-round-service:latest
+    image: fhictdev/eviden-round-svc:csr-v1
     container_name: round-service
     ports:
       - 8002:8002
@@ -238,6 +250,7 @@ services:
     depends_on:
       - kafka
       - round-service-db
+    restart: no
     deploy:
       restart_policy:
         condition: on-failure
@@ -246,9 +259,9 @@ services:
         window: 180s
     networks:
       - atos_network
-    
+
   lobby-service:
-    image: petarparpov/atos-lobby-service:latest
+    image: fhictdev/eviden-lobby-svs:csr-v1
     container_name: lobby-service
     ports:
       - 8006:8006
@@ -260,17 +273,18 @@ services:
     depends_on:
       - kafka
       - lobby-service-db
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 45s
-        max_attempts: 3
-        window: 180s
+    restart: no
+#    deploy:
+#      restart_policy:
+#        condition: on-failure
+#        delay: 45s
+#        max_attempts: 3
+#        window: 180s
     networks:
       - atos_network
-    
+
   game-service:
-    image: petarparpov/atos-game-service:latest
+    image: fhictdev/eviden-game-svc:csr-v1
     container_name: game-service
     ports:
       - 8005:8005
@@ -282,37 +296,18 @@ services:
     depends_on:
       - kafka
       - game-service-db
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 45s
-        max_attempts: 3
-        window: 180s
+    restart: no
+#    deploy:
+#      restart_policy:
+#        condition: on-failure
+#        delay: 45s
+#        max_attempts: 3
+#        window: 180s
     networks:
       - atos_network
 
-  kafka-manager:
-    container_name: kafkaManagerContainerAtos
-    image: hlebalbau/kafka-manager:stable
-    ports:
-      - "9000:9000"
-    environment:
-      ZK_HOSTS: "zookeeper:2181"
-    networks:
-      - atos_network
-
-  sonarqube:
-    image: sonarqube:latest
-    ports:
-      - 9000:9000
-    environment:
-      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
-    networks:
-      - atos_network
-
-          
 volumes:
-  db:  
+  db:
 
 networks:
   atos_network:
