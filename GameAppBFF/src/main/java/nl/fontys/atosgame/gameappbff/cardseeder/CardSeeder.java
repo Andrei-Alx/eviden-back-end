@@ -107,6 +107,25 @@ public class CardSeeder {
 
         tags = AddTags("advice", "group", "operatingModel");
         AddCards(setNeeded, "roundThreeCardsAdvice", tags);
+
+        if(cardSetService.getAllCardSets().size() > 6)
+        {
+            List<UUID> ids = new ArrayList<>();
+
+            for(CardSet cards : cardSetService.getAllCardSets())
+            {
+                for(Card card : cards.getCards())
+                {
+                    ids.add(card.getId());
+                }
+
+                cardSetService.deleteCardSet(cards.getId());
+                for(UUID id : ids)
+                {
+                    cardService.deleteCard(id);
+                }
+            }
+        }
     }
 
     public void AddCards(CardSet set, String setName, List<Tag> tags) throws IOException
