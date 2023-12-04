@@ -68,8 +68,6 @@ public class CardSeeder {
 
         tags = AddTags("advice", "group", "operatingModel");
         AddCards("classpath:data/cards/roundThreeAdvice.json", "roundThreeCardsAdvice", tags);
-
-        cardSetService.produceCardSet();
     }
 
     public void AddCards(String classpath, String setName, List<Tag> tags) throws IOException

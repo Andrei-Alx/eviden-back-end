@@ -10,6 +10,7 @@ import java.util.*;
 import nl.fontys.atosgame.gameappbff.enums.ShowResults;
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.model.Round;
+import nl.fontys.atosgame.gameappbff.service.CardSetService;
 import nl.fontys.atosgame.gameappbff.service.GameService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,10 @@ public class GameController {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameController.class);
     private GameService gameService;
 
-    private GameController(@Autowired GameService gameService) {
+    private CardSetService cardSetService;
+
+    private GameController(@Autowired GameService gameService, @Autowired CardSetService cardSetService) {
+        this.cardSetService = cardSetService;
         this.gameService = gameService;
     }
 
@@ -50,6 +54,7 @@ public class GameController {
         }
     )
     public ResponseEntity<List<Game>> getGames() {
+        cardSetService.cardSetRequest();
         List<Game> games = gameService.getAllGames();
         return ResponseEntity.ok(games);
     }

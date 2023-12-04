@@ -33,11 +33,6 @@ public class CardSeeder {
         oldCards = new ArrayList<>(cardSetService.getAllCardSets());
     }
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void seedCards() {
-        cardSetService.cardSetRequest();
-    }
-
     public void handleCardSet(List<CardSet> currentCards) throws IOException
     {
         CardSet setNeeded = new CardSet();

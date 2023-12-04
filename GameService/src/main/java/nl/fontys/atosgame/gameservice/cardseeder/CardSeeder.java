@@ -26,11 +26,6 @@ public class CardSeeder {
         oldCards = cardSetService.getAllCardSets();
     }
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void seedCards() {
-        cardSetService.cardSetRequest();
-    }
-
     //When receiving a new card-set the old id's will always be thrown out, and it will insert new ones.
     public void handleCardSet(List<CardSet> currentCards) throws IOException
     {

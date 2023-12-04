@@ -16,6 +16,11 @@ services:
     container_name: kafka
     depends_on:
       - zookeeper
+      - card-service-db
+      - gameappbff-db
+      - game-service-db
+      - round-service-db
+      - lobby-service-db
     ports:
       - 29092:29092
     environment:
@@ -33,6 +38,12 @@ services:
         window: 180s
     networks:
       - atos_network
+    healthcheck:
+      test: nc -z localhost 9092 || exit -1
+      start_period: 15s
+      interval: 5s
+      timeout: 10s
+      retries: 10
 
   kpow:
     image: factorhouse/kpow-ce
@@ -174,9 +185,11 @@ services:
         - HTTPS=false
         - REACT_APP_SERVER_HOST_IP="0.0.0.0"
     depends_on:
-      - zookeeper
-      - kafka
-      - kpow
+      - game-service
+      - gameappbff
+      - round-service
+      - lobby-service
+      - card-service
     restart: no
     deploy:
       restart_policy:
@@ -200,7 +213,8 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_RESOURCES_STATIC_LOCATIONS=classpath:/data.cards/
     depends_on:
-      - card-service-db
+      kafka:
+        condition: service_healthy
     restart: no
     deploy:
       restart_policy:
@@ -229,11 +243,8 @@ services:
         max_attempts: 3
         window: 180s
     depends_on:
-      - round-service
-      - lobby-service
-      - game-service
-      - gameappbff-db
-
+      kafka:
+        condition: service_healthy
     networks:
       - atos_network
 
@@ -248,8 +259,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=mypassword
     depends_on:
-      - kafka
-      - round-service-db
+      kafka:
+        condition: service_healthy
     restart: no
     deploy:
       restart_policy:
@@ -271,8 +282,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=mypassword
     depends_on:
-      - kafka
-      - lobby-service-db
+      kafka:
+        condition: service_healthy
     restart: no
 #    deploy:
 #      restart_policy:
@@ -294,8 +305,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
     depends_on:
-      - kafka
-      - game-service-db
+      kafka:
+        condition: service_healthy
     restart: no
 #    deploy:
 #      restart_policy:

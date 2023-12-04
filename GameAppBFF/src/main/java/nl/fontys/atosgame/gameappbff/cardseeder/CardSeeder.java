@@ -33,11 +33,6 @@ public class CardSeeder {
         oldCards = new ArrayList<>(cardSetService.getAllCardSets());
     }
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void seedCards() {
-        cardSetService.cardSetRequest();
-    }
-
     public void handleCardSet(List<CardSet> currentCards) throws IOException
     {
         CardSet setNeeded = new CardSet();
@@ -107,25 +102,6 @@ public class CardSeeder {
 
         tags = AddTags("advice", "group", "operatingModel");
         AddCards(setNeeded, "roundThreeCardsAdvice", tags);
-
-        if(cardSetService.getAllCardSets().size() > 6)
-        {
-            List<UUID> ids = new ArrayList<>();
-
-            for(CardSet cards : cardSetService.getAllCardSets())
-            {
-                for(Card card : cards.getCards())
-                {
-                    ids.add(card.getId());
-                }
-
-                cardSetService.deleteCardSet(cards.getId());
-                for(UUID id : ids)
-                {
-                    cardService.deleteCard(id);
-                }
-            }
-        }
     }
 
     public void AddCards(CardSet set, String setName, List<Tag> tags) throws IOException
