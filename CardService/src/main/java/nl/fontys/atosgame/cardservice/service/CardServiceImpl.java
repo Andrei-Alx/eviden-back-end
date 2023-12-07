@@ -33,11 +33,8 @@ public class CardServiceImpl implements CardService {
      * @return the created card
      */
     @Override
-    public Card createCard(CreateCardDto createCardDto) {
-        Card card = cardRepository.save(
-            new Card(null, createCardDto.getTags(), createCardDto.getTranslations())
-        );
-        return card;
+    public Card createCard(Card card) {
+        return cardRepository.save(card);
     }
 
     /**
@@ -47,8 +44,7 @@ public class CardServiceImpl implements CardService {
      */
     @Override
     public Card updateCard(Card card) {
-        Card updatedCard = cardRepository.save(card);
-        return updatedCard;
+        return cardRepository.save(card);
     }
 
     /**

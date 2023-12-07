@@ -5,5 +5,4 @@ import nl.fontys.atosgame.cardservice.event.BaseEvent;
 
 @Data
 public class CardSetRequestEvent extends BaseEvent {
-    String dummy;
 }

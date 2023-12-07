@@ -32,7 +32,7 @@ class CardControllerTest {
     void createCard200() {
         CreateCardDto createCardDto = new CreateCardDto(null, null);
         Card card = new Card();
-        when(cardService.createCard(createCardDto)).thenReturn(card);
+        when(cardService.createCard(new Card(null, createCardDto.getTags(),createCardDto.getTranslations()))).thenReturn(card);
 
         var response = cardController.createCard(createCardDto);
 
@@ -45,7 +45,7 @@ class CardControllerTest {
         List<Tag> tags = List.of(new Tag(), new Tag());
         List<Translation> translations = List.of(new Translation(), new Translation());
         CreateCardDto createCardDto = new CreateCardDto(tags, translations);
-        when(cardService.createCard(createCardDto)).thenThrow(new RuntimeException());
+        when(cardService.createCard(new Card(null, createCardDto.getTags(),createCardDto.getTranslations()))).thenThrow(new RuntimeException());
 
         var response = cardController.createCard(createCardDto);
 

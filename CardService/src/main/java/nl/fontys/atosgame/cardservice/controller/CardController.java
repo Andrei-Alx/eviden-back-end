@@ -54,7 +54,7 @@ public class CardController {
     )
     public ResponseEntity<Card> createCard(@RequestBody CreateCardDto createCardDto) {
         try {
-            return ResponseEntity.ok(cardService.createCard(createCardDto));
+            return ResponseEntity.ok(cardService.createCard(new Card(null, createCardDto.getTags(), createCardDto.getTranslations())));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }

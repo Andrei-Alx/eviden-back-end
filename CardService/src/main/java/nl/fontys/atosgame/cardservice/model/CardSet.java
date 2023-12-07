@@ -29,7 +29,7 @@ public class CardSet {
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
         name = "card_set_cards",
-        joinColumns = @JoinColumn(name = "card_set_null"),
+        joinColumns = @JoinColumn(name = "card_set_id"),
         inverseJoinColumns = @JoinColumn(name = "cards_id")
     )
     @JsonProperty
