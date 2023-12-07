@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
+import nl.fontys.atosgame.cardservice.event.produced.CardSetEvent;
 import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.model.CardSet;
-import nl.fontys.atosgame.cardservice.model.Tag;
 import nl.fontys.atosgame.cardservice.repository.CardSetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -55,7 +55,6 @@ public class CardSetServiceImpl implements CardSetService {
         );
 
         cardSet = cardSetRepository.save(cardSet);
-        streamBridge.send("cardSetCreated-in-0", cardSet);
         return cardSet;
     }
 
@@ -67,7 +66,6 @@ public class CardSetServiceImpl implements CardSetService {
     @Override
     public void deleteCardSet(UUID id) {
         cardSetRepository.deleteById(id);
-        streamBridge.send("cardSetDeleted-in-0", id);
     }
 
     /**
@@ -79,7 +77,6 @@ public class CardSetServiceImpl implements CardSetService {
     @Override
     public CardSet updateCardSet(CardSet cardSet) {
         CardSet updatedCardSet = cardSetRepository.save(cardSet);
-        streamBridge.send("cardSetUpdated-in-0", updatedCardSet);
         return updatedCardSet;
     }
 
@@ -87,4 +84,14 @@ public class CardSetServiceImpl implements CardSetService {
     public List<CardSet> getAll() throws EntityNotFoundException {
         return cardSetRepository.findAll();
     }
+
+    @Override
+    public void produceCardSet() throws EntityNotFoundException {
+        List<CardSet> currentCards = cardSetRepository.findAll();
+        CardSetEvent event = new CardSetEvent();
+        event.setCardSets(currentCards);
+        streamBridge.send("produceCardSet-out-0", event);
+    }
+
+
 }

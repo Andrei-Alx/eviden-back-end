@@ -35,7 +35,7 @@ class GameServiceImplTest {
     }
 
     @Test
-    void createGameCardSetsExist() throws EmptyStringException {
+    void createGameCardSetsExist() throws Exception {
         String title = "titleGame";
         String companyType = "companyType";
         LobbySettings lobbySettings = new LobbySettings();

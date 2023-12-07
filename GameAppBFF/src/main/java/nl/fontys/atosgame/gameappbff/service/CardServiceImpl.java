@@ -32,7 +32,7 @@ public class CardServiceImpl implements CardService {
      * @param card The card to create.
      */
     @Override
-    public void handleCardCreated(Card card)
+    public void createCard(Card card)
     {
         LOGGER.info(String.format(card.toString()));
         cardRepository.save(card);
@@ -44,7 +44,7 @@ public class CardServiceImpl implements CardService {
      * @param card The card to update.
      */
     @Override
-    public void handleCardUpdated(Card card) {
+    public void updateCard(Card card) {
         cardRepository.save(card);
     }
 
@@ -54,7 +54,7 @@ public class CardServiceImpl implements CardService {
      * @param cardId The id of the card to delete.
      */
     @Override
-    public void handleCardDeleted(UUID cardId) {
+    public void deleteCard(UUID cardId) {
         cardRepository.deleteById(cardId);
     }
 

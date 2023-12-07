@@ -14,4 +14,6 @@ public interface CardService {
     void deleteCard(UUID id) throws EntityNotFoundException;
 
     Collection<Card> getCardsByIds(Collection<UUID> ids);
+
+    void deleteCards(Collection<UUID> ids) throws EntityNotFoundException;
 }

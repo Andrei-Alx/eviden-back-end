@@ -1,10 +1,15 @@
 package nl.fontys.atosgame.gameservice.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
+
+import nl.fontys.atosgame.gameservice.event.produced.CardSetRequestEvent;
 import nl.fontys.atosgame.gameservice.model.CardSet;
 import nl.fontys.atosgame.gameservice.repository.CardSetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,9 +20,11 @@ import org.springframework.stereotype.Service;
 public class CardSetServiceImpl implements CardSetService {
 
     private CardSetRepository cardSetRepository;
+    private StreamBridge streamBridge;
 
-    public CardSetServiceImpl(@Autowired CardSetRepository cardSetRepository) {
+    public CardSetServiceImpl(@Autowired CardSetRepository cardSetRepository, @Autowired StreamBridge streamBridge) {
         this.cardSetRepository = cardSetRepository;
+        this.streamBridge = streamBridge;
     }
 
     /**
@@ -26,7 +33,7 @@ public class CardSetServiceImpl implements CardSetService {
      * @param cardSet The cardset to create.
      */
     @Override
-    public void handleCardSetCreated(CardSet cardSet) {
+    public void createCardSet(CardSet cardSet) {
         cardSetRepository.save(cardSet);
     }
 
@@ -36,8 +43,8 @@ public class CardSetServiceImpl implements CardSetService {
      * @param cardSet The cardset to update.
      */
     @Override
-    public void handleCardSetUpdated(CardSet cardSet) {
-        cardSetRepository.save(cardSet);
+    public void updateCardSet(CardSet cardSet) {
+        cardSetRepository.saveAndFlush(cardSet);
     }
 
     /**
@@ -46,7 +53,7 @@ public class CardSetServiceImpl implements CardSetService {
      * @param cardSetId The id of the cardSet to delete.
      */
     @Override
-    public void handleCardSetDeleted(UUID cardSetId) {
+    public void deleteCardSet(UUID cardSetId) {
         cardSetRepository.deleteById(cardSetId);
     }
 
@@ -59,5 +66,17 @@ public class CardSetServiceImpl implements CardSetService {
     @Override
     public Optional<CardSet> getCardSet(UUID cardSetId) {
         return cardSetRepository.findById(cardSetId);
+    }
+
+    public List<CardSet> getAllCardSets() {
+        return cardSetRepository.findAll();
+    }
+
+    @Override
+    public void cardSetRequest() {
+        streamBridge.send(
+                "produceCardSetRequest-out-0",
+                new CardSetRequestEvent()
+        );
     }
 }

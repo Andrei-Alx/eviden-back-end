@@ -1,111 +1,130 @@
-package nl.fontys.atosgame.cardservice.seeder;
+package nl.fontys.atosgame.gameappbff.cardseeder;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import nl.fontys.atosgame.cardservice.CardServiceApplication;
-import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
-import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
-import nl.fontys.atosgame.cardservice.enums.TagType;
-import nl.fontys.atosgame.cardservice.model.Card;
-import nl.fontys.atosgame.cardservice.model.CardSet;
-import nl.fontys.atosgame.cardservice.model.Tag;
-import nl.fontys.atosgame.cardservice.service.CardService;
-import nl.fontys.atosgame.cardservice.service.CardSetService;
+import nl.fontys.atosgame.gameappbff.enums.TagType;
+import nl.fontys.atosgame.gameappbff.model.Card;
+import nl.fontys.atosgame.gameappbff.model.CardSet;
+import nl.fontys.atosgame.gameappbff.model.Tag;
+import nl.fontys.atosgame.gameappbff.service.CardService;
+import nl.fontys.atosgame.gameappbff.service.CardSetEventService;
+import nl.fontys.atosgame.gameappbff.service.CardSetService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
-import static java.util.stream.Collectors.toCollection;
+import java.io.IOException;
+import java.util.*;
 
 @Service
-@Profile("development")
 public class CardSeeder {
-
     private CardService cardService;
     private CardSetService cardSetService;
+    private CardSetEventService cardSetEventService;
     private List<CardSet> oldCards;
 
-    ResourceLoader resourceLoader = new DefaultResourceLoader();
-    List<Tag> tags;
-
     public CardSeeder(
-        @Autowired CardService cardService,
-        @Autowired CardSetService cardSetService
-    ) {
+            @Autowired CardService cardService,
+            @Autowired CardSetService cardSetService,
+            @Autowired CardSetEventService cardSetEventService
+            ) {
         this.cardService = cardService;
         this.cardSetService = cardSetService;
-        oldCards = new ArrayList<>(cardSetService.getAll());
+        this.cardSetEventService = cardSetEventService;
+        oldCards = new ArrayList<>(cardSetService.getAllCardSets());
     }
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void seedCards() throws IOException {
-        tags = AddTags("game", "personal", "color");
-        AddCards("classpath:data/cards/roundOne.json", "roundOneCards", tags);
+    public void handleCardSet(List<CardSet> currentCards) throws IOException
+    {
+        CardSet setNeeded = new CardSet();
+
+        for(CardSet set : currentCards)
+        {
+            if(set.getName().equals("roundOneCards"))
+            {
+                setNeeded = set;
+            }
+        }
+
+        List<Tag> tags = AddTags("game", "personal", "color");
+        AddCards(setNeeded,"roundOneCards", tags);
+
+        for(CardSet set : currentCards)
+        {
+            if(set.getName().equals("roundOneCardsAdvice"))
+            {
+                setNeeded = set;
+            }
+        }
 
         tags = AddTags("advice", "personal", "color");
-        AddCards("classpath:data/cards/roundOneAdvice.json", "roundOneCardsAdvice", tags);
+        AddCards(setNeeded, "roundOneCardsAdvice", tags);
+
+        for(CardSet set : currentCards)
+        {
+            if(set.getName().equals("roundTwoCards"))
+            {
+                setNeeded = set;
+            }
+        }
 
         tags = AddTags("game", "group", "color");
-        AddCards("classpath:data/cards/roundTwo.json", "roundTwoCards", tags);
+        AddCards(setNeeded, "roundTwoCards", tags);
+
+        for(CardSet set : currentCards)
+        {
+            if(set.getName().equals("roundTwoCardsAdvice"))
+            {
+                setNeeded = set;
+            }
+        }
 
         tags = AddTags("advice", "group", "color");
-        AddCards("classpath:data/cards/roundOneAdvice.json", "roundTwoCardsAdvice", tags);
+        AddCards(setNeeded, "roundTwoCardsAdvice", tags);
+
+        for(CardSet set : currentCards)
+        {
+            if(set.getName().equals("roundThreeCards"))
+            {
+                setNeeded = set;
+            }
+        }
 
         tags = AddTags("game", "group", "operatingModel");
-        AddCards("classpath:data/cards/roundThree.json", "roundThreeCards", tags);
+        AddCards(setNeeded, "roundThreeCards", tags);
+
+        for(CardSet set : currentCards)
+        {
+            if(set.getName().equals("roundThreeCardsAdvice"))
+            {
+                setNeeded = set;
+            }
+        }
 
         tags = AddTags("advice", "group", "operatingModel");
-        AddCards("classpath:data/cards/roundThreeAdvice.json", "roundThreeCardsAdvice", tags);
+        AddCards(setNeeded, "roundThreeCardsAdvice", tags);
     }
 
-    public void AddCards(String classpath, String setName, List<Tag> tags) throws IOException
+    public void AddCards(CardSet set, String setName, List<Tag> tags) throws IOException
     {
-        Resource resource = resourceLoader.getResource(classpath);
-        InputStream inputStream = resource.getInputStream();
-        List<CreateCardDto> cards = CardJsonReader.readCards(inputStream);
-
         if(!oldCards.isEmpty())
         {
-            if(ChecksumCheck(setName, cards))
+            if(ChecksumCheck(setName, (List<Card>)set.getCards()))
             {
                 return;
             }
         }
 
-        List<Card> createdCards = new ArrayList<>();
-        // Create the cards
-        for (CreateCardDto card : cards) {
-            createdCards.add(cardService.createCard(card));
+        for (Card card : set.getCards()) {
+            cardService.createCard(card);
         }
 
-        // Create the card set
-        CreateCardSetDto cardSet = new CreateCardSetDto(
-                setName,
-                tags,
-                createdCards
-                        .stream()
-                        .map(Card::getId)
-                        .collect(toCollection(ArrayList::new))
-        );
-        cardSetService.createCardSet(cardSet);
+        cardSetService.createCardSet(set);
 
         tags.clear();
     }
 
-    public boolean ChecksumCheck(String setName, List<CreateCardDto> cards)
+    public boolean ChecksumCheck(String setName, List<Card> cards)
     {
-
         if(CreateChecksum(setName, cards))
         {
             return true;
@@ -126,15 +145,16 @@ public class CardSeeder {
             ids.add(card.getId());
         }
 
-        if(!currentSet.getCards().isEmpty())
+        cardSetService.deleteCardSet(currentSet.getId());
+        for(UUID id : ids)
         {
-            cardSetService.deleteCardSet(currentSet.getId());
-            cardService.deleteCards(ids);
+            cardService.deleteCard(id);
         }
+
         return false;
     }
 
-    public boolean CreateChecksum(String setName, List<CreateCardDto> cards)
+    public boolean CreateChecksum(String setName, List<Card> cards)
     {
         List<Card> cardSetOld = new ArrayList<>();
 
@@ -167,7 +187,7 @@ public class CardSeeder {
         englishCards.clear();
         tags.clear();
 
-        for(CreateCardDto card : cards)
+        for(Card card : cards)
         {
             dutchCards.add(new ArrayList<>(card.getTranslations()).get(0).getText());
             englishCards.add(new ArrayList<>(card.getTranslations()).get(1).getText());
@@ -211,4 +231,5 @@ public class CardSeeder {
 
         return tags;
     }
+
 }

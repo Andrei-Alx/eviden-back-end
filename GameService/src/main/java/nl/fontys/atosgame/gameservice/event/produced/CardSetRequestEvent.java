@@ -1,6 +1,5 @@
-package nl.fontys.atosgame.gameservice.event.consumed;
+package nl.fontys.atosgame.gameservice.event.produced;
 
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +8,6 @@ import nl.fontys.atosgame.gameservice.event.BaseEvent;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CardSetDeletedEvent extends BaseEvent {
-
-    private UUID cardSetId;
+public class CardSetRequestEvent extends BaseEvent {
+    String dummy;
 }
