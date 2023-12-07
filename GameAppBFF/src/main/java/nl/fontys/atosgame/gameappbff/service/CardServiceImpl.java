@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import nl.fontys.atosgame.gameappbff.controller.CardConsumers;
 import nl.fontys.atosgame.gameappbff.model.Card;
 import nl.fontys.atosgame.gameappbff.repository.CardRepository;
 import org.slf4j.Logger;
@@ -19,8 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CardServiceImpl implements CardService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CardConsumers.class);
-    private CardRepository cardRepository;
+    private final CardRepository cardRepository;
 
     public CardServiceImpl(@Autowired CardRepository cardRepository) {
         this.cardRepository = cardRepository;
@@ -34,7 +32,6 @@ public class CardServiceImpl implements CardService {
     @Override
     public void createCard(Card card)
     {
-        LOGGER.info(String.format(card.toString()));
         cardRepository.save(card);
     }
 

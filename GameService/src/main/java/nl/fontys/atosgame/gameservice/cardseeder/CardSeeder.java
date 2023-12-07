@@ -14,15 +14,12 @@ import java.util.*;
 @Service
 public class CardSeeder {
     private CardSetService cardSetService;
-    private CardSetEventService cardSetEventService;
     private List<CardSet> oldCards;
 
     public CardSeeder(
-            @Autowired CardSetService cardSetService,
-            @Autowired CardSetEventService cardSetEventService
+            @Autowired CardSetService cardSetService
     ) {
         this.cardSetService = cardSetService;
-        this.cardSetEventService = cardSetEventService;
         oldCards = cardSetService.getAllCardSets();
     }
 
