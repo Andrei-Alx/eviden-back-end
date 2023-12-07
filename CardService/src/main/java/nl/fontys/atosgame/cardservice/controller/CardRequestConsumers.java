@@ -21,15 +21,7 @@ public class CardRequestConsumers {
     @Bean
     public Function<Message<CardSetRequestEvent>, Void> handleCardSetRequest() {
         return message -> {
-            new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            cardSetService.produceCardSet();
-                        }
-                    },
-                    5000
-            );
+            cardSetService.produceCardSet();
             return null;
         };
     }

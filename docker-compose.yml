@@ -3,6 +3,12 @@ services:
   zookeeper:
     container_name: zookeeper
     image: confluentinc/cp-zookeeper:latest
+    depends_on:
+      - card-service-db
+      - gameappbff-db
+      - game-service-db
+      - round-service-db
+      - lobby-service-db
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -10,6 +16,12 @@ services:
       - 22181:2181
     networks:
       - atos_network
+    healthcheck:
+      test: nc -z localhost 2181 || exit -1
+      start_period: 15s
+      interval: 5s
+      timeout: 10s
+      retries: 10
   
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -202,7 +214,7 @@ services:
 
 
   card-service:
-    image: fhictdev/eviden-card-svc:csr-v1
+    image: fhictdev/eviden-card-svc:csr-v3
     container_name: card-service
     ports:
       - 8001:8001
@@ -226,7 +238,7 @@ services:
       - atos_network
 
   gameappbff:
-    image: fhictdev/eviden-game-app-bff:csr-v1
+    image: fhictdev/eviden-game-app-bff:csr-v3
     container_name: gameappbff
     ports:
       - 8004:8004
@@ -249,7 +261,7 @@ services:
       - atos_network
 
   round-service:
-    image: fhictdev/eviden-round-svc:csr-v1
+    image: fhictdev/eviden-round-svc:csr-v3
     container_name: round-service
     ports:
       - 8002:8002
@@ -272,7 +284,7 @@ services:
       - atos_network
 
   lobby-service:
-    image: fhictdev/eviden-lobby-svs:csr-v1
+    image: fhictdev/eviden-lobby-svs:csr-v3
     container_name: lobby-service
     ports:
       - 8006:8006
@@ -295,7 +307,7 @@ services:
       - atos_network
 
   game-service:
-    image: fhictdev/eviden-game-svc:csr-v1
+    image: fhictdev/eviden-game-svc:csr-v3
     container_name: game-service
     ports:
       - 8005:8005

@@ -36,7 +36,6 @@ public class CardSeeder {
     private CardSetService cardSetService;
     private List<CardSet> oldCards;
 
-    private StreamBridge streamBridge;
     ResourceLoader resourceLoader = new DefaultResourceLoader();
     List<Tag> tags;
 
