@@ -18,6 +18,13 @@ public class CardRequestConsumers {
         this.cardSetService = cardSetservice;
     }
 
+
+    /**
+     * Id: C-1
+     * Consumer for CardSetRequest and activates CardSetEventProducer
+     * input topic: card-set-request-topic
+     * output topic: -
+     */
     @Bean
     public Function<Message<CardSetRequestEvent>, Void> handleCardSetRequest() {
         return message -> {
