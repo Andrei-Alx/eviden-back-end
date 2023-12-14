@@ -8,6 +8,7 @@ import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
 import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.service.CardService;
+import nl.fontys.atosgame.cardservice.service.CardSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +19,18 @@ import org.springframework.web.bind.annotation.*;
  * Performs CRUD operations on cards
  * @author Eli
  */
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/cards")
 public class CardController {
 
     private CardService cardService;
+    private CardSetService cardSetService;
 
-    public CardController(@Autowired CardService cardService) {
+    public CardController(@Autowired CardService cardService, @Autowired CardSetService cardSetService)
+    {
         this.cardService = cardService;
+        this.cardSetService = cardSetService;
     }
 
     /**
@@ -54,7 +59,7 @@ public class CardController {
     )
     public ResponseEntity<Card> createCard(@RequestBody CreateCardDto createCardDto) {
         try {
-            return ResponseEntity.ok(cardService.createCard(new Card(null, createCardDto.getTags(), createCardDto.getTranslations())));
+            return ResponseEntity.ok(cardService.createCard(new Card(null, createCardDto.getTags(), createCardDto.getTranslations(), true)));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -120,6 +125,28 @@ public class CardController {
             return ResponseEntity.ok().build();
         } catch (EmptyResultDataAccessException e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/seed")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Cards seeded",
+                            content = @io.swagger.v3.oas.annotations.media.Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Card.class)
+                            )
+                    )
+            }
+    )
+    public ResponseEntity<String> seedCards() {
+        try {
+            cardSetService.produceCardSet();
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 }

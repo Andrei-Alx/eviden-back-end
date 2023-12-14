@@ -40,4 +40,8 @@ public class CardSet {
     @ElementCollection
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Tag> tags;
+
+    @JsonProperty
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private boolean isActive;
 }

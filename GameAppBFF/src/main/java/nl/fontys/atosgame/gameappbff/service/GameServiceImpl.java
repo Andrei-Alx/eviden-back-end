@@ -142,6 +142,11 @@ public class GameServiceImpl implements GameService {
         return gameRepository.findAll();
     }
 
+    @Override
+    public List<Game> getGamesByStatus() {
+        return gameRepository.findByGameStatus();
+    }
+
     /**
      * Get a game from the database.
      *

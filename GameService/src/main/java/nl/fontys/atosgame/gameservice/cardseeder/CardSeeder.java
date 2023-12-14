@@ -13,35 +13,20 @@ import java.util.*;
 
 @Service
 public class CardSeeder {
-    private CardSetService cardSetService;
-    private List<CardSet> oldCards;
+    private final CardSetService cardSetService;
 
     public CardSeeder(
             @Autowired CardSetService cardSetService
     ) {
         this.cardSetService = cardSetService;
-        oldCards = cardSetService.getAllCardSets();
     }
 
     //When receiving a new card-set the old id's will always be thrown out, and it will insert new ones.
     public void handleCardSet(List<CardSet> currentCards) throws IOException
     {
-        List<String> idsOld = new ArrayList<>();
-        List<String> idsNew = new ArrayList<>();
-        for(CardSet set : oldCards)
-        {
-            idsOld.add(set.getId().toString());
-        }
+        List<CardSet> oldCards = new ArrayList<>(cardSetService.getAllCardSets());
 
-        for(CardSet set : currentCards)
-        {
-            idsNew.add(set.getId().toString());
-        }
-
-        Collections.sort(idsOld);
-        Collections.sort(idsNew);
-
-        if(idsOld.hashCode() == idsNew.hashCode())
+        if(currentCards.equals(oldCards))
         {
             return;
         }

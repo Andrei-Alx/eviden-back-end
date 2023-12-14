@@ -24,12 +24,9 @@ import org.springframework.web.bind.annotation.*;
 public class GameController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameController.class);
-    private GameService gameService;
+    private final GameService gameService;
 
-    private CardSetService cardSetService;
-
-    private GameController(@Autowired GameService gameService, @Autowired CardSetService cardSetService) {
-        this.cardSetService = cardSetService;
+    private GameController(@Autowired GameService gameService) {
         this.gameService = gameService;
     }
 
@@ -54,8 +51,7 @@ public class GameController {
         }
     )
     public ResponseEntity<List<Game>> getGames() {
-        cardSetService.cardSetRequest();
-        List<Game> games = gameService.getAllGames();
+        List<Game> games = gameService.getGamesByStatus();
         return ResponseEntity.ok(games);
     }
 

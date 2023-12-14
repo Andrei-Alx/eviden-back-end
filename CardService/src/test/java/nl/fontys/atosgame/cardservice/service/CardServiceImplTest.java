@@ -33,7 +33,7 @@ class CardServiceImplTest {
         Card card = mock(Card.class);
         when(cardRepository.save(any(Card.class))).thenReturn(card);
 
-        Card result = cardService.createCard(new Card(null, createCardDto.getTags(),createCardDto.getTranslations()));
+        Card result = cardService.createCard(new Card(null, createCardDto.getTags(),createCardDto.getTranslations(), true));
 
         assertEquals(card, result);
         verify(cardRepository, times(1)).save(any(Card.class));

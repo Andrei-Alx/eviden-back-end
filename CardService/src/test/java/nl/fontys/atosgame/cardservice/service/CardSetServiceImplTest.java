@@ -42,7 +42,7 @@ class CardSetServiceImplTest {
         );
         Collection<Card> cards = mock(Collection.class);
         doReturn(cards).when(cardService).getCardsByIds(createCardSetDto.getCards());
-        CardSet cardSet = new CardSet(UUID.randomUUID(), "RoundOneCards", cards, tags);
+        CardSet cardSet = new CardSet(UUID.randomUUID(), "RoundOneCards", cards, tags, true);
         doReturn(cardSet).when(cardSetRepository).save(any());
 
         CardSet result = cardSetService.createCardSet(createCardSetDto);
@@ -62,7 +62,7 @@ class CardSetServiceImplTest {
 
     @Test
     void updateCardSet() {
-        CardSet cardSet = new CardSet(UUID.randomUUID(), "RoundOneCards", null, null);
+        CardSet cardSet = new CardSet(UUID.randomUUID(), "RoundOneCards", null, null, true);
         doReturn(cardSet).when(cardSetRepository).save(any());
 
         CardSet result = cardSetService.updateCardSet(cardSet);

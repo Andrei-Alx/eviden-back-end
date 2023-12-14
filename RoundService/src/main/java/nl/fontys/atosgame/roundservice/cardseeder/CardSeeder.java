@@ -19,7 +19,7 @@ import java.util.*;
 public class CardSeeder {
     private final CardService cardService;
     private final CardSetService cardSetService;
-    private final List<CardSet> oldCards;
+    private List<CardSet> oldCards;
 
     public CardSeeder(
             @Autowired CardService cardService,
@@ -27,118 +27,107 @@ public class CardSeeder {
     ) {
         this.cardService = cardService;
         this.cardSetService = cardSetService;
-        oldCards = new ArrayList<>(cardSetService.getAllCardSets());
     }
 
-    public void handleCardSet(List<CardSet> currentCards) throws IOException
-    {
+    public void handleCardSet(List<CardSet> currentCards) throws IOException {
+        oldCards = new ArrayList<>(cardSetService.getAllCardSets());
         //for every card-set in currentCards get the set and check cards
-        for(CardSet set : currentCards)
-        {
+        for (CardSet set : currentCards) {
             List<Tag> tags;
-            if(set.getName().equals("roundOneCards"))
-            {
+            if (set.getName().equals("roundOneCards")) {
                 tags = AddTags("game", "personal", "color");
-                AddCards(set,"roundOneCards", tags);
+                AddCards(set, "roundOneCards", tags);
             }
 
-            if(set.getName().equals("roundOneCardsAdvice"))
-            {
+            if (set.getName().equals("roundOneCardsAdvice")) {
                 tags = AddTags("advice", "personal", "color");
                 AddCards(set, "roundOneCardsAdvice", tags);
             }
 
-            if(set.getName().equals("roundTwoCards"))
-            {
+            if (set.getName().equals("roundTwoCards")) {
                 tags = AddTags("game", "group", "color");
                 AddCards(set, "roundTwoCards", tags);
             }
 
-            if(set.getName().equals("roundTwoCardsAdvice"))
-            {
+            if (set.getName().equals("roundTwoCardsAdvice")) {
                 tags = AddTags("advice", "group", "color");
                 AddCards(set, "roundTwoCardsAdvice", tags);
             }
 
-            if(set.getName().equals("roundThreeCards"))
-            {
+            if (set.getName().equals("roundThreeCards")) {
                 tags = AddTags("game", "group", "operatingModel");
                 AddCards(set, "roundThreeCards", tags);
             }
 
-            if(set.getName().equals("roundThreeCardsAdvice"))
-            {
+            if (set.getName().equals("roundThreeCardsAdvice")) {
                 tags = AddTags("advice", "group", "operatingModel");
                 AddCards(set, "roundThreeCardsAdvice", tags);
             }
         }
     }
 
-    public void AddCards(CardSet receivedSet, String setName, List<Tag> tags) throws IOException
-    {
+    public void AddCards(CardSet receivedSet, String setName, List<Tag> tags) throws IOException {
         //If there are cards in the database do the checksum
-        if(!oldCards.isEmpty())
-        {
-            if(Checksum(setName, (List<Card>)receivedSet.getCards()))
-            {
-                return;
-            }
-
-            //Get the currently checked set from the old card-sets list
-            CardSet currentSet = new CardSet();
-            List<UUID> ids = new ArrayList<>();
-            for(CardSet set : oldCards)
-            {
-                if(Objects.equals(set.getName(), setName))
-                {
-                    currentSet = set;
+        if (!oldCards.isEmpty()) {
+            //full list of old cards that will be used to update the set if needed
+            CardSet cardSetOld = new CardSet();
+            //starts as the list of old cards but will remove have all cards removed that exist in received set
+            CardSet cardSetOldToBeDisabled = new CardSet();
+            for (CardSet set : oldCards) {
+                if (Objects.equals(set.getName(), setName)) {
+                    cardSetOld = set;
+                    cardSetOldToBeDisabled = set;
                 }
             }
 
-            //retrieve all card ids from the current set
-            for(Card card : currentSet.getCards())
-            {
-                ids.add(card.getId());
+            //compare new set to old set to check for changes
+            if (receivedSet.equals(cardSetOld)) {
+                return;
             }
 
-            //Delete the incorrect card-set and associated cards
-            cardSetService.deleteCardSet(currentSet.getId());
-            for(UUID id : ids)
-            {
-                cardService.deleteCard(id);
+            //loop through every card in the new set
+            for (Card cardNew : receivedSet.getCards()) {
+                //try to find the same card in old set
+                for (Card cardOld : cardSetOld.getCards()) {
+                    //compare the two cards
+                    boolean found = cardNew.getId() == cardOld.getId();
+                    if (found) {
+                        // if the card is found it is removed from these 2 lists
+                        cardSetOldToBeDisabled.getCards().remove(cardOld);
+                        receivedSet.getCards().remove(cardNew);
+                        return;
+                    }
+                }
             }
+
+            //all remaining cards have to be disabled from this list
+            for (Card card : cardSetOldToBeDisabled.getCards()) {
+                card.setActive(false);
+                cardService.updateCard(card);
+            }
+
+            //all remaining cards in this list have to be created
+            for (Card card : receivedSet.getCards()) {
+                cardService.createCard(card);
+                cardSetOld.getCards().add(card);
+            }
+
+            //update the card-set to link with the new cards
+            cardSetService.updateCardSet(cardSetOld);
+        } else {
+            //if there are no old cards this will be executed
+            //Insert received cards into the db
+            for (Card card : receivedSet.getCards()) {
+                cardService.createCard(card);
+            }
+            //Insert received card-set into the db
+            cardSetService.createCardSet(receivedSet);
         }
-
-        //Insert received cards into the db
-        for (Card card : receivedSet.getCards()) {
-            cardService.createCard(card);
-        }
-
-        //Insert received card-set into the db
-        cardSetService.createCardSet(receivedSet);
-
         //clear the tags for next function
         tags.clear();
     }
 
-    private boolean Checksum(String setName, List<Card> newCards)
-    {
-        //Get the current old set from the list of old sets
-        List<Card> cardSetOld = new ArrayList<>();
-        for(CardSet set : oldCards)
-        {
-            if(Objects.equals(set.getName(), setName))
-            {
-                cardSetOld = new ArrayList<>(set.getCards());
-            }
-        }
-
-        //Create a hash of old set and new set, compare and return result
-        return CreateHash(cardSetOld) == CreateHash(newCards);
-    }
-
-    private List<Tag> AddTags(String value1, String value2, String value3)
-    {
+    private List<Tag> AddTags(String value1, String value2, String value3) {
         List<Tag> tags = new ArrayList<>();
         Tag tag1 = new Tag();
         // type tag
@@ -160,22 +149,5 @@ public class CardSeeder {
         tags.add(tag3);
 
         return tags;
-    }
-
-    private int CreateHash(List<Card> setToHash)
-    {
-        //Create new list to hold the card variables
-        List<String> tags = new ArrayList<>();
-
-        //Get the translations + tags from the cards
-        for(Card card : setToHash)
-        {
-            tags.add(new ArrayList<>(card.getTags()).get(0).getTagValue());
-        }
-
-        //Sort them to make sure both hashes are made from the same ordering
-        Collections.sort(tags);
-
-        return tags.hashCode();
     }
 }
