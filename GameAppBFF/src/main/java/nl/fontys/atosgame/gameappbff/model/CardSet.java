@@ -39,4 +39,8 @@ public class CardSet {
     @JsonProperty
     @ElementCollection(fetch = FetchType.EAGER)
     private Collection<Tag> tags;
+
+    @JsonProperty
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private boolean isActive;
 }

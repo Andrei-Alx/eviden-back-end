@@ -24,9 +24,9 @@ import javax.persistence.EntityNotFoundException;
 @Service
 public class CardSetServiceImpl implements CardSetService {
 
-    private CardSetRepository cardSetRepository;
-    private CardService cardService;
-    private StreamBridge streamBridge;
+    private final CardSetRepository cardSetRepository;
+    private final CardService cardService;
+    private final StreamBridge streamBridge;
 
     public CardSetServiceImpl(
         @Autowired CardSetRepository cardSetRepository,
@@ -51,7 +51,8 @@ public class CardSetServiceImpl implements CardSetService {
             null,
             createCardSetDto.getName(),
             cards,
-            createCardSetDto.getTags()
+            createCardSetDto.getTags(),
+            true
         );
 
         cardSet = cardSetRepository.save(cardSet);

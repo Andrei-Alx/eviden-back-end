@@ -26,7 +26,7 @@ public class CardSetServiceImplTest {
     @Test
     void createCardSet() {
         UUID cardSetId = UUID.randomUUID();
-        CardSet cardSet = new CardSet(cardSetId);
+        CardSet cardSet = new CardSet(cardSetId, true);
         cardSetService.createCardSet(cardSet);
 
         verify(cardSetRepository).save(cardSet);
@@ -35,7 +35,7 @@ public class CardSetServiceImplTest {
     @Test
     void updateCardSet() {
         UUID cardSetId = UUID.randomUUID();
-        CardSet cardSet = new CardSet(cardSetId);
+        CardSet cardSet = new CardSet(cardSetId, true);
 
         cardSetService.updateCardSet(cardSet);
 
@@ -45,7 +45,7 @@ public class CardSetServiceImplTest {
     @Test
     void deleteCardSet() {
         UUID cardSetId = UUID.randomUUID();
-        CardSet cardSet = new CardSet(cardSetId);
+        CardSet cardSet = new CardSet(cardSetId, true);
         cardSetService.createCardSet(cardSet);
 
         cardSetService.deleteCardSet(cardSetId);
@@ -56,7 +56,7 @@ public class CardSetServiceImplTest {
     @Test
     void getCardSet() {
         UUID cardSetId = UUID.randomUUID();
-        CardSet cardSet = new CardSet(cardSetId);
+        CardSet cardSet = new CardSet(cardSetId, true);
         cardSetService.createCardSet(cardSet);
 
         cardSetService.getCardSet(cardSetId);

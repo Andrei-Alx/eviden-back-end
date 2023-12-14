@@ -13,7 +13,7 @@ import java.util.function.Function;
 
 @Controller
 public class CardRequestProducer {
-
+    //not used at the moment but can be used to send out a card set request to card service which will reply to all services with cardset with the current cardset
     @Bean
     public Function<Integer, Message<CardSetRequestEvent>> cardSetRequest() {
         return input -> {

@@ -32,8 +32,8 @@ import static java.util.stream.Collectors.toCollection;
 @Profile("development")
 public class CardSeeder {
 
-    private CardService cardService;
-    private CardSetService cardSetService;
+    private final CardService cardService;
+    private final CardSetService cardSetService;
     private List<CardSet> oldCards;
 
     ResourceLoader resourceLoader = new DefaultResourceLoader();
@@ -45,7 +45,6 @@ public class CardSeeder {
     ) {
         this.cardService = cardService;
         this.cardSetService = cardSetService;
-        oldCards = new ArrayList<>(cardSetService.getAll());
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -71,6 +70,7 @@ public class CardSeeder {
 
     private void AddCards(String classpath, String setName, List<Tag> tags) throws IOException
     {
+        oldCards = new ArrayList<>(cardSetService.getAll());
         //Gets the cards from the json and create a list of CardDTOs
         Resource resource = resourceLoader.getResource(classpath);
         InputStream inputStream = resource.getInputStream();
@@ -79,7 +79,7 @@ public class CardSeeder {
         //Convert CardDTOs to cards
         List<Card> newCards = new ArrayList<>();
         for (CreateCardDto card : JsonCards) {
-            newCards.add(new Card(null, card.getTags(), card.getTranslations()));
+            newCards.add(new Card(null, card.getTags(), card.getTranslations(), true));
         }
 
         //If there are cards in the database do the checksum

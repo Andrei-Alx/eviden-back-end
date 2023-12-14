@@ -35,7 +35,7 @@ class CardSetServiceImplTest {
         String name = "testCardSet";
         Collection<Card> cards = new ArrayList<>();
         Collection<Tag> tags = new ArrayList<>();
-        CardSet cardSet = new CardSet(cardSetId, name, cards, tags);
+        CardSet cardSet = new CardSet(cardSetId, name, cards, tags, true);
 
         cardSetService.createCardSet(cardSet);
 
@@ -49,7 +49,7 @@ class CardSetServiceImplTest {
         String type = "testType";
         Collection<Card> cards = new ArrayList<>();
         Collection<Tag> tags = new ArrayList<>();
-        CardSet cardSet = new CardSet(cardSetId, name, cards, tags);
+        CardSet cardSet = new CardSet(cardSetId, name, cards, tags, true);
 
         cardSetService.updateCardSet(cardSet);
 
@@ -63,7 +63,7 @@ class CardSetServiceImplTest {
         String type = "testType";
         Collection<Card> cards = new ArrayList<>();
         Collection<Tag> tags = new ArrayList<>();
-        CardSet cardSet = new CardSet(cardSetId, name, cards, tags);
+        CardSet cardSet = new CardSet(cardSetId, name, cards, tags, true);
         cardSetService.createCardSet(cardSet);
 
         cardSetService.deleteCardSet(cardSetId);

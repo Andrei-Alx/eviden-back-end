@@ -62,7 +62,7 @@ class RoundServiceImplTest {
         Collection<Tag> cardSetTags = new ArrayList<>(List.of(tagImportantTag));
 
         Collection<Card> cards = new ArrayList<>(
-            List.of(new Card(UUID.randomUUID(), cardTags))
+            List.of(new Card(UUID.randomUUID(), cardTags, true))
         );
         CardSet cardSet = new CardSet();
         cardSet.setCards(cards);
@@ -161,9 +161,9 @@ class RoundServiceImplTest {
         );
         List<Card> cards = new ArrayList<>(
             List.of(
-                new Card(UUID.randomUUID(), null),
-                new Card(UUID.randomUUID(), null),
-                new Card(UUID.randomUUID(), null)
+                new Card(UUID.randomUUID(), null, true),
+                new Card(UUID.randomUUID(), null, true),
+                new Card(UUID.randomUUID(), null, true)
             )
         );
         List<PlayerRound> playerRounds = new ArrayList<>(
