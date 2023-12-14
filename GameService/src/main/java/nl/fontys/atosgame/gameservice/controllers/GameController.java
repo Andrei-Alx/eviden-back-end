@@ -126,4 +126,27 @@ public class GameController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PutMapping("/abort/{id}")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Aborted the game",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Game.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "404", description = "Game not found"),
+            }
+    )
+    public ResponseEntity<Game> abortGame(@PathVariable UUID id) {
+        try {
+            Game game = gameService.endGame(id);
+            return ResponseEntity.ok(game);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
