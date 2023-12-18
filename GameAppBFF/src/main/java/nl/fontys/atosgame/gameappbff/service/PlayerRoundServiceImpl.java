@@ -9,6 +9,8 @@ import nl.fontys.atosgame.gameappbff.model.Card;
 import nl.fontys.atosgame.gameappbff.model.PlayerRound;
 import nl.fontys.atosgame.gameappbff.model.Round;
 import nl.fontys.atosgame.gameappbff.repository.PlayerRoundRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PlayerRoundServiceImpl implements PlayerRoundService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlayerRoundServiceImpl.class);
     private PlayerRoundRepository playerRoundRepository;
     private RoundService roundService;
     private CardService cardService;
@@ -183,6 +186,7 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
         Card card = cardService.getCard(cardId).get();
         playerRound.addLikedCard(card);
 
+        LOGGER.info(String.format("liking card event => %s", playerRound));
         // Send to socket
         gameSocketController.cardLiked(gameId, playerId, card);
         return playerRoundRepository.save(playerRound);

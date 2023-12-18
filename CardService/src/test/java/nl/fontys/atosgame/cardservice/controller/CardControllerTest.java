@@ -12,6 +12,7 @@ import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.model.Tag;
 import nl.fontys.atosgame.cardservice.model.Translation;
 import nl.fontys.atosgame.cardservice.service.CardService;
+import nl.fontys.atosgame.cardservice.service.CardSetService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -21,18 +22,20 @@ class CardControllerTest {
 
     CardController cardController;
     CardService cardService;
+    CardSetService cardSetService;
+
 
     @BeforeEach
     void setUp() {
         cardService = mock(CardService.class);
-        cardController = new CardController(cardService);
+        cardController = new CardController(cardService, cardSetService);
     }
 
     @Test
     void createCard200() {
         CreateCardDto createCardDto = new CreateCardDto(null, null);
         Card card = new Card();
-        when(cardService.createCard(createCardDto)).thenReturn(card);
+        when(cardService.createCard(new Card(null, createCardDto.getTags(),createCardDto.getTranslations(), true))).thenReturn(card);
 
         var response = cardController.createCard(createCardDto);
 
@@ -45,7 +48,7 @@ class CardControllerTest {
         List<Tag> tags = List.of(new Tag(), new Tag());
         List<Translation> translations = List.of(new Translation(), new Translation());
         CreateCardDto createCardDto = new CreateCardDto(tags, translations);
-        when(cardService.createCard(createCardDto)).thenThrow(new RuntimeException());
+        when(cardService.createCard(new Card(null, createCardDto.getTags(),createCardDto.getTranslations(), true))).thenThrow(new RuntimeException());
 
         var response = cardController.createCard(createCardDto);
 

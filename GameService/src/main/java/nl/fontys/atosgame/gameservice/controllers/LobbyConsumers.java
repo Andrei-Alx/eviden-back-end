@@ -2,6 +2,7 @@ package nl.fontys.atosgame.gameservice.controllers;
 
 import java.util.function.Function;
 import nl.fontys.atosgame.gameservice.event.consumed.LobbyCreatedEvent;
+import nl.fontys.atosgame.gameservice.service.LobbyServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,12 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class LobbyConsumers {
 
+    private final LobbyServiceImpl lobbyServiceImpl;
+
+    public LobbyConsumers(LobbyServiceImpl lobbyServiceImpl)
+    {
+        this.lobbyServiceImpl = lobbyServiceImpl;
+    }
     /**
      * Id: C-57
      * Consumer for LobbyCreatedEvent
@@ -24,8 +31,8 @@ public class LobbyConsumers {
     public Function<Message<LobbyCreatedEvent>, Void> handleLobbyCreated() {
         return lobbyCreatedEventMessage -> {
             LobbyCreatedEvent event = lobbyCreatedEventMessage.getPayload();
-            //TODO
-            throw new UnsupportedOperationException("Not implemented yet");
+            lobbyServiceImpl.AddLobby(event.getLobby());
+            return null;
         };
     }
 }

@@ -14,19 +14,19 @@ public interface CardService {
      * Create a new card in the database.
      * @param card The card to create.
      */
-    void handleCardCreated(Card card);
+    void createCard(Card card);
 
     /**
      * Update a card in the database.
      * @param card The card to update.
      */
-    void handleCardUpdated(Card card);
+    void updateCard(Card card);
 
     /**
      * Delete a card from the database.
      * @param cardId The id of the card to delete.
      */
-    void handleCardDeleted(UUID cardId);
+    void deleteCard(UUID cardId);
 
     /**
      * Get a list card by ids

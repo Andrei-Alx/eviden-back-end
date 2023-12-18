@@ -61,4 +61,10 @@ public interface GameService {
      * @return The game.
      */
     Optional<Game> getGame(UUID gameId);
+
+    /**
+     * Get all games from the database which do not have the GameStatus Ended.
+     * @return List of games.
+     */
+    List<Game> getGamesByStatus();
 }

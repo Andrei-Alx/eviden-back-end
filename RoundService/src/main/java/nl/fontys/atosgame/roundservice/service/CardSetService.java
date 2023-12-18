@@ -41,4 +41,6 @@ public interface CardSetService {
      * @return The card sets
      */
     List<CardSet> getAllCardSets();
+
+    void cardSetRequest();
 }

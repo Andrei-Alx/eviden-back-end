@@ -1,73 +1,44 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
-import java.util.function.Function;
-import nl.fontys.atosgame.gameappbff.event.consumed.CardSetCreatedEvent;
-import nl.fontys.atosgame.gameappbff.event.consumed.CardSetDeletedEvent;
-import nl.fontys.atosgame.gameappbff.event.consumed.CardSetUpdatedEvent;
-import nl.fontys.atosgame.gameappbff.service.CardSetService;
+import nl.fontys.atosgame.gameappbff.cardseeder.CardSeeder;
+import nl.fontys.atosgame.gameappbff.event.consumed.CardSetEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
+import java.util.function.Function;
+
 /**
  * Collection of consumers for cardset related events:
- * - CardSetCreated
- * - CardSetUpdated
- * - CardSetDeleted
+ * - CardSetEvent
  * @author Aniek
  */
 @Controller
 public class CardSetConsumers {
+    private CardSeeder cardSeeder;
 
-    private CardSetService cardSetService;
-
-    public CardSetConsumers(@Autowired CardSetService cardSetService) {
-        this.cardSetService = cardSetService;
+    public CardSetConsumers(@Autowired CardSeeder cardSeeder) {
+        this.cardSeeder = cardSeeder;
     }
 
     /**
-     * Id: C-45
-     * Consumer for CardSetCreatedEvent
-     * input topic: card-set-created-topic
+     * Id: C-1
+     * Consumer for CardSetEvent
+     * input topic: card-set-topic
      * output topic: -
      */
     @Bean
-    public Function<Message<CardSetCreatedEvent>, Void> handleCardSetCreated() {
-        return cardSetCreatedEventMessage -> {
-            CardSetCreatedEvent event = cardSetCreatedEventMessage.getPayload();
-            cardSetService.handleCardSetCreated(event.getCardSet());
+    public Function<Message<CardSetEvent>, Void> handleCardSet() {
+        return message -> {
+            CardSetEvent event = message.getPayload();
+            try {
+                cardSeeder.handleCardSet(event.getCardSets());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             return null;
-        };
-    }
-
-    /**
-     * Id: C-46
-     * Consumer for CardSetUpdatedEvent
-     * input topic: card-set-updated-topic
-     * output topic: -
-     */
-    @Bean
-    public Function<Message<CardSetUpdatedEvent>, Void> handleCardSetUpdated() {
-        return cardSetUpdatedEventMessage -> {
-            CardSetUpdatedEvent event = cardSetUpdatedEventMessage.getPayload();
-            cardSetService.handleCardSetUpdated(event.getCardSet());
-            return null;
-        };
-    }
-
-    /**
-     * Id: C-47
-     * Consumer for CardSetDeletedEvent
-     * input topic: card-set-deleted-topic
-     * output topic: -
-     */
-    @Bean
-    public Function<Message<CardSetDeletedEvent>, Void> handleCardSetDeleted() {
-        return cardSetDeletedEventMessage -> {
-            CardSetDeletedEvent event = cardSetDeletedEventMessage.getPayload();
-            cardSetService.handleCardSetDeleted(event.getId());
-            throw new UnsupportedOperationException("Not implemented yet");
         };
     }
 }

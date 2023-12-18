@@ -1,5 +1,7 @@
 package nl.fontys.atosgame.gameappbff.event;
 
+import nl.fontys.atosgame.gameappbff.event.produced.CardSetRequestEvent;
+
 import java.util.UUID;
 
 /**
@@ -7,6 +9,12 @@ import java.util.UUID;
  * @author Eli
  */
 public class EventFactory {
+    public static CardSetRequestEvent cardsRequestEvent() {
+        CardSetRequestEvent event = new CardSetRequestEvent();
+        event =
+                (CardSetRequestEvent) initializeBaseEvent(event, "CardSetRequest", "GameAppBFF");
+        return event;
+    }
 
     private static BaseEvent initializeBaseEvent(
         BaseEvent event,

@@ -29,7 +29,7 @@ public class CardSet {
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
         name = "card_set_cards",
-        joinColumns = @JoinColumn(name = "card_set_null"),
+        joinColumns = @JoinColumn(name = "card_set_id"),
         inverseJoinColumns = @JoinColumn(name = "cards_id")
     )
     @JsonProperty
@@ -39,4 +39,8 @@ public class CardSet {
     @JsonProperty
     @ElementCollection(fetch = FetchType.EAGER)
     private Collection<Tag> tags;
+
+    @JsonProperty
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private boolean isActive;
 }

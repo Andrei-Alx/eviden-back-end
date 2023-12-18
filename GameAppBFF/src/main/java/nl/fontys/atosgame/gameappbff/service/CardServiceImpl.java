@@ -3,8 +3,11 @@ package nl.fontys.atosgame.gameappbff.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import nl.fontys.atosgame.gameappbff.model.Card;
 import nl.fontys.atosgame.gameappbff.repository.CardRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CardServiceImpl implements CardService {
 
-    private CardRepository cardRepository;
+    private final CardRepository cardRepository;
 
     public CardServiceImpl(@Autowired CardRepository cardRepository) {
         this.cardRepository = cardRepository;
@@ -27,7 +30,8 @@ public class CardServiceImpl implements CardService {
      * @param card The card to create.
      */
     @Override
-    public void handleCardCreated(Card card) {
+    public void createCard(Card card)
+    {
         cardRepository.save(card);
     }
 
@@ -37,7 +41,7 @@ public class CardServiceImpl implements CardService {
      * @param card The card to update.
      */
     @Override
-    public void handleCardUpdated(Card card) {
+    public void updateCard(Card card) {
         cardRepository.save(card);
     }
 
@@ -47,7 +51,7 @@ public class CardServiceImpl implements CardService {
      * @param cardId The id of the card to delete.
      */
     @Override
-    public void handleCardDeleted(UUID cardId) {
+    public void deleteCard(UUID cardId) {
         cardRepository.deleteById(cardId);
     }
 

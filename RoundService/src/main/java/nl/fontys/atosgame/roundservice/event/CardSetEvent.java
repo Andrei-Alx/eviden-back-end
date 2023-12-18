@@ -5,10 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.roundservice.model.CardSet;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class CardSetEvent extends BaseEvent {
 
-    private CardSet cardSet;
+    List<CardSet> cardSets;
 }

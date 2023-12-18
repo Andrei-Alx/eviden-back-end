@@ -20,14 +20,11 @@ import org.springframework.stereotype.Service;
 public class CardServiceImpl implements CardService {
 
     private CardRepository cardRepository;
-    private StreamBridge streamBridge;
 
     public CardServiceImpl(
-        @Autowired CardRepository cardRepository,
-        @Autowired StreamBridge streamBridge
+        @Autowired CardRepository cardRepository
     ) {
         this.cardRepository = cardRepository;
-        this.streamBridge = streamBridge;
     }
 
     /**
@@ -36,12 +33,8 @@ public class CardServiceImpl implements CardService {
      * @return the created card
      */
     @Override
-    public Card createCard(CreateCardDto createCardDto) {
-        Card card = cardRepository.save(
-            new Card(null, createCardDto.getTags(), createCardDto.getTranslations())
-        );
-        streamBridge.send("cardCreated-in-0", card);
-        return card;
+    public Card createCard(Card card) {
+        return cardRepository.save(card);
     }
 
     /**
@@ -51,9 +44,7 @@ public class CardServiceImpl implements CardService {
      */
     @Override
     public Card updateCard(Card card) {
-        Card updatedCard = cardRepository.save(card);
-        streamBridge.send("cardUpdated-in-0", updatedCard);
-        return updatedCard;
+        return cardRepository.save(card);
     }
 
     /**
@@ -63,7 +54,6 @@ public class CardServiceImpl implements CardService {
     @Override
     public void deleteCard(UUID id) {
         cardRepository.deleteById(id);
-        streamBridge.send("cardDeleted-in-0", id);
     }
 
     /**
@@ -74,5 +64,10 @@ public class CardServiceImpl implements CardService {
     @Override
     public Collection<Card> getCardsByIds(Collection<UUID> ids) {
         return cardRepository.findAllById(ids);
+    }
+
+    @Override
+    public void deleteCards(Collection<UUID> ids) {
+        cardRepository.deleteAllById(ids);
     }
 }

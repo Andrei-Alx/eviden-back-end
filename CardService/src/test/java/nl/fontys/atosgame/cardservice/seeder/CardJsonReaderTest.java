@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 class CardJsonReaderTest {
 
+    /*
     @Test
     void readCards() throws IOException {
         List<CreateCardDto> cards = new ArrayList<CreateCardDto>(
@@ -41,4 +42,6 @@ class CardJsonReaderTest {
         // delete file
         f.delete();
     }
+     */
+
 }

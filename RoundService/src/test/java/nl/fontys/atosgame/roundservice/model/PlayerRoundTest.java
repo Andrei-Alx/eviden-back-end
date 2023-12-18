@@ -205,14 +205,14 @@ class PlayerRoundTest {
         playerRound.setRoundSettings(roundSettings);
 
         playerRound.setLikedCards(
-            new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>())))
+            new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>(), true)))
         );
         playerRound.setSelectedCards(
             new ArrayList<>(
                 List.of(
-                    new Card(UUID.randomUUID(), new ArrayList<>()),
-                    new Card(UUID.randomUUID(), new ArrayList<>()),
-                    new Card(UUID.randomUUID(), new ArrayList<>())
+                    new Card(UUID.randomUUID(), new ArrayList<>(), true),
+                    new Card(UUID.randomUUID(), new ArrayList<>(), true),
+                    new Card(UUID.randomUUID(), new ArrayList<>(), true)
                 )
             )
         );
@@ -229,13 +229,13 @@ class PlayerRoundTest {
         playerRound.setRoundSettings(roundSettings);
 
         playerRound.setLikedCards(
-            new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>())))
+            new ArrayList<>(List.of(new Card(UUID.randomUUID(), new ArrayList<>(), true)))
         );
         playerRound.setSelectedCards(
             new ArrayList<>(
                 List.of(
-                    new Card(UUID.randomUUID(), new ArrayList<>()),
-                    new Card(UUID.randomUUID(), new ArrayList<>())
+                    new Card(UUID.randomUUID(), new ArrayList<>(), true),
+                    new Card(UUID.randomUUID(), new ArrayList<>(), true)
                 )
             )
         );
@@ -274,9 +274,9 @@ class PlayerRoundTest {
     void addLikedCardCorrectFlow() {
         PlayerRound playerRound = new PlayerRound();
         playerRound.setLikedCards(new ArrayList<>());
-        Card card = new Card(UUID.randomUUID(), new ArrayList<>());
+        Card card = new Card(UUID.randomUUID(), new ArrayList<>(), true);
         playerRound.setDistributedCards(
-            new ArrayList<>(List.of(card, new Card(UUID.randomUUID(), new ArrayList<>())))
+            new ArrayList<>(List.of(card, new Card(UUID.randomUUID(), new ArrayList<>(), true)))
         );
 
         playerRound.addLikedCard(card);
@@ -289,7 +289,7 @@ class PlayerRoundTest {
     void addLikedCardNotInHand() {
         PlayerRound playerRound = new PlayerRound();
         playerRound.setLikedCards(new ArrayList<>());
-        Card card = new Card(UUID.randomUUID(), new ArrayList<>());
+        Card card = new Card(UUID.randomUUID(), new ArrayList<>(), true);
 
         assertThrows(
             IllegalArgumentException.class,
@@ -301,7 +301,7 @@ class PlayerRoundTest {
     void addLikedCardAlreadyLiked() {
         PlayerRound playerRound = new PlayerRound();
         playerRound.setLikedCards(new ArrayList<>());
-        Card card = new Card(UUID.randomUUID(), new ArrayList<>());
+        Card card = new Card(UUID.randomUUID(), new ArrayList<>(), true);
 
         assertThrows(
             IllegalArgumentException.class,
@@ -313,9 +313,9 @@ class PlayerRoundTest {
     void addDislikedCardCorrectFlow() {
         PlayerRound playerRound = new PlayerRound();
         playerRound.setDislikedCards(new ArrayList<>());
-        Card card = new Card(UUID.randomUUID(), new ArrayList<>());
+        Card card = new Card(UUID.randomUUID(), new ArrayList<>(), true);
         playerRound.setDistributedCards(
-            new ArrayList<>(List.of(card, new Card(UUID.randomUUID(), new ArrayList<>())))
+            new ArrayList<>(List.of(card, new Card(UUID.randomUUID(), new ArrayList<>(), true)))
         );
 
         playerRound.addDislikedCard(card);
@@ -328,7 +328,7 @@ class PlayerRoundTest {
     void addDislikedCardNotInHand() {
         PlayerRound playerRound = new PlayerRound();
         playerRound.setDislikedCards(new ArrayList<>());
-        Card card = new Card(UUID.randomUUID(), new ArrayList<>());
+        Card card = new Card(UUID.randomUUID(), new ArrayList<>(), true);
 
         assertThrows(
             IllegalArgumentException.class,
@@ -340,7 +340,7 @@ class PlayerRoundTest {
     void addDislikedCardAlreadyDisliked() {
         PlayerRound playerRound = new PlayerRound();
         playerRound.setDislikedCards(new ArrayList<>());
-        Card card = new Card(UUID.randomUUID(), new ArrayList<>());
+        Card card = new Card(UUID.randomUUID(), new ArrayList<>(), true);
 
         assertThrows(
             IllegalArgumentException.class,
@@ -352,8 +352,8 @@ class PlayerRoundTest {
     void addSelectedCardsCorrectFlow() {
         PlayerRound playerRound = new PlayerRound();
         playerRound.setSelectedCards(new ArrayList<>());
-        Card card1 = new Card(UUID.randomUUID(), new ArrayList<>());
-        Card card2 = new Card(UUID.randomUUID(), new ArrayList<>());
+        Card card1 = new Card(UUID.randomUUID(), new ArrayList<>(), true);
+        Card card2 = new Card(UUID.randomUUID(), new ArrayList<>(), true);
         List<Card> cards = new ArrayList<>(List.of(card1, card2));
         playerRound.setDistributedCards(new ArrayList<>(List.of(card1, card2)));
 
@@ -368,8 +368,8 @@ class PlayerRoundTest {
     void addSelectedCardsNotInHand() {
         PlayerRound playerRound = new PlayerRound();
         playerRound.setSelectedCards(new ArrayList<>());
-        Card card1 = new Card(UUID.randomUUID(), new ArrayList<>());
-        Card card2 = new Card(UUID.randomUUID(), new ArrayList<>());
+        Card card1 = new Card(UUID.randomUUID(), new ArrayList<>(), true);
+        Card card2 = new Card(UUID.randomUUID(), new ArrayList<>(), true);
         List<Card> cards = new ArrayList<>(List.of(card1, card2));
 
         assertThrows(
@@ -382,8 +382,8 @@ class PlayerRoundTest {
     void addSelectedCardsAlreadySelected() {
         PlayerRound playerRound = new PlayerRound();
         playerRound.setSelectedCards(new ArrayList<>());
-        Card card1 = new Card(UUID.randomUUID(), new ArrayList<>());
-        Card card2 = new Card(UUID.randomUUID(), new ArrayList<>());
+        Card card1 = new Card(UUID.randomUUID(), new ArrayList<>(), true);
+        Card card2 = new Card(UUID.randomUUID(), new ArrayList<>(), true);
         List<Card> cards = new ArrayList<>(List.of(card1, card2));
         playerRound.setSelectedCards(cards);
 

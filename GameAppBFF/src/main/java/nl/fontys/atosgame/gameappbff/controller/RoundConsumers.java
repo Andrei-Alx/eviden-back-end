@@ -4,6 +4,8 @@ import java.util.function.Function;
 import nl.fontys.atosgame.gameappbff.event.consumed.*;
 import nl.fontys.atosgame.gameappbff.service.PlayerRoundService;
 import nl.fontys.atosgame.gameappbff.service.RoundService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class RoundConsumers {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RoundConsumers.class);
     private RoundService roundService;
     private PlayerRoundService playerRoundService;
 
@@ -150,6 +153,7 @@ public class RoundConsumers {
     @Bean
     public Function<Message<PlayerLikedCardEvent>, Void> handlePlayerLikedCard() {
         return message -> {
+            LOGGER.info(String.format("handle liking card => %s", message));
             PlayerLikedCardEvent event = message.getPayload();
             playerRoundService.likeCard(
                 event.getPlayerId(),

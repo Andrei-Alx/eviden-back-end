@@ -7,6 +7,8 @@ import nl.fontys.atosgame.gameappbff.enums.RoundStatus;
 import nl.fontys.atosgame.gameappbff.model.PlayerRound;
 import nl.fontys.atosgame.gameappbff.model.Round;
 import nl.fontys.atosgame.gameappbff.repository.RoundRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoundServiceImpl implements RoundService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RoundServiceImpl.class);
     private GameService gameService;
     private RoundRepository roundRepository;
     private GameSocketController gameSocketController;
@@ -50,6 +53,7 @@ public class RoundServiceImpl implements RoundService {
      */
     @Override
     public void handleRoundCreatedEvent(Round round, UUID gameId) {
+        LOGGER.info(String.format("Round created event recieved in gameappbff => %s", round));
         roundRepository.save(round);
         gameService.addRoundToGame(round, gameId);
     }

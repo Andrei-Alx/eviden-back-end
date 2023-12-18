@@ -1,16 +1,16 @@
 package nl.fontys.atosgame.roundservice.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import javax.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
+import nl.fontys.atosgame.roundservice.enums.ShowResults;
 import nl.fontys.atosgame.roundservice.model.Game;
 import nl.fontys.atosgame.roundservice.model.Lobby;
 import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.repository.GameRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class GameServiceImpl implements GameService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameServiceImpl.class);
     private RoundService roundService;
     private LobbyService lobbyService;
 
@@ -93,9 +94,28 @@ public class GameServiceImpl implements GameService {
      */
     @Override
     public Game startGame(UUID gameId) throws EntityNotFoundException {
+
         Game game = gameRepository
             .findById(gameId)
             .orElseThrow(EntityNotFoundException::new);
+
+        for (Round round : game.getRounds()) {
+            if (round.getRoundSettings().getShowPersonalOrGroupResults() == ShowResults.PERSONAL) {
+                int indexOfFirstRound = 0;
+
+                // Find the index of the first round with the same ShowResults
+                for (int i = 0; i < game.getRounds().size(); i++) {
+                    if (game.getRounds().get(i).getRoundSettings().getShowPersonalOrGroupResults() == ShowResults.PERSONAL) {
+                        indexOfFirstRound = i;
+                        break;
+                    }
+                }
+                // Swap the current round with the first round
+                Collections.swap(game.getRounds(), indexOfFirstRound, 0);
+                break;
+            }
+        }
+        LOGGER.info(String.format("game starting event (GameEventConsumers class)=> %s", game.getRounds().get(0)));
         Round firstRound = game.getRounds().get(0);
         firstRound =
             roundService.startRound(
@@ -122,18 +142,35 @@ public class GameServiceImpl implements GameService {
         // Get all rounds in the game
         List<Round> rounds = game.getRounds();
         // get the latest round with status FINISHED
-        Round latestFinishedRound = null;
-        Round possibleNextRound = null;
+        Round[] latestFinishedRound = new Round[2];
+        Round[] possibleNextRound = new Round[2];
+        int x = 0;
+        int y = 0;
         for (Round round : rounds) {
+
             if (round.getStatus() == RoundStatus.FINISHED) {
-                latestFinishedRound = round;
+                latestFinishedRound[x] = round;
+                x++;
+            }
+            if (round.getStatus() == RoundStatus.CREATED){
+                possibleNextRound[y] = round;
+                y++;
             }
         }
+        Round nextRound = null;
+        for(Round round : possibleNextRound)
+        {
+            if(round == null)
+            {
 
-        for (Round round : rounds){
-            if (round.getStatus() == RoundStatus.CREATED){
-                possibleNextRound = round;
+            }
+            else if ("roundTwoCards".equals(round.getRoundSettings().getCardSet().getName()))
+            {
+                nextRound = round;
                 break;
+            }
+            else{
+                nextRound = round;
             }
         }
 
@@ -150,7 +187,7 @@ public class GameServiceImpl implements GameService {
 
                 // Start the next round
                 roundService.startRound(
-                    possibleNextRound.getId(),
+                    nextRound.getId(),
                     game.getLobby().getPlayerIds(),
                     gameId
                 );

@@ -7,9 +7,9 @@ import java.util.UUID;
 import nl.fontys.atosgame.gameservice.applicationEvents.RoundEndedAppEvent;
 import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
 import nl.fontys.atosgame.gameservice.enums.GameStatus;
+import nl.fontys.atosgame.gameservice.exceptions.EmptyStringException;
 import nl.fontys.atosgame.gameservice.model.*;
 import nl.fontys.atosgame.gameservice.repository.GameRepository;
-import org.apache.kafka.streams.StreamsBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.ApplicationListener;
@@ -48,13 +48,21 @@ public class GameServiceImpl implements GameService, ApplicationListener<RoundEn
         String companyType,
         LobbySettings lobbySettings,
         List<RoundSettings> roundSettings
-    ) {
+    ) throws EmptyStringException
+    {
+        List<CardSet> sets = cardSetService.getAllCardSets();
         // Check if all cardsets exist
         for (RoundSettings roundSetting : roundSettings) {
             cardSetService
                 .getCardSet(roundSetting.getCardSetId())
                 .orElseThrow(() -> new IllegalArgumentException("CardSet not found"));
         }
+
+        // Check if Null or empty.
+        if (title == null || title.trim().isEmpty()) {
+            throw new EmptyStringException("title is empty for the lobby");
+        }
+
         // Create game
         Game game = new Game();
         game.setCompanyType(companyType);

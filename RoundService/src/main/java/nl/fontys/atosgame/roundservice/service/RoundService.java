@@ -95,5 +95,5 @@ public interface RoundService {
      * @param roundId The id of the round
      * @param gameId The id of the game
      */
-    void publishResults(UUID roundId, UUID gameId);
+    void publishResults(UUID roundId, UUID gameId, UUID playerId);
 }

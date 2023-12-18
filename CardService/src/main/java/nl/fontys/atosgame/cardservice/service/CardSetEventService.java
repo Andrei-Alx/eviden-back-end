@@ -1,14 +1,9 @@
 package nl.fontys.atosgame.cardservice.service;
 
-import java.util.UUID;
-import nl.fontys.atosgame.cardservice.event.BaseEvent;
-import nl.fontys.atosgame.cardservice.event.CardSetDeletedEvent;
-import nl.fontys.atosgame.cardservice.event.CardSetEvent;
-import nl.fontys.atosgame.cardservice.model.CardSet;
+import nl.fontys.atosgame.cardservice.event.produced.CardSetEvent;
+import nl.fontys.atosgame.cardservice.seeder.CardSeeder;
 import org.springframework.messaging.Message;
 
 public interface CardSetEventService {
-    Message<CardSetEvent> cardSetCreated(CardSet cardSet);
-    Message<CardSetDeletedEvent> cardSetDeleted(UUID id);
-    Message<CardSetEvent> cardSetUpdated(CardSet cardSet);
+    Message<CardSetEvent> produceCardSet(CardSetEvent event);
 }

@@ -32,4 +32,8 @@ public class Card {
     @JsonProperty
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Translation> translations;
+
+    @JsonProperty
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private boolean isActive;
 }

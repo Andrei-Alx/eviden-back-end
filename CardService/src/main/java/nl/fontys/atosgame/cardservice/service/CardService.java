@@ -7,11 +7,13 @@ import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
 import nl.fontys.atosgame.cardservice.model.Card;
 
 public interface CardService {
-    Card createCard(CreateCardDto createCardDto);
+    Card createCard(Card card);
 
     Card updateCard(Card card) throws EntityNotFoundException;
 
     void deleteCard(UUID id) throws EntityNotFoundException;
 
     Collection<Card> getCardsByIds(Collection<UUID> ids);
+
+    void deleteCards(Collection<UUID> ids) throws EntityNotFoundException;
 }

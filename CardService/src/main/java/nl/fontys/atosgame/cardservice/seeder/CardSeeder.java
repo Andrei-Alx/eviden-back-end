@@ -1,8 +1,8 @@
 package nl.fontys.atosgame.cardservice.seeder;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.InputStream;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import nl.fontys.atosgame.cardservice.CardServiceApplication;
@@ -10,42 +10,34 @@ import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
 import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
 import nl.fontys.atosgame.cardservice.enums.TagType;
 import nl.fontys.atosgame.cardservice.model.Card;
+import nl.fontys.atosgame.cardservice.model.CardSet;
 import nl.fontys.atosgame.cardservice.model.Tag;
 import nl.fontys.atosgame.cardservice.service.CardService;
 import nl.fontys.atosgame.cardservice.service.CardSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
+
+import static java.util.stream.Collectors.toCollection;
 
 @Service
 @Profile("development")
 public class CardSeeder {
 
-    private CardService cardService;
-    private CardSetService cardSetService;
+    private final CardService cardService;
+    private final CardSetService cardSetService;
+    private List<CardSet> oldCards;
 
-    @Value("classpath:data/cards/roundOne.json")
-    private ClassPathResource roundOne;
-
-    @Value("classpath:data/cards/roundOneAdvice.json")
-    private ClassPathResource roundOneAdvice;
-
-    @Value("classpath:data/cards/roundTwo.json")
-    private ClassPathResource roundTwo;
-
-    @Value("classpath:data/cards/roundOneAdvice.json")
-    private ClassPathResource roundTwoAdvice;
-
-    @Value("classpath:data/cards/roundThree.json")
-    private ClassPathResource roundThree;
-
-    @Value("classpath:data/cards/roundThreeAdvice.json")
-    private ClassPathResource roundThreeAdvice;
+    ResourceLoader resourceLoader = new DefaultResourceLoader();
+    List<Tag> tags;
 
     public CardSeeder(
         @Autowired CardService cardService,
@@ -57,222 +49,155 @@ public class CardSeeder {
 
     @EventListener(ApplicationReadyEvent.class)
     public void seedCards() throws IOException {
-        // Read the cards from the json file
-        List<CreateCardDto> cards = CardJsonReader.readCards(roundOne.getInputStream());
-        List<Card> createdCards = new ArrayList<>();
-        // Create the cards
-        for (CreateCardDto card : cards) {
-            createdCards.add(cardService.createCard(card));
+        tags = AddTags("game", "personal", "color");
+        AddCards("classpath:data/cards/roundOne.json", "roundOneCards", tags);
+
+        tags = AddTags("advice", "personal", "color");
+        AddCards("classpath:data/cards/roundOneAdvice.json", "roundOneCardsAdvice", tags);
+
+        tags = AddTags("game", "group", "color");
+        AddCards("classpath:data/cards/roundTwo.json", "roundTwoCards", tags);
+
+        tags = AddTags("advice", "group", "color");
+        AddCards("classpath:data/cards/roundOneAdvice.json", "roundTwoCardsAdvice", tags);
+
+        tags = AddTags("game", "group", "operatingModel");
+        AddCards("classpath:data/cards/roundThree.json", "roundThreeCards", tags);
+
+        tags = AddTags("advice", "group", "operatingModel");
+        AddCards("classpath:data/cards/roundThreeAdvice.json", "roundThreeCardsAdvice", tags);
+    }
+
+    private void AddCards(String classpath, String setName, List<Tag> tags) throws IOException
+    {
+        oldCards = new ArrayList<>(cardSetService.getAll());
+        //Gets the cards from the json and create a list of CardDTOs
+        Resource resource = resourceLoader.getResource(classpath);
+        InputStream inputStream = resource.getInputStream();
+        List<CreateCardDto> JsonCards = CardJsonReader.readCards(inputStream);
+
+        //Convert CardDTOs to cards
+        List<Card> newCards = new ArrayList<>();
+        for (CreateCardDto card : JsonCards) {
+            newCards.add(new Card(null, card.getTags(), card.getTranslations(), true));
         }
 
-        // create tags
-        List<Tag> tags1 = new ArrayList<>();
-        Tag tag = new Tag();
-        // type tag
-        tag.setTagKey(TagType.TYPE);
-        tag.setTagValue("game");
-        // group or personal tag
-        Tag tag2 = new Tag();
-        tag2.setTagKey(TagType.GROUP_OR_PERSONAL);
-        tag2.setTagValue("personal");
-        // important tag
-        Tag tag3 = new Tag();
-        tag3.setTagKey(TagType.IMPORTANT_TAG);
-        tag3.setTagValue("color");
+        //If there are cards in the database do the checksum
+        if(!oldCards.isEmpty())
+        {
+            if(Checksum(setName, newCards))
+            {
+                return;
+            }
+        }
 
-        tags1.add(tag);
-        tags1.add(tag2);
-        tags1.add(tag3);
+        //Get current incorrect card set
+        CardSet currentSet = new CardSet();
+        List<UUID> ids = new ArrayList<>();
+        for(CardSet set : oldCards)
+        {
+            if(Objects.equals(set.getName(), setName))
+            {
+                currentSet = set;
+            }
+        }
+
+        //Get all ids from current cards
+        for(Card card : currentSet.getCards())
+        {
+            ids.add(card.getId());
+        }
+
+        //Delete set and associated cards
+        if(!currentSet.getCards().isEmpty())
+        {
+            cardSetService.deleteCardSet(currentSet.getId());
+            cardService.deleteCards(ids);
+        }
+
+        // Create the cards
+        List<Card> addedCards = new ArrayList<>();
+        for(Card card: newCards)
+        {
+            addedCards.add(cardService.createCard(card));
+        }
 
         // Create the card set
         CreateCardSetDto cardSet = new CreateCardSetDto(
-            "roundOneCards",
-            tags1,
-            createdCards
-                .stream()
-                .map(Card::getId)
-                .collect(Collectors.toCollection(ArrayList::new))
+                setName,
+                tags,
+                addedCards
+                        .stream()
+                        .map(Card::getId)
+                        .collect(toCollection(ArrayList::new))
         );
         cardSetService.createCardSet(cardSet);
 
-        // create tags
-        List<Tag> tags1Advice = new ArrayList<>();
-        Tag tag4 = new Tag();
-        // type tag
-        tag4.setTagKey(TagType.TYPE);
-        tag4.setTagValue("advice");
-        // group or personal tag
-        Tag tag5 = new Tag();
-        tag5.setTagKey(TagType.GROUP_OR_PERSONAL);
-        tag5.setTagValue("personal");
-        // important tag
-        Tag tag6 = new Tag();
-        tag6.setTagKey(TagType.IMPORTANT_TAG);
-        tag6.setTagValue("color");
+        //Clear the tag list for the next function
+        tags.clear();
+    }
 
-        tags1Advice.add(tag4);
-        tags1Advice.add(tag5);
-        tags1Advice.add(tag6);
-
-        // Card set for round one advice cards
-        cards = CardJsonReader.readCards(roundOneAdvice.getInputStream());
-        createdCards = new ArrayList<>();
-        for (CreateCardDto card : cards) {
-            createdCards.add(cardService.createCard(card));
+    private boolean Checksum(String setName, List<Card> newCards)
+    {
+        //Get the current old set from the list of old sets
+        List<Card> cardSetOld = new ArrayList<>();
+        for(CardSet set : oldCards)
+        {
+            if(Objects.equals(set.getName(), setName))
+            {
+                cardSetOld = new ArrayList<>(set.getCards());
+            }
         }
-        cardSet =
-            new CreateCardSetDto(
-                "roundOneCardsAdvice",
-                tags1Advice,
-                createdCards
-                    .stream()
-                    .map(Card::getId)
-                    .collect(Collectors.toCollection(ArrayList::new))
-            );
-        cardSetService.createCardSet(cardSet);
 
-        // create tags
-        List<Tag> tags2 = new ArrayList<>();
-        Tag tag7 = new Tag();
+        //Create a hash of old set and new set, compare and return result
+        return CreateHash(cardSetOld) == CreateHash(newCards);
+    }
+
+    private List<Tag> AddTags(String value1, String value2, String value3)
+    {
+        List<Tag> tags = new ArrayList<>();
+        Tag tag1 = new Tag();
         // type tag
-        tag7.setTagKey(TagType.TYPE);
-        tag7.setTagValue("game");
+        tag1.setTagKey(TagType.TYPE);
+        tag1.setTagValue(value1);
+
         // group or personal tag
-        Tag tag8 = new Tag();
-        tag8.setTagKey(TagType.GROUP_OR_PERSONAL);
-        tag8.setTagValue("group");
+        Tag tag2 = new Tag();
+        tag2.setTagKey(TagType.GROUP_OR_PERSONAL);
+        tag2.setTagValue(value2);
+
         // important tag
-        Tag tag9 = new Tag();
-        tag9.setTagKey(TagType.IMPORTANT_TAG);
-        tag9.setTagValue("color");
+        Tag tag3 = new Tag();
+        tag3.setTagKey(TagType.IMPORTANT_TAG);
+        tag3.setTagValue(value3);
 
-        tags2.add(tag7);
-        tags2.add(tag8);
-        tags2.add(tag9);
+        tags.add(tag1);
+        tags.add(tag2);
+        tags.add(tag3);
 
-        // Do same for round two
-        cards = CardJsonReader.readCards(roundTwo.getInputStream());
-        createdCards = new ArrayList<>();
-        for (CreateCardDto card : cards) {
-            createdCards.add(cardService.createCard(card));
+        return tags;
+    }
+
+    private int CreateHash(List<Card> setToHash)
+    {
+        //Create new lists to hold the card variables
+        List<String> dutchCards = new ArrayList<>();
+        List<String> englishCards = new ArrayList<>();
+        List<String> tags = new ArrayList<>();
+
+        //Get the translations + tags from the cards
+        for(Card card : setToHash)
+        {
+            dutchCards.add((new ArrayList<>(card.getTranslations()).get(0).getText()));
+            englishCards.add((new ArrayList<>(card.getTranslations()).get(1).getText()));
+            tags.add(new ArrayList<>(card.getTags()).get(0).getTagValue());
         }
-        cardSet =
-            new CreateCardSetDto(
-                "roundTwoCards",
-                tags2,
-                createdCards
-                    .stream()
-                    .map(Card::getId)
-                    .collect(Collectors.toCollection(ArrayList::new))
-            );
-        cardSetService.createCardSet(cardSet);
 
-        // create tags
-        List<Tag> tags3 = new ArrayList<>();
-        Tag tag10 = new Tag();
-        // type tag
-        tag10.setTagKey(TagType.TYPE);
-        tag10.setTagValue("advice");
-        // group or personal tag
-        Tag tag11 = new Tag();
-        tag11.setTagKey(TagType.GROUP_OR_PERSONAL);
-        tag11.setTagValue("group");
-        // important tag
-        Tag tag12 = new Tag();
-        tag12.setTagKey(TagType.IMPORTANT_TAG);
-        tag12.setTagValue("color");
+        //Sort them to make sure both hashes are made from the same ordering
+        Collections.sort(dutchCards);
+        Collections.sort(englishCards);
+        Collections.sort(tags);
 
-        tags3.add(tag10);
-        tags3.add(tag11);
-        tags3.add(tag12);
-
-        // Do same for round two advice cards
-        cards = CardJsonReader.readCards(roundTwoAdvice.getInputStream());
-        createdCards = new ArrayList<>();
-        for (CreateCardDto card : cards) {
-            createdCards.add(cardService.createCard(card));
-        }
-        cardSet =
-            new CreateCardSetDto(
-                "roundTwoCardsAdvice",
-                tags3,
-                createdCards
-                    .stream()
-                    .map(Card::getId)
-                    .collect(Collectors.toCollection(ArrayList::new))
-            );
-        cardSetService.createCardSet(cardSet);
-
-        // create tags
-        List<Tag> tags4 = new ArrayList<>();
-        Tag tag14 = new Tag();
-        // type tag
-        tag14.setTagKey(TagType.TYPE);
-        tag14.setTagValue("game");
-        // group or personal tag
-        Tag tag15 = new Tag();
-        tag15.setTagKey(TagType.GROUP_OR_PERSONAL);
-        tag15.setTagValue("group");
-        // important tag
-        Tag tag16 = new Tag();
-        tag16.setTagKey(TagType.IMPORTANT_TAG);
-        tag16.setTagValue("operatingModel");
-
-        tags4.add(tag14);
-        tags4.add(tag15);
-        tags4.add(tag16);
-
-        // Do same for round three cards
-        cards = CardJsonReader.readCards(roundThree.getInputStream());
-        createdCards = new ArrayList<>();
-        for (CreateCardDto card : cards) {
-            createdCards.add(cardService.createCard(card));
-        }
-        cardSet =
-            new CreateCardSetDto(
-                "roundThreeCards",
-                tags4,
-                createdCards
-                    .stream()
-                    .map(Card::getId)
-                    .collect(Collectors.toCollection(ArrayList::new))
-            );
-        cardSetService.createCardSet(cardSet);
-
-        // create tags
-        List<Tag> tags5 = new ArrayList<>();
-        Tag tag17 = new Tag();
-        // type tag
-        tag17.setTagKey(TagType.TYPE);
-        tag17.setTagValue("advice");
-        // group or personal tag
-        Tag tag18 = new Tag();
-        tag18.setTagKey(TagType.GROUP_OR_PERSONAL);
-        tag18.setTagValue("group");
-        // important tag
-        Tag tag19 = new Tag();
-        tag19.setTagKey(TagType.IMPORTANT_TAG);
-        tag19.setTagValue("operatingModel");
-
-        tags5.add(tag17);
-        tags5.add(tag18);
-        tags5.add(tag19);
-
-        // Do same for round three advice cards
-        cards = CardJsonReader.readCards(roundThreeAdvice.getInputStream());
-        createdCards = new ArrayList<>();
-        for (CreateCardDto card : cards) {
-            createdCards.add(cardService.createCard(card));
-        }
-        cardSet =
-            new CreateCardSetDto(
-                "roundThreeCardsAdvice",
-                tags5,
-                createdCards
-                    .stream()
-                    .map(Card::getId)
-                    .collect(Collectors.toCollection(ArrayList::new))
-            );
-        cardSetService.createCardSet(cardSet);
+        return dutchCards.hashCode() + englishCards.hashCode() + tags.hashCode();
     }
 }

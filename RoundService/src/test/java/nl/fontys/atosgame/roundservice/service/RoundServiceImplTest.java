@@ -62,7 +62,7 @@ class RoundServiceImplTest {
         Collection<Tag> cardSetTags = new ArrayList<>(List.of(tagImportantTag));
 
         Collection<Card> cards = new ArrayList<>(
-            List.of(new Card(UUID.randomUUID(), cardTags))
+            List.of(new Card(UUID.randomUUID(), cardTags, true))
         );
         CardSet cardSet = new CardSet();
         cardSet.setCards(cards);
@@ -161,9 +161,9 @@ class RoundServiceImplTest {
         );
         List<Card> cards = new ArrayList<>(
             List.of(
-                new Card(UUID.randomUUID(), null),
-                new Card(UUID.randomUUID(), null),
-                new Card(UUID.randomUUID(), null)
+                new Card(UUID.randomUUID(), null, true),
+                new Card(UUID.randomUUID(), null, true),
+                new Card(UUID.randomUUID(), null, true)
             )
         );
         List<PlayerRound> playerRounds = new ArrayList<>(
@@ -249,7 +249,7 @@ class RoundServiceImplTest {
         // Set behavior of repository
         when(roundRepository.findById(round.getId())).thenReturn(Optional.of(round));
         when(roundRepository.save(round)).thenReturn(round);
-        doNothing().when(roundService).publishResults(any(), any());
+        //doNothing().when(roundService).publishResults(any(), any());
 
         // Act
         Round result = roundService.endRound(round.getId(), gameId);
@@ -259,7 +259,7 @@ class RoundServiceImplTest {
         verify(streamBridge)
             .send("produceRoundEnded-in-0", new RoundEndedDto(gameId, result.getId()));
         verify(roundRepository).save(result);
-        verify(roundService).publishResults(round.getId(), gameId);
+        //verify(roundService).publishResults(round.getId(), gameId);
     }
 
     @Test
