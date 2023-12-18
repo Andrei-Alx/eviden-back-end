@@ -142,18 +142,35 @@ public class GameServiceImpl implements GameService {
         // Get all rounds in the game
         List<Round> rounds = game.getRounds();
         // get the latest round with status FINISHED
-        Round latestFinishedRound = null;
-        Round possibleNextRound = null;
+        Round[] latestFinishedRound = new Round[2];
+        Round[] possibleNextRound = new Round[2];
+        int x = 0;
+        int y = 0;
         for (Round round : rounds) {
+
             if (round.getStatus() == RoundStatus.FINISHED) {
-                latestFinishedRound = round;
+                latestFinishedRound[x] = round;
+                x++;
+            }
+            if (round.getStatus() == RoundStatus.CREATED){
+                possibleNextRound[y] = round;
+                y++;
             }
         }
+        Round nextRound = null;
+        for(Round round : possibleNextRound)
+        {
+            if(round == null)
+            {
 
-        for (Round round : rounds){
-            if (round.getStatus() == RoundStatus.CREATED){
-                possibleNextRound = round;
+            }
+            else if ("roundTwoCards".equals(round.getRoundSettings().getCardSet().getName()))
+            {
+                nextRound = round;
                 break;
+            }
+            else{
+                nextRound = round;
             }
         }
 
@@ -170,7 +187,7 @@ public class GameServiceImpl implements GameService {
 
                 // Start the next round
                 roundService.startRound(
-                    possibleNextRound.getId(),
+                    nextRound.getId(),
                     game.getLobby().getPlayerIds(),
                     gameId
                 );
