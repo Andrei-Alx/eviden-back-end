@@ -1,13 +1,10 @@
 package nl.fontys.atosgame.cardservice.model;
 
-import java.util.Locale;
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.intellij.lang.annotations.Language;
 
 @Data
 @AllArgsConstructor

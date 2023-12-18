@@ -1,12 +1,7 @@
 package nl.fontys.atosgame.cardservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import javax.persistence.ElementCollection;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

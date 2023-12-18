@@ -184,8 +184,8 @@ spring:
       root: DEBUG
 
 uri:
-  cardservice: http://card-service:8001
-  gameappbff: http://gameappbff:8004
-  gameservice: http://game-service:8005
-  lobbyservice: http://lobby-service:8006
-  roundservice: http://round-service:8002
+  cardservice: http://localhost:8001
+  gameappbff: http://localhost:8004
+  gameservice: http://localhost:8005
+  lobbyservice: http://localhost:8006
+  roundservice: http://localhost:8002
