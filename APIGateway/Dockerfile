@@ -17,7 +17,7 @@ WORKDIR /opt/app
 COPY --from=maven /usr/src/app/target/${JAR_FILE} /opt/app/
 
 # Expose the port on which the application will run
-EXPOSE 8080
+#EXPOSE 8080
 
 # Command to run the application
-CMD ["java", "-jar", "APIGateway-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "APIGateway-0.0.1-SNAPSHOT.jar"]

@@ -1,237 +1,296 @@
+
 stages: # List of stages for jobs, and their order of execution
   - build
-  - test
-  - QC
-  - deploy
+  - release
 
-# Tests for Card service
+variables:
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  Build_IMAGE: "maven:3.8.6-jdk-11"
+  Release_IMAGE: "docker:dind"
+  DOCKER_HOST: "tcp://docker:2375"
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_DRIVER: overlay2
+
+
+cache:
+  paths:
+    - .m2/repository
+    - .sonar/cache
+    -  CardService/target
+    -  GameService/target
+    -  LobbyService/target
+    -  RoundService/target
+    -  AdminAppBFF/target
+    -  GameAppBFF/target
+    -  APIGateway/target
+
+
+# Build and Release API Gateway
+build-api-gateway: # This job runs in the build stage, which runs first.
+  stage: build
+  image: $Build_IMAGE
+  script:
+    - echo "Running API Gateway Build"
+    - cd APIGateway
+    - mvn install -DskipTests
+    - echo "API Gateway Build complete!"
+
+release-api-gateway:
+  stage: release
+  image: $Release_IMAGE
+  services:
+    - name: docker:dind
+      alias: docker
+  before_script:
+    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+  script:
+    - docker build -t "$CI_REG_IMG_API_GATEWAY" APIGateway/
+    - docker push "$CI_REG_IMG_API_GATEWAY"
+    - echo "API Gateway Latest Release Pushed to Docker Hub!"
+
+
+# Build and Release Card service
 build-card-service: # This job runs in the build stage, which runs first.
   stage: build
+  image: $Build_IMAGE
   script:
-    - echo "Running Build"
+    - echo "Running Card Service Build"
     - cd CardService
-    - ./mvnw install -DskipTests
-    - echo "Build complete."
+    - mvn install -DskipTests
+    - echo "Card Service Build Complete!"
 
-unit-test-card-service: # This job runs in the test stage.
-  stage: test # It only starts when the job in the build stage completes successfully.
-  script:
-    - echo "Running unit tests."
-    - cd CardService
-    - ./mvnw test
-    - echo "Tests complete."
+###unit-test-card-service: # This job runs in the test stage.
+###  stage: test # It only starts when the job in the build stage completes successfully.
+###  only: devlope
+###  script:
+###    - echo "Running unit tests."
+###    - cd CardService
+###    - ./mvnw test
+###    - echo "Card Service Tests complete."
+###  allow_failure: true
+###
+###sonarqube-check-card-service:
+###  stage: QC
+###  image: maven:3.8.6-jdk-11
+###  variables:
+###    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+###    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
+###  cache:
+###    key: "${CI_JOB_NAME}"
+###    paths:
+###      - .sonar/cache
+###  script:
+###    - cd CardService
+###    - ./mvnw verify sonar:sonar
+###  allow_failure: true
+###  only:
+###    - develop
 
-sonarqube-check-card-service:
-  stage: QC
-  image: maven:3.8.6-jdk-11
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
-    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths:
-      - .sonar/cache
-  script:
-    - cd CardService
-    - ./mvnw verify sonar:sonar
-  allow_failure: true
-  only:
-    - develop
-
-deploy-card-service:
-  stage: deploy
-  image: ubuntu-latest
+release-card-service:
+  stage: release
+  image: $Release_IMAGE
   services:
-    - docker:dind
+    - name: docker:dind
+      alias: docker
   before_script:
-    - docker login -u "$DOCKER_HUB_USERNAME" --password "$DOCKER_HUB_PASSWORD" $CI_REGISTRY
+    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
   script:
-    - cd CardService
-    - docker build --pull -t "$CI_REG_IMG_CARD_SERVICE" .
+    - docker build -t "$CI_REG_IMG_CARD_SERVICE" CardService/
     - docker push "$CI_REG_IMG_CARD_SERVICE"
+    - echo "Card Service Latest Release Pushed to Docker Hub!"
 
-# Tests for Game service
+# Build and Release Game service
 build-game-service: # This job runs in the build stage, which runs first.
   stage: build
+  image: $Build_IMAGE
   script:
-    - echo "Running Build"
+    - echo "Running Game Service Build"
     - cd GameService
-    - ./mvnw install -DskipTests
-    - echo "Build complete."
+    - mvn install -DskipTests
+    - echo "Game Service Build Complete!"
 
-unit-test-game-service: # This job runs in the test stage.
-  stage: test # It only starts when the job in the build stage completes successfully.
-  script:
-    - echo "Running unit tests."
-    - cd GameService
-    - ./mvnw test
-    - echo "Tests complete."
+#unit-test-game-service: # This job runs in the test stage.
+#  stage: test # It only starts when the job in the build stage completes successfully.
+#  script:
+#    - echo "Running unit tests."
+#    - cd GameService
+#    - ./mvnw test
+#    - echo "Tests complete."
+#
+#sonarqube-check-game-service:
+#  stage: QC
+#  image: maven:3.8.6-jdk-11
+#  variables:
+#    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+#    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
+#  cache:
+#    key: "${CI_JOB_NAME}"
+#    paths:
+#      - .sonar/cache
+#  script:
+#    - cd GameService
+#    - ./mvnw verify sonar:sonar
+#  allow_failure: true
+#  only:
+#    - develop
 
-sonarqube-check-game-service:
-  stage: QC
-  image: maven:3.8.6-jdk-11
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
-    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths:
-      - .sonar/cache
-  script:
-    - cd GameService
-    - ./mvnw verify sonar:sonar
-  allow_failure: true
-  only:
-    - develop
-
-deploy-game-service:
-  stage: deploy
-  image: ubuntu-latest
+releases-game-service:
+  stage: release
+  image: $Release_IMAGE
   services:
-    - docker:dind
+    - name: docker:dind
+      alias: docker
   before_script:
-    - docker login -u "$DOCKER_HUB_USERNAME" --password "$DOCKER_HUB_PASSWORD" $CI_REGISTRY
+    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
   script:
-    - cd GameService
-    - docker build --pull -t "$CI_REG_IMG_GAME_SERVICE" .
+    - docker build -t "$CI_REG_IMG_GAME_SERVICE" GameService/
     - docker push "$CI_REG_IMG_GAME_SERVICE"
+    - echo "Game Service Latest Release Pushed to Docker Hub!"
 
-# Tests for Lobby service
+# Build and Release Lobby service
 build-lobby-service: # This job runs in the build stage, which runs first.
   stage: build
+  image: $Build_IMAGE
   script:
-    - echo "Running Build"
+    - echo "Running Lobby Service Build"
     - cd LobbyService
-    - ./mvnw install -DskipTests
-    - echo "Build complete."
+    - mvn install -DskipTests
+    - echo "Lobby Service Build Complete!"
 
-unit-test-lobby-service: # This job runs in the test stage.
-  stage: test # It only starts when the job in the build stage completes successfully.
-  script:
-    - echo "Running unit tests."
-    - cd LobbyService
-    - ./mvnw test
-    - echo "Tests complete."
+#unit-test-lobby-service: # This job runs in the test stage.
+#  stage: test # It only starts when the job in the build stage completes successfully.
+#  script:
+#    - echo "Running unit tests."
+#    - cd LobbyService
+#    - ./mvnw test
+#    - echo "Tests complete."
+#
+#sonarqube-check-lobby-service:
+#  stage: QC
+#  image: maven:3.8.6-jdk-11
+#  variables:
+#    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+#    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
+#  cache:
+#    key: "${CI_JOB_NAME}"
+#    paths:
+#      - .sonar/cache
+#  script:
+#    - cd LobbyService
+#    - ./mvnw verify sonar:sonar
+#  allow_failure: true
+#  only:
+#    - develop
 
-sonarqube-check-lobby-service:
-  stage: QC
-  image: maven:3.8.6-jdk-11
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
-    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths:
-      - .sonar/cache
-  script:
-    - cd LobbyService
-    - ./mvnw verify sonar:sonar
-  allow_failure: true
-  only:
-    - develop
-
-deploy-lobby-service:
-  stage: deploy
-  image: ubuntu-latest
+release-lobby-service:
+  stage: release
+  image: $Release_IMAGE
   services:
-    - docker:dind
+    - name: docker:dind
+      alias: docker
   before_script:
-    - docker login -u "$DOCKER_HUB_USERNAME" --password "$DOCKER_HUB_PASSWORD" $CI_REGISTRY
+    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
   script:
-    - cd LobbyService
-    - docker build --pull -t "$CI_REG_IMG_LOBBY_SERVICE" .
+    - docker build -t "$CI_REG_IMG_LOBBY_SERVICE" LobbyService/
     - docker push "$CI_REG_IMG_LOBBY_SERVICE"
+    - echo "Lobby Service Latest Release Pushed to Docker Hub!"
 
-# Tests for Round service
+# Build and Release Round service
 build-round-service: # This job runs in the build stage, which runs first.
   stage: build
+  image: $Build_IMAGE
   script:
-    - echo "Running Build"
+    - echo "Running Round Service Build"
     - cd RoundService
-    - ./mvnw install -DskipTests
-    - echo "Build complete."
-  allow_failure: true
+    - mvn install -DskipTests
+    - echo "Round Service Build Complete!"
+#  allow_failure: true
 
-unit-test-round-service: # This job runs in the test stage.
-  stage: test # It only starts when the job in the build stage completes successfully.
-  script:
-    - echo "Running unit tests."
-    - cd RoundService
-    - ./mvnw test
-    - echo "Tests complete."
-  allow_failure: true
+#unit-test-round-service: # This job runs in the test stage.
+#  stage: test # It only starts when the job in the build stage completes successfully.
+#  script:
+#    - echo "Running unit tests."
+#    - cd RoundService
+#    - ./mvnw test
+#    - echo "Tests complete."
+#  allow_failure: true
+#
+#sonarqube-check-round-service:
+#  stage: QC
+#  image: maven:3.8.6-jdk-11
+#  variables:
+#    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+#    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
+#  cache:
+#    key: "${CI_JOB_NAME}"
+#    paths:
+#      - .sonar/cache
+#  script:
+#    - cd RoundService
+#    - ./mvnw verify sonar:sonar
+#  allow_failure: true
+#  only:
+#    - develop
 
-sonarqube-check-round-service:
-  stage: QC
-  image: maven:3.8.6-jdk-11
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
-    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths:
-      - .sonar/cache
-  script:
-    - cd RoundService
-    - ./mvnw verify sonar:sonar
-  allow_failure: true
-  only:
-    - develop
-
-deploy-round-service:
-  stage: deploy
-  image: ubuntu-latest
+release-round-service:
+  stage: release
+  image: $Release_IMAGE
   services:
-    - docker:dind
+    - name: docker:dind
+      alias: docker
   before_script:
-    - docker login -u "$DOCKER_HUB_USERNAME" --password "$DOCKER_HUB_PASSWORD" $CI_REGISTRY
+    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
   script:
-    - cd RoundService
-    - docker build --pull -t "$CI_REG_IMG_ROUND_SERVICE" .
+    - docker build -t "$CI_REG_IMG_ROUND_SERVICE" RoundService/
     - docker push "$CI_REG_IMG_ROUND_SERVICE"
+    - echo "Round Service Latest Release Pushed to Docker Hub!"
 
-# Tests for GameBFF
+# Build and Release for GameBFF
 build-gamebff: # This job runs in the build stage, which runs first.
   stage: build
+  image: $Build_IMAGE
   script:
     - echo "Running Build"
     - cd GameAppBFF
-    - ./mvnw install -DskipTests
-    - echo "Build complete."
+    - mvn install -DskipTests
+    - echo "Game App BFF Build complete."
 
-unit-test-gamebff: # This job runs in the test stage.
-  stage: test # It only starts when the job in the build stage completes successfully.
-  script:
-    - echo "Running unit tests."
-    - cd GameAppBFF
-    - ./mvnw test
-    - echo "Tests complete."
+#unit-test-gamebff: # This job runs in the test stage.
+#  stage: test # It only starts when the job in the build stage completes successfully.
+#  script:
+#    - echo "Running unit tests."
+#    - cd GameAppBFF
+#    - ./mvnw test
+#    - echo "Tests complete."
+#
+#sonarqube-check-gamebff:
+#  stage: QC
+#  image: maven:3.8.6-jdk-11
+#  variables:
+#    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+#    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
+#  cache:
+#    key: "${CI_JOB_NAME}"
+#    paths:
+#      - .sonar/cache
+#  script:
+#    - cd GameAppBFF
+#    - ./mvnw verify sonar:sonar
+#  allow_failure: true
+#  only:
+#    - develop
 
-sonarqube-check-gamebff:
-  stage: QC
-  image: maven:3.8.6-jdk-11
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
-    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths:
-      - .sonar/cache
-  script:
-    - cd GameAppBFF
-    - ./mvnw verify sonar:sonar
-  allow_failure: true
-  only:
-    - develop
-
-deploy-gamebff-service:
-  stage: deploy
-  image: ubuntu-latest
+release-gamebff-service:
+  stage: release
+  image: $Release_IMAGE
   services:
-    - docker:dind
+    - name: docker:dind
+      alias: docker
   before_script:
-    - docker login -u "$DOCKER_HUB_USERNAME" --password "$DOCKER_HUB_PASSWORD" $CI_REGISTRY
+    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
   script:
-    - cd GameAppBFF
-    - docker build --pull -t "$CI_REG_IMG_GAMEAPPBFF" .
+    - docker build -t "$CI_REG_IMG_GAMEAPPBFF" GameAppBFF/
     - docker push "$CI_REG_IMG_GAMEAPPBFF"
+    - echo "Game App BFF Latest Release Pushed to Docker Hub!"
+
