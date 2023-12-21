@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class CardSetEventConsumers {
-    private CardSeeder cardSeeder;
+    private final CardSeeder cardSeeder;
 
     public CardSetEventConsumers(@Autowired CardSeeder cardSeeder) {
         this.cardSeeder = cardSeeder;

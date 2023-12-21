@@ -11,7 +11,5 @@ import org.hibernate.annotations.Type;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GameEndedEvent extends BaseEvent {
-
-    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID gameId;
 }

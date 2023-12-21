@@ -41,7 +41,7 @@ public class GameProducers {
             );
             Message<GameCreatedEvent> message = MessageBuilder
                 .withPayload(event)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, input.getGameId())
+                .setHeader(KafkaHeaders.KEY, input.getGameId())
                 .build();
             return message;
         };
@@ -60,7 +60,7 @@ public class GameProducers {
 
             return MessageBuilder
                 .withPayload(event)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, input)
+                .setHeader(KafkaHeaders.KEY, input)
                 .build();
         };
     }
@@ -78,7 +78,7 @@ public class GameProducers {
 
             return MessageBuilder
                 .withPayload(event)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, input)
+                .setHeader(KafkaHeaders.KEY, input)
                 .build();
         };
     }

@@ -2,7 +2,8 @@ package nl.fontys.atosgame.roundservice.service;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import javax.persistence.EntityNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.roundservice.dto.CardsDistributedDto;
 import nl.fontys.atosgame.roundservice.dto.PlayerPhaseStartedDto;
 import nl.fontys.atosgame.roundservice.dto.PlayerResultDeterminedDto;
@@ -20,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 /**
@@ -40,24 +40,20 @@ public class RoundServiceImpl implements RoundService {
 
     private final RoundLogicService roundLogicService;
 
-    private final ApplicationEventPublisher applicationEventPublisher;
-
-    private StreamBridge streamBridge;
+    private final StreamBridge streamBridge;
 
     public RoundServiceImpl(
         @Autowired RoundRepository roundRepository,
         @Autowired CardSetService cardSetService,
         @Autowired StreamBridge streamBridge,
         @Autowired PlayerRoundService playerRoundService,
-        @Autowired RoundLogicService roundLogicService,
-        @Autowired ApplicationEventPublisher eventPublisher
+        @Autowired RoundLogicService roundLogicService
     ) {
         this.roundRepository = roundRepository;
         this.cardSetService = cardSetService;
         this.playerRoundService = playerRoundService;
         this.streamBridge = streamBridge;
         this.roundLogicService = roundLogicService;
-        this.applicationEventPublisher = eventPublisher;
     }
 
     /**

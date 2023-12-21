@@ -2,6 +2,7 @@ package nl.fontys.atosgame.gameappbff.service;
 
 import java.util.*;
 
+import jakarta.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.gameappbff.event.produced.CardSetRequestEvent;
 import nl.fontys.atosgame.gameappbff.model.CardSet;
 import nl.fontys.atosgame.gameappbff.model.Tag;
@@ -10,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
-
 /**
  * Service for handling cardsets.
  * @author Aniek
@@ -19,9 +18,9 @@ import javax.persistence.EntityNotFoundException;
 @Service
 public class CardSetServiceImpl implements CardSetService {
 
-    private CardSetRepository cardSetRepository;
+    private final CardSetRepository cardSetRepository;
 
-    private StreamBridge streamBridge;
+    private final StreamBridge streamBridge;
 
     public CardSetServiceImpl(@Autowired CardSetRepository cardSetRepository, @Autowired StreamBridge streamBridge) {
         this.cardSetRepository = cardSetRepository;

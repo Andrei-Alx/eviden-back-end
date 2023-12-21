@@ -1,15 +1,12 @@
 package nl.fontys.atosgame.roundservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Set;
 import java.util.UUID;
-import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.roundservice.enums.ShowResults;
 import nl.fontys.atosgame.roundservice.enums.ShuffleMethod;
-import org.hibernate.annotations.Type;
 
 @Data
 @AllArgsConstructor
@@ -32,6 +29,5 @@ public class RoundSettingsDto {
     private boolean showSameCardOrder;
 
     @JsonProperty
-    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID cardSetId;
 }

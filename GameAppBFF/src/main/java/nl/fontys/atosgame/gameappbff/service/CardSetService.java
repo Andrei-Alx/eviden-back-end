@@ -1,15 +1,14 @@
 package nl.fontys.atosgame.gameappbff.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import nl.fontys.atosgame.gameappbff.enums.CardSetType;
+
+import jakarta.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.gameappbff.model.CardSet;
 import nl.fontys.atosgame.gameappbff.model.Tag;
 
-import javax.persistence.EntityNotFoundException;
 
 /**
  * Service for handling cardsets.

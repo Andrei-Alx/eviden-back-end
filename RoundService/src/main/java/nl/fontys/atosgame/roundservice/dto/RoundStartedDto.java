@@ -11,9 +11,7 @@ import org.hibernate.annotations.Type;
 @NoArgsConstructor
 public class RoundStartedDto {
 
-    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID gameId;
 
-    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID roundId;
 }

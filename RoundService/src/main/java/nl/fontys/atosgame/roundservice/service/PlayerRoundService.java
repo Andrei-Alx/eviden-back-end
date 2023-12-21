@@ -2,7 +2,6 @@ package nl.fontys.atosgame.roundservice.service;
 
 import java.util.List;
 import java.util.UUID;
-import nl.fontys.atosgame.roundservice.dto.PlayerRoundEndedDto;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
 
 public interface PlayerRoundService {

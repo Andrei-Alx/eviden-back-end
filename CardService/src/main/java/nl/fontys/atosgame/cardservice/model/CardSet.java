@@ -33,15 +33,12 @@ public class CardSet {
         inverseJoinColumns = @JoinColumn(name = "cards_id")
     )
     @JsonProperty
-    @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Card> cards = new java.util.ArrayList<>();
 
     @JsonProperty
-    @ElementCollection
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @ElementCollection(fetch = FetchType.EAGER)
     private Collection<Tag> tags;
 
     @JsonProperty
-    @LazyCollection(LazyCollectionOption.FALSE)
     private boolean isActive;
 }
