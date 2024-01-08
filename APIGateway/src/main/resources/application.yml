@@ -8,182 +8,58 @@ spring:
       globalcors:
         cors-configurations:
           "[/**]":
-            allowed-origins: "*"
+            allowed-origins: "${front-end}"
             allowed-methods: "*"
             allowed-headers: "*"
-            allow-credentials: false
+            allow-credentials: true
             max-age: 3600
       routes:
-        ################################## CardService
-        - id: CardService-CardSet-Create
+        - id: cardService-cards
           uri: ${uri.cardservice}
           predicates:
-            - Path=/cardsets/create
-          filters:
-            - SetPath=/api/cardsets/create
-
-        - id: CardService-CardSet-Delete
+            - Path=/api/cards/**
+        - id: cardService-cardSets
           uri: ${uri.cardservice}
           predicates:
-            - Path=/cardsets/delete
-          filters:
-            - SetPath=/api/cardsets/delete
+            - Path=/api/cardSets/**
 
-        - id: CardService-CardSet-Update
-          uri: ${uri.cardservice}
-          predicates:
-            - Path=/cardsets/update
-          filters:
-            - SetPath=/api/cardsets/update
-
-        - id: CardService-Cards-Create
-          uri: ${uri.cardservice}
-          predicates:
-            - Path=/cards/create
-          filters:
-            - SetPath=/api/cards/create
-
-        - id: CardService-Cards-Delete
-          uri: ${uri.cardservice}
-          predicates:
-            - Path=/cards/delete
-          filters:
-            - SetPath=/api/cards/delete
-
-        - id: CardService-Cards-update
-          uri: ${uri.cardservice}
-          predicates:
-            - Path=/cards/seed
-          filters:
-            - SetPath=/api/cards/seed
-
-        - id: CardService-Cards-update
-          uri: ${uri.cardservice}
-          predicates:
-            - Path=/cards/update
-          filters:
-            - SetPath=/api/cards/update
-
-        ################################## GameAppBff
-        - id: GameAppBff-cardsets
+        - id: gameAppBff-gameappbff
           uri: ${uri.gameappbff}
           predicates:
-            - Path=/gameappbff/cardSets/{segment}
-          filters:
-            - SetPath=/api/gameappbff/cardSets/{segment}
-
-        - id: GameAppBff-lobby
+            - Path=/api/gameappbff/**
+        - id: gameAppBff-results
           uri: ${uri.gameappbff}
           predicates:
-            - Path=/gameappbff/lobby
-          filters:
-            - SetPath=/api/gameappbff/lobby
+            - Path=/api/results/**
 
-        - id: GameAppBff-game
-          uri: ${uri.gameappbff}
-          predicates:
-            - Path=/gameappbff/game/{segment}
-          filters:
-            - SetPath=/api/gameappbff/game/{segment}
-
-        - id: GameAppBff-games
-          uri: ${uri.gameappbff}
-          predicates:
-            - Path=/gameappbff/games
-          filters:
-            - SetPath=/api/gameappbff/games
-
-        - id: GameAppBff-results
-          uri: ${uri.gameappbff}
-          predicates:
-            - Path=/results/phase3?{segment}
-          filters:
-            - SetPath=/api/results/phase3?{segment}
-
-        - id: GameAppBff-results-individual
-          uri: ${uri.gameappbff}
-          predicates:
-            - Path=/results/phase3individual?{segment}
-          filters:
-            - SetPath=/api/results/phase3individual?{segment}
-
-        ################################## GameService
-        - id: GameService-create
+        - id: gameService
           uri: ${uri.gameservice}
           predicates:
-            - Path=/game/create
-          filters:
-            - SetPath=/api/game/create
+            - Path=/api/game/**
 
-        - id: GameService-end
-          uri: ${uri.gameservice}
-          predicates:
-            - Path=/game/end/{segment}
-          filters:
-            - SetPath=/api/game/end/{segment}
-
-        - id: GameService-start
-          uri: ${uri.gameservice}
-          predicates:
-            - Path=/game/start/{segment}
-          filters:
-            - SetPath=/api/game/start/{segment}
-
-        - id: GameService-abort
-          uri: ${uri.gameservice}
-          predicates:
-            - Path=/game/abort/{segment}
-          filters:
-            - SetPath=/api/game/abort/{segment}
-
-        ################################## LobbyService
-        - id: LobbyService-join
+        - id: lobbyService-lobby
           uri: ${uri.lobbyservice}
           predicates:
-            - Path=/lobby/join
-          filters:
-            - SetPath=/api/lobby/join
+            - Path=/api/lobby/**
 
-        - id: LobbyService-quit
-          uri: ${uri.lobbyservice}
-          predicates:
-            - Path=/lobby/quit
-          filters:
-            - SetPath=/api/lobby/quit
-
-        ################################## RoundService
-        - id: RoundService-dislike
+        - id: roundService-round
           uri: ${uri.roundservice}
           predicates:
-            - Path=/round/dislikeCard
-          filters:
-            - SetPath=/api/round/dislikeCard
+            - Path=/api/round/**
 
-        - id: RoundService-like
-          uri: ${uri.roundservice}
+        - id: gameAppBffWebsocket
+          uri: ${uri.ws.gameappbff}
           predicates:
-            - Path=/round/likeCard
-          filters:
-            - SetPath=/api/round/likeCard
-
-        - id: RoundService-select
-          uri: ${uri.roundservice}
-          predicates:
-            - Path=/round/selectCards
-          filters:
-            - SetPath=/api/round/selectCards
-
-        - id: RoundService-startnextround
-          uri: ${uri.roundservice}
-          predicates:
-            - Path=/round/startnextround
-          filters:
-            - SetPath=/api/round/startnextround
+            - Path=/websocket/gameappbff/**
   logging:
     level:
       root: DEBUG
 
+front-end: http://game-app:3001
+
 uri:
+  ws:
+    gameappbff: ws://gameappbff:8004
   cardservice: http://card-service:8001
   gameappbff: http://gameappbff:8004
   gameservice: http://game-service:8005
