@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>nl.fontys.atosgame</groupId>
+    <groupId>com.eviden</groupId>
     <artifactId>APIGateway</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>APIGateway</name>
@@ -101,7 +101,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>nl.fontys.atosgame.apigateway.ApiGatewayApplication</mainClass>
+                    <mainClass>com.eviden.apigateway.ApiGatewayApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

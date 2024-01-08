@@ -1,8 +1,14 @@
+# build: docker build -t eviden-api-gateway:m-v1 .
+
 # AS <NAME> to name this stage as maven
 FROM maven:3.9.6 AS maven
 
 WORKDIR /usr/src/app
 COPY . /usr/src/app
+
+# Rename application-docker.yml to application.yml
+RUN mv /usr/src/app/src/main/resources/application-docker.yml /usr/src/app/src/main/resources/application.yml
+
 # Compile and package the application to an executable JAR
 RUN mvn package -Dmaven.test.skip
 
