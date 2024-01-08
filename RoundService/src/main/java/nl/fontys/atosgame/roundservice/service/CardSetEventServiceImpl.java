@@ -18,7 +18,7 @@ public class CardSetEventServiceImpl implements CardSetEventService{
         Object key = UUID.randomUUID();
         return MessageBuilder
                 .withPayload(event)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, key)
+                .setHeader(KafkaHeaders.KEY, key)
                 .build();
     }
 }

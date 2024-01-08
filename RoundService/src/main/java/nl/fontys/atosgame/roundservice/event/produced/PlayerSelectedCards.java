@@ -13,15 +13,11 @@ import org.hibernate.annotations.Type;
 @NoArgsConstructor
 public class PlayerSelectedCards extends BaseEvent {
 
-    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID playerId;
 
-    @Type(type = "org.hibernate.type.UUIDCharType")
     private List<UUID> cardIds;
 
-    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID roundId;
 
-    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID gameId;
 }

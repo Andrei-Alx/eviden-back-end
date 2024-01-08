@@ -6,7 +6,7 @@ stages: # List of stages for jobs, and their order of execution
 variables:
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
-  Build_IMAGE: "maven:3.8.6-jdk-11"
+  Build_IMAGE: "maven:3.9.6-amazoncorretto-17"
   Release_IMAGE: "docker:dind"
   DOCKER_HOST: "tcp://docker:2375"
   DOCKER_TLS_CERTDIR: ""

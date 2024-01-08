@@ -12,7 +12,6 @@ import org.hibernate.annotations.Type;
 @NoArgsConstructor
 public abstract class BaseEvent {
 
-    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 
     private LocalDateTime timestamp;

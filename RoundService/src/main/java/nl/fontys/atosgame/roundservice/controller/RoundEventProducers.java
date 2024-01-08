@@ -47,7 +47,7 @@ public class RoundEventProducers {
             );
             return MessageBuilder
                 .withPayload(event)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                .setHeader(KafkaHeaders.KEY, keyValue.getGameId())
                 .build();
         };
     }
@@ -68,7 +68,7 @@ public class RoundEventProducers {
 
             return MessageBuilder
                 .withPayload(event)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, round.getGameId())
+                .setHeader(KafkaHeaders.KEY, round.getGameId())
                 .build();
         };
     }
@@ -88,7 +88,7 @@ public class RoundEventProducers {
             );
             return MessageBuilder
                 .withPayload(event)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, dto.getGameId())
+                .setHeader(KafkaHeaders.KEY, dto.getGameId())
                 .build();
         };
     }
@@ -110,7 +110,7 @@ public class RoundEventProducers {
             );
             return MessageBuilder
                 .withPayload(event)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, playerPhaseStartedDto.getGameId())
+                .setHeader(KafkaHeaders.KEY, playerPhaseStartedDto.getGameId())
                 .build();
         };
     }
@@ -132,7 +132,7 @@ public class RoundEventProducers {
             );
             return MessageBuilder
                 .withPayload(event)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, dto.getGameId())
+                .setHeader(KafkaHeaders.KEY, dto.getGameId())
                 .build();
         };
     }
@@ -154,7 +154,7 @@ public class RoundEventProducers {
             );
             return MessageBuilder
                 .withPayload(event)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, cardsDistributedDto.getGameId())
+                .setHeader(KafkaHeaders.KEY, cardsDistributedDto.getGameId())
                 .build();
         };
     }
@@ -177,7 +177,7 @@ public class RoundEventProducers {
 
             return MessageBuilder
                 .withPayload(event)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                .setHeader(KafkaHeaders.KEY, keyValue.getGameId())
                 .build();
         };
     }
@@ -199,7 +199,7 @@ public class RoundEventProducers {
             );
             return MessageBuilder
                 .withPayload(event)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                .setHeader(KafkaHeaders.KEY, keyValue.getGameId())
                 .build();
         };
     }
@@ -221,7 +221,7 @@ public class RoundEventProducers {
             );
             return MessageBuilder
                 .withPayload(event)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                .setHeader(KafkaHeaders.KEY, keyValue.getGameId())
                 .build();
         };
     }
@@ -245,7 +245,7 @@ public class RoundEventProducers {
             );
             return MessageBuilder
                 .withPayload(event)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                .setHeader(KafkaHeaders.KEY, keyValue.getGameId())
                 .build();
         };
     }
@@ -267,7 +267,7 @@ public class RoundEventProducers {
             );
             return MessageBuilder
                 .withPayload(event)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                .setHeader(KafkaHeaders.KEY, keyValue.getGameId())
                 .build();
         };
     }

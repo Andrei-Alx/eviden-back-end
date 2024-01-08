@@ -2,8 +2,8 @@ package nl.fontys.atosgame.roundservice.service;
 
 import java.util.Optional;
 import java.util.UUID;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.Lob;
+
+import jakarta.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.roundservice.model.Lobby;
 import nl.fontys.atosgame.roundservice.repository.LobbyRepository;
 import org.springframework.beans.factory.annotation.Autowired;

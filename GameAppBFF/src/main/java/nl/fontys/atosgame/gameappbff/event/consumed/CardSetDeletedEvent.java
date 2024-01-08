@@ -12,6 +12,5 @@ import org.hibernate.annotations.Type;
 @NoArgsConstructor
 public class CardSetDeletedEvent extends BaseEvent {
 
-    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID cardSetId;
 }

@@ -1,7 +1,6 @@
 package nl.fontys.atosgame.gameappbff.controller;
 
 import java.util.function.Function;
-import javax.transaction.Transactional;
 import nl.fontys.atosgame.gameappbff.event.consumed.FinalResultEvent;
 import nl.fontys.atosgame.gameappbff.event.consumed.PlayerResultDeterminedEvent;
 import nl.fontys.atosgame.gameappbff.model.PlayerRoundResult;
@@ -22,7 +21,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class ResultConsumers {
 
-    private ResultService resultService;
+    private final ResultService resultService;
     private static final Logger LOGGER = LoggerFactory.getLogger(ResultConsumers.class);
     private ResultConsumers(@Autowired ResultService resultService) {
         this.resultService = resultService;

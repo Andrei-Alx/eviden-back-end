@@ -3,7 +3,7 @@ package nl.fontys.atosgame.lobbyservice.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Collection;
 import java.util.UUID;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,12 +19,11 @@ public class Lobby {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    @Type(type = "org.hibernate.type.UUIDCharType")
     @JsonProperty
     private UUID id;
 
     @JsonProperty
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Collection<Player> players = new java.util.ArrayList<>();
 
     @JsonProperty
@@ -34,7 +33,6 @@ public class Lobby {
     @Embedded
     private LobbySettings lobbySettings;
 
-    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID gameId;
 
     public void addPlayer(Player player)

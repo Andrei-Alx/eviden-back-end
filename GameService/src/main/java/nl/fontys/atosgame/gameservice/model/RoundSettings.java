@@ -2,7 +2,8 @@ package nl.fontys.atosgame.gameservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.UUID;
-import javax.persistence.*;
+
+import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

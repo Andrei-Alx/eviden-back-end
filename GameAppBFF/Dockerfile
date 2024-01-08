@@ -1,5 +1,5 @@
 # AS <NAME> to name this stage as maven
-FROM maven:3.6.3 AS maven
+FROM maven:3.9.6 AS maven
 
 WORKDIR /usr/src/app
 COPY . /usr/src/app
@@ -7,7 +7,7 @@ COPY . /usr/src/app
 RUN mvn package -Dmaven.test.skip
 
 # For Java 11, 
-FROM adoptopenjdk/openjdk11:alpine-jre
+FROM openjdk:17-oracle
 
 ARG JAR_FILE=GameAppBFF-0.0.1-SNAPSHOT.jar
 

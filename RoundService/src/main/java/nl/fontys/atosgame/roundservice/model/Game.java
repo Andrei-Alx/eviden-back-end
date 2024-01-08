@@ -1,19 +1,15 @@
 package nl.fontys.atosgame.roundservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import javax.persistence.*;
-import jdk.jfr.DataAmount;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.annotations.Type;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -22,13 +18,11 @@ import org.hibernate.annotations.Type;
 public class Game {
 
     @Id
-    @Type(type = "org.hibernate.type.UUIDCharType")
     @JsonProperty
     private UUID id;
 
     @JsonProperty
-    @OneToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Round> rounds = new java.util.ArrayList<>();
 
     @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)

@@ -1,7 +1,7 @@
 package nl.fontys.atosgame.roundservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -2,14 +2,11 @@ package nl.fontys.atosgame.roundservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.*;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.roundservice.enums.PlayerRoundPhase;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.annotations.Type;
 
 @Entity
 @Data
@@ -19,30 +16,24 @@ public class PlayerRound {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 
     @JsonProperty
-    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID playerId;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
     @JsonProperty
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<Card> likedCards = new ArrayList<>();
 
-    @LazyCollection(LazyCollectionOption.FALSE)
     @JsonProperty
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<Card> dislikedCards = new ArrayList<>();
 
-    @LazyCollection(LazyCollectionOption.FALSE)
     @JsonProperty
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<Card> selectedCards = new ArrayList<>();
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(cascade = { CascadeType.PERSIST })
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<Card> distributedCards = new ArrayList<>();
 
     @Embedded
