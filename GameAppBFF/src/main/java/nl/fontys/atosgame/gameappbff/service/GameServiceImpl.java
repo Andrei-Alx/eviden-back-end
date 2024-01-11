@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import javax.persistence.EntityNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import nl.fontys.atosgame.gameappbff.enums.GameStatus;
 import nl.fontys.atosgame.gameappbff.model.Game;
@@ -24,8 +25,8 @@ import org.springframework.stereotype.Service;
 public class GameServiceImpl implements GameService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameServiceImpl.class);
-    private GameRepository gameRepository;
-    private GameSocketController gameSocketController;
+    private final GameRepository gameRepository;
+    private final GameSocketController gameSocketController;
 
     public GameServiceImpl(
         @Autowired GameRepository gameRepository,

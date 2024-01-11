@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
-
 /**
  * Service for card set related operations
  * @author Eli
@@ -19,9 +17,9 @@ import javax.persistence.EntityNotFoundException;
 @Service
 public class CardSetServiceImpl implements CardSetService {
 
-    private StreamBridge streamBridge;
+    private final StreamBridge streamBridge;
 
-    private CardSetRepository cardSetRepository;
+    private final CardSetRepository cardSetRepository;
 
     public CardSetServiceImpl(@Autowired CardSetRepository cardSetRepository, @Autowired StreamBridge streamBridge) {
         this.cardSetRepository = cardSetRepository;

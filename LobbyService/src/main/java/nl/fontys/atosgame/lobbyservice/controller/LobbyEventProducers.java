@@ -1,6 +1,5 @@
 package nl.fontys.atosgame.lobbyservice.controller;
 
-import java.util.UUID;
 import java.util.function.Function;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyDeletedDto;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyJoinedDto;
@@ -39,7 +38,7 @@ public class LobbyEventProducers {
             );
             return MessageBuilder
                 .withPayload(lobbyCreatedEvent)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, lobby.getGameId())
+                .setHeader(KafkaHeaders.KEY, lobby.getGameId())
                 .build();
         };
     }
@@ -59,7 +58,7 @@ public class LobbyEventProducers {
             );
             return MessageBuilder
                 .withPayload(lobbyDeletedEvent)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, dto.getGameId())
+                .setHeader(KafkaHeaders.KEY, dto.getGameId())
                 .build();
         };
     }
@@ -81,7 +80,7 @@ public class LobbyEventProducers {
 
             return MessageBuilder
                 .withPayload(playerJoinedEvent)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                .setHeader(KafkaHeaders.KEY, keyValue.getGameId())
                 .build();
         };
     }
@@ -102,7 +101,7 @@ public class LobbyEventProducers {
             );
             return MessageBuilder
                 .withPayload(playerQuitEvent)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, keyValue.getGameId())
+                .setHeader(KafkaHeaders.KEY, keyValue.getGameId())
                 .build();
         };
     }

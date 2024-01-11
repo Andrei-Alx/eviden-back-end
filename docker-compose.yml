@@ -213,7 +213,7 @@ services:
 
 
   card-service:
-    image: fhictdev/eviden-card-svc:csr-v3
+    image: fhictdev/eviden-card-svc:latest
     container_name: card-service
     ports:
       - 8001:8001
@@ -236,7 +236,7 @@ services:
       - atos_network
 
   gameappbff:
-    image: fhictdev/eviden-game-app-bff:csr-v3
+    image: fhictdev/eviden-game-app-bff:latest
     container_name: gameappbff
     ports:
       - 8004:8004
@@ -258,7 +258,7 @@ services:
       - atos_network
 
   round-service:
-    image: fhictdev/eviden-round-svc:csr-v3
+    image: fhictdev/eviden-round-svc:latest
     container_name: round-service
     ports:
       - 8002:8002
@@ -280,7 +280,7 @@ services:
       - atos_network
 
   lobby-service:
-    image: fhictdev/eviden-lobby-svs:csr-v3
+    image: fhictdev/eviden-lobby-svc:latest
     container_name: lobby-service
     ports:
       - 8006:8006
@@ -302,7 +302,7 @@ services:
       - atos_network
 
   game-service:
-    image: fhictdev/eviden-game-svc:csr-v3
+    image: fhictdev/eviden-game-svc:latest
     container_name: game-service
     ports:
       - 8005:8005
@@ -324,7 +324,7 @@ services:
       - atos_network
 
   api-gateway:
-    image: api-gateway-image:v1
+    image: fhictdev/eviden-api-gateway:m-v1
     container_name: api-gateway
     ports:
       - 8080:8080

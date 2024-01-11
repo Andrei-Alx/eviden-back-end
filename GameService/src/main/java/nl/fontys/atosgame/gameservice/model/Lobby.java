@@ -1,12 +1,12 @@
 package nl.fontys.atosgame.gameservice.model;
 
 import java.util.UUID;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
 
 @Entity
 @Data
@@ -15,6 +15,5 @@ import org.hibernate.annotations.Type;
 public class Lobby {
 
     @Id
-    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 }

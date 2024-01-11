@@ -7,7 +7,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import java.util.Collections;
 import java.util.UUID;
-import javax.persistence.EntityNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.gameservice.dto.CreateGameDto;
 import nl.fontys.atosgame.gameservice.enums.ShowResults;
 import nl.fontys.atosgame.gameservice.exceptions.EmptyStringException;

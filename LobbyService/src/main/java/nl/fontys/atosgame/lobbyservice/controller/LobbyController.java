@@ -5,7 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.UUID;
-import javax.persistence.EntityNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.lobbyservice.dto.ExceptionDto;
 import nl.fontys.atosgame.lobbyservice.dto.JoinRequestDto;
 import nl.fontys.atosgame.lobbyservice.dto.JoinResponseDto;
@@ -33,7 +34,7 @@ public class LobbyController {
         this.lobbyService = lobbyService;
     }
 
-    private LobbyService lobbyService;
+    private final LobbyService lobbyService;
 
     /**
      * Id: R-7

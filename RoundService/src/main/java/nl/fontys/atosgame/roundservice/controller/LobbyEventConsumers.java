@@ -23,8 +23,8 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class LobbyEventConsumers {
 
-    private GameService gameService;
-    private LobbyService lobbyService;
+    private final GameService gameService;
+    private final LobbyService lobbyService;
 
     public LobbyEventConsumers(
         @Autowired GameService gameService,

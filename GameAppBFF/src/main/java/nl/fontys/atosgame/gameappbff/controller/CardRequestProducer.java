@@ -21,7 +21,7 @@ public class CardRequestProducer {
             Object key = UUID.randomUUID();
             Message<CardSetRequestEvent> message = MessageBuilder
                     .withPayload(event)
-                    .setHeader(KafkaHeaders.MESSAGE_KEY, key)
+                    .setHeader(KafkaHeaders.KEY, key)
                     .build();
             return message;
         };

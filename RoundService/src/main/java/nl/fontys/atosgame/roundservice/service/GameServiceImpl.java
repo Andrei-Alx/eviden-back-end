@@ -1,7 +1,8 @@
 package nl.fontys.atosgame.roundservice.service;
 
 import java.util.*;
-import javax.persistence.EntityNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.enums.ShowResults;
@@ -12,7 +13,6 @@ import nl.fontys.atosgame.roundservice.repository.GameRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,22 +23,18 @@ import org.springframework.stereotype.Service;
 public class GameServiceImpl implements GameService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameServiceImpl.class);
-    private RoundService roundService;
-    private LobbyService lobbyService;
-
-    private GameRepository gameRepository;
-    private StreamBridge streamBridge;
+    private final RoundService roundService;
+    private final LobbyService lobbyService;
+    private final GameRepository gameRepository;
 
     public GameServiceImpl(
         @Autowired RoundService roundService,
         @Autowired LobbyService lobbyService,
-        @Autowired GameRepository gameRepository,
-        @Autowired StreamBridge streamBridge
+        @Autowired GameRepository gameRepository
     ) {
         this.roundService = roundService;
         this.lobbyService = lobbyService;
         this.gameRepository = gameRepository;
-        this.streamBridge = streamBridge;
     }
 
     /**

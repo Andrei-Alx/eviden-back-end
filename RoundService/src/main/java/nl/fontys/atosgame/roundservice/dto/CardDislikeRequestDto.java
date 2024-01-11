@@ -10,16 +10,12 @@ import org.hibernate.annotations.Type;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CardDislikeRequestDto {
-
-    @Type(type = "org.hibernate.type.UUIDCharType")
+     
     private UUID playerId;
-
-    @Type(type = "org.hibernate.type.UUIDCharType")
+     
     private UUID cardId;
-
-    @Type(type = "org.hibernate.type.UUIDCharType")
+     
     private UUID roundId;
 
-    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID gameId;
 }

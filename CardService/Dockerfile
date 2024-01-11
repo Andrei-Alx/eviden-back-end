@@ -1,13 +1,13 @@
 # AS <NAME> to name this stage as maven
-FROM maven:3.6.3 AS maven
+FROM maven:3.9.6 AS maven
 
 WORKDIR /usr/src/app
 COPY . /usr/src/app
 # Compile and package the application to an executable JAR
 RUN mvn package -Dmaven.test.skip
 
-# For Java 11, 
-FROM adoptopenjdk/openjdk11:alpine-jre
+# For Java 17,
+FROM openjdk:17-oracle
 
 ARG JAR_FILE=CardService-0.0.1-SNAPSHOT.jar
 

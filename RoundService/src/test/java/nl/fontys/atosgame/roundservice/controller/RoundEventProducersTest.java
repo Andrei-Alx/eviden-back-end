@@ -36,7 +36,7 @@ class RoundEventProducersTest {
         );
         assertEquals(
             roundCreatedEventKeyValue.getGameId(),
-            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+            message.getHeaders().get(KafkaHeaders.KEY)
         );
     }
 
@@ -64,7 +64,7 @@ class RoundEventProducersTest {
         assertEquals(cardsDistributedDto.getCardIds(), message.getPayload().getCardIds());
         assertEquals(
             cardsDistributedDto.getGameId(),
-            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+            message.getHeaders().get(KafkaHeaders.KEY)
         );
     }
 
@@ -86,7 +86,7 @@ class RoundEventProducersTest {
         assertEquals(roundStartedDto.getGameId(), message.getPayload().getGameId());
         assertEquals(
             roundStartedDto.getGameId(),
-            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+            message.getHeaders().get(KafkaHeaders.KEY)
         );
     }
 
@@ -121,7 +121,7 @@ class RoundEventProducersTest {
         );
         assertEquals(
             playerPhaseStartedDto.getGameId(),
-            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+            message.getHeaders().get(KafkaHeaders.KEY)
         );
     }
 
@@ -143,7 +143,7 @@ class RoundEventProducersTest {
         assertEquals(roundEndedDto.getGameId(), message.getPayload().getGameId());
         assertEquals(
             roundEndedDto.getGameId(),
-            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+            message.getHeaders().get(KafkaHeaders.KEY)
         );
     }
 
@@ -175,7 +175,7 @@ class RoundEventProducersTest {
         );
         assertEquals(
             playerPhaseEndedDto.getGameId(),
-            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+            message.getHeaders().get(KafkaHeaders.KEY)
         );
     }
 
@@ -204,7 +204,7 @@ class RoundEventProducersTest {
         assertEquals(playerLikedCardDto.getCardId(), message.getPayload().getCardId());
         assertEquals(
             playerLikedCardDto.getGameId(),
-            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+            message.getHeaders().get(KafkaHeaders.KEY)
         );
     }
 
@@ -236,7 +236,7 @@ class RoundEventProducersTest {
         assertEquals(playerDislikedCardDto.getCardId(), message.getPayload().getCardId());
         assertEquals(
             playerDislikedCardDto.getGameId(),
-            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+            message.getHeaders().get(KafkaHeaders.KEY)
         );
     }
 
@@ -274,7 +274,7 @@ class RoundEventProducersTest {
         );
         assertEquals(
             playerSelectedCardsDto.getGameId(),
-            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+            message.getHeaders().get(KafkaHeaders.KEY)
         );
     }
 
@@ -314,7 +314,7 @@ class RoundEventProducersTest {
         //        );
         //        assertEquals(
         //            playerResultDeterminedDto.getGameId(),
-        //            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+        //            message.getHeaders().get(KafkaHeaders.KEY)
         //        );
     }
 
@@ -354,7 +354,7 @@ class RoundEventProducersTest {
         //        );
         //        assertEquals(
         //            playerResultIndeterminateEvent.getGameId(),
-        //            message.getHeaders().get(KafkaHeaders.MESSAGE_KEY)
+        //            message.getHeaders().get(KafkaHeaders.KEY)
         //        );
     }
 }

@@ -13,10 +13,7 @@ import org.hibernate.annotations.Type;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateGameEventDto {
-
-    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID gameId;
-
     private String title;
     private String companyType;
     private List<RoundSettings> roundSettings;
