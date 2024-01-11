@@ -280,7 +280,7 @@ services:
       - atos_network
 
   lobby-service:
-    image: fhictdev/eviden-lobby-svs:latest
+    image: fhictdev/eviden-lobby-svc:latest
     container_name: lobby-service
     ports:
       - 8006:8006

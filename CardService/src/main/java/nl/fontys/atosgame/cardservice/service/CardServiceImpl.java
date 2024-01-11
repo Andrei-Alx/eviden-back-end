@@ -29,7 +29,7 @@ public class CardServiceImpl implements CardService {
 
     /**
      * Create a new card
-     * @param createCardDto the card to create
+     * @param CreateCardDto the card to create
      * @return the created card
      */
     @Override

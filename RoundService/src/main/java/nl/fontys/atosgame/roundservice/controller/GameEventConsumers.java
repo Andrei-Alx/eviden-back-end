@@ -4,7 +4,6 @@ import java.util.function.Function;
 import nl.fontys.atosgame.roundservice.event.GameCreatedEvent;
 import nl.fontys.atosgame.roundservice.event.GameStartedEvent;
 import nl.fontys.atosgame.roundservice.service.GameService;
-import nl.fontys.atosgame.roundservice.service.RoundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class GameEventConsumers {
 
-    private GameService gameService;
+    private final GameService gameService;
 
     public GameEventConsumers(@Autowired GameService gameService) {
         this.gameService = gameService;

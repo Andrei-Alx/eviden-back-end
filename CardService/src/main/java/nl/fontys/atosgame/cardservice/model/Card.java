@@ -2,8 +2,8 @@ package nl.fontys.atosgame.cardservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.*;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,21 +19,17 @@ public class Card {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    @Type(type = "org.hibernate.type.UUIDCharType")
     @JsonProperty
     private UUID id;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @JsonProperty
-    @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Tag> tags;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @JsonProperty
-    @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Translation> translations;
 
     @JsonProperty
-    @LazyCollection(LazyCollectionOption.FALSE)
     private boolean isActive;
 }

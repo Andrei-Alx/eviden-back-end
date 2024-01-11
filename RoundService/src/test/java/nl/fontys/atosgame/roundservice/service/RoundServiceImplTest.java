@@ -13,10 +13,8 @@ import nl.fontys.atosgame.roundservice.enums.ShowResults;
 import nl.fontys.atosgame.roundservice.enums.ShuffleMethod;
 import nl.fontys.atosgame.roundservice.enums.TagType;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
-import nl.fontys.atosgame.roundservice.event.produced.RoundEndedEvent;
 import nl.fontys.atosgame.roundservice.model.*;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -39,7 +37,6 @@ class RoundServiceImplTest {
         playerRoundService = mock(PlayerRoundService.class);
         roundLogicService = mock(RoundLogicService.class);
         streamBridge = mock(StreamBridge.class);
-        applicationEventPublisher = mock(ApplicationEventPublisher.class);
         roundService =
             spy(
                 new RoundServiceImpl(
@@ -47,8 +44,7 @@ class RoundServiceImplTest {
                     cardSetService,
                     streamBridge,
                     playerRoundService,
-                    roundLogicService,
-                    applicationEventPublisher
+                    roundLogicService
                 )
             );
     }
@@ -116,7 +112,7 @@ class RoundServiceImplTest {
                 "produceRoundCreated-in-0",
                 new RoundCreatedEventKeyValue(gameId, round)
             );
-        Assert.assertSame(
+        assertSame(
             "color",
             result
                 .getRoundSettings()

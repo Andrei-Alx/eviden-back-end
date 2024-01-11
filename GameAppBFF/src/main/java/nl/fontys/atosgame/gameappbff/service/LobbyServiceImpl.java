@@ -1,8 +1,6 @@
 package nl.fontys.atosgame.gameappbff.service;
 
-import java.util.Optional;
-import java.util.UUID;
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import nl.fontys.atosgame.gameappbff.controller.LobbySocketController;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
@@ -10,6 +8,9 @@ import nl.fontys.atosgame.gameappbff.model.Player;
 import nl.fontys.atosgame.gameappbff.repository.LobbyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Service for handling lobbies.

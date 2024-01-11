@@ -28,9 +28,8 @@ class GameServiceImplTest {
         roundService = mock(RoundService.class);
         lobbyService = mock(LobbyService.class);
         gameRepository = mock(GameRepository.class);
-        streamBridge = mock(StreamBridge.class);
         gameService =
-            new GameServiceImpl(roundService, lobbyService, gameRepository, streamBridge);
+            new GameServiceImpl(roundService, lobbyService, gameRepository);
     }
 
     @Test

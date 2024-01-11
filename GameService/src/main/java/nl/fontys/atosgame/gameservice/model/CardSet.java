@@ -1,9 +1,11 @@
 package nl.fontys.atosgame.gameservice.model;
 
 import java.util.UUID;
-import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,10 +20,8 @@ import org.hibernate.annotations.Type;
 public class CardSet {
 
     @Id
-    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 
     @JsonProperty
-    @LazyCollection(LazyCollectionOption.FALSE)
     private boolean isActive;
 }

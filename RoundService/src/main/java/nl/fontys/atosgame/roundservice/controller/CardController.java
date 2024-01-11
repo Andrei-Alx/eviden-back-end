@@ -4,9 +4,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import java.util.List;
-import java.util.UUID;
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.roundservice.dto.CardLikeRequestDto;
 import nl.fontys.atosgame.roundservice.dto.CardSubmitRequestDto;
 import nl.fontys.atosgame.roundservice.dto.StartNextRoundDto;
@@ -24,11 +22,14 @@ import org.springframework.web.bind.annotation.*;
 public class CardController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CardController.class);
-    @Autowired
-    private RoundService roundService;
+    private final RoundService roundService;
+    private final GameService gameService;
 
-    @Autowired
-    private GameService gameService;
+    public CardController(@Autowired RoundService roundService, @Autowired GameService gameService)
+    {
+        this.roundService = roundService;
+        this.gameService = gameService;
+    }
 
     @PostMapping("/likeCard")
     @ApiResponses(

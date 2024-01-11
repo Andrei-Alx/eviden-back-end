@@ -3,7 +3,8 @@ package nl.fontys.atosgame.cardservice.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Collection;
 import java.util.UUID;
-import javax.persistence.*;
+
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,6 @@ public class CardSet {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    @Type(type = "org.hibernate.type.UUIDCharType")
     @JsonProperty
     private UUID id;
 
@@ -33,15 +33,12 @@ public class CardSet {
         inverseJoinColumns = @JoinColumn(name = "cards_id")
     )
     @JsonProperty
-    @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Card> cards = new java.util.ArrayList<>();
 
     @JsonProperty
-    @ElementCollection
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @ElementCollection(fetch = FetchType.EAGER)
     private Collection<Tag> tags;
 
     @JsonProperty
-    @LazyCollection(LazyCollectionOption.FALSE)
     private boolean isActive;
 }

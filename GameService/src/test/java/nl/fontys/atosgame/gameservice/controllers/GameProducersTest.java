@@ -51,6 +51,6 @@ class GameProducersTest {
         assertNotNull(event.getPayload().getTimestamp());
         assertNotNull(event.getPayload().getId());
         assertEquals(gameId, event.getPayload().getGameId());
-        assertEquals(gameId, event.getHeaders().get(KafkaHeaders.MESSAGE_KEY));
+        assertEquals(gameId, event.getHeaders().get(KafkaHeaders.KEY));
     }
 }

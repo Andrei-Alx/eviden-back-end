@@ -1,7 +1,8 @@
 package nl.fontys.atosgame.lobbyservice.service;
 
 import java.util.*;
-import javax.persistence.EntityNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyDeletedDto;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyJoinedDto;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyQuitDto;
