@@ -46,7 +46,7 @@ release-api-gateway:
     - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
   script:
     - docker buildx create --use
-    - docker buildx build --platform linux/arm/v7,linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_API_GATEWAY" APIGateway/
+    - docker buildx build --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_API_GATEWAY" APIGateway/
     - docker push "$CI_REG_IMG_API_GATEWAY"
     - echo "API Gateway Latest Release Pushed to Docker Hub!"
 
@@ -98,7 +98,7 @@ release-card-service:
     - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
   script:
     - docker buildx create --use
-    - docker buildx build --platform linux/arm/v7,linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_CARD_SERVICE" CardService/
+    - docker buildx build --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_CARD_SERVICE" CardService/
     - docker push "$CI_REG_IMG_CARD_SERVICE"
     - echo "Card Service Latest Release Pushed to Docker Hub!"
 
@@ -147,7 +147,7 @@ releases-game-service:
     - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
   script:
     - docker buildx create --use
-    - docker buildx build --platform linux/arm/v7,linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_GAME_SERVICE" GameService/
+    - docker buildx build --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_GAME_SERVICE" GameService/
     - docker push "$CI_REG_IMG_GAME_SERVICE"
     - echo "Game Service Latest Release Pushed to Docker Hub!"
 
@@ -196,7 +196,7 @@ release-lobby-service:
     - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
   script:
     - docker buildx create --use
-    - docker buildx build --platform linux/arm/v7,linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_LOBBY_SERVICE" LobbyService/
+    - docker buildx build --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_LOBBY_SERVICE" LobbyService/
     - docker push "$CI_REG_IMG_LOBBY_SERVICE"
     - echo "Lobby Service Latest Release Pushed to Docker Hub!"
 
@@ -247,7 +247,7 @@ release-round-service:
     - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
   script:
     - docker buildx create --use
-    - docker buildx build --platform linux/arm/v7,linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_ROUND_SERVICE" RoundService/
+    - docker buildx build --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_ROUND_SERVICE" RoundService/
     - docker push "$CI_REG_IMG_ROUND_SERVICE"
     - echo "Round Service Latest Release Pushed to Docker Hub!"
 
@@ -296,7 +296,7 @@ release-gamebff-service:
     - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
   script:
     - docker buildx create --use
-    - docker buildx build --platform linux/arm/v7,linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_GAMEAPPBFF" GameAppBFF/
+    - docker buildx build --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_GAMEAPPBFF" GameAppBFF/
     - docker push "$CI_REG_IMG_GAMEAPPBFF"
     - echo "Game App BFF Latest Release Pushed to Docker Hub!"
 
