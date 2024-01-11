@@ -46,8 +46,11 @@ release-api-gateway:
     - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
   script:
     - docker buildx create --use
-    - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_API_GATEWAY" APIGateway/
+    - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_API_GATEWAY" -t "$CI_REG_IMG_API_GATEWAY:$CI_COMMIT_SHORT_SHA" APIGateway/
     - echo "API Gateway Latest Release Pushed to Docker Hub!"
+  only: 
+    - develop
+    - main
 
 
 # Build and Release Card service
@@ -97,8 +100,11 @@ release-card-service:
     - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
   script:
     - docker buildx create --use
-    - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_CARD_SERVICE" CardService/
+    - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_CARD_SERVICE" -t "$CI_REG_IMG_CARD_SERVICE:$CI_COMMIT_SHORT_SHA" CardService/
     - echo "Card Service Latest Release Pushed to Docker Hub!"
+  only: 
+    - main
+    - develop
 
 # Build and Release Game service
 build-game-service: # This job runs in the build stage, which runs first.
@@ -145,8 +151,11 @@ releases-game-service:
     - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
   script:
     - docker buildx create --use
-    - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_GAME_SERVICE" GameService/
+    - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_GAME_SERVICE" -t "$CI_REG_IMG_GAME_SERVICE:$CI_COMMIT_SHORT_SHA" GameService/
     - echo "Game Service Latest Release Pushed to Docker Hub!"
+  only: 
+    - main
+    - develop
 
 # Build and Release Lobby service
 build-lobby-service: # This job runs in the build stage, which runs first.
@@ -193,8 +202,11 @@ release-lobby-service:
     - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
   script:
     - docker buildx create --use
-    - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_LOBBY_SERVICE" LobbyService/
+    - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_LOBBY_SERVICE" -t "$CI_REG_IMG_LOBBY_SERVICE:$CI_COMMIT_SHORT_SHA" LobbyService/
     - echo "Lobby Service Latest Release Pushed to Docker Hub!"
+  only: 
+    - main
+    - develop
 
 # Build and Release Round service
 build-round-service: # This job runs in the build stage, which runs first.
@@ -243,8 +255,11 @@ release-round-service:
     - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
   script:
     - docker buildx create --use
-    - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_ROUND_SERVICE" RoundService/
+    - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_ROUND_SERVICE" -t "$CI_REG_IMG_ROUND_SERVICE:$CI_COMMIT_SHORT_SHA" RoundService/
     - echo "Round Service Latest Release Pushed to Docker Hub!"
+  only: 
+    - main
+    - develop  
 
 # Build and Release for GameBFF
 build-gamebff: # This job runs in the build stage, which runs first.
@@ -291,6 +306,9 @@ release-gamebff-service:
     - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
   script:
     - docker buildx create --use
-    - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_GAMEAPPBFF" GameAppBFF/
+    - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_GAMEAPPBFF" -t "$CI_REG_IMG_GAMEAPPBFF:$CI_COMMIT_SHORT_SHA" GameAppBFF/
     - echo "Game App BFF Latest Release Pushed to Docker Hub!"
+  only: 
+    - main
+    - develop
 
