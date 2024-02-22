@@ -13,7 +13,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     ports:
-      - 22181:2181
+      - "22181:2181"
     networks:
       - atos_network
     healthcheck:
@@ -34,7 +34,7 @@ services:
       - round-service-db
       - lobby-service-db
     ports:
-      - 29092:29092
+      - "29092:29092"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -61,7 +61,7 @@ services:
     image: factorhouse/kpow-ce
     container_name: kpow
     ports:
-      - 3000:3000
+      - "3000:3000"
     deploy:
       restart_policy:
         condition: on-failure
@@ -81,7 +81,7 @@ services:
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
     ports:
-      - 3307:3306
+      - "3307:3306"
     deploy:
       restart_policy:
         condition: on-failure
@@ -101,7 +101,7 @@ services:
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
     ports:
-      - 3308:3306
+      - "3308:3306"
     deploy:
       restart_policy:
         condition: on-failure
@@ -121,7 +121,7 @@ services:
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
     ports:
-      - 3309:3306
+      - "3309:3306"
     deploy:
       restart_policy:
         condition: on-failure
@@ -141,7 +141,7 @@ services:
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
     ports:
-      - 3310:3306
+      - "3310:3306"
     deploy:
       restart_policy:
         condition: on-failure
@@ -161,7 +161,7 @@ services:
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
     ports:
-      - 3312:3306
+      - "3312:3306"
     deploy:
       restart_policy:
         condition: on-failure
@@ -177,7 +177,7 @@ services:
     image: adminer:latest
     container_name: adminer
     ports:
-      - 8020:8080
+      - "8020:8080"
     deploy:
       restart_policy:
         condition: on-failure
@@ -191,7 +191,7 @@ services:
     image: fhictdev/eviden-game_app-fe:latest
     container_name: game-app
     ports:
-      - 80:80
+      - "80:80"
     environment:
         - PORT=3001
         - HTTPS=false
@@ -216,7 +216,7 @@ services:
     image: fhictdev/eviden-card-svc:latest
     container_name: card-service
     ports:
-      - 8001:8001
+      - "8001:8001"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://card-service-db/card_db?useSSL=false
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
@@ -239,7 +239,7 @@ services:
     image: fhictdev/eviden-game-app-bff:latest
     container_name: gameappbff
     ports:
-      - 8004:8004
+      - "8004:8004"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://gameappbff-db/gameappbff_db?useSSL=false
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
@@ -261,7 +261,7 @@ services:
     image: fhictdev/eviden-round-svc:latest
     container_name: round-service
     ports:
-      - 8002:8002
+      - "8002:8002"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://round-service-db:3306/round_db?useSSL=false
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
@@ -283,7 +283,7 @@ services:
     image: fhictdev/eviden-lobby-svc:latest
     container_name: lobby-service
     ports:
-      - 8006:8006
+      - "8006:8006"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://lobby-service-db:3306/lobby_db?useSSL=false
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
@@ -305,7 +305,7 @@ services:
     image: fhictdev/eviden-game-svc:latest
     container_name: game-service
     ports:
-      - 8005:8005
+      - "8005:8005"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://game-service-db:3306/game_db?useSSL=false
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
@@ -327,7 +327,7 @@ services:
     image: fhictdev/eviden-api-gateway:m-v1
     container_name: api-gateway
     ports:
-      - 8080:8080
+      - "8080:8080"
     networks:
       - atos_network
 
