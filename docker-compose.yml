@@ -324,7 +324,7 @@ services:
       - atos_network
 
   api-gateway:
-    image: fhictdev/eviden-api-gateway:m-v1
+    image: fhictdev/eviden-api-gateway:latest
     container_name: api-gateway
     ports:
       - 8080:8080
