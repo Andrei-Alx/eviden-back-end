@@ -188,14 +188,10 @@ services:
       - atos_network
 
   game-app:
-    image: fhictdev/eviden-game_app-fe:latest
+    build: ../game-app
     container_name: game-app
     ports:
       - "80:80"
-    environment:
-        - PORT=3001
-        - HTTPS=false
-        - REACT_APP_SERVER_HOST_IP="0.0.0.0"
     depends_on:
       - game-service
       - gameappbff
@@ -213,7 +209,7 @@ services:
 
 
   card-service:
-    image: fhictdev/eviden-card-svc:latest
+    build: ./CardService
     container_name: card-service
     ports:
       - "8001:8001"
@@ -236,7 +232,7 @@ services:
       - atos_network
 
   gameappbff:
-    image: fhictdev/eviden-game-app-bff:latest
+    build: ./GameAppBFF
     container_name: gameappbff
     ports:
       - "8004:8004"
@@ -258,7 +254,7 @@ services:
       - atos_network
 
   round-service:
-    image: fhictdev/eviden-round-svc:latest
+    build: ./RoundService
     container_name: round-service
     ports:
       - "8002:8002"
@@ -280,7 +276,7 @@ services:
       - atos_network
 
   lobby-service:
-    image: fhictdev/eviden-lobby-svc:latest
+    build: ./LobbyService
     container_name: lobby-service
     ports:
       - "8006:8006"
@@ -302,7 +298,7 @@ services:
       - atos_network
 
   game-service:
-    image: fhictdev/eviden-game-svc:latest
+    build: ./GameService
     container_name: game-service
     ports:
       - "8005:8005"
@@ -324,7 +320,7 @@ services:
       - atos_network
 
   api-gateway:
-    image: fhictdev/eviden-api-gateway:m-v1
+    build: ./APIGateway
     container_name: api-gateway
     ports:
       - "8080:8080"
