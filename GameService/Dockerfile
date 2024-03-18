@@ -7,7 +7,7 @@ COPY . /usr/src/app
 RUN mvn package -Dmaven.test.skip
 
 # For Java 11, 
-FROM openjdk:17-oracle
+FROM openjdk:20-oracle
 
 ARG JAR_FILE=GameService-0.0.1-SNAPSHOT.jar
 
