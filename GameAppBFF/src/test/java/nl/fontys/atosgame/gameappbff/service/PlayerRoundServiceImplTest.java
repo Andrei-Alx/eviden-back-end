@@ -93,7 +93,7 @@ class PlayerRoundServiceImplTest {
         PlayerRound playerRound = new PlayerRound();
         playerRound.setPlayerId(playerId);
         round.getPlayerRounds().add(playerRound);
-        when(roundService.getRound(roundId)).thenReturn(Optional.of(round));
+        when(roundService.getRoundById(roundId)).thenReturn(Optional.of(round));
 
         playerRoundService.startPhase(playerId, roundId, gameID, phase);
 
@@ -113,7 +113,7 @@ class PlayerRoundServiceImplTest {
         PlayerRound playerRound = new PlayerRound();
         playerRound.setPlayerId(playerId);
         round.getPlayerRounds().add(playerRound);
-        when(roundService.getRound(roundId)).thenReturn(Optional.of(round));
+        when(roundService.getRoundById(roundId)).thenReturn(Optional.of(round));
 
         playerRoundService.endPhase(playerId, roundId, gameID, phase);
 
@@ -130,7 +130,7 @@ class PlayerRoundServiceImplTest {
         Round round = new Round();
         round.getPlayerRounds().add(playerRound1);
         round.getPlayerRounds().add(playerRound2);
-        when(roundService.getRound(roundId)).thenReturn(Optional.of(round));
+        when(roundService.getRoundById(roundId)).thenReturn(Optional.of(round));
 
         Optional<PlayerRound> playerRound = playerRoundService.getPlayerRound(
             playerRound2.getPlayerId(),
@@ -151,7 +151,7 @@ class PlayerRoundServiceImplTest {
         Round round = new Round();
         round.getPlayerRounds().add(playerRound1);
         round.getPlayerRounds().add(playerRound2);
-        when(roundService.getRound(roundId)).thenReturn(Optional.of(round));
+        when(roundService.getRoundById(roundId)).thenReturn(Optional.of(round));
 
         Optional<PlayerRound> playerRound = playerRoundService.getPlayerRound(
             UUID.randomUUID(),

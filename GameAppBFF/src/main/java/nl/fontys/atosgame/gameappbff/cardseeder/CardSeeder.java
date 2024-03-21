@@ -5,11 +5,8 @@ import nl.fontys.atosgame.gameappbff.model.Card;
 import nl.fontys.atosgame.gameappbff.model.CardSet;
 import nl.fontys.atosgame.gameappbff.model.Tag;
 import nl.fontys.atosgame.gameappbff.service.CardService;
-import nl.fontys.atosgame.gameappbff.service.CardSetEventService;
 import nl.fontys.atosgame.gameappbff.service.CardSetService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -35,38 +32,38 @@ public class CardSeeder {
         for (CardSet set : currentCards) {
             List<Tag> tags;
             if (set.getName().equals("roundOneCards")) {
-                tags = AddTags("game", "personal", "color");
-                AddCards(set, "roundOneCards", tags);
+                tags = addTags("game", "personal", "color");
+                addCards(set, "roundOneCards", tags);
             }
 
             if (set.getName().equals("roundOneCardsAdvice")) {
-                tags = AddTags("advice", "personal", "color");
-                AddCards(set, "roundOneCardsAdvice", tags);
+                tags = addTags("advice", "personal", "color");
+                addCards(set, "roundOneCardsAdvice", tags);
             }
 
             if (set.getName().equals("roundTwoCards")) {
-                tags = AddTags("game", "group", "color");
-                AddCards(set, "roundTwoCards", tags);
+                tags = addTags("game", "group", "color");
+                addCards(set, "roundTwoCards", tags);
             }
 
             if (set.getName().equals("roundTwoCardsAdvice")) {
-                tags = AddTags("advice", "group", "color");
-                AddCards(set, "roundTwoCardsAdvice", tags);
+                tags = addTags("advice", "group", "color");
+                addCards(set, "roundTwoCardsAdvice", tags);
             }
 
             if (set.getName().equals("roundThreeCards")) {
-                tags = AddTags("game", "group", "operatingModel");
-                AddCards(set, "roundThreeCards", tags);
+                tags = addTags("game", "group", "operatingModel");
+                addCards(set, "roundThreeCards", tags);
             }
 
             if (set.getName().equals("roundThreeCardsAdvice")) {
-                tags = AddTags("advice", "group", "operatingModel");
-                AddCards(set, "roundThreeCardsAdvice", tags);
+                tags = addTags("advice", "group", "operatingModel");
+                addCards(set, "roundThreeCardsAdvice", tags);
             }
         }
     }
 
-    public void AddCards(CardSet receivedSet, String setName, List<Tag> tags) {
+    public void addCards(CardSet receivedSet, String setName, List<Tag> tags) {
         //If there are cards in the database do the checksum
         if (!oldCards.isEmpty()) {
             //full list of old cards that will be used to update the set if needed
@@ -127,7 +124,7 @@ public class CardSeeder {
         tags.clear();
     }
 
-    private List<Tag> AddTags(String value1, String value2, String value3) {
+    private List<Tag> addTags(String value1, String value2, String value3) {
         List<Tag> tags = new ArrayList<>();
         Tag tag1 = new Tag();
         // type tag

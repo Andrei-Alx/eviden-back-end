@@ -54,7 +54,7 @@ public class GameServiceImpl implements GameService, ApplicationListener<RoundEn
         // Check if all cardsets exist
         for (RoundSettings roundSetting : roundSettings) {
             cardSetService
-                .getCardSet(roundSetting.getCardSetId())
+                .getCardSetById(roundSetting.getCardSetId())
                 .orElseThrow(() -> new IllegalArgumentException("CardSet not found"));
         }
 

@@ -31,7 +31,7 @@ public class LobbyConsumers {
     public Function<Message<LobbyCreatedEvent>, Void> handleLobbyCreated() {
         return lobbyCreatedEventMessage -> {
             LobbyCreatedEvent event = lobbyCreatedEventMessage.getPayload();
-            lobbyServiceImpl.AddLobby(event.getLobby());
+            lobbyServiceImpl.addLobby(event.getLobby());
             return null;
         };
     }

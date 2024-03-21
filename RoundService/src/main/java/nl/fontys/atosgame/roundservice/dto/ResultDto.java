@@ -19,7 +19,6 @@ public class ResultDto {
 
     private UUID playerId;
     private ShowResults type;
-    //private ResultStatus status;
     private List<String> result;
     private List<Card> chosenCards;
     private List<Card> adviceCards;

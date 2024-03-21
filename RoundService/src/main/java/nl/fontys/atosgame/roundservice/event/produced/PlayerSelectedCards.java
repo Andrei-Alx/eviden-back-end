@@ -14,10 +14,7 @@ import org.hibernate.annotations.Type;
 public class PlayerSelectedCards extends BaseEvent {
 
     private UUID playerId;
-
     private List<UUID> cardIds;
-
     private UUID roundId;
-
     private UUID gameId;
 }

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Controller;
  */
 
 @Controller
-public class ResultConsumers {
+public class  ResultConsumers {
 
     private final ResultService resultService;
     private static final Logger LOGGER = LoggerFactory.getLogger(ResultConsumers.class);

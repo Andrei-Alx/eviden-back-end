@@ -59,7 +59,7 @@ public class CardSetServiceImplTest {
         CardSet cardSet = new CardSet(cardSetId, true);
         cardSetService.createCardSet(cardSet);
 
-        cardSetService.getCardSet(cardSetId);
+        cardSetService.getCardSetById(cardSetId);
 
         verify(cardSetRepository).findById(cardSetId);
     }

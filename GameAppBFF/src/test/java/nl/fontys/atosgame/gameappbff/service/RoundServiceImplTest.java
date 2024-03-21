@@ -96,7 +96,7 @@ class RoundServiceImplTest {
         when(roundRepository.findById(any())).thenReturn(Optional.of(round));
 
         // Act
-        Optional<Round> result = roundService.getRound(roundId);
+        Optional<Round> result = roundService.getRoundById(roundId);
 
         // Assert
         verify(roundRepository).findById(roundId);

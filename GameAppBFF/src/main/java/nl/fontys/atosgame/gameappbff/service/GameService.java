@@ -50,21 +50,15 @@ public interface GameService {
     Game addRoundToGame(Round round, UUID gameId);
 
     /**
-     * Get all games from the database.
-     * @return List of games.
-     */
-    List<Game> getAllGames();
-
-    /**
      * Get a game from the database.
      * @param gameId The id of the game to get.
      * @return The game.
      */
-    Optional<Game> getGame(UUID gameId);
+    Optional<Game> getGameById(UUID gameId);
 
     /**
      * Get all games from the database which do not have the GameStatus Ended.
      * @return List of games.
      */
-    List<Game> getGamesByStatus();
+    List<Game> getActiveGames();
 }

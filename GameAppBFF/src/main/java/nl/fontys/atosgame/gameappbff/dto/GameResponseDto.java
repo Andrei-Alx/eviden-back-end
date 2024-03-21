@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 public class GameResponseDto {
 
     private UUID gameId;
-
     private LobbyResponseDto lobby;
     private String title;
     private String companyType;

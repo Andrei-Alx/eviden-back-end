@@ -13,7 +13,6 @@ import nl.fontys.atosgame.gameappbff.model.Player;
 public class PlayerJoinedEvent extends BaseEvent {
 
     private UUID lobbyId;
-
     private Player player;
     private UUID gameId;
 }

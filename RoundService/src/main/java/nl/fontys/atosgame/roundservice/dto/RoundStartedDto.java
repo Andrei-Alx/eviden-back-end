@@ -12,6 +12,5 @@ import org.hibernate.annotations.Type;
 public class RoundStartedDto {
 
     private UUID gameId;
-
     private UUID roundId;
 }

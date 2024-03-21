@@ -7,16 +7,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LobbyServiceImpl implements LobbyService {
-    private final LobbyRepository lobbyRepo;
+    private final LobbyRepository lobbyRepository;
 
     @Autowired
-    public LobbyServiceImpl(LobbyRepository lobbyRepo)
+    public LobbyServiceImpl(LobbyRepository lobbyRepository)
     {
-        this.lobbyRepo = lobbyRepo;
+        this.lobbyRepository = lobbyRepository;
     }
 
-    public void AddLobby(Lobby lobby)
+    public void addLobby(Lobby lobby)
     {
-        this.lobbyRepo.save(lobby);
+        this.lobbyRepository.save(lobby);
     }
 }

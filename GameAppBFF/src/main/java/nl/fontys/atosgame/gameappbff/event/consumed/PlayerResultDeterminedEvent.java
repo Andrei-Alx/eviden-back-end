@@ -14,12 +14,8 @@ import java.util.UUID;
 public class PlayerResultDeterminedEvent extends BaseEvent {
 
     private UUID id;
-
     private UUID roundId;
-
     private UUID playerId;
-
     private UUID gameId;
-
     private Result result;
 }

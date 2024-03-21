@@ -13,7 +13,6 @@ import nl.fontys.atosgame.gameappbff.dto.ResultDto;
 import nl.fontys.atosgame.gameappbff.enums.ShowResults;
 import nl.fontys.atosgame.gameappbff.model.*;
 import nl.fontys.atosgame.gameappbff.service.GameService;
-import nl.fontys.atosgame.gameappbff.service.LobbyService;
 import nl.fontys.atosgame.gameappbff.service.ResultService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,7 +75,7 @@ public class ResultController {
 
         // get player
         List<Player> players = new ArrayList<>(
-            gameService.getGame(gameId).get().getLobby().getPlayers()
+            gameService.getGameById(gameId).get().getLobby().getPlayers()
         );
         List<ResultDto> results = new ArrayList<>();
         for (PlayerRoundResult playerRoundResult : playerResults.get()) {
@@ -209,7 +208,7 @@ public class ResultController {
 
         //get player from game
         List<Player> players = new ArrayList<>(
-                gameService.getGame(gameId).get().getLobby().getPlayers()
+                gameService.getGameById(gameId).get().getLobby().getPlayers()
         );
 
         PlayerDto playerDto = new PlayerDto(

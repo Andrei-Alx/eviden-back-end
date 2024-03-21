@@ -12,7 +12,6 @@ import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
 import nl.fontys.atosgame.gameservice.enums.GameStatus;
 import nl.fontys.atosgame.gameservice.enums.ShowResults;
 import nl.fontys.atosgame.gameservice.enums.ShuffleMethod;
-import nl.fontys.atosgame.gameservice.exceptions.EmptyStringException;
 import nl.fontys.atosgame.gameservice.model.*;
 import nl.fontys.atosgame.gameservice.repository.GameRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,7 +58,7 @@ class GameServiceImplTest {
                 )
             )
         );
-        when(cardSetService.getCardSet(any()))
+        when(cardSetService.getCardSetById(any()))
             .thenReturn(Optional.of(mock(CardSet.class)));
         when(gameRepository.save(any()))
             .thenAnswer(invocation -> {
@@ -119,7 +118,7 @@ class GameServiceImplTest {
                 )
             )
         );
-        when(cardSetService.getCardSet(any())).thenReturn(Optional.empty());
+        when(cardSetService.getCardSetById(any())).thenReturn(Optional.empty());
 
         assertThrows(
             IllegalArgumentException.class,

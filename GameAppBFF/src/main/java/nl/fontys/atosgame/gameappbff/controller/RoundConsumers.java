@@ -204,17 +204,4 @@ public class RoundConsumers {
             return null;
         };
     }
-    /*@Bean
-    public Function<Message<PlayerResultDeterminedEvent>, Void> handlePlayerResultDetermined(){
-        return message -> {
-            PlayerResultDeterminedEvent event = message.getPayload();
-            roundService.res(
-                    event.getPlayerId(),
-                    event.getRoundId(),
-                    event.getGameId(),
-                    event.getResult()
-            );
-            return null;
-        };
-    }*/
 }

@@ -14,7 +14,7 @@ public interface RoundService {
      * @param id The id of the round
      * @return Optional of the round
      */
-    Optional<Round> getRound(UUID id);
+    Optional<Round> getRoundById(UUID id);
 
     /**
      * Creates a new round for the given game

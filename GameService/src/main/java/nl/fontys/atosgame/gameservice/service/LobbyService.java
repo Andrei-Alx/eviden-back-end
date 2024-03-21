@@ -4,5 +4,5 @@ import nl.fontys.atosgame.gameservice.model.Lobby;
 
 public interface LobbyService {
 
-    void AddLobby (Lobby lobby);
+    void addLobby(Lobby lobby);
 }

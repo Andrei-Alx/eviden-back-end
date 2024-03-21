@@ -13,10 +13,7 @@ import org.hibernate.annotations.Type;
 public class PlayerPhaseEndedEvent extends BaseEvent {
 
     private int phaseNumber;
-
     private UUID playerId;
-
     private UUID gameId;
-
     private UUID roundId;
 }

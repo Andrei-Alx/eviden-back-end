@@ -43,7 +43,7 @@ public class GameController {
     @PostMapping("/create")
     public ResponseEntity<Game> createGame(@RequestBody CreateGameDto createGameDto) {
 
-        LOGGER.info(String.format("given deto when creating a game => %s", createGameDto));
+        LOGGER.info(String.format("given DTO when creating a game => %s", createGameDto));
         try {
             Game game = gameService.createGame(
                     createGameDto.getTitle(),

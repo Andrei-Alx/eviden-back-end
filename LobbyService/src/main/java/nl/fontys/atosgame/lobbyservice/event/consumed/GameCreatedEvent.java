@@ -13,6 +13,5 @@ import nl.fontys.atosgame.lobbyservice.model.LobbySettings;
 public class GameCreatedEvent extends BaseEvent {
 
     private LobbySettings lobbySettings;
-
     private UUID gameId;
 }

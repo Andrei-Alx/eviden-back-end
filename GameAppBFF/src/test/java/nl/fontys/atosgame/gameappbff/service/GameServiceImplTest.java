@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.gameappbff.controller.GameSocketController;
 import nl.fontys.atosgame.gameappbff.enums.GameStatus;
-import nl.fontys.atosgame.gameappbff.enums.RoundStatus;
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.model.Lobby;
 import nl.fontys.atosgame.gameappbff.model.Round;
@@ -141,7 +140,7 @@ public class GameServiceImplTest {
         game.setId(gameId);
         when(gameRepository.findById(gameId)).thenReturn(Optional.of(game));
 
-        Optional<Game> result = gameService.getGame(gameId);
+        Optional<Game> result = gameService.getGameById(gameId);
 
         assertEquals(game, result.get());
     }

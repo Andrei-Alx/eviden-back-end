@@ -12,10 +12,7 @@ import org.hibernate.annotations.Type;
 public class CardDislikedEventDto {
 
     private UUID playerId;
-
     private UUID gameId;
-
     private UUID roundId;
-
     private UUID cardId;
 }

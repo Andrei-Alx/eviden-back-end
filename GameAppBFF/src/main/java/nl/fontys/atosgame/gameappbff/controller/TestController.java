@@ -28,7 +28,7 @@ public class TestController {
     @PostMapping("/testLobbyCreated")
     public String testLobbyCreated(@RequestBody UUID gameId) {
         Lobby lobby = new Lobby();
-        gameSocketController.lobby(gameId, lobby);
+        gameSocketController.lobbyCreated(gameId, lobby);
         return "lobby created";
     }
 }

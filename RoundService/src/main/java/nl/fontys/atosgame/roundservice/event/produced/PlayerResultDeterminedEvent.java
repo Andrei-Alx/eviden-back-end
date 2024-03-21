@@ -13,7 +13,6 @@ import nl.fontys.atosgame.roundservice.event.BaseEvent;
 public class PlayerResultDeterminedEvent extends BaseEvent {
 
     private UUID playerId;
-
     private UUID gameId;
     private UUID roundId;
     private ResultDto result;

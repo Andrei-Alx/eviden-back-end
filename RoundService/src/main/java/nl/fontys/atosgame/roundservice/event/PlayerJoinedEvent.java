@@ -12,6 +12,5 @@ import nl.fontys.atosgame.roundservice.dto.PlayerDto;
 public class PlayerJoinedEvent extends BaseEvent {
 
     private UUID lobbyId;
-
     private PlayerDto player;
 }

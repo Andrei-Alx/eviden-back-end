@@ -12,10 +12,7 @@ import nl.fontys.atosgame.roundservice.event.BaseEvent;
 public class PlayerPhaseStartedEvent extends BaseEvent {
 
     private int phaseNumber;
-
     private UUID playerId;
-
     private UUID gameId;
-
     private UUID roundId;
 }

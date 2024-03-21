@@ -12,8 +12,6 @@ import nl.fontys.atosgame.lobbyservice.event.BaseEvent;
 public class PlayerQuitEvent extends BaseEvent {
 
     private UUID lobbyId;
-
     private UUID playerId;
-
     private UUID gameId;
 }

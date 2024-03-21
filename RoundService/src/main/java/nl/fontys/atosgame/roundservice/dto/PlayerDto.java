@@ -11,6 +11,5 @@ import lombok.NoArgsConstructor;
 public class PlayerDto {
 
     private UUID id;
-
     private String name;
 }

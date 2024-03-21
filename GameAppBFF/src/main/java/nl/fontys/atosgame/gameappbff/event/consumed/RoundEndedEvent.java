@@ -12,6 +12,5 @@ import nl.fontys.atosgame.gameappbff.event.BaseEvent;
 public class RoundEndedEvent extends BaseEvent {
 
     private UUID roundId;
-
     private UUID gameId;
 }

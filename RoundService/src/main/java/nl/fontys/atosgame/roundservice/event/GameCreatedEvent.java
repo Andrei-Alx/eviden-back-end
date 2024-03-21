@@ -13,6 +13,5 @@ import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 public class GameCreatedEvent extends BaseEvent {
 
     private UUID gameId;
-
     private List<RoundSettingsDto> roundSettings;
 }

@@ -14,8 +14,6 @@ public class PlayerResultIndeterminateEvent extends BaseEvent {
 
     private UUID gameId;
     private UUID roundId;
-
     private UUID playerId;
-
     private ResultStatus resultStatus;
 }

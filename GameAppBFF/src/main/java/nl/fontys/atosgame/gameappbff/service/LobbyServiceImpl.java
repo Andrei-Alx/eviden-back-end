@@ -42,7 +42,7 @@ public class LobbyServiceImpl implements LobbyService {
     @Override
     public Lobby createLobby(Lobby lobby, UUID gameId) {
         Lobby lobby1 = lobbyRepository.save(lobby);
-        return gameSocketController.lobby(gameId, lobby1);
+        return gameSocketController.lobbyCreated(gameId, lobby1);
     }
 
     /**

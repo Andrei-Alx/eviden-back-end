@@ -133,18 +133,8 @@ public class GameServiceImpl implements GameService {
         }
     }
 
-    /**
-     * Get all games from the database.
-     *
-     * @return List of games.
-     */
     @Override
-    public List<Game> getAllGames() {
-        return gameRepository.findAll();
-    }
-
-    @Override
-    public List<Game> getGamesByStatus() {
+    public List<Game> getActiveGames() {
         return gameRepository.findByGameStatus();
     }
 
@@ -155,7 +145,7 @@ public class GameServiceImpl implements GameService {
      * @return The game.
      */
     @Override
-    public Optional<Game> getGame(UUID gameId) {
+    public Optional<Game> getGameById(UUID gameId) {
         return gameRepository.findById(gameId);
     }
 }

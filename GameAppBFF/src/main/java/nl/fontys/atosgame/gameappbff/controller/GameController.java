@@ -10,7 +10,6 @@ import java.util.*;
 import nl.fontys.atosgame.gameappbff.enums.ShowResults;
 import nl.fontys.atosgame.gameappbff.model.Game;
 import nl.fontys.atosgame.gameappbff.model.Round;
-import nl.fontys.atosgame.gameappbff.service.CardSetService;
 import nl.fontys.atosgame.gameappbff.service.GameService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +50,7 @@ public class GameController {
         }
     )
     public ResponseEntity<List<Game>> getGames() {
-        List<Game> games = gameService.getGamesByStatus();
+        List<Game> games = gameService.getActiveGames();
         return ResponseEntity.ok(games);
     }
 
@@ -74,7 +73,7 @@ public class GameController {
         }
     )
     public ResponseEntity<Game> getGameById(@PathVariable UUID id) {
-        Optional<Game> game = gameService.getGame(id);
+        Optional<Game> game = gameService.getGameById(id);
 
         for (Round round : game.get().getRounds()) {
             if (round.getRoundSettings().getShowPersonalOrGroupResults() == ShowResults.PERSONAL) {

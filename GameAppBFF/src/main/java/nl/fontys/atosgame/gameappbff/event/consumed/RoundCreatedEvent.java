@@ -13,6 +13,5 @@ import nl.fontys.atosgame.gameappbff.model.Round;
 public class RoundCreatedEvent extends BaseEvent {
 
     private Round round;
-
     private UUID gameId;
 }

@@ -12,10 +12,7 @@ import lombok.NoArgsConstructor;
 public class CardsSelectedEventDto {
 
     private UUID playerId;
-
     private List<UUID> cardIds;
-
     private UUID roundId;
-
     private UUID gameId;
 }

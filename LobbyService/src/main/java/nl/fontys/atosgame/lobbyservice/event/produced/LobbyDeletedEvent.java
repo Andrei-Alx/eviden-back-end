@@ -12,6 +12,5 @@ import nl.fontys.atosgame.lobbyservice.event.BaseEvent;
 public class LobbyDeletedEvent extends BaseEvent {
 
     private UUID lobbyId;
-
     private UUID gameId;
 }

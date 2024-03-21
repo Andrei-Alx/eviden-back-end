@@ -11,10 +11,7 @@ import lombok.NoArgsConstructor;
 public class PlayerPhaseStartedDto {
 
     private int phaseNumber;
-     
     private UUID playerId;
-     
     private UUID gameId;
-     
     private UUID roundId;
 }

@@ -11,6 +11,5 @@ import lombok.NoArgsConstructor;
 public class PlayerQuitEvent extends BaseEvent {
 
     private UUID lobbyId;
-
     private UUID playerId;
 }

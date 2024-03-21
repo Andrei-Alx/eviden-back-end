@@ -11,10 +11,7 @@ import lombok.NoArgsConstructor;
 public class CardLikedEventDto {
 
     private UUID playerId;
-
     private UUID gameId;
-
     private UUID roundId;
-
     private UUID cardId;
 }

@@ -11,6 +11,5 @@ import lombok.NoArgsConstructor;
 public class RoundEndedDto {
 
     private UUID gameId;
-
     private UUID roundId;
 }

@@ -33,7 +33,7 @@ public interface CardSetService {
      * @param cardSetId The id of the cardSet.
      * @return The cardSet.
      */
-    Optional<CardSet> getCardSet(UUID cardSetId);
+    Optional<CardSet> getCardSetById(UUID cardSetId);
 
     List<CardSet> getAllCardSets();
 

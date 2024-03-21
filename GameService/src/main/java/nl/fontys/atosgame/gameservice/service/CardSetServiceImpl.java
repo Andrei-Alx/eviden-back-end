@@ -64,7 +64,7 @@ public class CardSetServiceImpl implements CardSetService {
      * @return The cardSet.
      */
     @Override
-    public Optional<CardSet> getCardSet(UUID cardSetId) {
+    public Optional<CardSet> getCardSetById(UUID cardSetId) {
         return cardSetRepository.findById(cardSetId);
     }
 

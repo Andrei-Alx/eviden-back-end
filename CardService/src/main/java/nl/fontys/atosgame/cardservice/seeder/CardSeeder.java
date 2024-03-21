@@ -3,9 +3,7 @@ package nl.fontys.atosgame.cardservice.seeder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-import java.util.stream.Collectors;
 
-import nl.fontys.atosgame.cardservice.CardServiceApplication;
 import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
 import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
 import nl.fontys.atosgame.cardservice.enums.TagType;
@@ -15,12 +13,9 @@ import nl.fontys.atosgame.cardservice.model.Tag;
 import nl.fontys.atosgame.cardservice.service.CardService;
 import nl.fontys.atosgame.cardservice.service.CardSetService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -49,30 +44,30 @@ public class CardSeeder {
 
     @EventListener(ApplicationReadyEvent.class)
     public void seedCards() throws IOException {
-        tags = AddTags("game", "personal", "color");
-        AddCards("classpath:data/cards/roundOne.json", "roundOneCards", tags);
+        tags = addTags("game", "personal", "color");
+        addCards("classpath:data/cards/roundOne.json", "roundOneCards", tags);
 
-        tags = AddTags("advice", "personal", "color");
-        AddCards("classpath:data/cards/roundOneAdvice.json", "roundOneCardsAdvice", tags);
+        tags = addTags("advice", "personal", "color");
+        addCards("classpath:data/cards/roundOneAdvice.json", "roundOneCardsAdvice", tags);
 
-        tags = AddTags("game", "group", "color");
-        AddCards("classpath:data/cards/roundTwo.json", "roundTwoCards", tags);
+        tags = addTags("game", "group", "color");
+        addCards("classpath:data/cards/roundTwo.json", "roundTwoCards", tags);
 
-        tags = AddTags("advice", "group", "color");
-        AddCards("classpath:data/cards/roundOneAdvice.json", "roundTwoCardsAdvice", tags);
+        tags = addTags("advice", "group", "color");
+        addCards("classpath:data/cards/roundOneAdvice.json", "roundTwoCardsAdvice", tags);
 
-        tags = AddTags("game", "group", "operatingModel");
-        AddCards("classpath:data/cards/roundThree.json", "roundThreeCards", tags);
+        tags = addTags("game", "group", "operatingModel");
+        addCards("classpath:data/cards/roundThree.json", "roundThreeCards", tags);
 
-        tags = AddTags("advice", "group", "operatingModel");
-        AddCards("classpath:data/cards/roundThreeAdvice.json", "roundThreeCardsAdvice", tags);
+        tags = addTags("advice", "group", "operatingModel");
+        addCards("classpath:data/cards/roundThreeAdvice.json", "roundThreeCardsAdvice", tags);
     }
 
-    private void AddCards(String classpath, String setName, List<Tag> tags) throws IOException
+    private void addCards(String classPath, String setName, List<Tag> tags) throws IOException
     {
         oldCards = new ArrayList<>(cardSetService.getAll());
         //Gets the cards from the json and create a list of CardDTOs
-        Resource resource = resourceLoader.getResource(classpath);
+        Resource resource = resourceLoader.getResource(classPath);
         InputStream inputStream = resource.getInputStream();
         List<CreateCardDto> JsonCards = CardJsonReader.readCards(inputStream);
 
@@ -85,7 +80,7 @@ public class CardSeeder {
         //If there are cards in the database do the checksum
         if(!oldCards.isEmpty())
         {
-            if(Checksum(setName, newCards))
+            if(checksum(setName, newCards))
             {
                 return;
             }
@@ -137,7 +132,7 @@ public class CardSeeder {
         tags.clear();
     }
 
-    private boolean Checksum(String setName, List<Card> newCards)
+    private boolean checksum(String setName, List<Card> newCards)
     {
         //Get the current old set from the list of old sets
         List<Card> cardSetOld = new ArrayList<>();
@@ -150,10 +145,10 @@ public class CardSeeder {
         }
 
         //Create a hash of old set and new set, compare and return result
-        return CreateHash(cardSetOld) == CreateHash(newCards);
+        return createHash(cardSetOld) == createHash(newCards);
     }
 
-    private List<Tag> AddTags(String value1, String value2, String value3)
+    private List<Tag> addTags(String value1, String value2, String value3)
     {
         List<Tag> tags = new ArrayList<>();
         Tag tag1 = new Tag();
@@ -178,7 +173,7 @@ public class CardSeeder {
         return tags;
     }
 
-    private int CreateHash(List<Card> setToHash)
+    private int createHash(List<Card> setToHash)
     {
         //Create new lists to hold the card variables
         List<String> dutchCards = new ArrayList<>();

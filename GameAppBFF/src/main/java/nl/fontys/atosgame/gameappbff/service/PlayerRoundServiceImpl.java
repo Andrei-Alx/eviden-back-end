@@ -78,7 +78,7 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
         UUID gameId,
         int phaseNumber
     ) {
-        Round round = roundService.getRound(roundId).get();
+        Round round = roundService.getRoundById(roundId).get();
         // Find the playerRound for the player or create a new one
         Optional<PlayerRound> playerRoundOptional = getPlayerRound(playerId, roundId);
         PlayerRound playerRound;
@@ -133,7 +133,7 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
      */
     @Override
     public Optional<PlayerRound> getPlayerRound(UUID playerId, UUID roundId) {
-        Round round = roundService.getRound(roundId).get();
+        Round round = roundService.getRoundById(roundId).get();
         return round
             .getPlayerRounds()
             .stream()

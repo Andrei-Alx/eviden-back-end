@@ -41,7 +41,7 @@ public class RoundServiceImpl implements RoundService {
      * @return Optional of the round
      */
     @Override
-    public Optional<Round> getRound(UUID id) {
+    public Optional<Round> getRoundById(UUID id) {
         return roundRepository.findById(id);
     }
 
@@ -53,7 +53,7 @@ public class RoundServiceImpl implements RoundService {
      */
     @Override
     public void handleRoundCreatedEvent(Round round, UUID gameId) {
-        LOGGER.info(String.format("Round created event recieved in gameappbff => %s", round));
+        LOGGER.info(String.format("Round created event received in gameappbff => %s", round));
         roundRepository.save(round);
         gameService.addRoundToGame(round, gameId);
     }

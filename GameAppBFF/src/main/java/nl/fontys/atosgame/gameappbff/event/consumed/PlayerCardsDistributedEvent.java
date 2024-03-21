@@ -13,10 +13,7 @@ import nl.fontys.atosgame.gameappbff.event.BaseEvent;
 public class PlayerCardsDistributedEvent extends BaseEvent {
 
     private UUID playerId;
-
     private UUID gameId;
-
     private UUID roundId;
-
     private List<UUID> cardIds;
 }
