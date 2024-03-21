@@ -49,4 +49,11 @@ public interface GameService {
      * @return The game with the added round
      */
     Game addRound(UUID gameId, Round round);
+
+    /**
+     * Check if a game is finished
+     * @param game The id of the game
+     * @return Boolean whether game is finished or not
+     */
+    boolean gameIsDone(Game game);
 }

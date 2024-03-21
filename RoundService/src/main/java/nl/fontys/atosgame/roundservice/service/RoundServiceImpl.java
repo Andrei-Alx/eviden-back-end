@@ -205,7 +205,7 @@ public class RoundServiceImpl implements RoundService {
         Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
         LOGGER.info(String.format("Round service liking card => %s", round));
         playerRoundService.likeCard(
-            round.getPlayerRound(playerId),
+            getPlayerRound(round, playerId),
             cardId,
             gameId,
             roundId
@@ -227,7 +227,7 @@ public class RoundServiceImpl implements RoundService {
     public Round dislikeCard(UUID playerId, UUID cardId, UUID gameId, UUID roundId) {
         Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
         playerRoundService.dislikeCard(
-            round.getPlayerRound(playerId),
+            getPlayerRound(round, playerId),
             cardId,
             gameId,
             roundId
@@ -254,7 +254,7 @@ public class RoundServiceImpl implements RoundService {
     ) {
         Round round = getRound(roundId).orElseThrow(EntityNotFoundException::new);
         playerRoundService.selectCards(
-            round.getPlayerRound(playerId),
+            getPlayerRound(round, playerId),
             cardIds,
             gameId,
             roundId
@@ -272,7 +272,7 @@ public class RoundServiceImpl implements RoundService {
     @Override
     public boolean checkRoundEnd(UUID roundId, UUID gameId) {
         Round round = getRound(roundId).get();
-        if (round.isDone()) {
+        if (roundIsDone(round)) {
             this.endRound(roundId, gameId);
             return true;
         }
@@ -308,15 +308,15 @@ public class RoundServiceImpl implements RoundService {
         round
             .getPlayerRounds()
             .forEach(playerRound -> {
-                if(playerRound.isDone()) {
+                if(playerRoundService.playerRoundIsDone(playerRound)) {
                     // playerRound calculate results and produce in event
 
                     // calculate the amount a card type (color or operation model) is picked
-                    Map<String, Integer> tempResults = playerRound.determineCardsChosenPerType();
+                    Map<String, Integer> tempResults = playerRoundService.determineCardsChosenPerType(playerRound);
 
                     // get back a list of results when *undetermined*
                     // get back a single result when *determined*
-                    List<String> result = playerRound.getTopResultCardTypes(tempResults);
+                    List<String> result = playerRoundService.getTopResultCardTypes(playerRound, tempResults);
 
                     // get the importantTag
                     String importantTagValue = playerRound
@@ -453,5 +453,47 @@ public class RoundServiceImpl implements RoundService {
             new RoundCreatedEventKeyValue(gameId, round)
         );
         return round;
+    }
+
+    /**
+     * Add a playerRound to the round
+     * @param round The round to add to
+     * @param playerRound The playerRound to add
+     */
+    @Override
+    public void addPlayerRound(Round round, PlayerRound playerRound) {
+        round.getPlayerRounds().add(playerRound);
+    }
+
+    /**
+     * Check if the round is done.
+     * A round is done when all playerRounds are done.
+     * @param round the round to check
+     * @return True if the round is done, false otherwise.
+     */
+    @Override
+    public boolean roundIsDone(Round round) {
+        for (PlayerRound playerRound : round.getPlayerRounds()) {
+            if (!playerRoundService.playerRoundIsDone(playerRound)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * Get the playerRound for a player
+     * @param round the round to get the players from
+     * @param playerId The id of the player
+     * @return The playerRound for the player
+     */
+    @Override
+    public PlayerRound getPlayerRound(Round round, UUID playerId) {
+        return round.getPlayerRounds()
+                .stream()
+                .filter(playerRound -> playerRound.getPlayerId().equals(playerId))
+                .findFirst()
+                .orElse(null);
     }
 }

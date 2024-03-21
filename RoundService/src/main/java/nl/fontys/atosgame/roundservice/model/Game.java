@@ -29,30 +29,4 @@ public class Game {
     @JoinColumn(name = "lobby_id")
     @JsonProperty
     private Lobby lobby;
-
-    /**
-     * Get the current active round
-     * @return An optional containing the current active round or an empty optional if no round is active
-     */
-    public Optional<Round> getCurrentRound() {
-        for (Round round : rounds) {
-            if (round.getStatus() == RoundStatus.IN_PROGRESS) {
-                return Optional.of(round);
-            }
-        }
-        return Optional.empty();
-    }
-
-    /**
-     * Get the next round
-     * @return An optional containing the next round or an empty optional if there is no more rounds
-     */
-    public Optional<Round> getNextRound() {
-        for (Round round : rounds) {
-            if (round.getStatus() == RoundStatus.CREATED) {
-                return Optional.of(round);
-            }
-        }
-        return Optional.empty();
-    }
 }

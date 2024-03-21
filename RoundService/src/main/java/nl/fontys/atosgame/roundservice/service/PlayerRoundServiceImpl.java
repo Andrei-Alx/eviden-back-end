@@ -1,13 +1,13 @@
 package nl.fontys.atosgame.roundservice.service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+
 import nl.fontys.atosgame.roundservice.applicationevents.PlayerRoundFinishedAppEvent;
 import nl.fontys.atosgame.roundservice.dto.*;
 import nl.fontys.atosgame.roundservice.enums.PlayerRoundPhase;
 import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
+import nl.fontys.atosgame.roundservice.model.Tag;
 import nl.fontys.atosgame.roundservice.repository.PlayerRoundRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -56,9 +56,9 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
         UUID roundId
     ) {
         Card card = this.cardService.getCard(cardId).get();
-        PlayerRoundPhase previousPhase = playerRound.getPhase();
-        playerRound.addLikedCard(card);
-        PlayerRoundPhase currentPhase = playerRound.getPhase();
+        PlayerRoundPhase previousPhase = playerRoundGetPhase(playerRound);
+        addLikedCard(playerRound, card);
+        PlayerRoundPhase currentPhase = playerRoundGetPhase(playerRound);
         playerRound = playerRoundRepository.save(playerRound);
 
         // Send event
@@ -110,7 +110,7 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
         UUID roundId
     ) {
         Card card = this.cardService.getCard(cardId).get();
-        playerRound.addDislikedCard(card);
+        addDislikedCard(playerRound, card);
         playerRound = playerRoundRepository.save(playerRound);
 
         streamBridge.send(
@@ -138,9 +138,9 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
         UUID roundId
     ) {
         Collection<Card> cards = this.cardService.getCards(cardIds);
-        PlayerRoundPhase previousPhase = playerRound.getPhase();
-        playerRound.addSelectedCards(List.copyOf(cards));
-        PlayerRoundPhase currentPhase = playerRound.getPhase();
+        PlayerRoundPhase previousPhase = playerRoundGetPhase(playerRound);
+        addSelectedCards(playerRound, List.copyOf(cards));
+        PlayerRoundPhase currentPhase = playerRoundGetPhase(playerRound);
         playerRound = playerRoundRepository.save(playerRound);
 
         // Send event
@@ -150,7 +150,7 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
         );
 
         // Check if playerRound is finished
-        if (playerRound.isDone()) {
+        if (playerRoundIsDone(playerRound)) {
             this.endPlayerRound(playerRound);
         }
 
@@ -184,5 +184,149 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
      */
     public void endPlayerRound(PlayerRound playerRound) {
         eventPublisher.publishEvent(new PlayerRoundFinishedAppEvent(this, playerRound));
+    }
+
+    /**
+     * Check if a playerRound is done.
+     * A playerRound is done when the player has liked and picked enough cards and has a determinate result.
+     * @return True if the playerRound is done, false otherwise.
+     */
+    @Override
+    public boolean playerRoundIsDone(PlayerRound playerRound) {
+        return (
+                playerRound.getLikedCards().size() == playerRound.getRoundSettings().getNrOfLikedCards() &&
+                        playerRound.getSelectedCards().size() == playerRound.getRoundSettings().getNrOfSelectedCards()
+        );
+    }
+
+    /**
+     * Get the current phase of the playerRound.
+     * @return The current phase of the playerRound.
+     * @param playerRound The player round to check
+     */
+    @Override
+    public PlayerRoundPhase playerRoundGetPhase(PlayerRound playerRound) {
+        if (playerRound.getLikedCards().size() < playerRound.getRoundSettings().getNrOfLikedCards()) {
+            return PlayerRoundPhase.LIKING;
+        } else if (playerRound.getSelectedCards().size() < playerRound.getRoundSettings().getNrOfSelectedCards()) {
+            return PlayerRoundPhase.PICKING;
+        } else {
+            return PlayerRoundPhase.RESULT;
+        }
+    }
+
+    /**
+     * Get the results per color of the playerRound.
+     * @param playerRound The player round to check
+     * @return The results per color of the playerRound.
+     */
+    @Override
+    public Map<String, Integer> determineCardsChosenPerType(PlayerRound playerRound) {
+        // Count how often each tag is picked
+        Map<String, Integer> cardsChosenPerTag = new HashMap<>();
+        for (Card card : playerRound.getSelectedCards()) {
+            for (Tag tag : card.getTags()) {
+                if (cardsChosenPerTag.containsKey(tag.getTagValue())) {
+                    cardsChosenPerTag.put(
+                            tag.getTagValue(),
+                            cardsChosenPerTag.get(tag.getTagValue()) + 1
+                    );
+                } else {
+                    cardsChosenPerTag.put(tag.getTagValue(), 1);
+                }
+            }
+        }
+
+        return cardsChosenPerTag;
+    }
+
+    @Override
+    public List<String> getTopResultCardTypes(PlayerRound playerRound, Map<String, Integer> tagCount) {
+        // get tag with the highest count
+        String highestTagValue = null;
+        for (String tagValue : tagCount.keySet()) {
+            if (
+                    highestTagValue == null ||
+                            tagCount.get(tagValue) > tagCount.get(highestTagValue)
+            ) {
+                highestTagValue = tagValue;
+            }
+        }
+        // get key from tag(s) with the highest count
+        List<String> tagKeys = new ArrayList<>();
+        for (String tagValue : tagCount.keySet()) {
+            if (tagCount.get(tagValue).equals(tagCount.get(highestTagValue))) {
+                tagKeys.add(tagValue);
+            }
+        }
+
+        return tagKeys;
+    }
+
+
+    /**
+     * Add a card to the likedCards list.
+     * Checks if the card is in the hand of the player and if the card is not already liked.
+     * @param playerRound The player round to check
+     * @param card
+     */
+    @Override
+    public void addLikedCard(PlayerRound playerRound, Card card) {
+        if (hasCardInHand(playerRound, card) && !playerRound.getLikedCards().contains(card)) {
+            playerRound.getLikedCards().add(card);
+        } else {
+            throw new IllegalArgumentException("Card is not in hand or already liked");
+        }
+    }
+
+    /**
+     * Add a card to the disliked list.
+     * Checks if the card is in the hand of the player and if the card is not already disliked.
+     * @param playerRound The player round to check
+     * @param card The card to add.
+     */
+    @Override
+    public void addDislikedCard(PlayerRound playerRound, Card card) {
+        List<Card> dislikedCards = playerRound.getDislikedCards();
+
+        if (hasCardInHand(playerRound, card) && !dislikedCards.contains(card)) {
+            dislikedCards.add(card);
+            playerRound.setDislikedCards(dislikedCards);
+
+        } else {
+            throw new IllegalArgumentException("Card is not in hand or already disliked");
+        }
+    }
+
+    /**
+     * Add a card to the selectedCards list.
+     * Checks if the cards are in the hand and if the player has not already picked the cards
+     * @param playerRound The player round to check
+     * @param card The card to add.
+     */
+    @Override
+    public void addSelectedCards(PlayerRound playerRound, List<Card> card) {
+        List<Card> selectedCards = playerRound.getSelectedCards();
+
+        for (Card c : card) {
+            if (hasCardInHand(playerRound, c) && !selectedCards.contains(c)) {
+                selectedCards.add(c);
+                playerRound.setSelectedCards(selectedCards);
+
+            } else {
+                throw new IllegalArgumentException(
+                        "Card is not in hand or already selected"
+                );
+            }
+        }
+    }
+
+    /**
+     * Check if a card is in the hand of the player.
+     * @param card The card to check.
+     * @return True if the card is in the hand of the player, false otherwise.
+     */
+    private boolean hasCardInHand(PlayerRound playerRound, Card card) {
+        return playerRound.getDistributedCards().stream().anyMatch(c -> c.getId().equals(card.getId()));
     }
 }

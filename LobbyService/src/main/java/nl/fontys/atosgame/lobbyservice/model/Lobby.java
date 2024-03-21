@@ -34,17 +34,4 @@ public class Lobby {
     private LobbySettings lobbySettings;
 
     private UUID gameId;
-
-    public void addPlayer(Player player)
-        throws DuplicatePlayerException, LobbyFullException {
-        if (players.size() >= lobbySettings.getMaxPlayers()) {
-            throw new LobbyFullException("The lobby is full.");
-        }
-        if (players.stream().anyMatch(p -> p.getName().equals(player.getName()))) {
-            throw new DuplicatePlayerException(
-                "A player with this name already exists in this lobby."
-            );
-        }
-        players.add(player);
-    }
 }

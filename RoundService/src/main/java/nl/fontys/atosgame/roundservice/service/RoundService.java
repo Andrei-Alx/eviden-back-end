@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
-import nl.fontys.atosgame.roundservice.model.LobbySettings;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
 import nl.fontys.atosgame.roundservice.model.Round;
 
@@ -96,4 +95,27 @@ public interface RoundService {
      * @param gameId The id of the game
      */
     void publishResults(UUID roundId, UUID gameId, UUID playerId);
+
+    /**
+     * Add a playerRound to the round
+     * @param round The round to add to
+     * @param playerRound The playerRound to add
+     */
+    void addPlayerRound(Round round, PlayerRound playerRound);
+
+    /**
+     * Check if the round is done.
+     * A round is done when all playerRounds are done.
+     * @param round the round to check
+     * @return True if the round is done, false otherwise.
+     */
+    boolean roundIsDone(Round round);
+
+    /**
+     * Get the playerRound for a player
+     * @param round the round to get the players from
+     * @param playerId The id of the player
+     * @return The playerRound for the player
+     */
+    PlayerRound getPlayerRound(Round round, UUID playerId);
 }

@@ -21,9 +21,11 @@ public class RoundLogicServiceImpl implements RoundLogicService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RoundLogicServiceImpl.class);
     private CardShuffler cardShuffler;
+    private RoundService roundService;
 
-    public RoundLogicServiceImpl(@Autowired CardShuffler cardShuffler) {
+    public RoundLogicServiceImpl(@Autowired CardShuffler cardShuffler, @Autowired RoundService roundService) {
         this.cardShuffler = cardShuffler;
+        this.roundService = roundService;
     }
 
     /**
@@ -40,7 +42,7 @@ public class RoundLogicServiceImpl implements RoundLogicService {
             PlayerRound playerRound = new PlayerRound();
             playerRound.setPlayerId(playerId);
             playerRound.setRoundSettings(round.getRoundSettings());
-            round.addPlayerRound(playerRound);
+            roundService.addPlayerRound(round, playerRound);
         }
         return round;
     }

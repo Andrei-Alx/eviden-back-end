@@ -201,4 +201,18 @@ public class GameServiceImpl implements GameService {
     public Optional<Game> getGameByRoundId(UUID roundId) {
         return gameRepository.getGameByRoundsId(roundId);
     }
+
+    /**
+     * Get the next round
+     * @return An optional containing the next round or an empty optional if there is no more rounds
+     */
+    @Override
+    public Optional<Round> getNextRound(Game game) {
+        for (Round round : game.getRounds()) {
+            if (round.getStatus() == RoundStatus.CREATED) {
+                return Optional.of(round);
+            }
+        }
+        return Optional.empty();
+    }
 }

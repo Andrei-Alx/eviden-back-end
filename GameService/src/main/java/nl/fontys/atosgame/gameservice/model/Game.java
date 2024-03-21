@@ -32,8 +32,4 @@ public class Game {
     private String companyType;
 
     private GameStatus status = GameStatus.CREATED;
-
-    public boolean isDone() {
-        return rounds.stream().allMatch((round -> round.getStatus() == (RoundStatus.FINISHED)));
-    }
 }

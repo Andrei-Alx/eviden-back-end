@@ -100,7 +100,7 @@ public class LobbyServiceImpl implements LobbyService {
         Player player = new Player();
         player.setName(playerName);
         player.setId(UUID.randomUUID());
-        lobby.addPlayer(player);
+        addPlayer(lobby, player);
 
         //point of no return
         lobbyRepository.saveAndFlush(lobby);
@@ -114,6 +114,31 @@ public class LobbyServiceImpl implements LobbyService {
         );
         streamBridge.send("producePlayerJoined-in-0", lobbyJoinedDto);
         return player;
+    }
+
+    /**
+     * R-8
+     * This method adds a player to the lobby
+     * @param lobby
+     * @param player
+     */
+    @Override
+    public void addPlayer(Lobby lobby, Player player)
+            throws DuplicatePlayerException, LobbyFullException {
+        Collection<Player> players = lobby.getPlayers();
+
+        if (players.size() >= lobby.getLobbySettings().getMaxPlayers()) {
+            throw new LobbyFullException("The lobby is full.");
+        }
+
+        if (players.stream().anyMatch(p -> p.getName().equals(player.getName()))) {
+            throw new DuplicatePlayerException(
+                    "A player with this name already exists in this lobby."
+            );
+        }
+
+        players.add(player);
+        lobby.setPlayers(players);
     }
 
     /**

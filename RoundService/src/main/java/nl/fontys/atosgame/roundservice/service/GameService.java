@@ -8,6 +8,8 @@ import jakarta.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
 import nl.fontys.atosgame.roundservice.model.Game;
 import nl.fontys.atosgame.roundservice.model.Lobby;
+import nl.fontys.atosgame.roundservice.model.PlayerRound;
+import nl.fontys.atosgame.roundservice.model.Round;
 
 public interface GameService {
     /**
@@ -46,4 +48,10 @@ public interface GameService {
      * @return An optional containing the game if found
      */
     Optional<Game> getGameByRoundId(UUID roundId);
+
+    /**
+     * Get the next round
+     * @return An optional containing the next round or an empty optional if there is no more rounds
+     */
+    Optional<Round> getNextRound(Game game);
 }

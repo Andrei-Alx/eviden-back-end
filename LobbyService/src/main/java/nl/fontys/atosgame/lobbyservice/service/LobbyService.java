@@ -2,6 +2,9 @@ package nl.fontys.atosgame.lobbyservice.service;
 
 import java.util.Optional;
 import java.util.UUID;
+
+import nl.fontys.atosgame.lobbyservice.exceptions.DuplicatePlayerException;
+import nl.fontys.atosgame.lobbyservice.exceptions.LobbyFullException;
 import nl.fontys.atosgame.lobbyservice.model.Lobby;
 import nl.fontys.atosgame.lobbyservice.model.LobbySettings;
 import nl.fontys.atosgame.lobbyservice.model.Player;
@@ -32,6 +35,14 @@ public interface LobbyService {
      * @throws Exception
      */
     Player joinLobby(String lobbyCode, String playerName) throws Exception;
+
+    /**
+     * R-8
+     * This method adds a player to the lobby
+     * @param lobby
+     * @param player
+     */
+    void addPlayer(Lobby lobby, Player player) throws DuplicatePlayerException, LobbyFullException;
 
     /**
      * This method removes a player from the lobby

@@ -7,6 +7,7 @@ import java.util.UUID;
 import nl.fontys.atosgame.gameservice.applicationEvents.RoundEndedAppEvent;
 import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
 import nl.fontys.atosgame.gameservice.enums.GameStatus;
+import nl.fontys.atosgame.gameservice.enums.RoundStatus;
 import nl.fontys.atosgame.gameservice.exceptions.EmptyStringException;
 import nl.fontys.atosgame.gameservice.model.*;
 import nl.fontys.atosgame.gameservice.repository.GameRepository;
@@ -137,8 +138,13 @@ public class GameServiceImpl implements GameService, ApplicationListener<RoundEn
     @Override
     public void onApplicationEvent(RoundEndedAppEvent event) {
         Game game = gameRepository.findByRoundsId(event.getRoundId()).get();
-        if (game.isDone()) {
+        if (gameIsDone(game)) {
             endGame(game.getId());
         }
+    }
+
+    @Override
+    public boolean gameIsDone(Game game) {
+        return game.getRounds().stream().allMatch((round -> round.getStatus() == (RoundStatus.FINISHED)));
     }
 }
