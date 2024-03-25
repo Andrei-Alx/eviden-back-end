@@ -5,8 +5,8 @@ COPY . /usr/src/app
 # Compile and package the application to an executable JAR
 RUN mvn package -Dmaven.test.skip
 
-# For Java 11, 
-FROM openjdk:20-oracle
+# For Java 21,
+FROM amazoncorretto:21-alpine
 
 ARG JAR_FILE=GameAppBFF-0.0.1-SNAPSHOT.jar
 

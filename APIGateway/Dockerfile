@@ -9,8 +9,8 @@ RUN mv /usr/src/app/src/main/resources/application-docker.yml /usr/src/app/src/m
 # Compile and package the application to an executable JAR
 RUN mvn package -Dmaven.test.skip
 
-# For Java 11, 
-FROM openjdk:20-oracle
+# For Java 21,
+FROM amazoncorretto:21-alpine
 
 ARG JAR_FILE=APIGateway-0.0.1-SNAPSHOT.jar
 
