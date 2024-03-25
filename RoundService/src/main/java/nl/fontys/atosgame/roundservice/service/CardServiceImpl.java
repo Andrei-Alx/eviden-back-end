@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.repository.CardRepository;
+import nl.fontys.atosgame.roundservice.service.interfaces.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CardServiceImpl implements CardService {
 
-    private CardRepository cardRepository;
+    private final CardRepository cardRepository;
 
     public CardServiceImpl(@Autowired CardRepository cardRepository) {
         this.cardRepository = cardRepository;

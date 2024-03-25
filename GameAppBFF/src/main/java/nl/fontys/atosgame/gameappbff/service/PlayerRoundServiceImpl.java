@@ -23,11 +23,11 @@ import org.springframework.stereotype.Service;
 public class PlayerRoundServiceImpl implements PlayerRoundService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PlayerRoundServiceImpl.class);
-    private PlayerRoundRepository playerRoundRepository;
-    private RoundService roundService;
-    private CardService cardService;
+    private final PlayerRoundRepository playerRoundRepository;
+    private final RoundService roundService;
+    private final CardService cardService;
 
-    private GameSocketController gameSocketController;
+    private final GameSocketController gameSocketController;
 
     public PlayerRoundServiceImpl(
         @Autowired PlayerRoundRepository playerRoundRepository,

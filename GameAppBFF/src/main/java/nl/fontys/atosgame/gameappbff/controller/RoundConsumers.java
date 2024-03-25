@@ -28,8 +28,8 @@ import org.springframework.stereotype.Controller;
 public class RoundConsumers {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RoundConsumers.class);
-    private RoundService roundService;
-    private PlayerRoundService playerRoundService;
+    private final RoundService roundService;
+    private final PlayerRoundService playerRoundService;
 
     public RoundConsumers(
         @Autowired RoundService roundService,

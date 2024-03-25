@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
 import nl.fontys.atosgame.cardservice.model.CardSet;
-import nl.fontys.atosgame.cardservice.service.CardSetService;
+import nl.fontys.atosgame.cardservice.service.interfaces.CardSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @RequestMapping("/api/cardsets")
 public class CardSetController {
 
-    private CardSetService cardSetService;
+    private final CardSetService cardSetService;
 
     public CardSetController(@Autowired CardSetService cardSetService) {
         this.cardSetService = cardSetService;

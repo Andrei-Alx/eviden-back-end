@@ -25,17 +25,15 @@ import org.springframework.util.Assert;
 class LobbyServiceImplTest {
 
     LobbyRepository lobbyRepository;
-    LobbyCodeGenerator lobbyCodeGenerator;
     StreamBridge streamBridge;
     LobbyServiceImpl lobbyService;
 
     @BeforeEach
     void setUp() {
         lobbyRepository = mock(LobbyRepository.class);
-        lobbyCodeGenerator = mock(LobbyCodeGenerator.class);
         streamBridge = mock(StreamBridge.class);
         lobbyService =
-            new LobbyServiceImpl(lobbyRepository, lobbyCodeGenerator, streamBridge);
+            new LobbyServiceImpl(lobbyRepository, streamBridge);
     }
 
     @Test
@@ -48,7 +46,7 @@ class LobbyServiceImplTest {
                 lobby.setId(UUID.randomUUID());
                 return i.getArguments()[0];
             });
-        when(lobbyCodeGenerator.generateLobbyCode()).thenReturn("ABCDEF");
+        when(lobbyService.generateLobbyCode()).thenReturn("ABCDEF");
 
         Lobby lobby = lobbyService.createLobby(settings, gameId);
 
@@ -76,9 +74,9 @@ class LobbyServiceImplTest {
 
     @Test
     void joinLobby() throws Exception {
-        when(lobbyCodeGenerator.generateLobbyCode()).thenReturn("ABCDEF");
+        when(lobbyService.generateLobbyCode()).thenReturn("ABCDEF");
         // arrange player and lobby
-        String lobbyCode = lobbyCodeGenerator.generateLobbyCode();
+        String lobbyCode = lobbyService.generateLobbyCode();
         String playerName = "PlayerOne";
 
         LobbySettings lobbySettings = new LobbySettings(8);
@@ -120,9 +118,9 @@ class LobbyServiceImplTest {
 
     @Test
     void joinLobbyFullThrowsException() {
-        when(lobbyCodeGenerator.generateLobbyCode()).thenReturn("ABCDEF");
+        when(lobbyService.generateLobbyCode()).thenReturn("ABCDEF");
         // arrange player and lobby
-        String lobbyCode = lobbyCodeGenerator.generateLobbyCode();
+        String lobbyCode = lobbyService.generateLobbyCode();
         String playerName = "PlayerTwo";
         Player player = new Player(UUID.randomUUID(), "PlayerOne");
         LobbySettings lobbySettings = new LobbySettings(1);
@@ -145,9 +143,9 @@ class LobbyServiceImplTest {
 
     @Test
     void joinLobbyAlreadyJoinedThrowsException() {
-        when(lobbyCodeGenerator.generateLobbyCode()).thenReturn("ABCDEF");
+        when(lobbyService.generateLobbyCode()).thenReturn("ABCDEF");
         // arrange player and lobby
-        String lobbyCode = lobbyCodeGenerator.generateLobbyCode();
+        String lobbyCode = lobbyService.generateLobbyCode();
         String playerName = "PlayerOne";
         Player player = new Player(UUID.randomUUID(), "PlayerOne");
         LobbySettings lobbySettings = new LobbySettings(2);
@@ -172,7 +170,7 @@ class LobbyServiceImplTest {
     void quitLobby() {
         // arrange
         UUID lobbyId = UUID.randomUUID();
-        String lobbyCode = lobbyCodeGenerator.generateLobbyCode();
+        String lobbyCode = lobbyService.generateLobbyCode();
         LobbySettings lobbySettings = new LobbySettings(8);
         String playerName = "PlayerOne";
         UUID playerId = UUID.randomUUID();

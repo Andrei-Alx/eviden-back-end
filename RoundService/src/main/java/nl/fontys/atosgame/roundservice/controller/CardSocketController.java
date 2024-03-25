@@ -3,7 +3,7 @@ package nl.fontys.atosgame.roundservice.controller;
 import nl.fontys.atosgame.roundservice.dto.CardDislikeRequestDto;
 import nl.fontys.atosgame.roundservice.dto.CardLikeRequestDto;
 import nl.fontys.atosgame.roundservice.dto.CardSubmitRequestDto;
-import nl.fontys.atosgame.roundservice.service.RoundService;
+import nl.fontys.atosgame.roundservice.service.interfaces.RoundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;

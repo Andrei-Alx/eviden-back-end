@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationEvent;
 
 public class PlayerRoundFinishedAppEvent extends ApplicationEvent {
 
-    private PlayerRound playerRound;
+    private final PlayerRound playerRound;
 
     public PlayerRoundFinishedAppEvent(Object source, PlayerRound playerRound) {
         super(source);

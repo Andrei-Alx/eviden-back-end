@@ -8,7 +8,7 @@ import java.util.UUID;
 import jakarta.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
 import nl.fontys.atosgame.cardservice.model.CardSet;
-import nl.fontys.atosgame.cardservice.service.CardSetService;
+import nl.fontys.atosgame.cardservice.service.interfaces.CardSetService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

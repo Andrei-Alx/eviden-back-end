@@ -4,6 +4,8 @@ import nl.fontys.atosgame.gameservice.applicationEvents.RoundEndedAppEvent;
 import nl.fontys.atosgame.gameservice.enums.RoundStatus;
 import nl.fontys.atosgame.gameservice.model.Round;
 import nl.fontys.atosgame.gameservice.repository.RoundRepository;
+import nl.fontys.atosgame.gameservice.service.interfaces.GameService;
+import nl.fontys.atosgame.gameservice.service.interfaces.RoundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,7 @@ public class RoundServiceImpl implements RoundService {
 
     private final RoundRepository roundRepository;
     private final GameService gameService;
-    private ApplicationEventPublisher eventPublisher;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
     public RoundServiceImpl(RoundRepository roundRepository, GameService gameService, ApplicationEventPublisher eventPublisher) {

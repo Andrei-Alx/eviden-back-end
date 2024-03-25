@@ -11,6 +11,8 @@ import nl.fontys.atosgame.roundservice.model.Game;
 import nl.fontys.atosgame.roundservice.model.Lobby;
 import nl.fontys.atosgame.roundservice.model.Round;
 import nl.fontys.atosgame.roundservice.repository.GameRepository;
+import nl.fontys.atosgame.roundservice.service.interfaces.LobbyService;
+import nl.fontys.atosgame.roundservice.service.interfaces.RoundService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.stream.function.StreamBridge;

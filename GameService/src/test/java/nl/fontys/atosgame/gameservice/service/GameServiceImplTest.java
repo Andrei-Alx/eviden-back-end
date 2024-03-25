@@ -14,6 +14,7 @@ import nl.fontys.atosgame.gameservice.enums.ShowResults;
 import nl.fontys.atosgame.gameservice.enums.ShuffleMethod;
 import nl.fontys.atosgame.gameservice.model.*;
 import nl.fontys.atosgame.gameservice.repository.GameRepository;
+import nl.fontys.atosgame.gameservice.service.interfaces.CardSetService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.stream.function.StreamBridge;

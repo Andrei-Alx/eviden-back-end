@@ -14,7 +14,7 @@ import nl.fontys.atosgame.gameservice.enums.ShowResults;
 import nl.fontys.atosgame.gameservice.exceptions.EmptyStringException;
 import nl.fontys.atosgame.gameservice.model.Game;
 import nl.fontys.atosgame.gameservice.model.Round;
-import nl.fontys.atosgame.gameservice.service.GameService;
+import nl.fontys.atosgame.gameservice.service.interfaces.GameService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.*;
 public class GameController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameController.class);
-    private GameService gameService;
+    private final GameService gameService;
 
     public GameController(@Autowired GameService gameService) {
         this.gameService = gameService;

@@ -10,6 +10,8 @@ import nl.fontys.atosgame.cardservice.event.produced.CardSetEvent;
 import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.model.CardSet;
 import nl.fontys.atosgame.cardservice.repository.CardSetRepository;
+import nl.fontys.atosgame.cardservice.service.interfaces.CardService;
+import nl.fontys.atosgame.cardservice.service.interfaces.CardSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;

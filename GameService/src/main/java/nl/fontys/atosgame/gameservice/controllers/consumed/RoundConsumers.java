@@ -1,0 +1,74 @@
+package nl.fontys.atosgame.gameservice.controllers.consumed;
+
+import java.util.function.Function;
+import nl.fontys.atosgame.gameservice.event.consumed.RoundCreatedEvent;
+import nl.fontys.atosgame.gameservice.event.consumed.RoundEndedEvent;
+import nl.fontys.atosgame.gameservice.event.consumed.RoundStartedEvent;
+import nl.fontys.atosgame.gameservice.service.interfaces.RoundService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.messaging.Message;
+import org.springframework.stereotype.Controller;
+
+/**
+ * Collection of consumers for round related events:
+ * - RoundStartedEvent
+ * - RoundEndedEvent
+ * - RoundCreatedEvent
+ * @author Eli
+ */
+@Controller
+public class RoundConsumers {
+
+    private final RoundService roundService;
+
+    @Autowired
+    public RoundConsumers(RoundService roundService) {
+        this.roundService = roundService;
+    }
+
+    /**
+     * Id: C-3
+     * Consumer for RoundStartedEvent
+     * input topic: round-started-topic
+     * output topic: -
+     */
+    @Bean
+    public Function<Message<RoundStartedEvent>, Void> handleRoundStarted() {
+        return roundStartedEventMessage -> {
+            RoundStartedEvent event = roundStartedEventMessage.getPayload();
+            roundService.startRound(event.getRoundId());
+            return null;
+        };
+    }
+
+    /**
+     * Id: C-4
+     * Consumer for RoundEndedEvent
+     * input topic: round-ended-topic
+     * output topic: -
+     */
+    @Bean
+    public Function<Message<RoundEndedEvent>, Void> handleRoundEnded() {
+        return roundEndedEventMessage -> {
+            RoundEndedEvent event = roundEndedEventMessage.getPayload();
+            roundService.endRound(event.getRoundId());
+            return null;
+        };
+    }
+
+    /**
+     * Id: C-54
+     * Consumer for RoundCreatedEvent
+     * input topic: round-created-topic
+     * output topic: -
+     */
+    @Bean
+    public Function<Message<RoundCreatedEvent>, Void> handleRoundCreated() {
+        return roundCreatedEventMessage -> {
+            RoundCreatedEvent event = roundCreatedEventMessage.getPayload();
+            roundService.createRound(event.getGameId(), event.getRound());
+            return null;
+        };
+    }
+}

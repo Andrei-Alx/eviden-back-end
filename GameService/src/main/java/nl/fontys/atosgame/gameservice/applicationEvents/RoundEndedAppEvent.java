@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationEvent;
 import java.util.UUID;
 
 public class RoundEndedAppEvent extends ApplicationEvent {
-    private UUID roundId;
+    private final UUID roundId;
     public RoundEndedAppEvent(Object source, UUID roundId) {
         super(source);
         this.roundId = roundId;

@@ -20,9 +20,9 @@ import org.springframework.stereotype.Service;
 public class RoundServiceImpl implements RoundService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RoundServiceImpl.class);
-    private GameService gameService;
-    private RoundRepository roundRepository;
-    private GameSocketController gameSocketController;
+    private final GameService gameService;
+    private final RoundRepository roundRepository;
+    private final GameSocketController gameSocketController;
 
     public RoundServiceImpl(
         @Autowired GameService gameService,

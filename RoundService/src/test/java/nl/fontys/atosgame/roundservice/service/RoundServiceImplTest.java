@@ -15,6 +15,9 @@ import nl.fontys.atosgame.roundservice.enums.TagType;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.model.*;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
+import nl.fontys.atosgame.roundservice.service.helpers.RoundLogic;
+import nl.fontys.atosgame.roundservice.service.interfaces.CardSetService;
+import nl.fontys.atosgame.roundservice.service.interfaces.PlayerRoundService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -25,7 +28,7 @@ class RoundServiceImplTest {
     private CardSetService cardSetService;
     private RoundRepository roundRepository;
     private PlayerRoundService playerRoundService;
-    private RoundLogicService roundLogicService;
+    private RoundLogic roundLogic;
     private StreamBridge streamBridge;
     private ApplicationEventPublisher applicationEventPublisher;
     private RoundServiceImpl roundService;
@@ -35,7 +38,7 @@ class RoundServiceImplTest {
         cardSetService = mock(CardSetService.class);
         roundRepository = mock(RoundRepository.class);
         playerRoundService = mock(PlayerRoundService.class);
-        roundLogicService = mock(RoundLogicService.class);
+        roundLogic = mock(RoundLogic.class);
         streamBridge = mock(StreamBridge.class);
         roundService =
             spy(
@@ -44,7 +47,7 @@ class RoundServiceImplTest {
                     cardSetService,
                     streamBridge,
                     playerRoundService,
-                    roundLogicService
+                    roundLogic
                 )
             );
     }
@@ -140,8 +143,8 @@ class RoundServiceImplTest {
         when(roundRepository.findById(round.getId())).thenReturn(Optional.of(round));
         when(roundRepository.save(round)).thenReturn(round);
         // Set behavior of logic service
-        when(roundLogicService.initializeRound(round, playerIds)).thenReturn(round);
-        when(roundLogicService.distributeCards(round)).thenReturn(round);
+        when(roundLogic.initializeRound(round, playerIds)).thenReturn(round);
+        when(roundLogic.distributeCards(round)).thenReturn(round);
 
         // Act
         Round result = roundService.startRound(round.getId(), playerIds, gameId);
@@ -183,8 +186,8 @@ class RoundServiceImplTest {
         when(roundRepository.findById(round.getId())).thenReturn(Optional.of(round));
         when(roundRepository.save(any(Round.class))).thenAnswer(i -> i.getArguments()[0]);
         // Set logic service
-        when(roundLogicService.initializeRound(round, playerIds)).thenReturn(round);
-        when(roundLogicService.distributeCards(round)).thenReturn(round);
+        when(roundLogic.initializeRound(round, playerIds)).thenReturn(round);
+        when(roundLogic.distributeCards(round)).thenReturn(round);
 
         // Act
         Round result = roundService.startRound(round.getId(), playerIds, gameId);
@@ -226,15 +229,15 @@ class RoundServiceImplTest {
         when(roundRepository.findById(round.getId())).thenReturn(Optional.of(round));
         when(roundRepository.save(round)).thenReturn(round);
         // Set behavior of logic service
-        when(roundLogicService.initializeRound(round, playerIds)).thenReturn(round);
-        when(roundLogicService.distributeCards(round)).thenReturn(round);
+        when(roundLogic.initializeRound(round, playerIds)).thenReturn(round);
+        when(roundLogic.distributeCards(round)).thenReturn(round);
 
         // Act
         Round result = roundService.startRound(round.getId(), playerIds, gameId);
 
         // Assert
-        verify(roundLogicService).initializeRound(round, playerIds);
-        verify(roundLogicService).distributeCards(round);
+        verify(roundLogic).initializeRound(round, playerIds);
+        verify(roundLogic).distributeCards(round);
     }
 
     @Test

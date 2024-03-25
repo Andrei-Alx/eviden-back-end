@@ -8,7 +8,7 @@ import java.util.UUID;
 import nl.fontys.atosgame.roundservice.dto.CardDislikeRequestDto;
 import nl.fontys.atosgame.roundservice.dto.CardLikeRequestDto;
 import nl.fontys.atosgame.roundservice.dto.CardSubmitRequestDto;
-import nl.fontys.atosgame.roundservice.service.RoundService;
+import nl.fontys.atosgame.roundservice.service.interfaces.RoundService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

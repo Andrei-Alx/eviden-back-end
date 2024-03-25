@@ -25,10 +25,10 @@ import org.springframework.stereotype.Service;
 public class ResultServiceImpl implements ResultService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ResultServiceImpl.class);
-    private PlayerRoundResultRepository playerRoundResultRepository;
-    private FinalResultRepository finalResultRepository;
+    private final PlayerRoundResultRepository playerRoundResultRepository;
+    private final FinalResultRepository finalResultRepository;
 
-    private ResultRepository resultRepository;
+    private final ResultRepository resultRepository;
 
     /**
      * Create a new ResultServiceImpl

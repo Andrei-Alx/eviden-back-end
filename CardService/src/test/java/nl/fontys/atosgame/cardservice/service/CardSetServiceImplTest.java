@@ -12,6 +12,7 @@ import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.model.CardSet;
 import nl.fontys.atosgame.cardservice.model.Tag;
 import nl.fontys.atosgame.cardservice.repository.CardSetRepository;
+import nl.fontys.atosgame.cardservice.service.interfaces.CardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.stream.function.StreamBridge;

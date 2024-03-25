@@ -4,6 +4,7 @@ package nl.fontys.atosgame.cardservice.service;
 import java.util.UUID;
 import nl.fontys.atosgame.cardservice.event.*;
 import nl.fontys.atosgame.cardservice.event.produced.CardSetEvent;
+import nl.fontys.atosgame.cardservice.service.interfaces.CardSetEventService;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;

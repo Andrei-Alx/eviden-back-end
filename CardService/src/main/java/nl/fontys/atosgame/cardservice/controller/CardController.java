@@ -8,8 +8,8 @@ import java.util.UUID;
 import jakarta.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
 import nl.fontys.atosgame.cardservice.model.Card;
-import nl.fontys.atosgame.cardservice.service.CardService;
-import nl.fontys.atosgame.cardservice.service.CardSetService;
+import nl.fontys.atosgame.cardservice.service.interfaces.CardService;
+import nl.fontys.atosgame.cardservice.service.interfaces.CardSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/cards")
 public class CardController {
 
-    private CardService cardService;
-    private CardSetService cardSetService;
+    private final CardService cardService;
+    private final CardSetService cardSetService;
 
     public CardController(@Autowired CardService cardService, @Autowired CardSetService cardSetService)
     {

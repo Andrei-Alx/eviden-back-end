@@ -20,7 +20,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class GameConsumers {
 
-    private GameService gameService;
+    private final GameService gameService;
 
     public GameConsumers(@Autowired GameService gameService) {
         this.gameService = gameService;

@@ -17,6 +17,10 @@ import nl.fontys.atosgame.roundservice.enums.TagType;
 import nl.fontys.atosgame.roundservice.event.produced.RoundCreatedEventKeyValue;
 import nl.fontys.atosgame.roundservice.model.*;
 import nl.fontys.atosgame.roundservice.repository.RoundRepository;
+import nl.fontys.atosgame.roundservice.service.interfaces.CardSetService;
+import nl.fontys.atosgame.roundservice.service.interfaces.PlayerRoundService;
+import nl.fontys.atosgame.roundservice.service.interfaces.RoundService;
+import nl.fontys.atosgame.roundservice.service.helpers.RoundLogic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +42,7 @@ public class RoundServiceImpl implements RoundService {
 
     private final PlayerRoundService playerRoundService;
 
-    private final RoundLogicService roundLogicService;
+    private final RoundLogic roundLogic;
 
     private final StreamBridge streamBridge;
 
@@ -47,13 +51,13 @@ public class RoundServiceImpl implements RoundService {
         @Autowired CardSetService cardSetService,
         @Autowired StreamBridge streamBridge,
         @Autowired PlayerRoundService playerRoundService,
-        @Autowired RoundLogicService roundLogicService
+        @Autowired RoundLogic roundLogic
     ) {
         this.roundRepository = roundRepository;
         this.cardSetService = cardSetService;
         this.playerRoundService = playerRoundService;
         this.streamBridge = streamBridge;
-        this.roundLogicService = roundLogicService;
+        this.roundLogic = roundLogic;
     }
 
     /**
@@ -109,13 +113,13 @@ public class RoundServiceImpl implements RoundService {
         Round round = roundOptional.get();
 
         // Initialize the round so that it has all the player rounds
-        round = roundLogicService.initializeRound(round, playerIds);
+        round = roundLogic.initializeRound(round, playerIds);
 
         // Change the status of the round to InProgress and send event
         round.setStatus(RoundStatus.IN_PROGRESS);
 
         // Distribute the cards to the players
-        round = roundLogicService.distributeCards(round);
+        round = roundLogic.distributeCards(round);
 
         // Save to db
         round = roundRepository.save(round);
@@ -453,16 +457,6 @@ public class RoundServiceImpl implements RoundService {
             new RoundCreatedEventKeyValue(gameId, round)
         );
         return round;
-    }
-
-    /**
-     * Add a playerRound to the round
-     * @param round The round to add to
-     * @param playerRound The playerRound to add
-     */
-    @Override
-    public void addPlayerRound(Round round, PlayerRound playerRound) {
-        round.getPlayerRounds().add(playerRound);
     }
 
     /**

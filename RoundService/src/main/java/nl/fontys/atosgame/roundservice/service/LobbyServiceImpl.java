@@ -6,6 +6,7 @@ import java.util.UUID;
 import jakarta.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.roundservice.model.Lobby;
 import nl.fontys.atosgame.roundservice.repository.LobbyRepository;
+import nl.fontys.atosgame.roundservice.service.interfaces.LobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

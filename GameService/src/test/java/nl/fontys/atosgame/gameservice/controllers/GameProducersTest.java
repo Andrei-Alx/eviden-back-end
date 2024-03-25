@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.UUID;
+
+import nl.fontys.atosgame.gameservice.controllers.produced.GameProducers;
 import nl.fontys.atosgame.gameservice.dto.CreateGameEventDto;
 import nl.fontys.atosgame.gameservice.event.produced.GameCreatedEvent;
 import nl.fontys.atosgame.gameservice.event.produced.GameStartedEvent;

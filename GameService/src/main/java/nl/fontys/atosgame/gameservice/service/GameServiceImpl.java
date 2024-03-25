@@ -11,6 +11,8 @@ import nl.fontys.atosgame.gameservice.enums.RoundStatus;
 import nl.fontys.atosgame.gameservice.exceptions.EmptyStringException;
 import nl.fontys.atosgame.gameservice.model.*;
 import nl.fontys.atosgame.gameservice.repository.GameRepository;
+import nl.fontys.atosgame.gameservice.service.interfaces.CardSetService;
+import nl.fontys.atosgame.gameservice.service.interfaces.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.ApplicationListener;

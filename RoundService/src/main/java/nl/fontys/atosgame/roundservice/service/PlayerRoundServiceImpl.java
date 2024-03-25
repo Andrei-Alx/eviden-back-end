@@ -9,6 +9,8 @@ import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
 import nl.fontys.atosgame.roundservice.model.Tag;
 import nl.fontys.atosgame.roundservice.repository.PlayerRoundRepository;
+import nl.fontys.atosgame.roundservice.service.interfaces.CardService;
+import nl.fontys.atosgame.roundservice.service.interfaces.PlayerRoundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.ApplicationEventPublisher;
@@ -21,10 +23,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class PlayerRoundServiceImpl implements PlayerRoundService {
 
-    private CardService cardService;
-    private StreamBridge streamBridge;
-    private ApplicationEventPublisher eventPublisher;
-    private PlayerRoundRepository playerRoundRepository;
+    private final CardService cardService;
+    private final StreamBridge streamBridge;
+    private final ApplicationEventPublisher eventPublisher;
+    private final PlayerRoundRepository playerRoundRepository;
 
     public PlayerRoundServiceImpl(
         @Autowired CardService cardService,
@@ -69,24 +71,7 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
 
         // check if phase has ended
         if (previousPhase != currentPhase) {
-            streamBridge.send(
-                "producePlayerPhaseEnded-in-0",
-                new PlayerPhaseEndedDto(
-                    previousPhase.ordinal(),
-                    playerRound.getPlayerId(),
-                    gameId,
-                    roundId
-                )
-            );
-            streamBridge.send(
-                "producePlayerPhaseStarted-in-0",
-                new PlayerPhaseStartedDto(
-                    currentPhase.ordinal(),
-                    playerRound.getPlayerId(),
-                    gameId,
-                    roundId
-                )
-            );
+            phaseEnded(playerRound, gameId, roundId, previousPhase, currentPhase);
         }
 
         return playerRound;
@@ -155,24 +140,7 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
         }
 
         if (previousPhase != currentPhase) {
-            streamBridge.send(
-                "producePlayerPhaseEnded-in-0",
-                new PlayerPhaseEndedDto(
-                    previousPhase.ordinal(),
-                    playerRound.getPlayerId(),
-                    gameId,
-                    roundId
-                )
-            );
-            streamBridge.send(
-                "producePlayerPhaseStarted-in-0",
-                new PlayerPhaseStartedDto(
-                    currentPhase.ordinal(),
-                    playerRound.getPlayerId(),
-                    gameId,
-                    roundId
-                )
-            );
+            phaseEnded(playerRound, gameId, roundId, previousPhase, currentPhase);
         }
 
         return playerRound;
@@ -328,5 +296,26 @@ public class PlayerRoundServiceImpl implements PlayerRoundService {
      */
     private boolean hasCardInHand(PlayerRound playerRound, Card card) {
         return playerRound.getDistributedCards().stream().anyMatch(c -> c.getId().equals(card.getId()));
+    }
+
+    private void phaseEnded(PlayerRound playerRound, UUID gameId, UUID roundId, PlayerRoundPhase previousPhase, PlayerRoundPhase currentPhase) {
+        streamBridge.send(
+                "producePlayerPhaseEnded-in-0",
+                new PlayerPhaseEndedDto(
+                        previousPhase.ordinal(),
+                        playerRound.getPlayerId(),
+                        gameId,
+                        roundId
+                )
+        );
+        streamBridge.send(
+                "producePlayerPhaseStarted-in-0",
+                new PlayerPhaseStartedDto(
+                        currentPhase.ordinal(),
+                        playerRound.getPlayerId(),
+                        gameId,
+                        roundId
+                )
+        );
     }
 }

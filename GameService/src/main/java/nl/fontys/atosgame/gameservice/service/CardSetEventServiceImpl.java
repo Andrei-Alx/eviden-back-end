@@ -2,6 +2,7 @@ package nl.fontys.atosgame.gameservice.service;
 
 import nl.fontys.atosgame.gameservice.event.EventFactory;
 import nl.fontys.atosgame.gameservice.event.produced.CardSetRequestEvent;
+import nl.fontys.atosgame.gameservice.service.interfaces.CardSetEventService;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class CardSetEventServiceImpl implements CardSetEventService{
+public class CardSetEventServiceImpl implements CardSetEventService {
 
     @Override
     public Message<CardSetRequestEvent> cardSetRequest() {

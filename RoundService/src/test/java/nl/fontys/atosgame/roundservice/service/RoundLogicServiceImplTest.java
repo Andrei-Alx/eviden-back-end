@@ -12,18 +12,23 @@ import nl.fontys.atosgame.roundservice.enums.RoundStatus;
 import nl.fontys.atosgame.roundservice.enums.ShowResults;
 import nl.fontys.atosgame.roundservice.enums.ShuffleMethod;
 import nl.fontys.atosgame.roundservice.model.*;
+import nl.fontys.atosgame.roundservice.service.interfaces.CardShuffler;
+import nl.fontys.atosgame.roundservice.service.interfaces.RoundService;
+import nl.fontys.atosgame.roundservice.service.helpers.RoundLogic;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class RoundLogicServiceImplTest {
 
     private CardShuffler cardShuffler;
-    private RoundLogicServiceImpl roundLogicService;
+
+    private RoundLogic roundLogicService;
 
     @BeforeEach
     void setUp() {
         cardShuffler = mock(CardShuffler.class);
-        roundLogicService = new RoundLogicServiceImpl(cardShuffler);
+        RoundService roundService = mock(RoundService.class);
+        roundLogicService = new RoundLogic(cardShuffler, roundService);
     }
 
     @Test

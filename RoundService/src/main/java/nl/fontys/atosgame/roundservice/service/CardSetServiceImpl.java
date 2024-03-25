@@ -6,6 +6,7 @@ import nl.fontys.atosgame.roundservice.event.produced.CardSetRequestEvent;
 import nl.fontys.atosgame.roundservice.model.CardSet;
 import nl.fontys.atosgame.roundservice.model.Tag;
 import nl.fontys.atosgame.roundservice.repository.CardSetRepository;
+import nl.fontys.atosgame.roundservice.service.interfaces.CardSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;

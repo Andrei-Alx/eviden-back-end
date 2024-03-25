@@ -2,12 +2,11 @@ package nl.fontys.atosgame.cardservice.service;
 
 import java.util.Collection;
 import java.util.UUID;
-import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
+
 import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.repository.CardRepository;
+import nl.fontys.atosgame.cardservice.service.interfaces.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CardServiceImpl implements CardService {
 
-    private CardRepository cardRepository;
+    private final CardRepository cardRepository;
 
     public CardServiceImpl(
         @Autowired CardRepository cardRepository

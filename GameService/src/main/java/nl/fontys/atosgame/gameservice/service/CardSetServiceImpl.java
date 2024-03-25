@@ -3,11 +3,11 @@ package nl.fontys.atosgame.gameservice.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import nl.fontys.atosgame.gameservice.event.produced.CardSetRequestEvent;
 import nl.fontys.atosgame.gameservice.model.CardSet;
 import nl.fontys.atosgame.gameservice.repository.CardSetRepository;
+import nl.fontys.atosgame.gameservice.service.interfaces.CardSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
@@ -19,8 +19,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class CardSetServiceImpl implements CardSetService {
 
-    private CardSetRepository cardSetRepository;
-    private StreamBridge streamBridge;
+    private final CardSetRepository cardSetRepository;
+    private final StreamBridge streamBridge;
 
     public CardSetServiceImpl(@Autowired CardSetRepository cardSetRepository, @Autowired StreamBridge streamBridge) {
         this.cardSetRepository = cardSetRepository;

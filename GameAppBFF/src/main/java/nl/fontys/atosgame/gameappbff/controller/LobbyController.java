@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/gameappbff")
 public class LobbyController {
 
-    private LobbyService lobbyService;
+    private final LobbyService lobbyService;
 
     private LobbyController(@Autowired LobbyService lobbyService) {
         this.lobbyService = lobbyService;

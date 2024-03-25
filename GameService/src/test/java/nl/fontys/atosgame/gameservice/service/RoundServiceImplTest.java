@@ -3,6 +3,7 @@ package nl.fontys.atosgame.gameservice.service;
 import nl.fontys.atosgame.gameservice.enums.RoundStatus;
 import nl.fontys.atosgame.gameservice.model.Round;
 import nl.fontys.atosgame.gameservice.repository.RoundRepository;
+import nl.fontys.atosgame.gameservice.service.interfaces.GameService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationEventPublisher;

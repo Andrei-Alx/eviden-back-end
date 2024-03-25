@@ -3,6 +3,7 @@ package nl.fontys.atosgame.lobbyservice.controller;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
+import nl.fontys.atosgame.lobbyservice.controller.produced.LobbyEventProducers;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyDeletedDto;
 import nl.fontys.atosgame.lobbyservice.dto.LobbyJoinedDto;
 import nl.fontys.atosgame.lobbyservice.event.produced.LobbyCreatedEvent;

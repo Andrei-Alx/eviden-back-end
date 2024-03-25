@@ -13,6 +13,8 @@ import nl.fontys.atosgame.lobbyservice.model.Lobby;
 import nl.fontys.atosgame.lobbyservice.model.LobbySettings;
 import nl.fontys.atosgame.lobbyservice.model.Player;
 import nl.fontys.atosgame.lobbyservice.repository.LobbyRepository;
+import nl.fontys.atosgame.lobbyservice.service.interfaces.LobbyService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
@@ -27,17 +29,13 @@ public class LobbyServiceImpl implements LobbyService {
 
     private final LobbyRepository lobbyRepository;
 
-    private final LobbyCodeGenerator lobbyCodeGenerator;
-
     private final StreamBridge streamBridge;
 
     public LobbyServiceImpl(
         @Autowired LobbyRepository lobbyRepository,
-        @Autowired LobbyCodeGenerator lobbyCodeGenerator,
         @Autowired StreamBridge streamBridge
     ) {
         this.lobbyRepository = lobbyRepository;
-        this.lobbyCodeGenerator = lobbyCodeGenerator;
         this.streamBridge = streamBridge;
     }
 
@@ -53,7 +51,7 @@ public class LobbyServiceImpl implements LobbyService {
         Lobby lobby = new Lobby();
         lobby.setLobbySettings(settings);
         lobby.setGameId(gameId);
-        lobby.setLobbyCode(lobbyCodeGenerator.generateLobbyCode());
+        lobby.setLobbyCode(generateLobbyCode());
         Lobby createdLobby = lobbyRepository.save(lobby);
         streamBridge.send("produceLobbyCreated-in-0", createdLobby);
         return lobbyRepository.save(lobby);
@@ -183,5 +181,15 @@ public class LobbyServiceImpl implements LobbyService {
     @Override
     public Optional<Lobby> getByLobbyCode(String lobbyCode) {
         return Optional.ofNullable(lobbyRepository.getByLobbyCode(lobbyCode));
+    }
+
+    /**
+     * Generates a lobby code.
+     *
+     * @return The generated lobby code.
+     */
+    @Override
+    public String generateLobbyCode() {
+        return RandomStringUtils.random(6, true, false).toUpperCase();
     }
 }

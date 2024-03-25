@@ -1,6 +1,5 @@
 package nl.fontys.atosgame.roundservice.service;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Optional;
@@ -9,6 +8,9 @@ import nl.fontys.atosgame.roundservice.applicationevents.PlayerRoundFinishedAppE
 import nl.fontys.atosgame.roundservice.model.Game;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
 import nl.fontys.atosgame.roundservice.model.Round;
+import nl.fontys.atosgame.roundservice.service.helpers.PlayerRoundFinishedHandler;
+import nl.fontys.atosgame.roundservice.service.interfaces.GameService;
+import nl.fontys.atosgame.roundservice.service.interfaces.RoundService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

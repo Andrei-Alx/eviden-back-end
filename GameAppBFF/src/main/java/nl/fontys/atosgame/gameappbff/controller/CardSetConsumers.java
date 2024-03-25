@@ -17,7 +17,7 @@ import java.util.function.Function;
  */
 @Controller
 public class CardSetConsumers {
-    private CardSeeder cardSeeder;
+    private final CardSeeder cardSeeder;
 
     public CardSetConsumers(@Autowired CardSeeder cardSeeder) {
         this.cardSeeder = cardSeeder;

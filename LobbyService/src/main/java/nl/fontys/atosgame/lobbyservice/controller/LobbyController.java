@@ -15,7 +15,7 @@ import nl.fontys.atosgame.lobbyservice.exceptions.EmptyPlayerNameException;
 import nl.fontys.atosgame.lobbyservice.exceptions.LobbyFullException;
 import nl.fontys.atosgame.lobbyservice.model.Lobby;
 import nl.fontys.atosgame.lobbyservice.model.Player;
-import nl.fontys.atosgame.lobbyservice.service.LobbyService;
+import nl.fontys.atosgame.lobbyservice.service.interfaces.LobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -4,8 +4,8 @@ import nl.fontys.atosgame.roundservice.enums.TagType;
 import nl.fontys.atosgame.roundservice.model.Card;
 import nl.fontys.atosgame.roundservice.model.CardSet;
 import nl.fontys.atosgame.roundservice.model.Tag;
-import nl.fontys.atosgame.roundservice.service.CardService;
-import nl.fontys.atosgame.roundservice.service.CardSetService;
+import nl.fontys.atosgame.roundservice.service.interfaces.CardService;
+import nl.fontys.atosgame.roundservice.service.interfaces.CardSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

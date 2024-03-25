@@ -2,6 +2,7 @@ package nl.fontys.atosgame.gameservice.service;
 
 import nl.fontys.atosgame.gameservice.model.Lobby;
 import nl.fontys.atosgame.gameservice.repository.LobbyRepository;
+import nl.fontys.atosgame.gameservice.service.interfaces.LobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

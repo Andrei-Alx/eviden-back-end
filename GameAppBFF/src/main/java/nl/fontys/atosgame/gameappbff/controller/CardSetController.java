@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/gameappbff")
 public class CardSetController {
 
-    private CardSetService cardSetService;
+    private final CardSetService cardSetService;
 
     private CardSetController(@Autowired CardSetService cardSetService) {
         this.cardSetService = cardSetService;
