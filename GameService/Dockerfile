@@ -7,7 +7,7 @@ COPY . /usr/src/app
 RUN mvn package -Dmaven.test.skip
 
 # For Java 21,
-FROM amazoncorretto:21-alpine
+FROM eclipse-temurin:21-alpine
 
 ARG JAR_FILE=GameService-0.0.1-SNAPSHOT.jar
 
@@ -16,4 +16,4 @@ WORKDIR /opt/app
 # Copy the spring-boot-api-tutorial.jar from the maven stage to the /opt/app directory of the current stage.
 COPY --from=maven /usr/src/app/target/${JAR_FILE} /opt/app/
 
-ENTRYPOINT ["java","-jar","GameService-0.0.1-SNAPSHOT.jar"]
+CMD ["java","-jar","GameService-0.0.1-SNAPSHOT.jar"]
