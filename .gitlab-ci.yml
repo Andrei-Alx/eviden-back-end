@@ -6,7 +6,7 @@ stages: # List of stages for jobs, and their order of execution
 variables:
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
-  Build_IMAGE: "maven:3.9.6-amazoncorretto-17"
+  Build_IMAGE: "maven:3.9.6-amazoncorretto-21"
   Release_IMAGE: "docker:dind"
   DOCKER_HOST: "tcp://docker:2375"
   DOCKER_TLS_CERTDIR: ""
@@ -49,7 +49,7 @@ release-api-gateway:
     - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_API_GATEWAY" -t "$CI_REG_IMG_API_GATEWAY:$CI_COMMIT_SHORT_SHA" APIGateway/
     - echo "API Gateway Latest Release Pushed to Docker Hub!"
   only: 
-    - develop
+    - development
     - main
 
 
@@ -104,7 +104,7 @@ release-card-service:
     - echo "Card Service Latest Release Pushed to Docker Hub!"
   only: 
     - main
-    - develop
+    - development
 
 # Build and Release Game service
 build-game-service: # This job runs in the build stage, which runs first.
@@ -155,7 +155,7 @@ releases-game-service:
     - echo "Game Service Latest Release Pushed to Docker Hub!"
   only: 
     - main
-    - develop
+    - development
 
 # Build and Release Lobby service
 build-lobby-service: # This job runs in the build stage, which runs first.
@@ -206,7 +206,7 @@ release-lobby-service:
     - echo "Lobby Service Latest Release Pushed to Docker Hub!"
   only: 
     - main
-    - develop
+    - development
 
 # Build and Release Round service
 build-round-service: # This job runs in the build stage, which runs first.
@@ -259,7 +259,7 @@ release-round-service:
     - echo "Round Service Latest Release Pushed to Docker Hub!"
   only: 
     - main
-    - develop  
+    - development  
 
 # Build and Release for GameBFF
 build-gamebff: # This job runs in the build stage, which runs first.
@@ -310,5 +310,5 @@ release-gamebff-service:
     - echo "Game App BFF Latest Release Pushed to Docker Hub!"
   only: 
     - main
-    - develop
+    - development
 
