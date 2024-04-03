@@ -50,7 +50,7 @@ release-api-gateway:
     - echo "API Gateway Latest Release Pushed to Docker Hub!"
   only: 
     ##- development
-    - main
+   ## - main
 
 
 # Build and Release Card service
