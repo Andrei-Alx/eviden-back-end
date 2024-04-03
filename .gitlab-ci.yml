@@ -49,7 +49,7 @@ release-api-gateway:
     - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_API_GATEWAY" -t "$CI_REG_IMG_API_GATEWAY:$CI_COMMIT_SHORT_SHA" APIGateway/
     - echo "API Gateway Latest Release Pushed to Docker Hub!"
   only: 
-    - development
+    ##- development
     - main
 
 
