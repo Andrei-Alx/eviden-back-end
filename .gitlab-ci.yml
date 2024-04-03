@@ -44,7 +44,7 @@ release-api-gateway:
       alias: docker
   before_script:
     - echo "'$DOCKER_HUB_PASSWORD' + $DOCKER_HUB_USERNAME"
-    ##- echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
   script:
     - docker buildx create --use
     - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_API_GATEWAY" -t "$CI_REG_IMG_API_GATEWAY:$CI_COMMIT_SHORT_SHA" APIGateway/
