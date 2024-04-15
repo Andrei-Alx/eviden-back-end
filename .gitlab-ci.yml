@@ -1,6 +1,7 @@
 
 stages: # List of stages for jobs, and their order of execution
   - build
+  - test
   - release
 
 variables:
@@ -313,3 +314,18 @@ release-gamebff-service:
     - main
     - development
 
+# Test code coverage
+qodana:
+   stage: test
+   only:
+      - Eviden-22
+   image:
+      name: jetbrains/qodana-<linter>
+      entrypoint: [""]
+   variables:
+      QODANA_TOKEN: $qodana_token
+   script:
+      - qodana
+   artifacts:
+      paths:
+         - qodana
