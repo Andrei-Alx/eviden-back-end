@@ -1,5 +1,6 @@
 version: '3.8'
 services:
+  # MESSAGING/KAFKA RELATED SERVICES
   zookeeper:
     container_name: zookeeper
     image: confluentinc/cp-zookeeper:latest
@@ -13,7 +14,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     ports:
-      - 22181:2181
+      - "22181:2181"
     networks:
       - atos_network
     healthcheck:
@@ -34,7 +35,7 @@ services:
       - round-service-db
       - lobby-service-db
     ports:
-      - 29092:29092
+      - "29092:29092"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -61,7 +62,7 @@ services:
     image: factorhouse/kpow-ce
     container_name: kpow
     ports:
-      - 3000:3000
+      - "3000:3000"
     deploy:
       restart_policy:
         condition: on-failure
@@ -71,6 +72,7 @@ services:
     networks:
       - atos_network
 
+  # DATABASES
   card-service-db:
     image: mysql:latest
     container_name: card-service-db
@@ -81,7 +83,7 @@ services:
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
     ports:
-      - 3307:3306
+      - "3307:3306"
     deploy:
       restart_policy:
         condition: on-failure
@@ -101,7 +103,7 @@ services:
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
     ports:
-      - 3308:3306
+      - "3308:3306"
     deploy:
       restart_policy:
         condition: on-failure
@@ -121,7 +123,7 @@ services:
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
     ports:
-      - 3309:3306
+      - "3309:3306"
     deploy:
       restart_policy:
         condition: on-failure
@@ -141,7 +143,7 @@ services:
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
     ports:
-      - 3310:3306
+      - "3310:3306"
     deploy:
       restart_policy:
         condition: on-failure
@@ -161,23 +163,7 @@ services:
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
     ports:
-      - 3312:3306
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 45s
-        max_attempts: 3
-        window: 180s
-    volumes:
-      - db:/var/lib/mysql
-    networks:
-      - atos_network
-
-  adminer:
-    image: adminer:latest
-    container_name: adminer
-    ports:
-      - 8020:8080
+      - "3312:3306"
     deploy:
       restart_policy:
         condition: on-failure
@@ -187,36 +173,12 @@ services:
     networks:
       - atos_network
 
-  game-app:
-    image: fhictdev/eviden-game_app-fe:latest
-    container_name: game-app
-    ports:
-      - 80:80
-    environment:
-        - PORT=3001
-        - HTTPS=false
-        - REACT_APP_SERVER_HOST_IP="0.0.0.0"
-    depends_on:
-      - game-service
-      - gameappbff
-      - round-service
-      - lobby-service
-      - card-service
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 45s
-        max_attempts: 3
-        window: 180s
-    networks:
-      - atos_network
-
-
+  # Microservices
   card-service:
-    image: fhictdev/eviden-card-svc:latest
+    build: ./CardService
     container_name: card-service
     ports:
-      - 8001:8001
+      - "8001:8001"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://card-service-db/card_db?useSSL=false
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
@@ -236,15 +198,15 @@ services:
       - atos_network
 
   gameappbff:
-    image: fhictdev/eviden-game-app-bff:latest
+    build: ./GameAppBFF
     container_name: gameappbff
     ports:
-      - 8004:8004
+      - "8004:8004"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://gameappbff-db/gameappbff_db?useSSL=false
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - SPRING_DATASOURCE_USERNAME=myuser
-      - SPRING_DATASOURCE_PASSWORD=mypassword
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
     deploy:
       restart_policy:
         condition: on-failure
@@ -258,15 +220,15 @@ services:
       - atos_network
 
   round-service:
-    image: fhictdev/eviden-round-svc:latest
+    build: ./RoundService
     container_name: round-service
     ports:
-      - 8002:8002
+      - "8002:8002"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://round-service-db:3306/round_db?useSSL=false
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - SPRING_DATASOURCE_USERNAME=myuser
-      - SPRING_DATASOURCE_PASSWORD=mypassword
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
     depends_on:
       kafka:
         condition: service_healthy
@@ -280,32 +242,32 @@ services:
       - atos_network
 
   lobby-service:
-    image: fhictdev/eviden-lobby-svc:latest
+    build: ./LobbyService
     container_name: lobby-service
     ports:
-      - 8006:8006
+      - "8006:8006"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://lobby-service-db:3306/lobby_db?useSSL=false
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - SPRING_DATASOURCE_USERNAME=myuser
-      - SPRING_DATASOURCE_PASSWORD=mypassword
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
     depends_on:
       kafka:
         condition: service_healthy
-#    deploy:
-#      restart_policy:
-#        condition: on-failure
-#        delay: 45s
-#        max_attempts: 3
-#        window: 180s
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 45s
+        max_attempts: 3
+        window: 180s
     networks:
       - atos_network
 
   game-service:
-    image: fhictdev/eviden-game-svc:latest
+    build: ./GameService
     container_name: game-service
     ports:
-      - 8005:8005
+      - "8005:8005"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://game-service-db:3306/game_db?useSSL=false
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
@@ -314,25 +276,44 @@ services:
     depends_on:
       kafka:
         condition: service_healthy
-#    deploy:
-#      restart_policy:
-#        condition: on-failure
-#        delay: 45s
-#        max_attempts: 3
-#        window: 180s
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 45s
+        max_attempts: 3
+        window: 180s
     networks:
       - atos_network
 
+  # Frontend
+  game-app:
+    build: ../eviden-front-end
+    container_name: game-app
+    ports:
+      - "80:80"
+    depends_on:
+      - game-service
+      - gameappbff
+      - round-service
+      - lobby-service
+      - card-service
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 45s
+        max_attempts: 3
+        window: 180s
+    networks:
+      - atos_network
+
+  # Gateway/reverse proxy for microservices
   api-gateway:
-    image: fhictdev/eviden-api-gateway:latest
+    build: ./APIGateway
     container_name: api-gateway
     ports:
-      - 8080:8080
+      - "8080:8080"
     networks:
       - atos_network
-
-volumes:
-  db:
 
 networks:
   atos_network:
