@@ -42,7 +42,7 @@ release-api-gateway:
   services:
     - name: docker:dind
   before_script:
-    - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+    - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   script:
     - docker build --pull -t $DOCKERHUB_USERNAME/eviden-api-gateway:$CI_COMMIT_REF_NAME APIGateway/
     - docker push $DOCKERHUB_USERNAME/eviden-api-gateway:$CI_COMMIT_REF_NAME
@@ -95,7 +95,7 @@ release-card-service:
   services:
     - name: docker:dind
   before_script:
-    - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+    - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   script:
     - docker build --pull -t $DOCKERHUB_USERNAME/eviden-card-service:$CI_COMMIT_REF_NAME CardService/
     - docker push $DOCKERHUB_USERNAME/eviden-card-service:$CI_COMMIT_REF_NAME
@@ -145,7 +145,7 @@ releases-game-service:
   services:
     - name: docker:dind
   before_script:
-    - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+    - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   script:
     - docker build --pull -t $DOCKERHUB_USERNAME/eviden-game-service:$CI_COMMIT_REF_NAME GameService/
     - docker push $DOCKERHUB_USERNAME/eviden-game-service:$CI_COMMIT_REF_NAME
@@ -195,7 +195,7 @@ release-lobby-service:
   services:
     - name: docker:dind
   before_script:
-    - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+    - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   script:
     - docker build --pull -t $DOCKERHUB_USERNAME/eviden-lobby-service:$CI_COMMIT_REF_NAME LobbyService/
     - docker push $DOCKERHUB_USERNAME/eviden-lobby-service:$CI_COMMIT_REF_NAME
@@ -247,7 +247,7 @@ release-round-service:
   services:
     - name: docker:dind
   before_script:
-    - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+    - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   script:
     - docker build --pull -t $DOCKERHUB_USERNAME/eviden-round-service:$CI_COMMIT_REF_NAME RoundService/
     - docker push $DOCKERHUB_USERNAME/eviden-round-service:$CI_COMMIT_REF_NAME
@@ -297,7 +297,7 @@ release-gamebff-service:
   services:
     - name: docker:dind
   before_script:
-    - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
+    - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   script:
     - docker build --pull -t $DOCKERHUB_USERNAME/eviden-gamebff-service:$CI_COMMIT_REF_NAME GameAppBFF/
     - docker push $DOCKERHUB_USERNAME/eviden-gamebff-service:$CI_COMMIT_REF_NAME
