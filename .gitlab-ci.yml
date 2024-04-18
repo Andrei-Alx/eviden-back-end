@@ -6,8 +6,8 @@ stages: # List of stages for jobs, and their order of execution
 variables:
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
-  Build_IMAGE: "maven:3.9.6-eclipse-temurin-21-alpine"
-  Release_IMAGE: "docker:dind"
+  BUILD_IMAGE: "maven:3.9.6-eclipse-temurin-21-alpine"
+  RELEASE_IMAGE: "docker:dind"
   DOCKER_HOST: "tcp://docker:2375"
   DOCKER_TLS_CERTDIR: ""
   DOCKER_DRIVER: overlay2
@@ -29,7 +29,7 @@ cache:
 # Build and Release API Gateway
 build-api-gateway: # This job runs in the build stage, which runs first.
   stage: build
-  image: $Build_IMAGE
+  image: $BUILD_IMAGE
   script:
     - echo "Running API Gateway Build"
     - cd APIGateway
@@ -38,15 +38,15 @@ build-api-gateway: # This job runs in the build stage, which runs first.
 
 release-api-gateway:
   stage: release
-  image: $Release_IMAGE
+  image: $RELEASE_IMAGE
   services:
     - name: docker:dind
       alias: docker
   before_script:
-    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+    - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
   script:
-    - docker buildx create --use
-    - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_API_GATEWAY" -t "$CI_REG_IMG_API_GATEWAY:$CI_COMMIT_SHORT_SHA" APIGateway/
+    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-api-gateway:$CI_COMMIT_REF_NAME APIGateway/
+    - docker push $DOCKERHUB_USERNAME/eviden-api-gateway:$CI_COMMIT_REF_NAME
     - echo "API Gateway Latest Release Pushed to Docker Hub!"
   only: 
     - development
@@ -56,7 +56,7 @@ release-api-gateway:
 # Build and Release Card service
 build-card-service: # This job runs in the build stage, which runs first.
   stage: build
-  image: $Build_IMAGE
+  image: $BUILD_IMAGE
   script:
     - echo "Running Card Service Build"
     - cd CardService
@@ -92,15 +92,15 @@ build-card-service: # This job runs in the build stage, which runs first.
 
 release-card-service:
   stage: release
-  image: $Release_IMAGE
+  image: $RELEASE_IMAGE
   services:
     - name: docker:dind
       alias: docker
   before_script:
-    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+    - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
   script:
-    - docker buildx create --use
-    - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_CARD_SERVICE" -t "$CI_REG_IMG_CARD_SERVICE:$CI_COMMIT_SHORT_SHA" CardService/
+    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-card-service:$CI_COMMIT_REF_NAME CardService/
+    - docker push $DOCKERHUB_USERNAME/eviden-card-service:$CI_COMMIT_REF_NAME
     - echo "Card Service Latest Release Pushed to Docker Hub!"
   only: 
     - main
@@ -109,7 +109,7 @@ release-card-service:
 # Build and Release Game service
 build-game-service: # This job runs in the build stage, which runs first.
   stage: build
-  image: $Build_IMAGE
+  image: $BUILD_IMAGE
   script:
     - echo "Running Game Service Build"
     - cd GameService
@@ -143,15 +143,15 @@ build-game-service: # This job runs in the build stage, which runs first.
 
 releases-game-service:
   stage: release
-  image: $Release_IMAGE
+  image: $RELEASE_IMAGE
   services:
     - name: docker:dind
       alias: docker
   before_script:
-    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+    - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
   script:
-    - docker buildx create --use
-    - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_GAME_SERVICE" -t "$CI_REG_IMG_GAME_SERVICE:$CI_COMMIT_SHORT_SHA" GameService/
+    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-game-service:$CI_COMMIT_REF_NAME GameService/
+    - docker push $DOCKERHUB_USERNAME/eviden-game-service:$CI_COMMIT_REF_NAME
     - echo "Game Service Latest Release Pushed to Docker Hub!"
   only: 
     - main
@@ -160,7 +160,7 @@ releases-game-service:
 # Build and Release Lobby service
 build-lobby-service: # This job runs in the build stage, which runs first.
   stage: build
-  image: $Build_IMAGE
+  image: $BUILD_IMAGE
   script:
     - echo "Running Lobby Service Build"
     - cd LobbyService
@@ -194,15 +194,15 @@ build-lobby-service: # This job runs in the build stage, which runs first.
 
 release-lobby-service:
   stage: release
-  image: $Release_IMAGE
+  image: $RELEASE_IMAGE
   services:
     - name: docker:dind
       alias: docker
   before_script:
-    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+    - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
   script:
-    - docker buildx create --use
-    - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_LOBBY_SERVICE" -t "$CI_REG_IMG_LOBBY_SERVICE:$CI_COMMIT_SHORT_SHA" LobbyService/
+    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-lobby-service:$CI_COMMIT_REF_NAME LobbyService/
+    - docker push $DOCKERHUB_USERNAME/eviden-lobby-service:$CI_COMMIT_REF_NAME
     - echo "Lobby Service Latest Release Pushed to Docker Hub!"
   only: 
     - main
@@ -211,7 +211,7 @@ release-lobby-service:
 # Build and Release Round service
 build-round-service: # This job runs in the build stage, which runs first.
   stage: build
-  image: $Build_IMAGE
+  image: $BUILD_IMAGE
   script:
     - echo "Running Round Service Build"
     - cd RoundService
@@ -247,15 +247,15 @@ build-round-service: # This job runs in the build stage, which runs first.
 
 release-round-service:
   stage: release
-  image: $Release_IMAGE
+  image: $RELEASE_IMAGE
   services:
     - name: docker:dind
       alias: docker
   before_script:
-    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+    - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
   script:
-    - docker buildx create --use
-    - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_ROUND_SERVICE" -t "$CI_REG_IMG_ROUND_SERVICE:$CI_COMMIT_SHORT_SHA" RoundService/
+    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-round-service:$CI_COMMIT_REF_NAME RoundService/
+    - docker push $DOCKERHUB_USERNAME/eviden-round-service:$CI_COMMIT_REF_NAME
     - echo "Round Service Latest Release Pushed to Docker Hub!"
   only: 
     - main
@@ -264,7 +264,7 @@ release-round-service:
 # Build and Release for GameBFF
 build-gamebff: # This job runs in the build stage, which runs first.
   stage: build
-  image: $Build_IMAGE
+  image: $BUILD_IMAGE
   script:
     - echo "Running Build"
     - cd GameAppBFF
@@ -298,15 +298,15 @@ build-gamebff: # This job runs in the build stage, which runs first.
 
 release-gamebff-service:
   stage: release
-  image: $Release_IMAGE
+  image: $RELEASE_IMAGE
   services:
     - name: docker:dind
       alias: docker
   before_script:
-    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+    - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
   script:
-    - docker buildx create --use
-    - docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t "$CI_REG_IMG_GAMEAPPBFF" -t "$CI_REG_IMG_GAMEAPPBFF:$CI_COMMIT_SHORT_SHA" GameAppBFF/
+    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-gamebff-service:$CI_COMMIT_REF_NAME GameAppBFF/
+    - docker push $DOCKERHUB_USERNAME/eviden-gamebff-service:$CI_COMMIT_REF_NAME
     - echo "Game App BFF Latest Release Pushed to Docker Hub!"
   only: 
     - main
