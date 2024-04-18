@@ -7,7 +7,7 @@ variables:
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
   BUILD_IMAGE: "maven:3.9.6-eclipse-temurin-21-alpine"
-  RELEASE_IMAGE: "docker:latest"
+  RELEASE_IMAGE: "docker:dind"
   DOCKER_HOST: "tcp://docker:2375"
   DOCKER_TLS_CERTDIR: ""
   DOCKER_DRIVER: overlay2
