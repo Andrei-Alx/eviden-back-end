@@ -327,6 +327,7 @@ sonarcloud-check:
     paths:
       - .sonar/cache
   script:
+    - cd CardService
     - mvn verify sonar:sonar
   #rules:
    # - if: $CI_COMMIT_REF_NAME == 'main' || $CI_PIPELINE_SOURCE == 'merge_request_event'
