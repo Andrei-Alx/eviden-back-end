@@ -328,5 +328,5 @@ sonarcloud-check:
       - .sonar/cache
   script:
     - mvn verify sonar:sonar
-  rules:
-    - if: $CI_COMMIT_REF_NAME == 'main' || $CI_PIPELINE_SOURCE == 'merge_request_event'
+  #rules:
+   # - if: $CI_COMMIT_REF_NAME == 'main' || $CI_PIPELINE_SOURCE == 'merge_request_event'
