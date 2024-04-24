@@ -25,7 +25,7 @@
         <!--Prettier settings-->
         <plugin.prettier.goal>write</plugin.prettier.goal>
         <!-- SonarQube Authentication -->
-		<sonar.organization>evidensonar</sonar.organization>
+		<sonar.organization>eviden-dev</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.projectKey>{env.Sonar_Cloud_Project_Key}</sonar.projectKey>
 		<sonar.login>{env.Sonar_Cloud_Login}</sonar.login>
@@ -190,7 +190,7 @@
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.9.1.2184</version>
+                <version>3.9.6</version>
             </plugin>
 
         </plugins>
