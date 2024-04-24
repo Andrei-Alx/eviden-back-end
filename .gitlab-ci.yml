@@ -309,7 +309,7 @@ sonarcloud-check-Cardservice:
    - mvn verify sonar:sonar \
     -Dsonar.projectKey=$Sonar_Cloud_Project_Key\
     -Dsonar.organization=$SONAR_ORGANIZATION\
-    -Dsonar.host.url=https://sonarcloud.io \
+    -Dsonar.host.url=$SONAR_HOST_URL\
     -Dsonar.login=$SONAR_TOKEN
   only:
     - merge_requests
@@ -377,7 +377,7 @@ sonarcloud-check-GameBFF:
    - mvn verify sonar:sonar \
     -Dsonar.projectKey=$Sonar_Cloud_Project_Key\
     -Dsonar.organization=$SONAR_ORGANIZATION\
-    -Dsonar.host.url=https://sonarcloud.io \
+    -Dsonar.host.url=$SONAR_HOST_URL \
     -Dsonar.login=$SONAR_TOKEN
 
   only:
