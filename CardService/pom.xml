@@ -28,7 +28,7 @@
 		<sonar.organization>eviden-dev</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.projectKey>{env.Sonar_Cloud_Project_Key}</sonar.projectKey>
-		<sonar.login>{env.Sonar_Cloud_Login}</sonar.login>
+		<!--<sonar.login>{env.Sonar_Cloud_Login}</sonar.login>-->
     </properties>
     <dependencies>
         <dependency>
