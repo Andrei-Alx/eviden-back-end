@@ -22,9 +22,9 @@
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}\target\site\jacoco\jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.language>java</sonar.language>
-        <!-- SonarQube Authentication -->
-		<sonar.host.url>http://localhost:9000</sonar.host.url>
-		<sonar.login>sqa_376722bd4e1b384884443fab7ecfc4a884615abf</sonar.login>
+      <!-- SonarQube Authentication -->
+		<sonar.organization>eviden-dev</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
     </properties>
     <dependencies>

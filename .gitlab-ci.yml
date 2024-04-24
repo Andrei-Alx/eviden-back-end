@@ -1,6 +1,7 @@
 
 stages: # List of stages for jobs, and their order of execution
   - build
+  - test
   - release
 
 variables:
@@ -11,19 +12,8 @@ variables:
   DOCKER_HOST: "tcp://docker:2375"
   DOCKER_TLS_CERTDIR: ""
   DOCKER_DRIVER: overlay2
-
-
-cache:
-  paths:
-    - .m2/repository
-    - .sonar/cache
-    -  CardService/target
-    -  GameService/target
-    -  LobbyService/target
-    -  RoundService/target
-    -  AdminAppBFF/target
-    -  GameAppBFF/target
-    -  APIGateway/target
+  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+  GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
 
 
 # Build and Release API Gateway
@@ -48,8 +38,8 @@ release-api-gateway:
     - docker push $DOCKERHUB_USERNAME/eviden-api-gateway:$CI_COMMIT_REF_NAME
     - echo "API Gateway Latest Release Pushed to Docker Hub!"
   only: 
-    - development
-    - main
+   - development
+   - main
 
 
 # Build and Release Card service
@@ -305,4 +295,87 @@ release-gamebff-service:
   only: 
     - main
     - development
+
+# Test code coverage
+sonarcloud-check-Cardservice:
+  stage: test
+  image: $BUILD_IMAGE
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+   - cd CardService
+   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key
+
+  only:
+    - merge_requests
+    - main
+    - development
+    - Eviden-22
+   
+sonarcloud-check-Gameservice:
+  stage: test
+  image: $BUILD_IMAGE
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+   - cd GameService
+   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key
+
+  only:
+    - merge_requests
+    - main
+    - development
+
+sonarcloud-check-Lobbyservice:
+  stage: test
+  image: $BUILD_IMAGE
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+   - cd LobbyService
+   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key
+
+  only:
+    - merge_requests
+    - main
+    - development
+
+sonarcloud-check-Roundservice:
+  stage: test
+  image: $BUILD_IMAGE
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+   - cd RoundService
+   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key
+
+  only:
+    - merge_requests
+    - main
+    - development
+
+sonarcloud-check-GameBFF:
+  stage: test
+  image: $BUILD_IMAGE
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+   - cd GameAppBFF
+   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key
+
+  only:
+    - merge_requests
+    - main
+    - development
+    - Eviden-22
 
