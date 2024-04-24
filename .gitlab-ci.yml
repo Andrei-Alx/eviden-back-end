@@ -318,8 +318,8 @@ sonarcloud-check:
     paths:
       - .sonar/cache
   script:
-    - cd CardService
-    - ./mvnw verify sonar:sonar 
+   - cd CardService
+   - ./mvnw verify sonar:sonar
   only:
 ##    - merge_requests
   ##  - master
