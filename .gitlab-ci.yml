@@ -306,11 +306,7 @@ sonarcloud-check-Cardservice:
       - .sonar/cache
   script:
    - cd CardService
-   - mvn verify sonar:sonar \
-    -Dsonar.projectKey=$Sonar_Cloud_Project_Key\
-    -Dsonar.organization=$SONAR_ORGANIZATION\
-    -Dsonar.host.url=$SONAR_HOST_URL\
-    -Dsonar.login=$SONAR_TOKEN
+   - mvn verify sonar:sonar -Dsonar.projectKey=$SONAR_CLOUD_PROJECT_KEY -Dsonar.organization=eviden-dev -Dsonar.host.url=$SONAR_HOST_URL
   only:
     - merge_requests
     - main
@@ -374,11 +370,7 @@ sonarcloud-check-GameBFF:
       - .sonar/cache
   script:
    - cd GameAppBFF
-   - mvn verify sonar:sonar \
-    -Dsonar.projectKey=$Sonar_Cloud_Project_Key\
-    -Dsonar.organization=$SONAR_ORGANIZATION\
-    -Dsonar.host.url=$SONAR_HOST_URL \
-    -Dsonar.login=$SONAR_TOKEN
+   - mvn verify sonar:sonar -Dsonar.projectKey=$SONAR_CLOUD_PROJECT_KEY -Dsonar.organization=eviden-dev -Dsonar.host.url=$SONAR_HOST_URL
 
   only:
     - merge_requests
