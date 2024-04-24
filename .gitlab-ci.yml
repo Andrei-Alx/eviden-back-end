@@ -319,7 +319,8 @@ sonarcloud-check:
       - .sonar/cache
   script:
    - cd CardService
-   - mvn verify sonar:sonar 
+   - mvn verify sonar:sonar -Dsonar.projectKey=$SONAR_CLOUD_PROJECT_KEY
+
   only:
 ##    - merge_requests
   ##  - master
