@@ -310,8 +310,9 @@ sonarcloud-check-Cardservice:
 
   only:
     - merge_requests
-    - master
-    - develop
+    - main
+    - development
+    - Eviden-22
    
 sonarcloud-check-Gameservice:
   stage: test
@@ -326,8 +327,8 @@ sonarcloud-check-Gameservice:
 
   only:
     - merge_requests
-    - master
-    - develop   
+    - main
+    - development
 
 sonarcloud-check-Lobbyservice:
   stage: test
@@ -342,8 +343,8 @@ sonarcloud-check-Lobbyservice:
 
   only:
     - merge_requests
-    - master
-    - develop
+    - main
+    - development
 
 sonarcloud-check-Roundservice:
   stage: test
@@ -358,8 +359,8 @@ sonarcloud-check-Roundservice:
 
   only:
     - merge_requests
-    - master
-    - develop
+    - main
+    - development
 
 sonarcloud-check-GameBFF:
   stage: test
@@ -374,6 +375,7 @@ sonarcloud-check-GameBFF:
 
   only:
     - merge_requests
-    - master
-    - develop
+    - main
+    - development
+    - Eviden-22
 
