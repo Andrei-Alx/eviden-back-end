@@ -310,7 +310,7 @@ release-gamebff-service:
     - development
 
 # Test code coverage
-sonarcloud-check:
+sonarcloud-check-Cardservice:
   stage: test
   image: $BUILD_IMAGE
   cache:
@@ -322,7 +322,71 @@ sonarcloud-check:
    - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key
 
   only:
-##    - merge_requests
-  ##  - master
-    ##- develop
-    - Eviden-22
+    - merge_requests
+    - master
+    - develop
+   
+sonarcloud-check-Gameservice:
+  stage: test
+  image: $BUILD_IMAGE
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+   - cd GameService
+   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key
+
+  only:
+    - merge_requests
+    - master
+    - develop   
+
+sonarcloud-check-Lobbyservice:
+  stage: test
+  image: $BUILD_IMAGE
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+   - cd LobbyService
+   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key
+
+  only:
+    - merge_requests
+    - master
+    - develop
+
+sonarcloud-check-Roundservice:
+  stage: test
+  image: $BUILD_IMAGE
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+   - cd RoundService
+   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key
+
+  only:
+    - merge_requests
+    - master
+    - develop
+
+sonarcloud-check-GameBFF:
+  stage: test
+  image: $BUILD_IMAGE
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+   - cd GameAppBFF
+   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key
+
+  only:
+    - merge_requests
+    - master
+    - develop
+
