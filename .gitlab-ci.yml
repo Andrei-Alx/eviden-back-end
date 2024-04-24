@@ -319,8 +319,7 @@ sonarcloud-check:
       - .sonar/cache
   script:
     - cd CardService
-    - mvn --version
-    - mvn verify sonar:sonar 
+    - ./mvnw verify sonar:sonar 
   only:
 ##    - merge_requests
   ##  - master
