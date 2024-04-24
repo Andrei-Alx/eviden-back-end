@@ -308,7 +308,7 @@ sonarcloud-check-Cardservice:
    - cd CardService
    - mvn verify sonar:sonar \
     -Dsonar.projectKey=$Sonar_Cloud_Project_Key\
-    -Dsonar.organization=$SONAR_ORGANIZATION
+    -Dsonar.organization=$SONAR_ORGANIZATION\
     -Dsonar.host.url=https://sonarcloud.io \
     -Dsonar.login=$SONAR_TOKEN
   only:
@@ -376,7 +376,7 @@ sonarcloud-check-GameBFF:
    - cd GameAppBFF
    - mvn verify sonar:sonar \
     -Dsonar.projectKey=$Sonar_Cloud_Project_Key\
-    -Dsonar.organization=$SONAR_ORGANIZATION
+    -Dsonar.organization=$SONAR_ORGANIZATION\
     -Dsonar.host.url=https://sonarcloud.io \
     -Dsonar.login=$SONAR_TOKEN
 
