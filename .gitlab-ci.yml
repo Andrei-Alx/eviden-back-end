@@ -49,7 +49,7 @@ build-card-service: # This job runs in the build stage, which runs first.
   script:
     - echo "Running Card Service Build"
     - cd CardService
-    - mvn install -DskipTests
+    - mvn install 
     - echo "Card Service Build Complete!"
 
 ###unit-test-card-service: # This job runs in the test stage.
@@ -253,7 +253,7 @@ build-gamebff: # This job runs in the build stage, which runs first.
   script:
     - echo "Running Build"
     - cd GameAppBFF
-    - mvn install -DskipTests
+    - mvn install
     - echo "Game App BFF Build complete."
 
 #unit-test-gamebff: # This job runs in the test stage.
