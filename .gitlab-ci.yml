@@ -23,7 +23,7 @@ build-api-gateway: # This job runs in the build stage, which runs first.
   script:
     - echo "Running API Gateway Build"
     - cd APIGateway
-    - mvn install -DskipTests
+    - mvn install 
     - echo "API Gateway Build complete!"
 
 release-api-gateway:
@@ -101,7 +101,7 @@ build-game-service: # This job runs in the build stage, which runs first.
   script:
     - echo "Running Game Service Build"
     - cd GameService
-    - mvn install -DskipTests
+    - mvn install 
     - echo "Game Service Build Complete!"
 
 #unit-test-game-service: # This job runs in the test stage.
@@ -151,7 +151,7 @@ build-lobby-service: # This job runs in the build stage, which runs first.
   script:
     - echo "Running Lobby Service Build"
     - cd LobbyService
-    - mvn install -DskipTests
+    - mvn install
     - echo "Lobby Service Build Complete!"
 
 #unit-test-lobby-service: # This job runs in the test stage.
@@ -201,7 +201,7 @@ build-round-service: # This job runs in the build stage, which runs first.
   script:
     - echo "Running Round Service Build"
     - cd RoundService
-    - mvn install -DskipTests
+    - mvn install 
     - echo "Round Service Build Complete!"
 #  allow_failure: true
 
@@ -322,7 +322,8 @@ sonarcloud-check-Gameservice:
       - .sonar/cache
   script:
    - cd GameService
-   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key
+   
+   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key -Dsonar.organization=eviden-dev -Dsonar.host.url=$SONAR_HOST_URL
 
   only:
     - merge_requests
@@ -337,8 +338,8 @@ sonarcloud-check-Lobbyservice:
     paths:
       - .sonar/cache
   script:
-   - cd LobbyService
-   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key
+   - cd LobbyService 
+   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key -Dsonar.organization=eviden-dev -Dsonar.host.url=$SONAR_HOST_URL
 
   only:
     - merge_requests
@@ -354,7 +355,7 @@ sonarcloud-check-Roundservice:
       - .sonar/cache
   script:
    - cd RoundService
-   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key
+   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key -Dsonar.organization=eviden-dev -Dsonar.host.url=$SONAR_HOST_URL
 
   only:
     - merge_requests
