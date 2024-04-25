@@ -1,0 +1,92 @@
+[
+  {
+    "tags": [
+      {
+        "tagKey": "COLOR",
+        "tagValue": "Geel"
+      }
+    ],
+    "translations": [
+      {
+        "language": "nl",
+        "text": "Advies"
+      },
+      {
+        "language": "en",
+        "text": "Advice"
+      }
+    ]
+  },
+  {
+    "tags": [
+      {
+        "tagKey": "COLOR",
+        "tagValue": "Wit"
+      }
+    ],
+    "translations": [
+      {
+        "language": "nl",
+        "text": "Advies"
+      },
+      {
+        "language": "en",
+        "text": "Advice"
+      }
+    ]
+  },
+  {
+    "tags": [
+      {
+        "tagKey": "COLOR",
+        "tagValue": "Blauw"
+      }
+    ],
+    "translations": [
+      {
+        "language": "nl",
+        "text": "Advies"
+      },
+      {
+        "language": "en",
+        "text": "Advice"
+      }
+    ]
+  },
+  {
+    "tags": [
+      {
+        "tagKey": "COLOR",
+        "tagValue": "Rood"
+      }
+    ],
+    "translations": [
+      {
+        "language": "nl",
+        "text": "Advies"
+      },
+      {
+        "language": "en",
+        "text": "Advice"
+      }
+    ]
+  },
+  {
+    "tags": [
+      {
+        "tagKey": "COLOR",
+        "tagValue": "Groen"
+      }
+    ],
+    "translations": [
+      {
+        "language": "nl",
+        "text": "Advies"
+      },
+      {
+        "language": "en",
+        "text": "Advice"
+      }
+    ]
+  }
+  ]
