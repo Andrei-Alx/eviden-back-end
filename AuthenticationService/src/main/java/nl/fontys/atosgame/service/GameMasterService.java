@@ -1,4 +1,4 @@
-package nl.fontys.atosgame.autthenticationservice;
+package nl.fontys.atosgame.service;
 import nl.fontys.atosgame.model.GameMaster;
 import nl.fontys.atosgame.repository.GameMasterRepository;
 
