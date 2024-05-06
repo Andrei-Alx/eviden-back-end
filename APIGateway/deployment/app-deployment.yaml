@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eviden-api-gateway-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eviden-api-gateway
+  template:
+    metadata:
+      labels:
+        app: eviden-api-gateway
+    spec:
+      containers:
+        - name: eviden-api-gateway
+          image: i486205/eviden-api-gateway:development
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8180
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8180
+            initialDelaySeconds: 5
+            periodSeconds: 5

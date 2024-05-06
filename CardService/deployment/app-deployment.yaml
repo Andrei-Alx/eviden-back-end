@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eviden-card-service-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eviden-card-service-app
+  template:
+    metadata:
+      labels:
+        app: eviden-card-service-app
+    spec:
+      containers:
+        - name: eviden-card-service-app
+          image: i486205/eviden-card-service:development
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://eviden-card-service-db:3306/card_db"
+            - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
+              value: "my-cluster-kafka-bootstrap:9092"
+            - name: SPRING_JPA_HIBERNATE_DDL-AUTO
+              value: update
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8180
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8180
+            initialDelaySeconds: 5
+            periodSeconds: 5
