@@ -132,6 +132,26 @@ services:
         window: 180s
     networks:
       - atos_network
+      
+  gamemaster-service-db:
+    image: mysql:latest
+    container_name: gamemaster-service-db
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: gamemaster_db
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    ports:
+      - "33020:3306"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 45s
+        max_attempts: 3
+        window: 180s
+    networks:
+      - atos_network
 
   gameappbff-db:
     image: mysql:latest
@@ -270,6 +290,28 @@ services:
       - "8005:8005"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://game-service-db:3306/game_db?useSSL=false
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    depends_on:
+      kafka:
+        condition: service_healthy
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 45s
+        max_attempts: 3
+        window: 180s
+    networks:
+      - atos_network
+
+  gamemaster-service:
+    build: ./AuthenticationService
+    container_name: gamemaster-service
+    ports:
+      - "8010:8010"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://gamemaster-service-db:33020/game_db?useSSL=false
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
