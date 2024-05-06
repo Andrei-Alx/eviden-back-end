@@ -1,7 +1,7 @@
 FROM maven:3.9.6 AS maven
 
 WORKDIR /usr/src/app
-COPY . /usr/src/app
+COPY .. /usr/src/app
 # Compile and package the application to an executable JAR
 RUN mvn package -Dmaven.test.skip
 
@@ -10,7 +10,7 @@ FROM eclipse-temurin:21-alpine
 
 ARG JAR_FILE=CardService-0.0.1-SNAPSHOT.jar
 
-COPY src/main/resources/data/cards /opt/app/data/cards
+COPY ../src/main/resources/data/cards /opt/app/data/cards
 
 WORKDIR /opt/app
 

@@ -44,7 +44,7 @@ release-api-gateway:
   before_script:
     - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   script:
-    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-api-gateway:$CI_COMMIT_REF_NAME APIGateway/
+    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-api-gateway:$CI_COMMIT_REF_NAME APIGateway/deployment
     - docker push $DOCKERHUB_USERNAME/eviden-api-gateway:$CI_COMMIT_REF_NAME
     - echo "API Gateway Latest Release Pushed to Docker Hub!"
   only: 
@@ -97,7 +97,7 @@ release-card-service:
   before_script:
     - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   script:
-    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-card-service:$CI_COMMIT_REF_NAME CardService/
+    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-card-service:$CI_COMMIT_REF_NAME CardService/deployment
     - docker push $DOCKERHUB_USERNAME/eviden-card-service:$CI_COMMIT_REF_NAME
     - echo "Card Service Latest Release Pushed to Docker Hub!"
   only: 
@@ -147,7 +147,7 @@ releases-game-service:
   before_script:
     - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   script:
-    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-game-service:$CI_COMMIT_REF_NAME GameService/
+    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-game-service:$CI_COMMIT_REF_NAME GameService/deployment
     - docker push $DOCKERHUB_USERNAME/eviden-game-service:$CI_COMMIT_REF_NAME
     - echo "Game Service Latest Release Pushed to Docker Hub!"
   only: 
@@ -197,7 +197,7 @@ release-lobby-service:
   before_script:
     - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   script:
-    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-lobby-service:$CI_COMMIT_REF_NAME LobbyService/
+    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-lobby-service:$CI_COMMIT_REF_NAME LobbyService/deployment
     - docker push $DOCKERHUB_USERNAME/eviden-lobby-service:$CI_COMMIT_REF_NAME
     - echo "Lobby Service Latest Release Pushed to Docker Hub!"
   only: 
@@ -249,7 +249,7 @@ release-round-service:
   before_script:
     - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   script:
-    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-round-service:$CI_COMMIT_REF_NAME RoundService/
+    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-round-service:$CI_COMMIT_REF_NAME RoundService/deployment
     - docker push $DOCKERHUB_USERNAME/eviden-round-service:$CI_COMMIT_REF_NAME
     - echo "Round Service Latest Release Pushed to Docker Hub!"
   only: 
@@ -299,7 +299,7 @@ release-gamebff-service:
   before_script:
     - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   script:
-    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-gamebff-service:$CI_COMMIT_REF_NAME GameAppBFF/
+    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-gamebff-service:$CI_COMMIT_REF_NAME GameAppBFF/deployment
     - docker push $DOCKERHUB_USERNAME/eviden-gamebff-service:$CI_COMMIT_REF_NAME
     - echo "Game App BFF Latest Release Pushed to Docker Hub!"
   only: 
