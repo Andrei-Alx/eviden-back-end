@@ -3,10 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>nl.fontys.atosgame</groupId>
-    <artifactId>CardService</artifactId>
+    <artifactId>GameMster</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>CardService</name>
-    <description>CardService</description>
+    <packaging>jar</packaging> <!-- Add packaging type -->
+    <name>GameMster</name>
+    <description>GameMster</description>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -17,7 +18,7 @@
         <java.version>21</java.version>
         <maven.test.skip>true</maven.test.skip>
         <spring-cloud.version>2023.0.0</spring-cloud.version>
-        <jacoco.version>0.8.11</jacoco.version>
+        <jacoco.version>0.8.11</jacoco.version> <!-- Add Jacoco version -->
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}\target\site\jacoco\jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
@@ -25,15 +26,18 @@
         <!--Prettier settings-->
         <plugin.prettier.goal>write</plugin.prettier.goal>
         <!-- SonarQube Authentication -->
-		<sonar.organization>eviden-dev</sonar.organization>
+        <sonar.organization>eviden-dev</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-     
-		<!--<sonar.login>{env.Sonar_Cloud_Login}</sonar.login>-->
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>3.2.4</version> <!-- Specify the version of Spring Boot -->
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -108,11 +112,11 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <!-- SONARQUBE MAVEN PLUGIN -->
-		<dependency>
-			<groupId>org.sonarsource.scanner.maven</groupId>
-			<artifactId>sonar-maven-plugin</artifactId>
-			<version>3.10.0.2594</version>
-		</dependency>
+        <dependency>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>3.10.0.2594</version>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -126,47 +130,23 @@
         </dependencies>
     </dependencyManagement>
 
-    <build>
+        <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
+                    <mainClass>nl.fontys.atosgame.autthenticationservice.GameMaster</mainClass>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>com.hubspot.maven.plugins</groupId>-->
-<!--                <artifactId>prettier-maven-plugin</artifactId>-->
-<!--                <version>0.16</version>-->
-<!--                <configuration>-->
-<!--                    <prettierJavaVersion>1.5.0</prettierJavaVersion>-->
-<!--                    <printWidth>90</printWidth>-->
-<!--                    <tabWidth>4</tabWidth>-->
-<!--                    <useTabs>false</useTabs>-->
-<!--                    <ignoreConfigFile>true</ignoreConfigFile>-->
-<!--                    <ignoreEditorConfig>true</ignoreEditorConfig>-->
-<!--                    &lt;!&ndash; Use <inputGlobs> to override the default input patterns &ndash;&gt;-->
-<!--                    <inputGlobs>-->
-<!--                        &lt;!&ndash; These are the default patterns, you can omit <inputGlobs> entirely unless you want to override them &ndash;&gt;-->
-<!--                        <inputGlob>src/main/java/**/*.java</inputGlob>-->
-<!--                        <inputGlob>src/test/java/**/*.java</inputGlob>-->
-<!--                    </inputGlobs>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <phase>validate</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>${plugin.prettier.goal}</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+            <!-- Other plugins -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -188,7 +168,7 @@
                 </executions>
             </plugin>
 
-        		<!-- SONAR MAVEN PLUGIN-->
+            <!-- SONAR MAVEN PLUGIN-->
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>

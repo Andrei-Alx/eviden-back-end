@@ -3,11 +3,13 @@ package nl.fontys.atosgame.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import nl.fontys.atosgame.service.GameMasterService;
 
+@RestController
 public class GameMasterController {
-        @Autowired
+    @Autowired
     private GameMasterService gameMasterService;
 
     @GetMapping("/checkGameMaster/{email}")
@@ -18,5 +20,11 @@ public class GameMasterController {
         } else {
             return "This email does not belong to a game master.";
         }
+    }
+
+    @GetMapping("/api/example")
+    public String displayData() {
+        String message = "Welcome to GeeksForGeeks";
+        return message;
     }
 }
