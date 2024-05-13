@@ -27,11 +27,7 @@ public class CardSet {
     private String name;
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "card_set_cards",
-        joinColumns = @JoinColumn(name = "card_set_id"),
-        inverseJoinColumns = @JoinColumn(name = "cards_id")
-    )
+    @JoinTable()
     @JsonProperty
     private Collection<Card> cards = new java.util.ArrayList<>();
 

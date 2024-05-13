@@ -17,11 +17,13 @@ spec:
           image: i486205/eviden-card-service:development
           env:
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mysql://eviden-card-service-db:3306/card_db"
+              value: "jdbc:mysql://eviden-card-service-db/card_db"
             - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
               value: "my-cluster-kafka-bootstrap:9092"
             - name: SPRING_RESOURCES_STATIC_LOCATIONS
               value: "classpath:/data.cards/"
+            - name: SPRING_JPA_HIBERNATE_DDL-AUTO
+              value: "create"
           ports:
             - containerPort: 8001
           livenessProbe:
