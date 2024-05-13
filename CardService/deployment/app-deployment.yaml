@@ -20,19 +20,19 @@ spec:
               value: "jdbc:mysql://eviden-card-service-db:3306/card_db"
             - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
               value: "my-cluster-kafka-bootstrap:9092"
-            - name: SPRING_JPA_HIBERNATE_DDL-AUTO
-              value: update
+            - name: SPRING_RESOURCES_STATIC_LOCATIONS
+              value: "classpath:/data.cards/"
           ports:
-            - containerPort: 8080
+            - containerPort: 8001
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 8180
+              port: 8101
             initialDelaySeconds: 15
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 8180
+              port: 8101
             initialDelaySeconds: 5
             periodSeconds: 5
