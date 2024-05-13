@@ -7,7 +7,7 @@ COPY . /usr/src/app
 RUN mvn package -Dmaven.test.skip
 
 # For Java 21,
-FROM eclipse-temurin:21-alpine
+FROM eclipse-temurin:21-jre-alpine
 
 ARG JAR_FILE=GameService-0.0.1-SNAPSHOT.jar
 
