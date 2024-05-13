@@ -175,7 +175,7 @@ services:
     ports:
       - "8001:8001"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://card-service-db/card_db?useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://card-service-db/card_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
@@ -198,7 +198,7 @@ services:
     ports:
       - "8004:8004"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://gameappbff-db/gameappbff_db?useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://gameappbff-db/gameappbff_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
@@ -220,7 +220,7 @@ services:
     ports:
       - "8002:8002"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://round-service-db:3306/round_db?useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://round-service-db:3306/round_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
@@ -242,7 +242,7 @@ services:
     ports:
       - "8006:8006"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://lobby-service-db:3306/lobby_db?useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://lobby-service-db:3306/lobby_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
@@ -264,7 +264,7 @@ services:
     ports:
       - "8005:8005"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://game-service-db:3306/game_db?useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://game-service-db:3306/game_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
