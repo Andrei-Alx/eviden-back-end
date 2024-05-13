@@ -76,7 +76,6 @@ services:
   card-service-db:
     image: mysql:latest
     container_name: card-service-db
-    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: card_db
@@ -96,7 +95,6 @@ services:
   round-service-db:
     image: mysql:latest
     container_name: round-service-db
-    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: round_db
@@ -116,7 +114,6 @@ services:
   lobby-service-db:
     image: mysql:latest
     container_name: lobby-service-db
-    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: lobby_db
@@ -136,7 +133,6 @@ services:
   gameappbff-db:
     image: mysql:latest
     container_name: gameappbff-db
-    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: gameappbff_db
@@ -156,7 +152,6 @@ services:
   game-service-db:
     image: mysql:latest
     container_name: game-service-db
-    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: game_db
