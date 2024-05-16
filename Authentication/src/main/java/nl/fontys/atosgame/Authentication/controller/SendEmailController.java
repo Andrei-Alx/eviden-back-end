@@ -1,36 +1,35 @@
-// package nl.fontys.atosgame.Authentication.controller;
+package nl.fontys.atosgame.Authentication.controller;
 
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.web.bind.annotation.GetMapping;
-// import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import nl.fontys.atosgame.Authentication.service.EmailService;
+import nl.fontys.atosgame.Authentication.service.CodeGeneratorService;
+import nl.fontys.atosgame.Authentication.service.CodeStorageService;
+import org.slf4j.LoggerFactory;
+import org.aspectj.apache.bcel.classfile.Code;
+import org.slf4j.Logger;
+import org.springframework.web.bind.annotation.*;
 
-// import nl.fontys.atosgame.Authentication.service.EmailService;
-// import org.springframework.web.bind.annotation.RestController;
-// import nl.fontys.atosgame.Authentication.service.MailSenderService;
+@RestController
+@RequestMapping("/api/gamemaster")
+@CrossOrigin(origins = "*")
+public class SendEmailController {
+    private final EmailService emailService;
+   
 
-// @RestController
-// @RequestMapping("/email")
-// public class SendEmailController {
-//     private MailSenderService mailService;
+    private static final Logger logger = LoggerFactory.getLogger(SendEmailController.class);
+  
+    public SendEmailController(EmailService emailService) {
+        this.emailService = emailService;
+ 
+    }
 
-//     public void Foo(){
-//     mailService.sendNewMail("test@gmail.com", "Subject right here", "Body right there!");
-//     }
-//     @Autowired
-//    // private EmailService emailService;
-//     //private final EmailService service;
-
-
-
-//     @GetMapping("/send-test-email")
-//     public String sendTestEmail() {
-//         String to = "evidendev@gmail.com";
-//         String subject = "Test Email";
-//         String body = "This is a test email sent from my Spring Boot application.";
+    @PostMapping("/send-otp")
+    public String sendOTP(@RequestParam String userEmail) {
+        logger.info("Endpoint hit: /api/gamemaster/send-otp");
         
-//         // Invoke the email sending logic
-//         Foo();
+        // Send OTP to the user's email
+        emailService.sendOTPByEmail(userEmail);
         
-//         return "Test email sent successfully!";
-//     }
-// }
+        return "OTP sent successfully!";
+    }
+}
