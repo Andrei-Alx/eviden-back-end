@@ -3,14 +3,17 @@ package nl.fontys.atosgame.cardservice.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Collection;
 import java.util.UUID;
-
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.annotations.Type;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 
 @Data
 @AllArgsConstructor
@@ -29,7 +32,7 @@ public class CardSet {
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable()
     @JsonProperty
-    private Collection<Card> cards = new java.util.ArrayList<>();
+    private Collection<Card> cards;
 
     @JsonProperty
     @ElementCollection(fetch = FetchType.EAGER)
