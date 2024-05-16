@@ -309,7 +309,7 @@ services:
     build: ./Authentication
     container_name: gamemaster-service
     ports:
-      - "8011:8010"
+      - "8011:8011"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://gamemaster-service-db:3306/gamemaster_db?useSSL=false
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
