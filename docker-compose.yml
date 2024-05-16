@@ -312,6 +312,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       - GMAIL_USERNAME=${GMAIL_USERNAME}
       - GMAIL_PASSWORD=${GMAIL_PASSWORD}
+      - SERVER_PORT=8011
     depends_on:
       kafka:
         condition: service_healthy

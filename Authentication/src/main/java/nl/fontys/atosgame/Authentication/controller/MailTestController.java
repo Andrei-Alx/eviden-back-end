@@ -1,13 +1,11 @@
 package nl.fontys.atosgame.Authentication.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 
 import nl.fontys.atosgame.Authentication.service.MailSenderService;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/gamemaster")
@@ -21,12 +19,12 @@ public class MailTestController {
         this.mailSenderService = mailSenderService;
     }
 
-    @RequestMapping("/send-test-email")
+    @PostMapping("/send-test-email")
     public String sendTestEmail() {
         logger.info("endpoint hit: /api/gamemaster/send-test-email");
-        String to = "j.hooftman2k@gmail.com";
-        String subject = "Test Email";
-        String body = "This is a test email sent from my Spring Boot application.";
+        String to = "brandonlodowica@gmail.com";
+        String subject = "Fine Notification";
+        String body = "You have been fined 1000 euros. To Solve this issue, please deposit 1000 euros to the following bank account: NL12 INGB 1264 7624 9584 02. Thank you for your cooperation";
         mailSenderService.sendNewMail(to, subject, body);
         return "Test email sent successfully!";
     }
