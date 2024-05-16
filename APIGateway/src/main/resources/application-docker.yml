@@ -71,3 +71,4 @@ uri:
   gameservice: http://game-service:8005
   lobbyservice: http://lobby-service:8006
   roundservice: http://round-service:8002
+  gamemasterservice: http://gamemaster-service:8011
