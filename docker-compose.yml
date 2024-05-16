@@ -76,7 +76,6 @@ services:
   card-service-db:
     image: mysql:latest
     container_name: card-service-db
-    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: card_db
@@ -96,7 +95,6 @@ services:
   round-service-db:
     image: mysql:latest
     container_name: round-service-db
-    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: round_db
@@ -116,7 +114,6 @@ services:
   lobby-service-db:
     image: mysql:latest
     container_name: lobby-service-db
-    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: lobby_db
@@ -156,7 +153,6 @@ services:
   gameappbff-db:
     image: mysql:latest
     container_name: gameappbff-db
-    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: gameappbff_db
@@ -176,7 +172,6 @@ services:
   game-service-db:
     image: mysql:latest
     container_name: game-service-db
-    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: game_db
@@ -200,7 +195,7 @@ services:
     ports:
       - "8001:8001"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://card-service-db/card_db?useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://card-service-db/card_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
@@ -223,7 +218,7 @@ services:
     ports:
       - "8004:8004"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://gameappbff-db/gameappbff_db?useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://gameappbff-db/gameappbff_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
@@ -245,7 +240,7 @@ services:
     ports:
       - "8002:8002"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://round-service-db:3306/round_db?useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://round-service-db:3306/round_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
@@ -267,7 +262,7 @@ services:
     ports:
       - "8006:8006"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://lobby-service-db:3306/lobby_db?useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://lobby-service-db:3306/lobby_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
@@ -289,7 +284,7 @@ services:
     ports:
       - "8005:8005"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://game-service-db:3306/game_db?useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://game-service-db:3306/game_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root

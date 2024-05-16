@@ -10,7 +10,7 @@ RUN mv /usr/src/app/src/main/resources/application-docker.yml /usr/src/app/src/m
 RUN mvn package -Dmaven.test.skip
 
 # For Java 21,
-FROM eclipse-temurin:21-alpine
+FROM eclipse-temurin:21-jre-alpine
 
 ARG JAR_FILE=APIGateway-0.0.1-SNAPSHOT.jar
 
