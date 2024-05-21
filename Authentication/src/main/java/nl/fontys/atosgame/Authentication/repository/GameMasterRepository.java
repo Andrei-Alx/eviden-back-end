@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface GameMasterRepository extends JpaRepository<GameMaster, Long> {
 
     // Define custom query methods if needed
-    GameMaster findByEmail(String email);
+    GameMaster findByEmail(String email); // Find game master by email
 }
 

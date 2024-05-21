@@ -1,5 +1,6 @@
 package nl.fontys.atosgame.Authentication.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,8 +11,11 @@ public class GameMaster {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    
+    @Column(unique = true) // Ensure email is unique
     private String email;
+    
+    private String name;
     private boolean isGameMaster;
 
     // Constructors
