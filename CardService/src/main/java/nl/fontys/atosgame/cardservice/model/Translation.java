@@ -2,18 +2,20 @@ package nl.fontys.atosgame.cardservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.UUID;
-import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Embeddable
+@Builder
 public class Translation {
     @Id
     @GeneratedValue(generator = "UUID")

@@ -1,18 +1,15 @@
 package nl.fontys.atosgame.cardservice.service;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-
-import jakarta.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
 import nl.fontys.atosgame.cardservice.event.produced.CardSetEvent;
-import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.model.CardSet;
 import nl.fontys.atosgame.cardservice.repository.CardSetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
+import jakarta.persistence.EntityNotFoundException;
 
 /**
  * Service that handles all card set requests
@@ -25,17 +22,14 @@ import org.springframework.stereotype.Service;
 public class CardSetServiceImpl implements CardSetService {
 
     private final CardSetRepository cardSetRepository;
-    private final CardService cardService;
-    private final StreamBridge streamBridge;
+	private final StreamBridge streamBridge;
 
     public CardSetServiceImpl(
         @Autowired CardSetRepository cardSetRepository,
-        @Autowired CardService cardService,
         @Autowired StreamBridge streamBridge
     ) {
         this.cardSetRepository = cardSetRepository;
-        this.cardService = cardService;
-        this.streamBridge = streamBridge;
+		this.streamBridge = streamBridge;
     }
 
     /**
@@ -46,17 +40,14 @@ public class CardSetServiceImpl implements CardSetService {
      */
     @Override
     public CardSet createCardSet(CreateCardSetDto createCardSetDto) {
-        Collection<Card> cards = cardService.getCardsByIds(createCardSetDto.getCards());
-        CardSet cardSet = new CardSet(
-            null,
-            createCardSetDto.getName(),
-            cards,
-            createCardSetDto.getTags(),
-            true
-        );
+        CardSet cardSet = CardSet.builder()
+                .name(createCardSetDto.getName())
+                .cards(createCardSetDto.getCards())
+                .tags(createCardSetDto.getTags())
+                .isActive(true)
+                .build();
 
-        cardSet = cardSetRepository.save(cardSet);
-        return cardSet;
+        return cardSetRepository.save(cardSet);
     }
 
     /**
@@ -77,8 +68,7 @@ public class CardSetServiceImpl implements CardSetService {
      */
     @Override
     public CardSet updateCardSet(CardSet cardSet) {
-        CardSet updatedCardSet = cardSetRepository.save(cardSet);
-        return updatedCardSet;
+		return cardSetRepository.save(cardSet);
     }
 
     @Override

@@ -1,13 +1,10 @@
 package nl.fontys.atosgame.cardservice.service;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
-import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
 import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 /**
@@ -37,6 +34,10 @@ public class CardServiceImpl implements CardService {
         return cardRepository.save(card);
     }
 
+    public List<Card> createCards(List<Card> cards) {
+        return cardRepository.saveAll(cards);
+    }
+
     /**
      * Update an existing card
      * @param card the card to update
@@ -57,17 +58,17 @@ public class CardServiceImpl implements CardService {
     }
 
     /**
-     * Get collection of cards by their ids
+     * Get list of cards by their ids
      * @param ids the ids of the cards to get
-     * @return the collection of cards
+     * @return the list of cards
      */
     @Override
-    public Collection<Card> getCardsByIds(Collection<UUID> ids) {
+    public List<Card> getCardsByIds(List<UUID> ids) {
         return cardRepository.findAllById(ids);
     }
 
     @Override
-    public void deleteCards(Collection<UUID> ids) {
+    public void deleteCards(List<UUID> ids) {
         cardRepository.deleteAllById(ids);
     }
 }

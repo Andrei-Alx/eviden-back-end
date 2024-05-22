@@ -1,9 +1,12 @@
 package nl.fontys.atosgame.cardservice.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
@@ -12,7 +15,6 @@ import nl.fontys.atosgame.cardservice.repository.CardRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.stream.function.StreamBridge;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 class CardServiceImplTest {
 
@@ -63,10 +65,10 @@ class CardServiceImplTest {
     @Test
     void getCardsByIds() {
         List<Card> cards = mock(List.class);
-        Collection<UUID> ids = mock(Collection.class);
+        List<UUID> ids = mock(List.class);
         when(cardRepository.findAllById(ids)).thenReturn(cards);
 
-        Collection<Card> result = cardService.getCardsByIds(ids);
+        List<Card> result = cardService.getCardsByIds(ids);
 
         assertEquals(cards, result);
     }

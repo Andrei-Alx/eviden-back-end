@@ -1,10 +1,12 @@
 package nl.fontys.atosgame.cardservice.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
@@ -19,17 +21,15 @@ import org.springframework.cloud.stream.function.StreamBridge;
 class CardSetServiceImplTest {
 
     private CardSetRepository cardSetRepository;
-    private CardService cardService;
     private StreamBridge streamBridge;
     private CardSetServiceImpl cardSetService;
 
     @BeforeEach
     void setUp() {
         cardSetRepository = mock(CardSetRepository.class);
-        cardService = mock(CardService.class);
         streamBridge = mock(StreamBridge.class);
         cardSetService =
-            new CardSetServiceImpl(cardSetRepository, cardService, streamBridge);
+            new CardSetServiceImpl(cardSetRepository, streamBridge);
     }
 
     @Test
@@ -40,8 +40,7 @@ class CardSetServiceImplTest {
             tags,
             null
         );
-        Collection<Card> cards = mock(Collection.class);
-        doReturn(cards).when(cardService).getCardsByIds(createCardSetDto.getCards());
+        List<Card> cards = mock(List.class);
         CardSet cardSet = new CardSet(UUID.randomUUID(), "RoundOneCards", cards, tags, true);
         doReturn(cardSet).when(cardSetRepository).save(any());
 

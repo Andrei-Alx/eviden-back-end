@@ -1,34 +1,37 @@
 package nl.fontys.atosgame.cardservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.persistence.ElementCollection;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Builder
 public class Card {
     @Id
     @GeneratedValue(generator = "UUID")
     @JsonProperty
     private UUID id;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonProperty
-    private Collection<Tag> tags;
+    private List<Tag> tags;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonProperty
-    private Collection<Translation> translations;
+    private List<Translation> translations;
 
     @JsonProperty
     private boolean isActive;

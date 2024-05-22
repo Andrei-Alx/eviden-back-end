@@ -1,11 +1,11 @@
 package nl.fontys.atosgame.cardservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Collection;
-import java.util.UUID;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.model.Tag;
 
 @Data
@@ -17,8 +17,8 @@ public class CreateCardSetDto {
     private String name;
 
     @JsonProperty
-    private Collection<Tag> tags;
+    private List<Tag> tags;
 
     @JsonProperty
-    private Collection<UUID> cards;
+    private List<Card> cards;
 }
