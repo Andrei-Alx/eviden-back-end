@@ -5,14 +5,20 @@ import nl.fontys.atosgame.Authentication.repository.GameMasterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class GameMasterServiceImpl implements GameMasterService {
 
-    private final GameMasterRepository gameMasterRepository;
+    @Autowired
+    private GameMasterRepository gameMasterRepository;
 
     @Autowired
-    public GameMasterServiceImpl(GameMasterRepository gameMasterRepository) {
-        this.gameMasterRepository = gameMasterRepository;
+    private CodeStorageServiceImpl codeStorageService;
+
+    @Override
+    public GameMaster findGameMasterByEmail(String email) {
+        return gameMasterRepository.findByEmail(email);
     }
 
     @Override
@@ -21,17 +27,33 @@ public class GameMasterServiceImpl implements GameMasterService {
     }
 
     @Override
-    public GameMaster findGameMasterById(Long id) {
-        return gameMasterRepository.findById(id).orElse(null);
+    public List<GameMaster> findAllGameMasters() {
+        return gameMasterRepository.findAll();
     }
 
     @Override
-    public GameMaster findGameMasterByEmail(String email) {
-        return gameMasterRepository.findByEmail(email);
+    public void storeOtp(String email, String otp) {
+        codeStorageService.storeOTP(email, otp);
     }
 
     @Override
-    public boolean existsByEmail(String email) {
-        return gameMasterRepository.findByEmail(email) != null;
+    public String getStoredOtp(String email) {
+        return codeStorageService.getStoredOTP(email);
     }
+
+    @Override
+    public boolean verifyOtp(String email, String otp) {
+        String storedOtp = getStoredOtp(email);
+        return storedOtp != null && storedOtp.equals(otp);
+    }
+    @Override
+    public boolean deleteGameMasterByEmail(String email) {
+        GameMaster gameMaster = gameMasterRepository.findByEmail(email);
+        if (gameMaster != null) {
+            gameMasterRepository.delete(gameMaster);
+            return true; // Deletion successful
+        }
+        return false; // GameMaster with specified email not found
+    }
+
 }
