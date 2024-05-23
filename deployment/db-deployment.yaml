@@ -51,3 +51,14 @@ spec:
   instances: 1
   router:
     instances: 1
+---
+apiVersion: mysql.oracle.com/v2
+kind: InnoDBCluster
+metadata:
+  name: eviden-round-service-db
+spec:
+  secretName: eviden-mysql-default
+  tlsUseSelfSigned: true
+  instances: 1
+  router:
+    instances: 1
