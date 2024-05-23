@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: eviden-mysql-default
+type: Opaque
+data:
+  rootUser: cm9vdA==
+  rootPassword: cm9vdA==
+  rootHost: JQ==
+---
+apiVersion: mysql.oracle.com/v2
+kind: InnoDBCluster
+metadata:
+  name: eviden-card-service-db
+spec:
+  secretName: eviden-mysql-default
+  tlsUseSelfSigned: true
+  instances: 1
+  router:
+    instances: 1
+---
+apiVersion: mysql.oracle.com/v2
+kind: InnoDBCluster
+metadata:
+  name: eviden-gameappbff-service-db
+spec:
+  secretName: eviden-mysql-default
+  tlsUseSelfSigned: true
+  instances: 1
+  router:
+    instances: 1
+---
+apiVersion: mysql.oracle.com/v2
+kind: InnoDBCluster
+metadata:
+  name: eviden-game-service-db
+spec:
+  secretName: eviden-mysql-default
+  tlsUseSelfSigned: true
+  instances: 1
+  router:
+    instances: 1
+---
+apiVersion: mysql.oracle.com/v2
+kind: InnoDBCluster
+metadata:
+  name: eviden-lobby-service-db
+spec:
+  secretName: eviden-mysql-default
+  tlsUseSelfSigned: true
+  instances: 1
+  router:
+    instances: 1
