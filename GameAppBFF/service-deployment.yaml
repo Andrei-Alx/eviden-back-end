@@ -6,15 +6,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: eviden-gameappbff-service
+      app: eviden-gameappbff-service-deployment
   template:
     metadata:
       labels:
-        app: eviden-gameappbff-service
+        app: eviden-gameappbff-service-deployment
     spec:
       containers:
         - name: eviden-gameappbff-service-app
-          image: i486205/eviden-gamebff-service:development
+          image: gameappbff-service
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://eviden-gameappbff-service-db:3306/gameappbff_db"

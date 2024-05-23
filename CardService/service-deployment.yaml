@@ -6,15 +6,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: eviden-card-service
+      app: eviden-card-service-deployment
   template:
     metadata:
       labels:
-        app: eviden-card-service
+        app: eviden-card-service-deployment
     spec:
       containers:
         - name: eviden-card-service
-          image: eviden-card-service:latest
+          image: card-service
           imagePullPolicy: Never
           env:
             - name: SPRING_DATASOURCE_URL

@@ -6,15 +6,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: eviden-game-service
+      app: eviden-game-service-deployment
   template:
     metadata:
       labels:
-        app: eviden-game-service
+        app: eviden-game-service-deployment
     spec:
       containers:
         - name: eviden-game-service-app
-          image: i486205/eviden-game-service:development
+          image: game-service
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://eviden-game-service-db:3306/game_db"

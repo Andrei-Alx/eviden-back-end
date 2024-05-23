@@ -6,15 +6,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: eviden-lobby-service
+      app: eviden-lobby-service-deployment
   template:
     metadata:
       labels:
-        app: eviden-lobby-service
+        app: eviden-lobby-service-deployment
     spec:
       containers:
         - name: eviden-lobby-service-app
-          image: i486205/eviden-lobby-service:development
+          image: lobby-service
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://eviden-lobby-service-db:3306/lobby_db"

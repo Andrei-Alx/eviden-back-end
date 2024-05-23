@@ -6,15 +6,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: eviden-round-service
+      app: eviden-round-service-deployment
   template:
     metadata:
       labels:
-        app: eviden-round-service
+        app: eviden-round-service-deployment
     spec:
       containers:
         - name: eviden-round-service-app
-          image: i486205/eviden-round-service:development
+          image: round-service
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://eviden-round-service-db:3306/round_db"
