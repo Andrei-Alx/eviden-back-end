@@ -18,4 +18,5 @@ public interface GameMasterService {
 
     boolean verifyOtp(String email, String otp);
     boolean deleteGameMasterByEmail(String email);
+    void deleteAllGameMasters();
 }

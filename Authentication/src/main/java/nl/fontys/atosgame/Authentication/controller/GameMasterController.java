@@ -18,6 +18,13 @@ public class GameMasterController {
     @Autowired
     private EmailService emailService;
 
+    @DeleteMapping("/deleteAll")
+    public String deleteAllGameMasters() {
+        gameMasterService.deleteAllGameMasters();
+        return "All GameMaster records have been deleted.";
+    }
+
+
     @GetMapping("/findByEmail")
     public GameMaster findGameMasterByEmail(@RequestParam String email) {
         return gameMasterService.findGameMasterByEmail(email);

@@ -15,6 +15,10 @@ public class GameMasterServiceImpl implements GameMasterService {
 
     @Autowired
     private CodeStorageServiceImpl codeStorageService;
+    
+    public void deleteAllGameMasters() {
+        gameMasterRepository.deleteAll();
+    }
 
     @Override
     public GameMaster findGameMasterByEmail(String email) {
@@ -46,6 +50,7 @@ public class GameMasterServiceImpl implements GameMasterService {
         String storedOtp = getStoredOtp(email);
         return storedOtp != null && storedOtp.equals(otp);
     }
+    
     @Override
     public boolean deleteGameMasterByEmail(String email) {
         GameMaster gameMaster = gameMasterRepository.findByEmail(email);
