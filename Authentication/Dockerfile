@@ -12,7 +12,10 @@ ARG JAR_FILE=Authentication-0.0.1-SNAPSHOT.jar
 
 WORKDIR /opt/app
 
-# Copy the spring-boot-api-tutorial.jar from the maven stage to the /opt/app directory of the current stage.
+# Copy the JAR file from the maven stage to the /opt/app directory of the current stage.
 COPY --from=maven /usr/src/app/target/${JAR_FILE} /opt/app/
+
+# Explicitly copy the application.properties file if needed
+COPY --from=maven /usr/src/app/src/main/resources/application.properties /opt/app/
 
 CMD ["java","-jar","Authentication-0.0.1-SNAPSHOT.jar"]

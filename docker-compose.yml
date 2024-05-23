@@ -310,9 +310,8 @@ services:
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
-      - GMAIL_USERNAME=${GMAIL_USERNAME}
-      - GMAIL_PASSWORD=${GMAIL_PASSWORD}
-      - SERVER_PORT=8011
+     # - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+     # - SERVER_PORT=8011
     depends_on:
       kafka:
         condition: service_healthy
