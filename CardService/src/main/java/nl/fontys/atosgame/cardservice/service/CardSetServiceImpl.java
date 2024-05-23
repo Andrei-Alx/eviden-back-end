@@ -84,5 +84,8 @@ public class CardSetServiceImpl implements CardSetService {
         streamBridge.send("produceCardSet-out-0", event);
     }
 
-
+    @Override
+    public long getCardSetCount() {
+        return cardSetRepository.count();
+    }
 }

@@ -13,7 +13,6 @@ import nl.fontys.atosgame.cardservice.model.Tag;
 import nl.fontys.atosgame.cardservice.service.CardSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -21,7 +20,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 @Service
-@Profile("development")
 public class CardSeeder {
 
 	private final CardSetService cardSetService;
@@ -37,8 +35,8 @@ public class CardSeeder {
 
     @EventListener(ApplicationReadyEvent.class)
     public void seedCards() throws IOException {
-        List<CardSet> cardSets = cardSetService.getAll();
-        if (cardSets != null || !cardSets.isEmpty()) {
+        long cardSetCount = this.cardSetService.getCardSetCount();
+        if (cardSetCount != 0) {
             return;
         }
 
