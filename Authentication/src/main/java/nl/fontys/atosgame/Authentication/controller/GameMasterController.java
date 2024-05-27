@@ -8,10 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/gamemaster")
+@CrossOrigin(origins = "*")
 public class GameMasterController {
 
     @Autowired
@@ -70,24 +73,31 @@ public class GameMasterController {
 
     // Generate OTP for a game master
     @PostMapping("/generateOtp")
-    public String generateOtp(@RequestParam String email) {
+    public ResponseEntity<Map<String, String>> generateOtp(@RequestParam String email) {
         GameMaster gameMaster = gameMasterService.findGameMasterByEmail(email);
+        Map<String, String> response = new HashMap<>();
         if (gameMaster != null) {
             emailService.sendOTPByEmail(email);
-            return "OTP has been sent to your email.";
+            response.put("message", "OTP has been sent to your email.");
+            return ResponseEntity.ok(response);
         } else {
-            throw new RuntimeException("This email does not belong to a game master.");
+            response.put("message", "This email does not belong to a game master.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
+
     // Verify OTP for a game master
     @PostMapping("/verifyOtp")
-    public String verifyOtp(@RequestParam String email, @RequestParam String otp) {
+    public ResponseEntity<Map<String, String>> verifyOtp(@RequestParam String email, @RequestParam String otp) {
         boolean isVerified = gameMasterService.verifyOtp(email, otp);
+        Map<String, String> response = new HashMap<>();
         if (isVerified) {
-            return "OTP verified successfully. You are logged in.";
+            response.put("message", "OTP verified successfully. You are logged in.");
+            return ResponseEntity.ok(response);
         } else {
-            return "Invalid OTP or OTP has expired.";
+            response.put("message", "Invalid OTP or OTP has expired.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
