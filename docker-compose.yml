@@ -130,9 +130,9 @@ services:
     networks:
       - atos_network
       
-  gamemaster-service-db:
+  authentication-service-db:
     image: mysql:latest
-    container_name: gamemaster-service-db
+    container_name: authentication-service-db
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -300,13 +300,13 @@ services:
     networks:
       - atos_network
 
-  gamemaster-service:
+  authentication-service:
     build: ./Authentication
-    container_name: gamemaster-service
+    container_name: authentication-service
     ports:
       - "8011:8011"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://gamemaster-service-db:3306/gamemaster_db?useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://authentication-service-db:3306/gamemaster_db?useSSL=false
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root

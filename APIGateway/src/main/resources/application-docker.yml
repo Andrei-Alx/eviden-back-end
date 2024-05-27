@@ -52,8 +52,8 @@ spring:
           predicates:
             - Path=/websocket/gameappbff/**
  
-        - id: gameMasterService-gameMaster
-          uri: ${uri.gamemasterservice}
+        - id: AuthenticationService-authentication
+          uri: ${uri.authenticationservice}
           predicates:
             - Path=/api/gamemaster/**
     
@@ -71,4 +71,4 @@ uri:
   gameservice: http://game-service:8005
   lobbyservice: http://lobby-service:8006
   roundservice: http://round-service:8002
-  gamemasterservice: http://gamemaster-service:8011
+  authenticationservice: http://authentication-service:8011
