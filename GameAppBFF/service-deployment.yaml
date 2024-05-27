@@ -15,6 +15,7 @@ spec:
       containers:
         - name: eviden-gameappbff-service-app
           image: gameappbff-service
+          imagePullPolicy: Never
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://eviden-gameappbff-service-db:3306/gameappbff_db"
@@ -43,7 +44,7 @@ metadata:
   name: gameappbff-service-service
 spec:
   selector:
-    app: gameappbff-service
+    app: eviden-gameappbff-service-deployment
   ports:
     - protocol: TCP
       port: 8004

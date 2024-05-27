@@ -15,6 +15,7 @@ spec:
       containers:
         - name: eviden-round-service-app
           image: round-service
+          imagePullPolicy: Never
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://eviden-round-service-db:3306/round_db"
@@ -43,7 +44,7 @@ metadata:
   name: round-service-service
 spec:
   selector:
-    app: round-service
+    app: eviden-round-service-deployment
   ports:
     - protocol: TCP
       port: 8002

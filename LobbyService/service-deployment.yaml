@@ -15,6 +15,7 @@ spec:
       containers:
         - name: eviden-lobby-service-app
           image: lobby-service
+          imagePullPolicy: Never
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://eviden-lobby-service-db:3306/lobby_db"
@@ -43,7 +44,7 @@ metadata:
   name: lobby-service-service
 spec:
   selector:
-    app: lobby-service
+    app: eviden-lobby-service-deployment
   ports:
     - protocol: TCP
       port: 8006

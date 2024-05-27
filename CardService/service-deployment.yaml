@@ -46,7 +46,7 @@ metadata:
   name: card-service-service
 spec:
   selector:
-    app: card-service
+    app: eviden-card-service-deployment
   ports:
     - protocol: TCP
       port: 8001
