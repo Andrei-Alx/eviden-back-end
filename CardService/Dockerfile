@@ -10,7 +10,7 @@ FROM eclipse-temurin:21-jre-alpine
 
 ARG JAR_FILE=CardService-0.0.1-SNAPSHOT.jar
 
-COPY /src/main/resources/data/cards /opt/app/data/cards
+COPY src/main/resources/data/cards /opt/app/data/cards
 
 WORKDIR /opt/app
 
