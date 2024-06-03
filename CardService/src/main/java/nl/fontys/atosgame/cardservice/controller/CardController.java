@@ -9,6 +9,7 @@ import jakarta.persistence.EntityNotFoundException;
 import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
 import nl.fontys.atosgame.cardservice.model.Card;
 import nl.fontys.atosgame.cardservice.service.CardService;
+import nl.fontys.atosgame.cardservice.service.CardSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -24,11 +25,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/cards")
 public class CardController {
 
-    private CardService cardService;
+    private final CardService cardService;
+    private final CardSetService cardSetService;
 
-	public CardController(@Autowired CardService cardService)
+	public CardController(@Autowired CardService cardService, @Autowired CardSetService cardSetService)
     {
         this.cardService = cardService;
+        this.cardSetService = cardSetService;
 	}
 
     /**
@@ -123,6 +126,28 @@ public class CardController {
             return ResponseEntity.ok().build();
         } catch (EmptyResultDataAccessException e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/seed")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Cards seeded",
+                            content = @io.swagger.v3.oas.annotations.media.Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Card.class)
+                            )
+                    )
+            }
+    )
+    public ResponseEntity<String> seedCards() {
+        try {
+            cardSetService.produceCardSet();
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 }

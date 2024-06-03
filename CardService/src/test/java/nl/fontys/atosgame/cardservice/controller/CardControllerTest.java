@@ -30,7 +30,7 @@ class CardControllerTest {
     @BeforeEach
     void setUp() {
         cardService = mock(CardService.class);
-        cardController = new CardController(cardService);
+        cardController = new CardController(cardService, cardSetService);
     }
 
     @Test

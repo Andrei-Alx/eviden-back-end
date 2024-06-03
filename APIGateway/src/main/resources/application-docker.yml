@@ -4,6 +4,7 @@ spring:
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials, RETAIN_FIRST
         - DedupeResponseHeader=Access-Control-Allow-Origin, RETAIN_FIRST
+      ## Disabling cors ¯\(°_o)/¯
       globalcors:
         cors-configurations:
           "[/**]":
