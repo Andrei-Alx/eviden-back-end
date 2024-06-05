@@ -26,8 +26,7 @@ spec:
     spec:
       containers:
         - name: eviden-api-gateway-container
-          image: api-gateway
-          imagePullPolicy: Never
+          image: i486205/eviden-api-gateway:development
           ports:
             - containerPort: 8080
           env:

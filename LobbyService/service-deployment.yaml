@@ -14,8 +14,7 @@ spec:
     spec:
       containers:
         - name: eviden-lobby-service-app
-          image: lobby-service
-          imagePullPolicy: Never
+          image: i486205/eviden-lobby-service:development
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://eviden-lobby-service-db:3306/lobby_db"

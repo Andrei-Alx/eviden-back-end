@@ -14,8 +14,7 @@ spec:
     spec:
       containers:
         - name: eviden-game-service-app
-          image: game-service
-          imagePullPolicy: Never
+          image: i486205/eviden-game-service:development
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://eviden-game-service-db:3306/game_db"
