@@ -1,27 +1,19 @@
+---
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
-  name: istio-pool
+  name: default
   namespace: metallb-system
 spec:
   addresses:
-    - 172.16.2.10-172.16.2.20
+    - 172.16.2.6-172.16.2.10
+  autoAssign: true
 ---
 apiVersion: metallb.io/v1beta1
-kind: BGPAdvertisement
+kind: L2Advertisement
 metadata:
-  name: bgp-advertisement-default
+  name: default
   namespace: metallb-system
 spec:
   ipAddressPools:
-    - bgp-pool
----
-apiVersion: metallb.io/v1beta2
-kind: BGPPeer
-metadata:
-  name: bgp-peer-default
-  namespace: metallb-system
-spec:
-  myASN: 64828
-  peerASN: 64829
-  peerAddress: 10.1.4.1
+    - default
