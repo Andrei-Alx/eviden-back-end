@@ -79,7 +79,7 @@ metadata:
   name: eviden-api-gateway-service
 spec:
   selector:
-    app: eviden-api-gateway-deployment
+    app: eviden-api-gateway
   ports:
     - protocol: TCP
       port: 80
