@@ -101,9 +101,5 @@ public class GameMasterController {
         }
     }
 
-    // Example endpoint
-    @GetMapping("/api/example")
-    public String displayData() {
-        return "Welcome to GeeksForGeeks";
-    }
+
 }

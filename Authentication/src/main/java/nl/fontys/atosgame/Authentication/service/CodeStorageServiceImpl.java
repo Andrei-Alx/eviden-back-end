@@ -1,19 +1,23 @@
 package nl.fontys.atosgame.Authentication.service;
+
 import nl.fontys.atosgame.Authentication.model.StoredOTP;
+import nl.fontys.atosgame.Authentication.repository.OtpRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class CodeStorageServiceImpl implements CodeStorageService {
 
-    private final Map<String, StoredOTP> otpStorage = new HashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(CodeStorageServiceImpl.class);
+
+    @Autowired
+    private OtpRepository otpRepository;
 
     @Override
     public void storeOTP(String userEmail, String otp) {
@@ -23,32 +27,36 @@ public class CodeStorageServiceImpl implements CodeStorageService {
         // Calculate expiry timestamp (e.g., 5 minutes from now)
         Instant expiryTimestamp = Instant.now().plus(Duration.ofMinutes(5));
 
-        // Store OTP and expiry timestamp in the map
-        otpStorage.put(userEmail, new StoredOTP(otp, expiryTimestamp));
+        // Create a new StoredOTP object
+        StoredOTP storedOTP = new StoredOTP(userEmail, otp, expiryTimestamp);
+
+        // Save the OTP to the database
+        otpRepository.save(storedOTP);
 
         logger.info("OTP stored successfully for user {}: {}", userEmail, otp);
     }
-    
 
     @Override
     public String getStoredOTP(String userEmail) {
-        // Retrieve StoredOTP object associated with the user's email
-        StoredOTP storedOTP = otpStorage.get(userEmail);
-        if (storedOTP == null) {
+        // Retrieve StoredOTP object associated with the user's email from the database
+        Optional<StoredOTP> storedOTPOptional = otpRepository.findByEmail(userEmail);
+        if (storedOTPOptional.isEmpty()) {
             logger.info("No OTP found for user {}", userEmail);
             return null; // No OTP found for the user email
         }
 
+        StoredOTP storedOTP = storedOTPOptional.get();
+
         // Check if the OTP is expired
         if (Instant.now().isAfter(storedOTP.getExpiryTimestamp())) {
-            otpStorage.remove(userEmail); // Remove expired OTP
+            otpRepository.delete(storedOTP); // Remove expired OTP
             logger.info("Expired OTP removed for user {}", userEmail);
             return null; // Expired OTP
         }
 
-        logger.info("OTP retrieved successfully for user {}: {}", userEmail, storedOTP.getOTP());
+        logger.info("OTP retrieved successfully for user {}: {}", userEmail, storedOTP.getOtp());
 
         // Return the OTP if it's not expired
-        return storedOTP.getOTP();
+        return storedOTP.getOtp();
     }
 }
