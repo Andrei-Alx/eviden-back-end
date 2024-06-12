@@ -47,6 +47,11 @@ spring:
           predicates:
             - Path=/api/round/**
 
+        - id: gameMasterService-gamemaster
+          uri: ${uri.gamemasterservice}
+          predicates:
+            - Path=/api/gamemaster/**
+
         - id: gameAppBffWebsocket
           uri: ${uri.ws.gameappbff}
           predicates:

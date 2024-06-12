@@ -51,6 +51,12 @@ spring:
           uri: ${uri.ws.gameappbff}
           predicates:
             - Path=/websocket/gameappbff/**
+ 
+        - id: AuthenticationService-authentication
+          uri: ${uri.authenticationservice}
+          predicates:
+            - Path=/api/gamemaster/**
+    
   logging:
     level:
       root: DEBUG
@@ -65,3 +71,4 @@ uri:
   gameservice: http://game-service:8005
   lobbyservice: http://lobby-service:8006
   roundservice: http://round-service:8002
+  authenticationservice: http://authentication-service:8011
