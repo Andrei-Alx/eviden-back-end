@@ -30,11 +30,9 @@ public class GameMasterController {
         return "All GameMaster records have been deleted.";
     }
 
-
     // Find game master by email
     @GetMapping("/findByEmail")
     public ResponseEntity<?> findGameMasterByEmail(@RequestParam String email) {
-        System.out.println("Email: " + email);
         GameMaster gameMaster = gameMasterService.findGameMasterByEmail(email);
         if (gameMaster != null) {
             return ResponseEntity.ok(gameMaster);

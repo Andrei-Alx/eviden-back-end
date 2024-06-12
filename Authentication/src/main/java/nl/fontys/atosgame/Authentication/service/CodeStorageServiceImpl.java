@@ -13,11 +13,13 @@ import java.util.Optional;
 
 @Service
 public class CodeStorageServiceImpl implements CodeStorageService {
-
     private static final Logger logger = LoggerFactory.getLogger(CodeStorageServiceImpl.class);
+    private final OtpRepository otpRepository;
 
     @Autowired
-    private OtpRepository otpRepository;
+    public CodeStorageServiceImpl(OtpRepository otpRepository) {
+        this.otpRepository = otpRepository;
+    }
 
     @Override
     public void storeOTP(String userEmail, String otp) {
@@ -28,7 +30,11 @@ public class CodeStorageServiceImpl implements CodeStorageService {
         Instant expiryTimestamp = Instant.now().plus(Duration.ofMinutes(5));
 
         // Create a new StoredOTP object
-        StoredOTP storedOTP = new StoredOTP(userEmail, otp, expiryTimestamp);
+        StoredOTP storedOTP = StoredOTP.builder()
+                .email(userEmail)
+                .otp(otp)
+                .expiryTimestamp(expiryTimestamp)
+                .build();
 
         // Save the OTP to the database
         otpRepository.save(storedOTP);

@@ -133,7 +133,6 @@ services:
   authentication-service-db:
     image: mysql:latest
     container_name: authentication-service-db
-    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: gamemaster_db
@@ -306,7 +305,7 @@ services:
     ports:
       - "8011:8011"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://authentication-service-db:3306/gamemaster_db?useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://authentication-service-db:3306/gamemaster_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
