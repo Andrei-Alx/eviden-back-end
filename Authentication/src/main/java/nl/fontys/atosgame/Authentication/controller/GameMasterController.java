@@ -1,4 +1,5 @@
 package nl.fontys.atosgame.Authentication.controller;
+
 import nl.fontys.atosgame.Authentication.model.GameMaster;
 import nl.fontys.atosgame.Authentication.service.GameMasterService;
 import nl.fontys.atosgame.Authentication.service.EmailService;
@@ -93,6 +94,7 @@ public class GameMasterController {
         if (isVerified) {
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
             String token = jwtUtil.generateToken(userDetails.getUsername());
+            response.put("message", "OTP verified successfully. You are logged in.");
             response.put("token", token);
             return ResponseEntity.ok(response);
         } else {
