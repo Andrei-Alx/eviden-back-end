@@ -8,7 +8,7 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - eviden.duckdns.org
+      - eviden.duckdns.org
       secretName: quickstart-example-tls
   rules:
     - host: eviden.duckdns.org
