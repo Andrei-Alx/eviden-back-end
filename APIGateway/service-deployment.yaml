@@ -9,6 +9,7 @@ data:
   gameservice: "http://game-service-service:8005"
   lobbyservice: "http://lobby-service-service:8006"
   roundservice: "http://round-service-service:8002"
+  authenticationservice: "http://authentication-service-service"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -60,6 +61,11 @@ spec:
                 configMapKeyRef:
                   name: uri-config
                   key: roundservice
+            - name: URI_AUTHENTICATIONSERVICE
+              valueFrom:
+                configMapKeyRef:
+                  name: uri-config
+                  key: authenticationservice
           livenessProbe:
             httpGet:
               path: /actuator/health
