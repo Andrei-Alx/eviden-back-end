@@ -9,7 +9,7 @@ data:
   gameservice: "http://game-service-service:8005"
   lobbyservice: "http://lobby-service-service:8006"
   roundservice: "http://round-service-service:8002"
-  authenticationservice: "http://authentication-service-service"
+  authenticationservice: "http://authentication-service-service:8011"
 ---
 apiVersion: apps/v1
 kind: Deployment
