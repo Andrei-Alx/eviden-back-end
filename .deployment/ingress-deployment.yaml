@@ -2,8 +2,14 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: eviden-ingress
+  annotations:
+    cert-manager.io/issuer: "letsencrypt-prod"
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - eviden.duckdns.org
+    - secretName: quickstart-example-tls
   rules:
     - host: eviden.duckdns.org
       http:
