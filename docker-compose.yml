@@ -135,7 +135,7 @@ services:
     container_name: authentication-service-db
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: gamemaster_db
+      MYSQL_DATABASE: authentication_db
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
     ports:
@@ -305,7 +305,7 @@ services:
     ports:
       - "8011:8011"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://authentication-service-db:3306/gamemaster_db?allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://authentication-service-db:3306/authentication_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
