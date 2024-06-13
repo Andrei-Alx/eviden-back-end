@@ -26,4 +26,9 @@ public class GameMaster {
     
     private String name;
     private boolean isGameMaster;
+    public Object orElseThrow(Object object) {
+        
+        throw new UnsupportedOperationException("No User found with email");
+    }
+
 }
