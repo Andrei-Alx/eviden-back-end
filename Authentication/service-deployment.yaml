@@ -17,7 +17,7 @@ spec:
           image: i486205/eviden-authentication-service:development
           env:
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mysql://eviden-authentication-service-db/authentication_db"
+              value: "jdbc:mysql://eviden-auth-service-db/authentication_db"
             - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
               value: "my-cluster-kafka-bootstrap:9092"
             - name: SPRING_JPA_HIBERNATE_DDL-AUTO
