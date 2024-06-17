@@ -2,13 +2,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: eviden-ingress
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-staging"
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
       - eviden.duckdns.org
+      secretName: ssl-cert-staging
   rules:
     - host: eviden.duckdns.org
       http:
