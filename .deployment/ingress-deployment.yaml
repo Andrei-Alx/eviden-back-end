@@ -9,7 +9,7 @@ spec:
   tls:
     - hosts:
       - eviden.duckdns.org
-      secretName: eviden-tls-secret
+      secretName: letsencrypt-staging
   rules:
     - host: eviden.duckdns.org
       http:
