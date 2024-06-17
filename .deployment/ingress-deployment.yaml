@@ -9,7 +9,6 @@ spec:
   tls:
     - hosts:
       - eviden.duckdns.org
-      secretName: quickstart-example-tls
   rules:
     - host: eviden.duckdns.org
       http:
