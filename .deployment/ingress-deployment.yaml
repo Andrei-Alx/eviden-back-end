@@ -14,17 +14,17 @@ spec:
     - host: eviden.duckdns.org
       http:
         paths:
-          - path: /testpath
+          - path: /
             pathType: Prefix
             backend:
               service:
                 name: eviden-frontend-service
                 port:
                   number: 80
-#          - path: /api
-#            pathType: Prefix
-#            backend:
-#              service:
-#                name: eviden-api-gateway-service
-#                port:
-#                  number: 80
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: eviden-api-gateway-service
+                port:
+                  number: 80
