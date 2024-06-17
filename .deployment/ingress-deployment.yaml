@@ -3,13 +3,13 @@ kind: Ingress
 metadata:
   name: eviden-ingress
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
       - eviden.duckdns.org
-      secretName: letsencrypt-prod
+      secretName: quickstart-example-tls
   rules:
     - host: eviden.duckdns.org
       http:
