@@ -23,28 +23,37 @@ public class CodeStorageServiceImpl implements CodeStorageService {
 
     @Override
     public void storeOTP(String userEmail, String otp) {
-        // Log the code and email being stored
         logger.info("Storing OTP '{}' for user '{}'", otp, userEmail);
 
         // Calculate expiry timestamp (e.g., 5 minutes from now)
         Instant expiryTimestamp = Instant.now().plus(Duration.ofMinutes(5));
 
-        // Create a new StoredOTP object
-        StoredOTP storedOTP = StoredOTP.builder()
-                .email(userEmail)
-                .otp(otp)
-                .expiryTimestamp(expiryTimestamp)
-                .build();
+        // Check if an OTP already exists for the user
+        Optional<StoredOTP> existingOtpOptional = otpRepository.findByEmail(userEmail);
+        StoredOTP storedOTP;
+
+        if (existingOtpOptional.isPresent()) {
+            // Update existing OTP
+            storedOTP = existingOtpOptional.get();
+            storedOTP.setOtp(otp);
+            storedOTP.setExpiryTimestamp(expiryTimestamp);
+            logger.info("OTP updated successfully for user {}: {}", userEmail, otp);
+        } else {
+            // Create a new StoredOTP object
+            storedOTP = StoredOTP.builder()
+                    .email(userEmail)
+                    .otp(otp)
+                    .expiryTimestamp(expiryTimestamp)
+                    .build();
+            logger.info("OTP created successfully for user {}: {}", userEmail, otp);
+        }
 
         // Save the OTP to the database
         otpRepository.save(storedOTP);
-
-        logger.info("OTP stored successfully for user {}: {}", userEmail, otp);
     }
 
     @Override
     public String getStoredOTP(String userEmail) {
-        // Retrieve StoredOTP object associated with the user's email from the database
         Optional<StoredOTP> storedOTPOptional = otpRepository.findByEmail(userEmail);
         if (storedOTPOptional.isEmpty()) {
             logger.info("No OTP found for user {}", userEmail);
@@ -53,7 +62,6 @@ public class CodeStorageServiceImpl implements CodeStorageService {
 
         StoredOTP storedOTP = storedOTPOptional.get();
 
-        // Check if the OTP is expired
         if (Instant.now().isAfter(storedOTP.getExpiryTimestamp())) {
             otpRepository.delete(storedOTP); // Remove expired OTP
             logger.info("Expired OTP removed for user {}", userEmail);
@@ -61,8 +69,6 @@ public class CodeStorageServiceImpl implements CodeStorageService {
         }
 
         logger.info("OTP retrieved successfully for user {}: {}", userEmail, storedOTP.getOtp());
-
-        // Return the OTP if it's not expired
         return storedOTP.getOtp();
     }
 }
