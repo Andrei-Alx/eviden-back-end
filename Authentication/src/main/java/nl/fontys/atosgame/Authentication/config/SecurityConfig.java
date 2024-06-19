@@ -39,7 +39,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/gamemaster/generateOtp","/api/gamemaster/add", "/api/gamemaster/login", "api/gamemaster/findByEmail").permitAll()
+                .requestMatchers("/api/gamemaster/generateOtp", "/api/gamemaster/login", "api/gamemaster/findByEmail").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
