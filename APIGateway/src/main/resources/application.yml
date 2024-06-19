@@ -47,8 +47,8 @@ spring:
           predicates:
             - Path=/api/round/**
 
-        - id: gameMasterService-gamemaster
-          uri: ${uri.gamemasterservice}
+        - id: AuthenticationService-authentication
+          uri: ${uri.authenticationervice}
           predicates:
             - Path=/api/gamemaster/**
 

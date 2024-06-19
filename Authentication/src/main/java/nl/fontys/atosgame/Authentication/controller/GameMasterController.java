@@ -3,9 +3,12 @@ package nl.fontys.atosgame.Authentication.controller;
 import nl.fontys.atosgame.Authentication.model.GameMaster;
 import nl.fontys.atosgame.Authentication.service.GameMasterService;
 import nl.fontys.atosgame.Authentication.service.EmailService;
+import nl.fontys.atosgame.Authentication.service.CustomUserDetailsService;
+import nl.fontys.atosgame.Authentication.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -22,33 +25,35 @@ public class GameMasterController {
 
     @Autowired
     private EmailService emailService;
+    
+    @Autowired
+    private JwtUtil jwtUtil;
+    
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
 
-    // Delete all game masters
     @DeleteMapping("/deleteAll")
     public String deleteAllGameMasters() {
         gameMasterService.deleteAllGameMasters();
         return "All GameMaster records have been deleted.";
     }
 
-    // Find game master by email
     @GetMapping("/findByEmail")
     public ResponseEntity<?> findGameMasterByEmail(@RequestParam String email) {
         GameMaster gameMaster = gameMasterService.findGameMasterByEmail(email);
         if (gameMaster != null) {
             return ResponseEntity.ok(gameMaster);
         } else {
-            // Return a custom response with status 404 and a custom message
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                                .body("No game master found with email: " + email);
         }
     }
-    // Add a new game master
+
     @PostMapping("/add")
     public GameMaster addGameMaster(@RequestBody GameMaster gameMaster) {
         return gameMasterService.saveGameMaster(gameMaster);
     }
 
-    // Delete game master by email
     @DeleteMapping("/deleteByEmail/{email}")
     public String deleteGameMasterByEmail(@PathVariable String email) {
         boolean deleted = gameMasterService.deleteGameMasterByEmail(email);
@@ -59,7 +64,6 @@ public class GameMasterController {
         }
     }
 
-    // Get all game masters
     @GetMapping("/all")
     public List<GameMaster> getAllGameMasters() {
         List<GameMaster> gameMasters = gameMasterService.findAllGameMasters();
@@ -69,7 +73,6 @@ public class GameMasterController {
         return gameMasters;
     }
 
-    // Generate OTP for a game master
     @PostMapping("/generateOtp")
     public ResponseEntity<Map<String, String>> generateOtp(@RequestParam String email) {
         GameMaster gameMaster = gameMasterService.findGameMasterByEmail(email);
@@ -84,20 +87,19 @@ public class GameMasterController {
         }
     }
 
-
-    // Verify OTP for a game master
-    @PostMapping("/verifyOtp")
-    public ResponseEntity<Map<String, String>> verifyOtp(@RequestParam String email, @RequestParam String otp) {
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> login(@RequestParam String email, @RequestParam String otp) {
         boolean isVerified = gameMasterService.verifyOtp(email, otp);
         Map<String, String> response = new HashMap<>();
         if (isVerified) {
+            UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
+            String token = jwtUtil.generateToken(userDetails.getUsername());
             response.put("message", "OTP verified successfully. You are logged in.");
+            response.put("token", token);
             return ResponseEntity.ok(response);
         } else {
             response.put("message", "Invalid OTP or OTP has expired.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
-
-
 }
