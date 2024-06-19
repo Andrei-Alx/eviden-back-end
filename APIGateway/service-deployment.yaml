@@ -82,7 +82,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: eviden-api-gateway-service
+  name: api-gateway-service
 spec:
   selector:
     app: eviden-api-gateway
