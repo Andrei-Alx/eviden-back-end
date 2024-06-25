@@ -5,7 +5,7 @@ metadata:
 data:
   ws_gameappbff: "ws://gameappbff-service-service:8004"
   cardservice: "http://card-service-service:8001"
-  gameappbff:  "ws://gameappbff-service-service:8004"
+  gameappbff:  "http://gameappbff-service-service:8004"
   gameservice: "http://game-service-service:8005"
   lobbyservice: "http://lobby-service-service:8006"
   roundservice: "http://round-service-service:8002"
