@@ -36,7 +36,7 @@ public class PlayerRound {
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<Card> distributedCards;
 
-    @Embedded
+    @OneToOne
     private RoundSettings roundSettings;
 
     /**

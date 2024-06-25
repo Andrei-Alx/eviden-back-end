@@ -49,7 +49,10 @@ public class CardSetController {
     public ResponseEntity<ArrayList<CardSet>> getCardSetsByType(
         @PathVariable String type
     ) {
-        Tag typeTag = new Tag(TagType.TYPE, type);
+        Tag typeTag = Tag.builder()
+                .tagKey(TagType.TYPE)
+                .tagValue(type)
+                .build();
         Optional<ArrayList<CardSet>> cardsets = cardSetService.getCardSetsByType(typeTag);
         return cardsets
             .map(ResponseEntity::ok)

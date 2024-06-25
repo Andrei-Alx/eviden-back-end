@@ -21,7 +21,7 @@ public class Round {
     @JsonProperty
     private UUID id;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonProperty
     private List<PlayerRound> playerRounds;
 

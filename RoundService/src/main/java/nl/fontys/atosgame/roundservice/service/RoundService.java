@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import nl.fontys.atosgame.roundservice.dto.RoundSettingsDto;
-import nl.fontys.atosgame.roundservice.model.LobbySettings;
 import nl.fontys.atosgame.roundservice.model.PlayerRound;
 import nl.fontys.atosgame.roundservice.model.Round;
 
