@@ -1,18 +1,13 @@
 package nl.fontys.atosgame.gameservice.model;
 
-import java.util.UUID;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.gameservice.enums.RoundStatus;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.annotations.Type;
+
+import java.util.UUID;
 
 @Entity
 @Data
@@ -21,11 +16,12 @@ import org.hibernate.annotations.Type;
 public class Round {
 
     @Id
+    @GeneratedValue(generator = "UUID")
     private UUID id;
 
     private RoundStatus status;
 
     @JsonProperty
-    @Embedded
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     public RoundSettings roundSettings;
 }

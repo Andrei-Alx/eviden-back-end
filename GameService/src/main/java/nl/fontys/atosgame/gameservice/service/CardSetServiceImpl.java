@@ -1,16 +1,15 @@
 package nl.fontys.atosgame.gameservice.service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Stream;
-
 import nl.fontys.atosgame.gameservice.event.produced.CardSetRequestEvent;
 import nl.fontys.atosgame.gameservice.model.CardSet;
 import nl.fontys.atosgame.gameservice.repository.CardSetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Service for handling cardsets.
@@ -37,6 +36,11 @@ public class CardSetServiceImpl implements CardSetService {
         cardSetRepository.save(cardSet);
     }
 
+    @Override
+    public void createCardSets(List<CardSet> cardSets) {
+        cardSetRepository.saveAll(cardSets);
+    }
+
     /**
      * Update a cardset in the database.
      *
@@ -55,6 +59,11 @@ public class CardSetServiceImpl implements CardSetService {
     @Override
     public void deleteCardSet(UUID cardSetId) {
         cardSetRepository.deleteById(cardSetId);
+    }
+
+    @Override
+    public void deleteAll() {
+        cardSetRepository.deleteAll();
     }
 
     /**

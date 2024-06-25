@@ -1,9 +1,10 @@
 package nl.fontys.atosgame.gameservice.service;
 
+import nl.fontys.atosgame.gameservice.model.CardSet;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import nl.fontys.atosgame.gameservice.model.CardSet;
 
 /**
  * Service for handling cardsets.
@@ -16,6 +17,8 @@ public interface CardSetService {
      */
     void createCardSet(CardSet cardSet);
 
+    void createCardSets(List<CardSet> cardSets);
+
     /**
      * Update a cardSet in the database.
      * @param cardSet The card to update.
@@ -27,6 +30,8 @@ public interface CardSetService {
      * @param cardSetId The id of the card to delete.
      */
     void deleteCardSet(UUID cardSetId);
+
+    void deleteAll();
 
     /**
      * Get a cardSet from the database.

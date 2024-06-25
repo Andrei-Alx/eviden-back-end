@@ -1,15 +1,14 @@
 package nl.fontys.atosgame.gameservice.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.gameservice.enums.GameStatus;
 import nl.fontys.atosgame.gameservice.enums.RoundStatus;
+
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -27,7 +26,7 @@ public class Game {
     private Lobby lobby;
 
     @OneToMany(fetch = FetchType.EAGER)
-    private List<Round> rounds = new ArrayList<>();
+    private List<Round> rounds;
 
     private String companyType;
 
