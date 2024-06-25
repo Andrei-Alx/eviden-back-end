@@ -1,14 +1,13 @@
 package nl.fontys.atosgame.gameappbff.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -26,19 +25,19 @@ public class PlayerRound {
 
     @JsonProperty
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private List<Card> likedCards = new ArrayList<>();
+    private List<Card> likedCards;
 
     @JsonProperty
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private List<Card> dislikedCards = new ArrayList<>();
+    private List<Card> dislikedCards;
 
     @JsonProperty
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private List<Card> selectedCards = new ArrayList<>();
+    private List<Card> selectedCards;
 
     @JsonProperty
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private List<Card> distributedCards = new ArrayList<>();
+    private List<Card> distributedCards;
 
     public void addLikedCard(Card card) {
         likedCards.add(card);

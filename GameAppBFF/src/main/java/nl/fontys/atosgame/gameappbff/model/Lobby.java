@@ -1,13 +1,13 @@
 package nl.fontys.atosgame.gameappbff.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Collection;
-import java.util.UUID;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
+
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -16,12 +16,13 @@ import org.hibernate.annotations.Type;
 public class Lobby {
 
     @Id
+    @GeneratedValue(generator = "UUID")
     @JsonProperty
     private UUID id;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     @JsonProperty
-    private Collection<Player> players = new java.util.ArrayList<>();
+    private List<Player> players;
 
     @JsonProperty
     private String lobbyCode;

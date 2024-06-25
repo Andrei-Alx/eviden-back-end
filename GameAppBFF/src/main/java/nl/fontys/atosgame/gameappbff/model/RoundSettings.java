@@ -6,14 +6,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.gameappbff.enums.ShowResults;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
-@Embeddable
+import java.util.UUID;
+
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoundSettings {
+
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @JsonProperty
+    private UUID id;
 
     @JsonProperty
     private ShowResults showPersonalOrGroupResults;
@@ -31,7 +36,7 @@ public class RoundSettings {
     private boolean showSameCardOrder;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "card_set_id")
+    @JoinColumn()
     @JsonProperty
     private CardSet cardSet;
 }

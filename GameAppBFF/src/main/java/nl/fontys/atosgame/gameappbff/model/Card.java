@@ -1,32 +1,32 @@
 package nl.fontys.atosgame.gameappbff.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Collection;
-import java.util.UUID;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.UUID;
+
 @Entity
-@Table()
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Card {
 
     @Id
+    @GeneratedValue(generator = "uuid")
     @JsonProperty
     private UUID id;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     @JsonProperty
-    private Collection<Tag> tags;
+    private List<Tag> tags;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     @JsonProperty
-    private Collection<Translation> translations;
+    private List<Translation> translations;
 
     @JsonProperty
     private boolean isActive;
