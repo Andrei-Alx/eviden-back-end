@@ -328,10 +328,16 @@ public class RoundServiceImpl implements RoundService {
                             .findFirst()
                             .get()
                             .getTagValue();
-                    Tag importantTag = new Tag(TagType.IMPORTANT_TAG, importantTagValue);
+                    Tag importantTag = Tag.builder()
+                            .tagKey(TagType.IMPORTANT_TAG)
+                            .tagValue(importantTagValue)
+                            .build();
 
                     // Type is advice
-                    Tag adviceTag = new Tag(TagType.TYPE, "advice");
+                    Tag adviceTag = Tag.builder()
+                            .tagKey(TagType.TYPE)
+                            .tagValue("advice")
+                            .build();
 
                     // group or personal
                     String groupOrPersonalTagValue = playerRound
@@ -343,10 +349,11 @@ public class RoundServiceImpl implements RoundService {
                             .findFirst()
                             .get()
                             .getTagValue();
-                    Tag groupOrPersonalTag = new Tag(
-                            TagType.GROUP_OR_PERSONAL,
-                            groupOrPersonalTagValue
-                    );
+
+                    Tag groupOrPersonalTag = Tag.builder()
+                            .tagKey(TagType.GROUP_OR_PERSONAL)
+                            .tagValue(groupOrPersonalTagValue)
+                            .build();
 
                     List<Tag> tags = new ArrayList<>();
                     tags.add(importantTag);
@@ -423,14 +430,14 @@ public class RoundServiceImpl implements RoundService {
     public Round createRound(UUID gameId, RoundSettingsDto roundSettings) {
         Round round = new Round(null, new ArrayList<>(), RoundStatus.CREATED, null);
         // Create round settings
-        RoundSettings settings = new RoundSettings(
-            roundSettings.getShowPersonalOrGroupResults(),
-            roundSettings.getNrOfLikedCards(),
-            roundSettings.getNrOfSelectedCards(),
-            roundSettings.getShuffleMethod(),
-            roundSettings.isShowSameCardOrder(),
-            null
-        );
+        RoundSettings settings = RoundSettings.builder()
+                .showPersonalOrGroupResults(roundSettings.getShowPersonalOrGroupResults())
+                .nrOfLikedCards(roundSettings.getNrOfLikedCards())
+                .nrOfSelectedCards(roundSettings.getNrOfSelectedCards())
+                .shuffleMethod(roundSettings.getShuffleMethod())
+                .showSameCardOrder(roundSettings.isShowSameCardOrder())
+                .build();
+
         // Get card set
         Optional<CardSet> cardSet = cardSetService.getCardSet(
             roundSettings.getCardSetId()

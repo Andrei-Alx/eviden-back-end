@@ -2,6 +2,7 @@ package nl.fontys.atosgame.roundservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,24 +19,20 @@ import org.hibernate.annotations.Type;
 public class CardSet {
 
     @Id
+    @GeneratedValue(generator = "UUID")
     @JsonProperty
     private UUID id;
 
     @JsonProperty
     private String name;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "card_set_cards",
-        joinColumns = @JoinColumn(name = "card_set_id"),
-        inverseJoinColumns = @JoinColumn(name = "cards_id")
-    )
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonProperty
-    private Collection<Card> cards = new java.util.ArrayList<>();
+    private List<Card> cards;
 
     @JsonProperty
-    @ElementCollection(fetch = FetchType.EAGER)
-    private Collection<Tag> tags;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Tag> tags;
 
     @JsonProperty
     private boolean isActive;

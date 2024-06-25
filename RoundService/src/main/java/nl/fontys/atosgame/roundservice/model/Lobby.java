@@ -1,10 +1,7 @@
 package nl.fontys.atosgame.roundservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,12 +16,13 @@ import java.util.UUID;
 public class Lobby {
 
     @Id
+    @GeneratedValue(generator = "UUID")
     @JsonProperty
     private UUID id;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @JsonProperty
-    private List<UUID> playerIds = new java.util.ArrayList<>();
+    private List<UUID> playerIds;
 
     @JsonProperty
     private UUID gameId;

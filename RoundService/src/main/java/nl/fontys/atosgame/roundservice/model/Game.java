@@ -18,16 +18,16 @@ import java.util.UUID;
 public class Game {
 
     @Id
+    @GeneratedValue(generator = "UUID")
     @JsonProperty
     private UUID id;
 
     @JsonProperty
     @OneToMany(fetch = FetchType.EAGER)
-    private List<Round> rounds = new java.util.ArrayList<>();
+    private List<Round> rounds;
 
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "lobby_id")
-    @JsonProperty
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn()
     private Lobby lobby;
 
     /**

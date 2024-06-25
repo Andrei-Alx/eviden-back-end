@@ -23,7 +23,6 @@ public class CardSet {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable()
     @JsonProperty
     private List<Card> cards;
 

@@ -2,9 +2,14 @@ package nl.fontys.atosgame.roundservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+import java.util.UUID;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.fontys.atosgame.roundservice.enums.TagType;
@@ -12,8 +17,14 @@ import nl.fontys.atosgame.roundservice.enums.TagType;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Embeddable
+@Entity
+@Builder
 public class Tag {
+
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @JsonProperty
+    private UUID id;
 
     @JsonProperty
     private TagType tagKey;

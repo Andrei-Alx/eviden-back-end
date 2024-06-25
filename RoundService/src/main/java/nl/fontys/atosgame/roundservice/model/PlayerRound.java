@@ -23,18 +23,18 @@ public class PlayerRound {
 
     @JsonProperty
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private List<Card> likedCards = new ArrayList<>();
+    private List<Card> likedCards;
 
     @JsonProperty
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private List<Card> dislikedCards = new ArrayList<>();
+    private List<Card> dislikedCards;
 
     @JsonProperty
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private List<Card> selectedCards = new ArrayList<>();
+    private List<Card> selectedCards;
 
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private List<Card> distributedCards = new ArrayList<>();
+    private List<Card> distributedCards;
 
     @Embedded
     private RoundSettings roundSettings;

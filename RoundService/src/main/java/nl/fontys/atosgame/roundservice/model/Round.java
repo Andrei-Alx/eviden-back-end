@@ -23,13 +23,13 @@ public class Round {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonProperty
-    private List<PlayerRound> playerRounds = new ArrayList<>();
+    private List<PlayerRound> playerRounds;
 
     @JsonProperty
     private RoundStatus status;
 
     @JsonProperty
-    @Embedded
+    @OneToOne
     private RoundSettings roundSettings;
 
     /**
