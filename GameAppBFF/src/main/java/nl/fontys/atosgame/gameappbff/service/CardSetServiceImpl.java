@@ -37,6 +37,11 @@ public class CardSetServiceImpl implements CardSetService {
         cardSetRepository.save(cardSet);
     }
 
+    @Override
+    public void createCardSets(List<CardSet> cardSets) {
+        cardSetRepository.saveAll(cardSets);
+    }
+
     /**
      * Update a cardset in the database.
      *
@@ -55,6 +60,11 @@ public class CardSetServiceImpl implements CardSetService {
     @Override
     public void deleteCardSet(UUID cardSetId) {
         cardSetRepository.deleteById(cardSetId);
+    }
+
+    @Override
+    public void deleteAll() {
+        cardSetRepository.deleteAll();
     }
 
     /**

@@ -21,6 +21,8 @@ public interface CardSetService {
      */
     void createCardSet(CardSet cardSet);
 
+    void createCardSets(List<CardSet> cardSets);
+
     /**
      * Update a cardSet in the database.
      * @param cardSet The card to update.
@@ -32,6 +34,8 @@ public interface CardSetService {
      * @param cardSetId The id of the card to delete.
      */
     void deleteCardSet(UUID cardSetId);
+
+    void deleteAll();
 
     /**
      * Get cardSets from the database by type.

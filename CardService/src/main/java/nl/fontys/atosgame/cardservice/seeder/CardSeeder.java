@@ -8,7 +8,6 @@ import nl.fontys.atosgame.cardservice.dto.CreateCardDto;
 import nl.fontys.atosgame.cardservice.dto.CreateCardSetDto;
 import nl.fontys.atosgame.cardservice.enums.TagType;
 import nl.fontys.atosgame.cardservice.model.Card;
-import nl.fontys.atosgame.cardservice.model.CardSet;
 import nl.fontys.atosgame.cardservice.model.Tag;
 import nl.fontys.atosgame.cardservice.service.CardSetService;
 import org.springframework.beans.factory.annotation.Autowired;
