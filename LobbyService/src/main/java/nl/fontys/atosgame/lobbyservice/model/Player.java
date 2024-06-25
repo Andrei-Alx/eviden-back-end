@@ -2,8 +2,7 @@ package nl.fontys.atosgame.lobbyservice.model;
 
 import java.util.UUID;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,11 +10,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Embeddable
+@Entity
 public class Player {
-
-    // TODO
-    @Column(name = "player_id")
+    @Id
+    @GeneratedValue(generator = "UUID")
     private UUID id;
 
     private String name;
