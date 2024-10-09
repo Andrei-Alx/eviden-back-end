@@ -148,8 +148,6 @@ services:
         window: 180s
     networks:
       - atos_network
-    volumes:
-      - authentication-service-db-data:/var/lib/mysql
 
   gameappbff-db:
     image: mysql:latest
@@ -358,6 +356,3 @@ services:
 networks:
   atos_network:
     driver: bridge
-
-volumes:
-  authentication-service-db-data:
