@@ -50,17 +50,11 @@ public class GameMasterController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addGameMaster(@RequestBody GameMaster gameMaster) {
-        try {
-            GameMaster newGameMaster = gameMasterService.saveGameMaster(gameMaster);
-            return ResponseEntity.ok(newGameMaster);
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("A GameMaster with this email already exists.");
-        }
-    }
+    public GameMaster addGameMaster(@RequestBody GameMaster gameMaster) {
+        return gameMasterService.saveGameMaster(gameMaster);
 
-    @DeleteMapping("/deleteByEmail/{email}")
+
+        @DeleteMapping("/deleteByEmail/{email}")
     public String deleteGameMasterByEmail(@PathVariable String email) {
         boolean deleted = gameMasterService.deleteGameMasterByEmail(email);
         if (deleted) {
