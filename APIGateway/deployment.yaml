@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: uri-config
+data:
+  ws_gameappbff: "ws://gameappbff-service-service:8004"
+  cardservice: "http://card-service-service:8001"
+  gameappbff:  "http://gameappbff-service-service:8004"
+  gameservice: "http://game-service-service:8005"
+  lobbyservice: "http://lobby-service-service:8006"
+  roundservice: "http://round-service-service:8002"
+  authenticationservice: "http://authentication-service-service:8011"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eviden-api-gateway-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eviden-api-gateway
+  template:
+    metadata:
+      labels:
+        app: eviden-api-gateway
+    spec:
+      containers:
+        - name: eviden-api-gateway-container
+          image: i486205/eviden-api-gateway:development
+          ports:
+            - containerPort: 8080
+          env:
+            - name: URI_WS_GAMEAPPBFF
+              valueFrom:
+                configMapKeyRef:
+                  name: uri-config
+                  key: ws_gameappbff
+            - name: URI_CARDSERVICE
+              valueFrom:
+                configMapKeyRef:
+                  name: uri-config
+                  key: cardservice
+            - name: URI_GAMEAPPBFF
+              valueFrom:
+                configMapKeyRef:
+                  name: uri-config
+                  key: gameappbff
+            - name: URI_GAMESERVICE
+              valueFrom:
+                configMapKeyRef:
+                  name: uri-config
+                  key: gameservice
+            - name: URI_LOBBYSERVICE
+              valueFrom:
+                configMapKeyRef:
+                  name: uri-config
+                  key: lobbyservice
+            - name: URI_ROUNDSERVICE
+              valueFrom:
+                configMapKeyRef:
+                  name: uri-config
+                  key: roundservice
+            - name: URI_AUTHENTICATIONSERVICE
+              valueFrom:
+                configMapKeyRef:
+                  name: uri-config
+                  key: authenticationservice
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8180
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8180
+            initialDelaySeconds: 5
+            periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eviden-api-gateway-service
+spec:
+  selector:
+    app: eviden-api-gateway
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

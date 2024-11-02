@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eviden-round-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eviden-round-service-deployment
+  template:
+    metadata:
+      labels:
+        app: eviden-round-service-deployment
+    spec:
+      containers:
+        - name: eviden-round-service-app
+          image: i486205/eviden-round-service:development
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://eviden-round-service-db:3306/round_db"
+            - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
+              value: "my-cluster-kafka-bootstrap:9092"
+            - name: SPRING_JPA_HIBERNATE_DDL-AUTO
+              value: "update"
+          ports:
+            - containerPort: 8002
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8102
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8102
+            initialDelaySeconds: 5
+            periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: round-service-service
+spec:
+  selector:
+    app: eviden-round-service-deployment
+  ports:
+    - protocol: TCP
+      port: 8002
+      targetPort: 8002
