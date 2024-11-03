@@ -52,7 +52,7 @@ public class GameMasterController {
     @PostMapping("/add")
     public GameMaster addGameMaster(@RequestBody GameMaster gameMaster) {
         return gameMasterService.saveGameMaster(gameMaster);
-
+    }
 
         @DeleteMapping("/deleteByEmail/{email}")
     public String deleteGameMasterByEmail(@PathVariable String email) {
