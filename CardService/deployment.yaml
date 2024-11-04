@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: eviden-card-service
-          image: i486205/eviden-card-service:development
+          image: aacpc/eviden-card-service:development
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://eviden-card-service-db/card_db"

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: eviden-authentication-service
-          image: i486205/eviden-authentication-service:development
+          image: aacpc/eviden-authentication-service:development
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://eviden-auth-service-db/authentication_db"
@@ -28,7 +28,7 @@ spec:
             httpGet:
               path: /actuator/health/liveness
               port: 8111
-            initialDelaySeconds: 15
+            initialDelaySeconds: 120
             periodSeconds: 10
           readinessProbe:
             httpGet:

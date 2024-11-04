@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: eviden-round-service-app
-          image: i486205/eviden-round-service:development
+          image: aacpc/eviden-round-service:development
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://eviden-round-service-db:3306/round_db"

@@ -15,45 +15,45 @@ spring:
             max-age: 3600
       routes:
         - id: cardService-cards
-          uri: ${uri.cardservice}
+          uri: ${URI_CARDSERVICE:http://card-service:8001}
           predicates:
             - Path=/api/cards/**
         - id: cardService-cardSets
-          uri: ${uri.cardservice}
+          uri: ${URI_CARDSERVICE:http://card-service:8001}
           predicates:
             - Path=/api/cardSets/**
 
         - id: gameAppBff-gameappbff
-          uri: ${uri.gameappbff}
+          uri: ${URI_GAMEAPPBFF:http://gameappbff:8004}
           predicates:
             - Path=/api/gameappbff/**
         - id: gameAppBff-results
-          uri: ${uri.gameappbff}
+          uri: ${URI_GAMEAPPBFF:http://gameappbff:8004}
           predicates:
             - Path=/api/results/**
 
         - id: gameService
-          uri: ${uri.gameservice}
+          uri: ${URI_GAMESERVICE:http://game-service:8005}
           predicates:
             - Path=/api/game/**
 
         - id: lobbyService-lobby
-          uri: ${uri.lobbyservice}
+          uri: ${URI_LOBBYSERVICE:http://lobby-service:8006}
           predicates:
             - Path=/api/lobby/**
 
         - id: roundService-round
-          uri: ${uri.roundservice}
+          uri: ${URI_ROUNDSERVICE:http://round-service:8002}
           predicates:
             - Path=/api/round/**
 
         - id: gameAppBffWebsocket
-          uri: ${uri.ws.gameappbff}
+          uri: ${URI_WS_GAMEAPPBFF:ws://gameappbff:8004}
           predicates:
             - Path=/websocket/gameappbff/**
  
         - id: AuthenticationService-authentication
-          uri: ${uri.authenticationservice}
+          uri: ${URI_AUTHENTICATIONSERVICE:http://authentication-service:8011}
           predicates:
             - Path=/api/gamemaster/**
     
@@ -61,14 +61,14 @@ spring:
     level:
       root: DEBUG
 
-front-end: http://game-app:80
-
-uri:
-  ws:
-    gameappbff: ws://gameappbff:8004
-  cardservice: http://card-service:8001
-  gameappbff: http://gameappbff:8004
-  gameservice: http://game-service:8005
-  lobbyservice: http://lobby-service:8006
-  roundservice: http://round-service:8002
-  authenticationservice: http://authentication-service:8011
+#front-end: http://game-app:80
+#
+#uri:
+#  ws:
+#    gameappbff: ws://gameappbff:8004
+#  cardservice: http://card-service:8001
+#  gameappbff: http://gameappbff:8004
+#  gameservice: http://game-service:8005
+#  lobbyservice: http://lobby-service:8006
+#  roundservice: http://round-service:8002
+#  authenticationservice: http://authentication-service:8011
