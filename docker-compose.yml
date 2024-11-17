@@ -201,14 +201,14 @@ services:
 
 
   cloud-sql-proxy-card:
-    image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
-    command: protean-bit-441008-h3:europe-west4:card-db --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
-    volumes:
-      - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
-    ports:
-      - "127.0.0.1:3307:3306"
-    networks:
-      - atos_network
+      image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
+      command: protean-bit-441008-h3:europe-west4:card-db --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
+      volumes:
+        - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
+      ports:
+        - "127.0.0.1:3307:3306"
+      networks:
+        - atos_network
 
   cloud-sql-proxy-gameapp:
     image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
@@ -257,7 +257,7 @@ services:
     ports:
       - "8001:8001"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://cloud-sql-proxy-card:3307/card_db?allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://cloud-sql-proxy-card:3306/card_db?allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=mypassword
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
@@ -280,7 +280,7 @@ services:
     ports:
       - "8004:8004"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://cloud-sql-proxy-gameapp:3310/gameappbff_db?allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://cloud-sql-proxy-gameapp:3306/gameappbff_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=mypassword
@@ -302,7 +302,7 @@ services:
     ports:
       - "8002:8002"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://cloud-sql-proxy-round:3308/round_db?allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://cloud-sql-proxy-round:3306/round_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=mypassword
@@ -324,7 +324,7 @@ services:
     ports:
       - "8006:8006"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://cloud-sql-proxy-lobby:3309/lobby_db?allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://cloud-sql-proxy-lobby:3306/lobby_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=mypassword
@@ -346,7 +346,7 @@ services:
     ports:
       - "8005:8005"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://cloud-sql-proxy-game:3312/game_db?allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://cloud-sql-proxy-game:3306/game_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=mypassword
