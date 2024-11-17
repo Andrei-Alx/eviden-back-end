@@ -190,10 +190,10 @@ services:
 #      - atos_network
 
   cloud-sql-proxy-auth:
-      image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.8.2 #gcr.io/cloudsql-docker/gce-proxy:1.19.1
+      image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0 #gcr.io/cloudsql-docker/gce-proxy:1.19.1
       command: protean-bit-441008-h3:europe-west4:authentication-db --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
       volumes:
-        - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json
+        - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
       ports:
         - "127.0.0.1:3311:3306"
       networks:
@@ -378,7 +378,7 @@ services:
     ports:
       - "8011:8011"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/gamemaster_db?allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://cloud-sql-proxy-auth:3306/gamemaster_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=mypassword
