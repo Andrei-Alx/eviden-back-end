@@ -14,10 +14,10 @@ spec:
     spec:
       containers:
         - name: eviden-authentication-service
-          image: aacpc/eviden-authentication-service:development
+          image: europe-west4-docker.pkg.dev/protean-bit-441008-h3/docker-hub/eviden-back-end-authentication-service
           env:
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mysql://eviden-auth-service-db/authentication_db"
+              value: "jdbc:mysql://cloud-sql-proxy-auth:3306/gamemaster_db"
             - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
               value: "my-cluster-kafka-bootstrap:9092"
             - name: SPRING_JPA_HIBERNATE_DDL-AUTO
@@ -36,6 +36,19 @@ spec:
               port: 8111
             initialDelaySeconds: 5
             periodSeconds: 5
+        - name: cloud-sql-proxy
+          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
+          command:
+            - /cloud_sql_proxy
+            - -dir=/cloudsql
+            - -instances=your-project-id:your-region:your-instance-id
+          volumeMounts:
+            - name: cloudsql
+              mountPath: /cloudsql
+      volumes:
+        - name: cloudsql
+          emptyDir:
+            medium: Memory
 ---
 apiVersion: v1
 kind: Service
