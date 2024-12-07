@@ -1,4 +1,3 @@
-
 stages: # List of stages for jobs, and their order of execution
   - build
   - test
@@ -23,7 +22,7 @@ build-api-gateway: # This job runs in the build stage, which runs first.
   script:
     - echo "Running API Gateway Build"
     - cd APIGateway
-    - mvn install 
+    - mvn install
     - echo "API Gateway Build complete!"
 
 release-api-gateway:
@@ -34,12 +33,12 @@ release-api-gateway:
   before_script:
     - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   script:
-    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-api-gateway:$CI_COMMIT_REF_NAME APIGateway/
+    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-api-gateway:$CI_COMMIT_REF_NAME APIGateway
     - docker push $DOCKERHUB_USERNAME/eviden-api-gateway:$CI_COMMIT_REF_NAME
     - echo "API Gateway Latest Release Pushed to Docker Hub!"
-  only: 
-   - development
-   - main
+  only:
+    - development
+    - main
 
 
 # Build and Release Card service
@@ -49,7 +48,7 @@ build-card-service: # This job runs in the build stage, which runs first.
   script:
     - echo "Running Card Service Build"
     - cd CardService
-    - mvn install 
+    - mvn install
     - echo "Card Service Build Complete!"
 
 ###unit-test-card-service: # This job runs in the test stage.
@@ -87,26 +86,12 @@ release-card-service:
   before_script:
     - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   script:
-    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-card-service:$CI_COMMIT_REF_NAME CardService/
+    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-card-service:$CI_COMMIT_REF_NAME CardService
     - docker push $DOCKERHUB_USERNAME/eviden-card-service:$CI_COMMIT_REF_NAME
     - echo "Card Service Latest Release Pushed to Docker Hub!"
-  only: 
+  only:
     - main
     - development
-
-release-card-service-gar:
-  stage: release
-  image: $RELEASE_IMAGE
-  before_script:
-    - docker login -u _json_key --password-stdin https://$IMAGE_REGISTRY_URL < $ARTIFACT_REG_KEY
-    - apk add openjdk17
-  script:
-      - ./gradlew bootBuildImage
-      - docker tag CardService-SNAPSHOT $IMAGE_REGISTRY_URL/eviden-card-service
-      - docker push $IMAGE_REGISTRY_URL/eviden-card-service
-  only:
-      - main
-      - development
 
 # Build and Release Game service
 build-game-service: # This job runs in the build stage, which runs first.
@@ -115,7 +100,7 @@ build-game-service: # This job runs in the build stage, which runs first.
   script:
     - echo "Running Game Service Build"
     - cd GameService
-    - mvn install 
+    - mvn install
     - echo "Game Service Build Complete!"
 
 #unit-test-game-service: # This job runs in the test stage.
@@ -151,10 +136,10 @@ releases-game-service:
   before_script:
     - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   script:
-    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-game-service:$CI_COMMIT_REF_NAME GameService/
+    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-game-service:$CI_COMMIT_REF_NAME GameService
     - docker push $DOCKERHUB_USERNAME/eviden-game-service:$CI_COMMIT_REF_NAME
     - echo "Game Service Latest Release Pushed to Docker Hub!"
-  only: 
+  only:
     - main
     - development
 
@@ -201,10 +186,10 @@ release-lobby-service:
   before_script:
     - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   script:
-    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-lobby-service:$CI_COMMIT_REF_NAME LobbyService/
+    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-lobby-service:$CI_COMMIT_REF_NAME LobbyService
     - docker push $DOCKERHUB_USERNAME/eviden-lobby-service:$CI_COMMIT_REF_NAME
     - echo "Lobby Service Latest Release Pushed to Docker Hub!"
-  only: 
+  only:
     - main
     - development
 
@@ -215,7 +200,7 @@ build-round-service: # This job runs in the build stage, which runs first.
   script:
     - echo "Running Round Service Build"
     - cd RoundService
-    - mvn install 
+    - mvn install
     - echo "Round Service Build Complete!"
 #  allow_failure: true
 
@@ -253,12 +238,12 @@ release-round-service:
   before_script:
     - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   script:
-    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-round-service:$CI_COMMIT_REF_NAME RoundService/
+    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-round-service:$CI_COMMIT_REF_NAME RoundService
     - docker push $DOCKERHUB_USERNAME/eviden-round-service:$CI_COMMIT_REF_NAME
     - echo "Round Service Latest Release Pushed to Docker Hub!"
-  only: 
+  only:
     - main
-    - development  
+    - development
 
 # Build and Release for GameBFF
 build-gamebff: # This job runs in the build stage, which runs first.
@@ -303,59 +288,9 @@ release-gamebff-service:
   before_script:
     - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   script:
-    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-gamebff-service:$CI_COMMIT_REF_NAME GameAppBFF/
+    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-gamebff-service:$CI_COMMIT_REF_NAME GameAppBFF
     - docker push $DOCKERHUB_USERNAME/eviden-gamebff-service:$CI_COMMIT_REF_NAME
     - echo "Game App BFF Latest Release Pushed to Docker Hub!"
-  only: 
-    - main
-    - development
-
-# Build and Release for Authentication
-build-authentication: # This job runs in the build stage, which runs first.
-  stage: build
-  image: $BUILD_IMAGE
-  script:
-    - echo "Running Build"
-    - cd Authentication
-    - mvn install
-    - echo "Authentication Build complete."
-
-#unit-test-authentication: # This job runs in the test stage.
-#  stage: test # It only starts when the job in the build stage completes successfully.
-#  script:
-#    - echo "Running unit tests."
-#    - cd Authentication
-#    - ./mvnw test
-#    - echo "Tests complete."
-#
-#sonarqube-check-authentication:
-#  stage: QC
-#  image: maven:3.8.6-jdk-11
-#  variables:
-#    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
-#    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
-#  cache:
-#    key: "${CI_JOB_NAME}"
-#    paths:
-#      - .sonar/cache
-#  script:
-#    - cd Authentication
-#    - ./mvnw verify sonar:sonar
-#  allow_failure: true
-#  only:
-#    - develop
-
-release-authentication-service:
-  stage: release
-  image: $RELEASE_IMAGE
-  services:
-    - name: docker:dind
-  before_script:
-    - echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
-  script:
-    - docker build --pull -t $DOCKERHUB_USERNAME/eviden-authentication-service:$CI_COMMIT_REF_NAME Authentication/
-    - docker push $DOCKERHUB_USERNAME/eviden-authentication-service:$CI_COMMIT_REF_NAME
-    - echo "Authentication Latest Release Pushed to Docker Hub!"
   only:
     - main
     - development
@@ -369,14 +304,14 @@ sonarcloud-check-Cardservice:
     paths:
       - .sonar/cache
   script:
-   - cd CardService
-   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key -Dsonar.organization=eviden-dev -Dsonar.host.url=$SONAR_HOST_URL
+    - cd CardService
+    - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key -Dsonar.organization=eviden-dev -Dsonar.host.url=$SONAR_HOST_URL
   only:
     - merge_requests
     - main
     - development
     - Eviden-22
-   
+
 sonarcloud-check-Gameservice:
   stage: test
   image: $BUILD_IMAGE
@@ -385,8 +320,8 @@ sonarcloud-check-Gameservice:
     paths:
       - .sonar/cache
   script:
-   - cd GameService
-   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key -Dsonar.organization=eviden-dev -Dsonar.host.url=$SONAR_HOST_URL
+    - cd GameService
+    - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key -Dsonar.organization=eviden-dev -Dsonar.host.url=$SONAR_HOST_URL
 
   only:
     - merge_requests
@@ -401,8 +336,8 @@ sonarcloud-check-Lobbyservice:
     paths:
       - .sonar/cache
   script:
-   - cd LobbyService 
-   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key -Dsonar.organization=eviden-dev -Dsonar.host.url=$SONAR_HOST_URL
+    - cd LobbyService
+    - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key -Dsonar.organization=eviden-dev -Dsonar.host.url=$SONAR_HOST_URL
 
   only:
     - merge_requests
@@ -417,8 +352,8 @@ sonarcloud-check-Roundservice:
     paths:
       - .sonar/cache
   script:
-   - cd RoundService
-   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key -Dsonar.organization=eviden-dev -Dsonar.host.url=$SONAR_HOST_URL
+    - cd RoundService
+    - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key -Dsonar.organization=eviden-dev -Dsonar.host.url=$SONAR_HOST_URL
 
   only:
     - merge_requests
@@ -433,27 +368,11 @@ sonarcloud-check-GameBFF:
     paths:
       - .sonar/cache
   script:
-   - cd GameAppBFF
-   - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key -Dsonar.organization=eviden-dev -Dsonar.host.url=$SONAR_HOST_URL
-
-  only:
-    - merge_requests
-    - main
-    - development
-    - Eviden-22
-
-sonarcloud-check-Authentication:
-  stage: test
-  image: $BUILD_IMAGE
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths:
-      - .sonar/cache
-  script:
-    - cd Authentication
+    - cd GameAppBFF
     - mvn verify sonar:sonar -Dsonar.projectKey=$Sonar_Cloud_Project_Key -Dsonar.organization=eviden-dev -Dsonar.host.url=$SONAR_HOST_URL
 
   only:
     - merge_requests
     - main
     - development
+    - Eviden-22
