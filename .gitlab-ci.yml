@@ -93,19 +93,34 @@ release-card-service:
     - main
     - development
 
+#release-card-service-gar:
+#  stage: release
+#  image: $RELEASE_IMAGE
+#  before_script:
+#    - docker login -u _json_key --password-stdin https://$IMAGE_REGISTRY_URL < $ARTIFACT_REG_KEY
+#    - apk add openjdk17
+#  script:
+#      - ./gradlew bootBuildImage
+#      - docker tag CardService-SNAPSHOT $IMAGE_REGISTRY_URL/eviden-card-service
+#      - docker push $IMAGE_REGISTRY_URL/eviden-card-service
+#  only:
+#      - main
+#      - development
+
 release-card-service-gar:
   stage: release
-  image: $RELEASE_IMAGE
+  image: gradle:jdk17
   before_script:
     - docker login -u _json_key --password-stdin https://$IMAGE_REGISTRY_URL < $ARTIFACT_REG_KEY
-    - apk add openjdk17
   script:
-      - ./gradlew bootBuildImage
-      - docker tag CardService-SNAPSHOT $IMAGE_REGISTRY_URL/eviden-card-service
-      - docker push $IMAGE_REGISTRY_URL/eviden-card-service
+    - chmod +x ./gradlew
+    - ./gradlew bootBuildImage
+    - docker tag CardService-SNAPSHOT $IMAGE_REGISTRY_URL/eviden-card-service
+    - docker push $IMAGE_REGISTRY_URL/eviden-card-service
   only:
-      - main
-      - development
+    - main
+    - development
+
 
 # Build and Release Game service
 build-game-service: # This job runs in the build stage, which runs first.
