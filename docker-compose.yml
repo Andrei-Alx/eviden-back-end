@@ -191,7 +191,7 @@ services:
 
   cloud-sql-proxy-auth:
       image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0 #gcr.io/cloudsql-docker/gce-proxy:1.19.1
-      command: protean-bit-441008-h3:europe-west4:authentication-db --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
+      command: vocal-invention-443612-d9:europe-west4:authentication-db  --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
       volumes:
         - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
       ports:
@@ -202,7 +202,7 @@ services:
 
   cloud-sql-proxy-card:
       image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
-      command: protean-bit-441008-h3:europe-west4:card-db --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
+      command: vocal-invention-443612-d9:europe-west4:card-db  --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
       volumes:
         - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
       ports:
@@ -212,7 +212,7 @@ services:
 
   cloud-sql-proxy-gameapp:
     image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
-    command: protean-bit-441008-h3:europe-west4:gameappbff-db --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
+    command: vocal-invention-443612-d9:europe-west4:gameappbff-db  --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
     volumes:
       - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
     ports:
@@ -222,7 +222,7 @@ services:
 
   cloud-sql-proxy-game:
     image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
-    command: protean-bit-441008-h3:europe-west4:game-db --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
+    command: vocal-invention-443612-d9:europe-west4:game-db  --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
     volumes:
       - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
     ports:
@@ -232,7 +232,7 @@ services:
 
   cloud-sql-proxy-lobby:
     image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
-    command: protean-bit-441008-h3:europe-west4:lobby-db --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
+    command: vocal-invention-443612-d9:europe-west4:lobby-db  --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
     volumes:
       - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
     ports:
@@ -242,7 +242,7 @@ services:
 
   cloud-sql-proxy-round:
     image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
-    command: protean-bit-441008-h3:europe-west4:round-db --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
+    command: vocal-invention-443612-d9:europe-west4:round-db  --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
     volumes:
       - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
     ports:

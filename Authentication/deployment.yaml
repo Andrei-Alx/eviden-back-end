@@ -12,52 +12,43 @@ spec:
       labels:
         app: eviden-authentication-service-deployment
     spec:
+      # This section describes the containers that make up the deployment
       containers:
         - name: eviden-authentication-service
+          # CHANGE [PROJECT_ID] to the project where your Cloud SQL instance lives
           image: europe-west4-docker.pkg.dev/protean-bit-441008-h3/docker-hub/eviden-back-end-authentication-service
+          # Set env variables used for database connection
           env:
-            - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mysql://cloud-sql-proxy-auth:3306/gamemaster_db"
-            - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
-              value: "my-cluster-kafka-bootstrap:9092"
-            - name: SPRING_JPA_HIBERNATE_DDL-AUTO
-              value: "update"
-          ports:
-            - containerPort: 8011
-          livenessProbe:
-            httpGet:
-              path: /actuator/health/liveness
-              port: 8111
-            initialDelaySeconds: 120
-            periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /actuator/health/readiness
-              port: 8111
-            initialDelaySeconds: 5
-            periodSeconds: 5
-        - name: cloud-sql-proxy
-          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
-          command:
-            - /cloud_sql_proxy
-            - -dir=/cloudsql
-            - -instances=your-project-id:your-region:your-instance-id
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: cloudsql-db-credentials
+                  key: username
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: cloudsql-db-credentials
+                  key: password
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: cloudsql-db-credentials
+                  key: dbname
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: cloudsql-db-credentials
+                  key: host
+        - name: cloudsql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.23.0
+          command: [ "/cloud_sql_proxy",
+                     "-instances=protean-bit-441008-h3:europe-west4:authentication-db=tcp:3306",
+                     "-credential_file=/secrets/cloudsql/sql_credentials.json" ]
           volumeMounts:
-            - name: cloudsql
-              mountPath: /cloudsql
+            - name: my-secrets-volume
+              mountPath: /secrets/cloudsql
+              readOnly: true
       volumes:
-        - name: cloudsql
-          emptyDir:
-            medium: Memory
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: authentication-service-service
-spec:
-  selector:
-    app: eviden-authentication-service-deployment
-  ports:
-    - protocol: TCP
-      port: 8011
-      targetPort: 8011
+        - name: my-secrets-volume
+          secret:
+            secretName: cloudsql-instance-credentials
