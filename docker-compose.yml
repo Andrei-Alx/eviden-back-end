@@ -368,7 +368,7 @@ services:
     ports:
       - "8011:8011"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://cloud-sql-proxy-auth:3306/gamemaster_db?allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://127.0.0.1:3306/gamemaster_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=mypassword
