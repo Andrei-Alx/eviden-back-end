@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "vocal-invention-443612-d9",
+  "private_key_id": "28d0edbfb2edcd86ada3c568ad772a984481e519",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDlLaIQ634CKVLB\nLxJMOx5gUSqavZ64CN0U8TidW7+C/YjtApKNugE81/wkt4gx6wfJ8c/1v+/oybaW\ncIQvs7ii5FwOIkdEgEmh1h2N8QGa3e3Agy1mrLC+sUWZPSE9yDQxbyQqxYVuYi7C\n5Ag/0hNTmBYVNx7ryPMX1phBnDD8w7t+klXQSA+9qgmNuOkIHHW1BBcbSUslH8AB\ngX3HeScUdAbqvQVv356hYL61UrGJi5VrY1XlCqH3zev+OSY7CzcyOhkytOMSSHeH\nKemubpw7Fj1vakftnzTHAZux/sNJ0yiUs5fBxklheiz2BJj2McPQXuuXX9kXWQLA\ncpxRSlzfAgMBAAECggEADV3GrLXA/cKuOzeR5ogXwsAiu+KtgQgXT0ATlrq1DG1A\nERHlo6ypCZ6C0k6X+9CJSqhqG7TYx7Sk2KWLhOkc+12JPVPKrbHNWZboCcRekEs7\nfhv7rmTWn1CUga/HvAqf390FEkklE2W+wQqIRqMFRVdcVlsGi41TsqmHHzB+Ybqz\nPzHRDjT7I/KnsyN+D9Yyu1bmYBJ+OA55rskQkfLKK/iOe1HjrifoRThMRdkTlKJU\nOFppGHiz100BSXTEdYC/aOyplCf09u8Jg3cz0YVBNuCWg+w9jcQYJS4kPvZlp/9s\njmte0IuXs8hk6w7bcfSzTwse3vbz0Jb/vdGzfk7a7QKBgQD8HwEuw24Obum/9zQv\nZDK9kLLKcBFDdkK/IWH/H32iEg9cZwJej1VDg93+lPNk9t35Aq9QtI1eVQtscD0g\nUcuKlXOuVI+fp7/FL7RW0paNhBicMU0NmEl485ryopMuLYwDZFq/X8MPTubf8PLN\nvfH5FBJV9/IBchbj56g1nNVqhQKBgQDotEQ6W41J0DAjzQYHHY5rqrcHBCvGK85m\ncIg73Fpt1PEcI88UT9WS/2oEWDFkbBRhjV7DmE0gzvC5ubBfliG/sg/Lo6WZpcfA\nNJIbMvJ/PO2OZthI9CFbsp4RPzKVzPeMUIwJ+GsyPPNxpt7Kt26wwnIOZM3QEVsK\nOVHDqNAxEwKBgQDV/VbaoyNhesBJn/8aDliGzy8BZbcxZEnowePUT50pl1yUWBYJ\nvmxnHqCoeTJQyrvCo4W74VNv8oz8oBMxwFsbKBiEqd8xaob5TbEqVBlWyfy9bZbx\n6ATMdS9Zq6Vyd1Q0eNQRRK1h691Hy9G50PN1LpUVhJpSocxN6gy6XIBDpQKBgCBO\n3uYnTd+Aqx5dWcflH5/tLMoplxZFgLuSRifheSCknvEkO5z7VJC7K3H8+KaTpuTA\nZvbLD3JNqPhwQn+S7Y6a3zyLtPM3JBuYcOybzzVBNU4/EypV0sfTbcTBPHm14my1\nxiugNOndsoMGAwqsGw8pgAJllnmb30L1IFgE+RrHAoGBAMsb2a2T9cXGdO8c+ysJ\n7fnxG513/Uan9YfY//zYV8GLwH2Q8pr4YNFO2tUzDoN71uicI0LSXuUjInUoNN8k\nGiTAgn9MF2jVHJnm+pddkI/JIJiRxPJ7po9nOtacaWyzU3kzmXxAhagilKQGhfLT\n5mivr77kiQ5i/ZZ7mPgST28v\n-----END PRIVATE KEY-----\n",
+  "client_email": "sql-cloud-proxy@vocal-invention-443612-d9.iam.gserviceaccount.com",
+  "client_id": "102811416804146488415",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sql-cloud-proxy%40vocal-invention-443612-d9.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
