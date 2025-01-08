@@ -36,7 +36,7 @@ spec:
                   name: cloudsql-db-credentials
                   key: dbname
             - name: DB_HOST
-              value: "127.0.0.1"
+              value: "localhost"
             - name: DB_PORT
               value: "3311"
         - name: cloud-sql-proxy
@@ -73,7 +73,7 @@ metadata:
   name: authentication-service-service
 spec:
   selector:
-    app: eviden-authentication-service-deployment
+    app: eviden-authentication-service
   ports:
     - protocol: TCP
       port: 8011
