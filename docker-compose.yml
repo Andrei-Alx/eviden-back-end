@@ -4,12 +4,12 @@ services:
   zookeeper:
     container_name: zookeeper
     image: confluentinc/cp-zookeeper:latest
-    depends_on:
-      - cloud-sql-proxy-card
-      - cloud-sql-proxy-gameapp
-      - cloud-sql-proxy-game
-      - cloud-sql-proxy-round
-      - cloud-sql-proxy-lobby
+#    depends_on:
+#      - cloud-sql-proxy-card
+#      - cloud-sql-proxy-gameapp
+#      - cloud-sql-proxy-game
+#      - cloud-sql-proxy-round
+#      - cloud-sql-proxy-lobby
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -29,11 +29,11 @@ services:
     container_name: kafka
     depends_on:
       - zookeeper
-      - cloud-sql-proxy-card
-      - cloud-sql-proxy-gameapp
-      - cloud-sql-proxy-game
-      - cloud-sql-proxy-round
-      - cloud-sql-proxy-lobby
+#      - cloud-sql-proxy-card
+#      - cloud-sql-proxy-gameapp
+#      - cloud-sql-proxy-game
+#      - cloud-sql-proxy-round
+#      - cloud-sql-proxy-lobby
     ports:
       - "29092:29092"
     environment:
@@ -72,7 +72,7 @@ services:
     networks:
       - atos_network
 
-  # DATABASES
+   #DATABASES
 #  card-service-db:
 #    image: mysql:latest
 #    container_name: card-service-db
@@ -189,66 +189,66 @@ services:
 #    networks:
 #      - atos_network
 
-  cloud-sql-proxy-authentication:
-      image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0 #gcr.io/cloudsql-docker/gce-proxy:1.19.1
-      command: vocal-invention-443612-d9:europe-west4:authentication-db  --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
-      volumes:
-        - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
-      ports:
-        - "127.0.0.1:3311:3306"
-      networks:
-        - atos_network
-
-
-  cloud-sql-proxy-card:
-      image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
-      command: vocal-invention-443612-d9:europe-west4:card-db  --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
-      volumes:
-        - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
-      ports:
-        - "127.0.0.1:3307:3306"
-      networks:
-        - atos_network
-
-  cloud-sql-proxy-gameapp:
-    image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
-    command: vocal-invention-443612-d9:europe-west4:gameappbff-db  --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
-    volumes:
-      - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
-    ports:
-      - "127.0.0.1:3310:3306"
-    networks:
-      - atos_network
-
-  cloud-sql-proxy-game:
-    image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
-    command: vocal-invention-443612-d9:europe-west4:game-db  --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
-    volumes:
-      - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
-    ports:
-      - "127.0.0.1:3312:3306"
-    networks:
-      - atos_network
-
-  cloud-sql-proxy-lobby:
-    image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
-    command: vocal-invention-443612-d9:europe-west4:lobby-db  --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
-    volumes:
-      - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
-    ports:
-      - "127.0.0.1:3309:3306"
-    networks:
-      - atos_network
-
-  cloud-sql-proxy-round:
-    image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
-    command: vocal-invention-443612-d9:europe-west4:round-db  --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
-    volumes:
-      - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
-    ports:
-      - "127.0.0.1:3308:3306"
-    networks:
-      - atos_network
+#  cloud-sql-proxy-authentication:
+#      image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0 #gcr.io/cloudsql-docker/gce-proxy:1.19.1
+#      command: vocal-invention-443612-d9:europe-west4:authentication-db  --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
+#      volumes:
+#        - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
+#      ports:
+#        - "127.0.0.1:3311:3306"
+#      networks:
+#        - atos_network
+#
+#
+#  cloud-sql-proxy-card:
+#      image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
+#      command: vocal-invention-443612-d9:europe-west4:card-db  --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
+#      volumes:
+#        - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
+#      ports:
+#        - "127.0.0.1:3307:3306"
+#      networks:
+#        - atos_network
+#
+#  cloud-sql-proxy-gameapp:
+#    image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
+#    command: vocal-invention-443612-d9:europe-west4:gameappbff-db  --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
+#    volumes:
+#      - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
+#    ports:
+#      - "127.0.0.1:3310:3306"
+#    networks:
+#      - atos_network
+#
+#  cloud-sql-proxy-game:
+#    image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
+#    command: vocal-invention-443612-d9:europe-west4:game-db  --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
+#    volumes:
+#      - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
+#    ports:
+#      - "127.0.0.1:3312:3306"
+#    networks:
+#      - atos_network
+#
+#  cloud-sql-proxy-lobby:
+#    image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
+#    command: vocal-invention-443612-d9:europe-west4:lobby-db  --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
+#    volumes:
+#      - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
+#    ports:
+#      - "127.0.0.1:3309:3306"
+#    networks:
+#      - atos_network
+#
+#  cloud-sql-proxy-round:
+#    image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.0
+#    command: vocal-invention-443612-d9:europe-west4:round-db  --credentials-file=/secrets/cloudsql/credentials.json --address 0.0.0.0 --port 3306
+#    volumes:
+#      - ./.deployment/credentials.json:/secrets/cloudsql/credentials.json:ro
+#    ports:
+#      - "127.0.0.1:3308:3306"
+#    networks:
+#      - atos_network
 
   # Microservices
   card-service:
@@ -257,7 +257,7 @@ services:
     ports:
       - "8001:8001"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://cloud-sql-proxy-card:3306/card_db?allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://34.34.34.141:3306/card_db?allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=mypassword
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
@@ -280,7 +280,7 @@ services:
     ports:
       - "8004:8004"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://cloud-sql-proxy-gameapp:3306/gameappbff_db?allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://35.204.24.83:3306/gameappbff_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=mypassword
@@ -302,7 +302,7 @@ services:
     ports:
       - "8002:8002"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://cloud-sql-proxy-round:3306/round_db?allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://34.141.193.95:3306/round_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=mypassword
@@ -324,7 +324,7 @@ services:
     ports:
       - "8006:8006"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://cloud-sql-proxy-lobby:3306/lobby_db?allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://34.32.218.209:3306/lobby_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=mypassword
@@ -346,7 +346,7 @@ services:
     ports:
       - "8005:8005"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://cloud-sql-proxy-game:3306/game_db?allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://34.34.86.163:3306/game_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=mypassword
@@ -368,7 +368,7 @@ services:
     ports:
       - "8011:8011"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/gamemaster_db?allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://C:3306/gamemaster_db?allowPublicKeyRetrieval=true
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=mypassword
@@ -421,5 +421,5 @@ networks:
   atos_network:
     driver: bridge
 
-volumes:
-  cloud-sql-proxy-authentication:
+#volumes:
+#  cloud-sql-proxy-authentication:

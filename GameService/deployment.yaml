@@ -13,29 +13,13 @@ spec:
         app: eviden-game-service-deployment
     spec:
       containers:
-        - name: eviden-game-service-app
-          image: aacpc/eviden-game-service:development
+        - name: eviden-game-service
+          image: europe-west4-docker.pkg.dev/vocal-invention-443612-d9/docker-images/eviden-back-end-game-service:kubernetes-test
           env:
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mysql://eviden-game-service-db:3306/game_db"
-            - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
-              value: "my-cluster-kafka-bootstrap:9092"
-            - name: SPRING_JPA_HIBERNATE_DDL-AUTO
-              value: "update"
+              value: "jdbc:mysql://172.16.100.11:3306/game_db?allowPublicKeyRetrieval=true"
           ports:
-            - containerPort: 8005
-          livenessProbe:
-            httpGet:
-              path: /actuator/health/liveness
-              port: 8105
-            initialDelaySeconds: 15
-            periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /actuator/health/readiness
-              port: 8105
-            initialDelaySeconds: 5
-            periodSeconds: 5
+            - containerPort: 8011
 ---
 apiVersion: v1
 kind: Service
@@ -46,5 +30,5 @@ spec:
     app: eviden-game-service-deployment
   ports:
     - protocol: TCP
-      port: 8005
-      targetPort: 8005
+      port: 8011
+      targetPort: 8011

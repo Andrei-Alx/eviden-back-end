@@ -14,30 +14,12 @@ spec:
     spec:
       containers:
         - name: eviden-card-service
-          image: aacpc/eviden-card-service:development
+          image: europe-west4-docker.pkg.dev/vocal-invention-443612-d9/docker-images/eviden-back-end-card-service:kubernetes-test
           env:
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mysql://eviden-card-service-db/card_db"
-            - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
-              value: "my-cluster-kafka-bootstrap:9092"
-            - name: SPRING_RESOURCES_STATIC_LOCATIONS
-              value: "classpath:/data.cards/"
-            - name: SPRING_JPA_HIBERNATE_DDL-AUTO
-              value: "update"
+              value: "jdbc:mysql://172.16.100.3:3306/card_db?allowPublicKeyRetrieval=true"
           ports:
-            - containerPort: 8001
-          livenessProbe:
-            httpGet:
-              path: /actuator/health/liveness
-              port: 8101
-            initialDelaySeconds: 15
-            periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /actuator/health/readiness
-              port: 8101
-            initialDelaySeconds: 5
-            periodSeconds: 5
+            - containerPort: 8011
 ---
 apiVersion: v1
 kind: Service
@@ -48,5 +30,5 @@ spec:
     app: eviden-card-service-deployment
   ports:
     - protocol: TCP
-      port: 8001
-      targetPort: 8001
+      port: 8011
+      targetPort: 8011
