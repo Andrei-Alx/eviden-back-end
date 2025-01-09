@@ -14,12 +14,19 @@ spec:
     spec:
       containers:
         - name: eviden-gameappbff-service
-          image: europe-west4-docker.pkg.dev/vocal-invention-443612-d9/docker-images/eviden-back-end-gameappbff-service:kubernetes-test
+          image: europe-west4-docker.pkg.dev/vocal-invention-443612-d9/docker-images/eviden-back-end-gameappbff:kubernetes-test
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://172.16.100.12:3306/gameappbff_db?allowPublicKeyRetrieval=true"
           ports:
             - containerPort: 8011
+          resources:
+            requests:
+              memory: "128Mi" # Minimum memory needed for the container
+              cpu: "100m"     # Minimum CPU needed for the container
+            limits:
+              memory: "256Mi" # Maximum memory the container can use
+              cpu: "200m"     # Maximum CPU the container can use
 ---
 apiVersion: v1
 kind: Service

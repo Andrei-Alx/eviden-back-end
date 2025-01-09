@@ -66,6 +66,13 @@ spec:
                 configMapKeyRef:
                   name: uri-config
                   key: authenticationservice
+          resources:
+            requests:
+              memory: "128Mi" # Minimum memory needed for the container
+              cpu: "100m"     # Minimum CPU needed for the container
+            limits:
+              memory: "256Mi" # Maximum memory the container can use
+              cpu: "200m"     # Maximum CPU the container can use
 ---
 apiVersion: v1
 kind: Service
