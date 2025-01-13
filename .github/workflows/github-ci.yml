@@ -1,0 +1,25 @@
+name: Build and Analyze
+
+on:
+    push:
+      branches: [ "main", "development", "kubernetes-test" ]
+
+jobs:
+  build-api-gateway:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    runs-on: ubuntu-latest
+    container:
+      image: maven:3.9.6-eclipse-temurin-21-alpine
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Build Api Gateway
+        run: |
+          echo "Running API Gateway Build"
+          cd APIGateway
+          mvn install
+          echo "API Gateway Build Complete!"
