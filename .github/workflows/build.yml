@@ -1,0 +1,139 @@
+name: Build and Analyze
+
+on:
+  push:
+    branches: [ "main", "development", "kubernetes-test" ]
+
+jobs:
+  build-api-gateway:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    runs-on: ubuntu-latest
+    container:
+      image: maven:3.9.6-eclipse-temurin-21-alpine
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Api Gateway
+        run: |
+          echo "Running API Gateway Build"
+          cd APIGateway
+          mvn install
+          echo "API Gateway Build Complete!"
+
+  build-card-service:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    runs-on: ubuntu-latest
+    container:
+      image: maven:3.9.6-eclipse-temurin-21-alpine
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Card Service
+        run: |
+          echo "Running Card Service Build"
+          cd CardService
+          mvn install
+          echo "Card Service Build Complete!"
+
+  build-game-service:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    runs-on: ubuntu-latest
+    container:
+      image: maven:3.9.6-eclipse-temurin-21-alpine
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Game Service
+        run: |
+          echo "Running Game Service Build"
+          cd GameService
+          mvn install
+          echo "Game Service Build Complete!"
+
+  build-lobby-service:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    runs-on: ubuntu-latest
+    container:
+      image: maven:3.9.6-eclipse-temurin-21-alpine
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Lobby Service
+        run: |
+          echo "Running Lobby Service Build"
+          cd LobbyService
+          mvn install
+          echo "Lobby Service Build Complete!"
+
+  build-round-service:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    runs-on: ubuntu-latest
+    container:
+      image: maven:3.9.6-eclipse-temurin-21-alpine
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Round Service
+        run: |
+          echo "Running Round Service Build"
+          cd RoundService
+          mvn install
+          echo "Round Service Build Complete!"
+
+  build-gamebff:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    runs-on: ubuntu-latest
+    container:
+      image: maven:3.9.6-eclipse-temurin-21-alpine
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Round Service
+        run: |
+          echo "Running Game APP BFF Build"
+          cd GameAppBFF
+          mvn install
+          echo "Game APP BFF Complete!"
+
+  build-authentication-service:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    runs-on: ubuntu-latest
+    container:
+      image: maven:3.9.6-eclipse-temurin-21-alpine
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Authentication Service
+        run: |
+          echo "Running Authentication Service Build"
+          cd AuthenticationService
+          mvn install
+          echo "Authentication Service Build Complete!"

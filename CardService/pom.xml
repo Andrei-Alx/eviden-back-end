@@ -25,7 +25,7 @@
         <!--Prettier settings-->
         <plugin.prettier.goal>write</plugin.prettier.goal>
         <!-- SonarQube Authentication -->
-		<sonar.organization>eviden-dev</sonar.organization>
+		<sonar.organization>andrei-alx</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
      
 		<!--<sonar.login>{env.Sonar_Cloud_Login}</sonar.login>-->
