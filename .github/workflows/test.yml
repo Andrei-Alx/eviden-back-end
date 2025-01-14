@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  SonarCloud:
+  sonarcloud-check-Cardservice:
     permissions:
       pull-requests: read
       contents: 'read'
@@ -21,14 +21,11 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-          
-      - name: Analyze with SonarCloud
-        uses: SonarSource/sonarcloud-github-action@4006f663ecaf1f8093e8e4abb9227f6041f52216
+
+      - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=${{ secrets.SONAR_CLOUD_PROJECT_KEY }}
-            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
-            -Dsonar.java.binaries=build/classes
-          projectBaseDir: ..
+        run: mvn verify sonar:sonar \
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+          -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
+          -Dsonar.projectKey=${{ secrets.SONAR_CLOUD_PROJECT_KEY }} \
