@@ -25,8 +25,6 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          Sonar_Cloud_Project_Key: ${{ secrets.SONAR_CLOUD_PROJECT_KEY }}
         run: |
           cd CardService
           mvn verify sonar:sonar \
