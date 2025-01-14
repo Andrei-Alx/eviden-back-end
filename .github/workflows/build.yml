@@ -134,6 +134,6 @@ jobs:
       - name: Build Authentication Service
         run: |
           echo "Running Authentication Service Build"
-          cd AuthenticationService
+          cd Authentication
           mvn install
           echo "Authentication Service Build Complete!"
