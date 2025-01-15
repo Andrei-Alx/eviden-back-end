@@ -86,7 +86,7 @@ jobs:
         run: |
           cd APIGateway
           gcloud container clusters get-credentials autopilot-cluster-2 --region europe-west4
-          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yml
+          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yaml
           kubectl apply -f deployment.yaml
 
       - name: Deploy to GKE
@@ -95,7 +95,7 @@ jobs:
         run: |
           cd Authentication
           gcloud container clusters get-credentials autopilot-cluster-2 --region europe-west4
-          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yml
+          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yaml
           kubectl apply -f deployment.yaml
 
       - name: Deploy to GKE
@@ -104,7 +104,7 @@ jobs:
         run: |
           cd CardService
           gcloud container clusters get-credentials autopilot-cluster-2 --region europe-west4
-          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yml
+          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yaml
           kubectl apply -f deployment.yaml
 
       - name: Deploy to GKE
@@ -113,7 +113,7 @@ jobs:
         run: |
           cd GameAppBFF
           gcloud container clusters get-credentials autopilot-cluster-2 --region europe-west4
-          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yml
+          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yaml
           kubectl apply -f deployment.yaml
 
       - name: Deploy to GKE
@@ -122,7 +122,7 @@ jobs:
         run: |
           cd GameService
           gcloud container clusters get-credentials autopilot-cluster-2 --region europe-west4
-          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yml
+          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yaml
           kubectl apply -f deployment.yaml
 
       - name: Deploy to GKE
@@ -131,7 +131,7 @@ jobs:
         run: |
           cd LobbyService
           gcloud container clusters get-credentials autopilot-cluster-2 --region europe-west4
-          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yml
+          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yaml
           kubectl apply -f deployment.yaml
 
       - name: Deploy to GKE
@@ -140,5 +140,5 @@ jobs:
         run: |
           cd RoundService
           gcloud container clusters get-credentials autopilot-cluster-2 --region europe-west4
-          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yml
+          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yaml
           kubectl apply -f deployment.yaml
