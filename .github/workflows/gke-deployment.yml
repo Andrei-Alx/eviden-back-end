@@ -1,0 +1,144 @@
+name: Deploy to GKE & Performance Test
+
+on:
+  push:
+    branches: [ kubernetes-test" ]
+
+jobs:
+  Deploy-to-GKE:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Google Auth
+        id: auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          token_format: 'access_token'
+          project_id: ${{ secrets.GCR_PROJECT_ID }}
+          service_account: ${{ secrets.GCR_SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ secrets.GCR_WORKLOAD_IDENTITY_PROVIDER }}
+
+      - name: Docker Auth
+        id: docker-auth
+        uses: 'docker/login-action@v3'
+        with:
+          username: 'oauth2accesstoken'
+          password: '${{ steps.auth.outputs.access_token }}'
+          registry: '${{ secrets.GCR_REPO_LOCATION }}-docker.pkg.dev'
+
+      - name: Build and Push API Gateway
+        run: |-
+          cd APIGateway
+          docker build -t "${{ secrets.GCR_URL }}/eviden-back-end-api-gateway:${{ github.ref_name }}" ./
+          docker push "${{ secrets.GCR_URL }}/eviden-back-end-api-gateway:${{ github.ref_name }}"
+
+      - name: Build and Push Authentication Service
+        run: |-
+          cd Authentication
+          docker build -t "${{ secrets.GCR_URL }}/eviden-back-end-authentication-service:${{ github.ref_name }}" ./
+          docker push "${{ secrets.GCR_URL }}/eviden-back-end-authentication-service:${{ github.ref_name }}"
+
+      - name: Build and Push Card Service
+        run: |-
+          cd CardService
+          docker build -t "${{ secrets.GCR_URL }}/eviden-back-end-card-service:${{ github.ref_name }}" ./
+          docker push "${{ secrets.GCR_URL }}/eviden-back-end-card-service:${{ github.ref_name }}"
+
+      - name: Build and Push GameAppBFF
+        run: |-
+          cd GameAppBFF
+          docker build -t "${{ secrets.GCR_URL }}/eviden-back-end-gameappbff:${{ github.ref_name }}" ./
+          docker push "${{ secrets.GCR_URL }}/eviden-back-end-gameappbff:${{ github.ref_name }}"
+
+      - name: Build and Push Game Service
+        run: |-
+          cd GameService
+          docker build -t "${{ secrets.GCR_URL }}/eviden-back-end-game-service:${{ github.ref_name }}" ./
+          docker push "${{ secrets.GCR_URL }}/eviden-back-end-game-service:${{ github.ref_name }}"
+
+      - name: Build and Push Lobby Service
+        run: |-
+          cd LobbyService
+          docker build -t "${{ secrets.GCR_URL }}/eviden-back-end-lobby-service:${{ github.ref_name }}" ./
+          docker push "${{ secrets.GCR_URL }}/eviden-back-end-lobby-service:${{ github.ref_name }}"
+
+      - name: Build and Push Round Service
+        run: |-
+          cd RoundService
+          docker build -t "${{ secrets.GCR_URL }}/eviden-back-end-round-service:${{ github.ref_name }}" ./
+          docker push "${{ secrets.GCR_URL }}/eviden-back-end-round-service:${{ github.ref_name }}"
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+        with:
+          install_components: 'gke-gcloud-auth-plugin'
+          version: '>= 363.0.0'
+
+      - name: Deploy to GKE
+        env:
+          GOOGLE_PROJECT: ${{ secrets.GCR_PROJECT_ID }}
+        run: |
+          cd APIGateway
+          gcloud container clusters get-credentials autopilot-cluster-2 --region europe-west4
+          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yml
+          kubectl apply -f deployment.yaml
+
+      - name: Deploy to GKE
+        env:
+          GOOGLE_PROJECT: ${{ secrets.GCR_PROJECT_ID }}
+        run: |
+          cd Authentication
+          gcloud container clusters get-credentials autopilot-cluster-2 --region europe-west4
+          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yml
+          kubectl apply -f deployment.yaml
+
+      - name: Deploy to GKE
+        env:
+          GOOGLE_PROJECT: ${{ secrets.GCR_PROJECT_ID }}
+        run: |
+          cd CardService
+          gcloud container clusters get-credentials autopilot-cluster-2 --region europe-west4
+          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yml
+          kubectl apply -f deployment.yaml
+
+      - name: Deploy to GKE
+        env:
+          GOOGLE_PROJECT: ${{ secrets.GCR_PROJECT_ID }}
+        run: |
+          cd GameAppBFF
+          gcloud container clusters get-credentials autopilot-cluster-2 --region europe-west4
+          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yml
+          kubectl apply -f deployment.yaml
+
+      - name: Deploy to GKE
+        env:
+          GOOGLE_PROJECT: ${{ secrets.GCR_PROJECT_ID }}
+        run: |
+          cd GameService
+          gcloud container clusters get-credentials autopilot-cluster-2 --region europe-west4
+          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yml
+          kubectl apply -f deployment.yaml
+
+      - name: Deploy to GKE
+        env:
+          GOOGLE_PROJECT: ${{ secrets.GCR_PROJECT_ID }}
+        run: |
+          cd LobbyService
+          gcloud container clusters get-credentials autopilot-cluster-2 --region europe-west4
+          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yml
+          kubectl apply -f deployment.yaml
+
+      - name: Deploy to GKE
+        env:
+          GOOGLE_PROJECT: ${{ secrets.GCR_PROJECT_ID }}
+        run: |
+          cd RoundService
+          gcloud container clusters get-credentials autopilot-cluster-2 --region europe-west4
+          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yml
+          kubectl apply -f deployment.yaml
