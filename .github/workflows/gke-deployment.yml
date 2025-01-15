@@ -22,7 +22,7 @@ jobs:
           token_format: 'access_token'
           project_id: ${{ secrets.GCR_PROJECT_ID }}
           service_account: ${{ secrets.GCR_SERVICE_ACCOUNT }}
-          workload_identity_provider: ${{ secrets.GCR_WORKLOAD_IDENTITY_PROVIDER }}
+          workload_identity_provider: ${{ secrets.GCR_WORKLOAD_IDENTITY }}
 
       - name: Docker Auth
         id: docker-auth
