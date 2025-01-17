@@ -39,3 +39,16 @@ spec:
     - protocol: TCP
       port: 8011
       targetPort: 8011
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eviden-lobby-service-deployment
+spec:
+  type: LoadBalancer
+  selector:
+    app: eviden-lobby-service-deployment
+  ports:
+    - port: 8080
+      targetPort: 8080
