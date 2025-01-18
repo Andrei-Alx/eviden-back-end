@@ -26,8 +26,8 @@ spec:
         app: eviden-api-gateway
     spec:
       containers:
-        - name: eviden-api-gateway-container
-          image: aacpc/eviden-api-gateway:development
+        - name: eviden-api-gateway-service
+          image: europe-west4-docker.pkg.dev/vocal-invention-443612-d9/docker-images/eviden-back-end-api-gateway:kubernetes-test
           ports:
             - containerPort: 8080
           env:
@@ -79,21 +79,9 @@ kind: Service
 metadata:
   name: eviden-api-gateway-service
 spec:
-  selector:
-    app: eviden-api-gateway
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 8080
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: eviden-api-gateway-service-deployment
-spec:
   type: LoadBalancer
   selector:
-    app: eviden-api-gateway-service-deployment
+    app: eviden-api-gateway-service
   ports:
     - port: 8080
       targetPort: 8080

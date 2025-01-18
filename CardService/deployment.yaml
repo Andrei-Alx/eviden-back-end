@@ -6,11 +6,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: eviden-card-service-deployment
+      app: eviden-card-service
   template:
     metadata:
       labels:
-        app: eviden-card-service-deployment
+        app: eviden-card-service
     spec:
       containers:
         - name: eviden-card-service
@@ -18,36 +18,28 @@ spec:
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://172.16.100.10:3306/card_db?allowPublicKeyRetrieval=true"
+            - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
+              value: "my-cluster-kafka-bootstrap:9092"
+            - name: SPRING_JPA_HIBERNATE_DDL-AUTO
+              value: "update"
           ports:
-            - containerPort: 8011
+            - containerPort: 8001
           resources:
             requests:
-              memory: "128Mi" # Minimum memory needed for the container
-              cpu: "100m"     # Minimum CPU needed for the container
+              memory: "128Mi"
+              cpu: "100m"
             limits:
-              memory: "256Mi" # Maximum memory the container can use
-              cpu: "200m"     # Maximum CPU the container can use
+              memory: "256Mi"
+              cpu: "200m"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: card-service-service
-spec:
-  selector:
-    app: eviden-card-service-deployment
-  ports:
-    - protocol: TCP
-      port: 8011
-      targetPort: 8011
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: eviden-card-service-deployment
+  name: eviden-card-service
 spec:
   type: LoadBalancer
   selector:
-    app: eviden-card-service-deployment
+    app: eviden-card-service
   ports:
-    - port: 8080
-      targetPort: 8080
+    - port: 8001
+      targetPort: 8001

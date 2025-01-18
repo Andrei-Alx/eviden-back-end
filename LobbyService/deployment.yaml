@@ -6,11 +6,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: eviden-lobby-service-deployment
+      app: eviden-lobby-service
   template:
     metadata:
       labels:
-        app: eviden-lobby-service-deployment
+        app: eviden-lobby-service
     spec:
       containers:
         - name: eviden-lobby-service
@@ -18,37 +18,28 @@ spec:
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://172.16.100.13:3306/lobby_db?allowPublicKeyRetrieval=true"
+            - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
+              value: "my-cluster-kafka-bootstrap:9092"
+            - name: SPRING_JPA_HIBERNATE_DDL-AUTO
+              value: "update"
           ports:
-            - containerPort: 8011
+            - containerPort: 8006
           resources:
             requests:
-              memory: "128Mi" # Minimum memory needed for the container
-              cpu: "100m"     # Minimum CPU needed for the container
+              memory: "128Mi"
+              cpu: "100m"
             limits:
-              memory: "256Mi" # Maximum memory the container can use
-              cpu: "200m"     # Maximum CPU the container can use
+              memory: "256Mi"
+              cpu: "200m"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: lobby-service-service
-spec:
-  selector:
-    app: eviden-lobby-service-deployment
-  ports:
-    - protocol: TCP
-      port: 8011
-      targetPort: 8011
----
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: eviden-lobby-service-deployment
+  name: eviden-lobby-service
 spec:
   type: LoadBalancer
   selector:
-    app: eviden-lobby-service-deployment
+    app: eviden-lobby-service
   ports:
-    - port: 8080
-      targetPort: 8080
+    - port: 8006
+      targetPort: 8006
