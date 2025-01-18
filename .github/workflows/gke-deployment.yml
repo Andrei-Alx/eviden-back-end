@@ -80,7 +80,7 @@ jobs:
           install_components: 'gke-gcloud-auth-plugin'
           version: '>= 363.0.0'
 
-      - name: Deploy to GKE
+      - name: Deploy to GKE APIGateway
         env:
           GOOGLE_PROJECT: ${{ secrets.GCR_PROJECT_ID }}
         run: |
@@ -89,7 +89,7 @@ jobs:
           sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yaml
           kubectl apply -f deployment.yaml
 
-      - name: Deploy to GKE
+      - name: Deploy to GKE Authentication
         env:
           GOOGLE_PROJECT: ${{ secrets.GCR_PROJECT_ID }}
         run: |
@@ -98,7 +98,7 @@ jobs:
           sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yaml
           kubectl apply -f deployment.yaml
 
-      - name: Deploy to GKE
+      - name: Deploy to GKE CardService
         env:
           GOOGLE_PROJECT: ${{ secrets.GCR_PROJECT_ID }}
         run: |
@@ -107,7 +107,7 @@ jobs:
           sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yaml
           kubectl apply -f deployment.yaml
 
-      - name: Deploy to GKE
+      - name: Deploy to GKE GameAppBFF
         env:
           GOOGLE_PROJECT: ${{ secrets.GCR_PROJECT_ID }}
         run: |
@@ -116,7 +116,7 @@ jobs:
           sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yaml
           kubectl apply -f deployment.yaml
 
-      - name: Deploy to GKE
+      - name: Deploy to GKE GameService
         env:
           GOOGLE_PROJECT: ${{ secrets.GCR_PROJECT_ID }}
         run: |
@@ -125,7 +125,7 @@ jobs:
           sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yaml
           kubectl apply -f deployment.yaml
 
-      - name: Deploy to GKE
+      - name: Deploy to GKE LobbyService
         env:
           GOOGLE_PROJECT: ${{ secrets.GCR_PROJECT_ID }}
         run: |
@@ -134,7 +134,7 @@ jobs:
           sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deployment.yaml
           kubectl apply -f deployment.yaml
 
-      - name: Deploy to GKE
+      - name: Deploy to GKE RoundService
         env:
           GOOGLE_PROJECT: ${{ secrets.GCR_PROJECT_ID }}
         run: |
