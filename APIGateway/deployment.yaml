@@ -26,7 +26,7 @@ spec:
         app: eviden-api-gateway
     spec:
       containers:
-        - name: eviden-api-gateway-service
+        - name: eviden-api-gateway
           image: europe-west4-docker.pkg.dev/vocal-invention-443612-d9/docker-images/eviden-back-end-api-gateway:kubernetes-test
           ports:
             - containerPort: 8080
