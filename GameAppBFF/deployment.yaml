@@ -37,7 +37,7 @@ kind: Service
 metadata:
   name: eviden-gameappbff-service
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: eviden-gameappbff-service
   ports:

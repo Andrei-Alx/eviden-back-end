@@ -37,7 +37,7 @@ kind: Service
 metadata:
   name: eviden-lobby-service
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: eviden-lobby-service
   ports:

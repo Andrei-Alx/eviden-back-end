@@ -68,11 +68,11 @@ spec:
                   key: authenticationservice
           resources:
             requests:
-              memory: "128Mi" # Minimum memory needed for the container
-              cpu: "100m"     # Minimum CPU needed for the container
+              memory: "128Mi"
+              cpu: "100m"
             limits:
-              memory: "256Mi" # Maximum memory the container can use
-              cpu: "200m"     # Maximum CPU the container can use
+              memory: "256Mi"
+              cpu: "200m"
 ---
 apiVersion: v1
 kind: Service

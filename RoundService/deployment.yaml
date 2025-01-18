@@ -37,7 +37,7 @@ kind: Service
 metadata:
   name: eviden-round-service
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: eviden-round-service
   ports:
