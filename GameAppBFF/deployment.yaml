@@ -6,11 +6,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: eviden-gameappbff-service-deployment
+      app: eviden-gameappbff-service
   template:
     metadata:
       labels:
-        app: eviden-gameappbff-service-deployment
+        app: eviden-gameappbff-service
     spec:
       containers:
         - name: eviden-gameappbff-service
