@@ -83,5 +83,6 @@ spec:
   selector:
     app: eviden-api-gateway
   ports:
-    - port: 8080
+    - protocol: TCP
+      port: 80
       targetPort: 8080
